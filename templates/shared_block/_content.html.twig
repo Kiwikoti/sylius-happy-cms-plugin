@@ -1,0 +1,5 @@
+{% if app.request.get('block_type') is null %}
+    {{ sylius_template_event([event_prefix, 'sylius.cms.shared_block.choose'], _context) }}
+{% else %}
+    {{ sylius_template_event([event_prefix, 'sylius.cms.shared_block.create'], _context) }}
+{% endif %}

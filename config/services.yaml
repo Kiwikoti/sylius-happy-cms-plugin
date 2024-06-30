@@ -1,0 +1,51 @@
+imports:
+  - { resource: services/pages.yaml }
+  - { resource: services/seo.yaml }
+  - { resource: services/menu.yaml }
+  - { resource: services/block.yaml }
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  adeliom.sylius.cms.plugin.listener.admin.menu_builder:
+    class: Adeliom\SyliusHappyCMSPlugin\Menu\AdminMenuListener
+    tags:
+      - { name: kernel.event_listener, event: sylius.menu.admin.main, method: addAdminMenuItems }
+
+  Adeliom\SyliusHappyCMSPlugin\ContextProvider\CreateSharedBlockContextProvider:
+    arguments:
+      - '@adeliom.sylius.cms.shared_block.block_collection'
+    tags:
+      - { name: sylius.ui.template_event.context_provider }
+
+  adeliom.sylius.cms.plugin.listener.entity_route_indexer:
+    class: Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer
+    arguments:
+      - '@cmf_routing.orm_content_repository'
+    tags:
+      -   name: 'doctrine.event_listener'
+          event: 'postPersist'
+          priority: 500
+          connection: 'default'
+      -   name: 'doctrine.event_listener'
+          event: 'postUpdate'
+          priority: 500
+          connection: 'default'
+
+  adeliom.sylius.cms.plugin.controller.render:
+    class: Adeliom\SyliusHappyCMSPlugin\Controller\Routing\RenderController
+    arguments:
+      - "@router"
+      - "@sylius.resource_controller.request_configuration_factory"
+      - "@twig"
+    public: true
+
+  Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage:
+    tags:
+      -   assets.package: { package: 'sylius.happy.cms.assets.package' }
+
+  Adeliom\SyliusHappyCMSPlugin\Security\ContentDocumentVoter:
+    tags:
+      - "security.voter"

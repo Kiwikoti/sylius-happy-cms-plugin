@@ -1,0 +1,101 @@
+<?php
+
+namespace Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock;
+
+use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
+use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
+use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameTrait;
+use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
+use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
+use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\TranslatableInterface;
+use Sylius\Component\Resource\Model\TranslatableTrait;
+use Sylius\Component\Resource\Model\TranslationInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\HasLifecycleCallbacks]
+#[ORM\MappedSuperclass(repositoryClass: SharedBlockRepository::class)]
+class SharedBlock implements ResourceInterface, TranslatableInterface
+{
+    use EntityIdTrait;
+
+    use TranslatableTrait {
+        TranslatableTrait::__construct as private initializeTranslationsCollection;
+        getTranslation as private doGetTranslation;
+    }
+
+    use EntityTimestampableTrait {
+        EntityTimestampableTrait::__construct as private timestampableConstruct;
+    }
+    use EntityNameTrait;
+    use EntityStatusTrait;
+
+    #[ORM\Column(name: 'block_key', type: \Doctrine\DBAL\Types\Types::STRING, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Type('string')]
+    protected ?string $key = null;
+
+    #[ORM\Column(name: 'type', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[Assert\NotBlank]
+    #[Assert\Type('string')]
+    protected ?string $type = null;
+
+    #[ORM\Column(name: 'settings', type: \Doctrine\DBAL\Types\Types::JSON)]
+    #[Assert\Type('array')]
+    protected ?array $settings = [];
+
+    public function __construct()
+    {
+        $this->initializeTranslationsCollection();
+        $this->timestampableConstruct();
+    }
+
+    protected function createTranslation(): TranslationInterface
+    {
+        return new SharedBlockTranslation();
+    }
+
+    public function getTranslation(?string $locale = null): SharedBlockTranslation
+    {
+        /** @var SharedBlockTranslation $translation */
+        $translation = $this->doGetTranslation($locale);
+
+        return $translation;
+    }
+
+    public static function getTranslationClass(): string
+    {
+        return SharedBlockTranslation::class;
+    }
+
+    public function getKey(): ?string
+    {
+        return $this->key;
+    }
+
+    public function setKey(?string $key)
+    {
+        $this->key = $key;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getSettings(): ?array
+    {
+        return $this->settings;
+    }
+
+    public function setSettings(?array $settings): void
+    {
+        $this->settings = $settings;
+    }
+}

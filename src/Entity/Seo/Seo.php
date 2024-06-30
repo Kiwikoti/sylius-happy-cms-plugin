@@ -1,0 +1,63 @@
+<?php
+
+namespace Adeliom\SyliusHappyCMSPlugin\Entity\Seo;
+
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Embeddable]
+class Seo implements \Stringable
+{
+    /**
+     * @var string
+     */
+    #[ORM\Column]
+    public string $title;
+
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    public ?string $description = null;
+
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(nullable: true)]
+    public ?string $keywords;
+
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(nullable: true)]
+    public ?string $canonical;
+
+    /**
+     * @var Media|string|null
+     */
+    #[ORM\Column(type: 'happy_cms_media_type', nullable: true)]
+    public Media|string|null $cover;
+
+    /**
+     * @var string|null
+     */
+    #[ORM\Column(nullable: true)]
+    public ?string $key;
+
+    /**
+     * @var bool
+     */
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::BOOLEAN)]
+    public ?bool $sitemap = true;
+
+    /**
+     * @var array<int, string>
+     */
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::JSON)]
+    public array $robots = [];
+
+    public function __toString(): string
+    {
+        return $this->title;
+    }
+}

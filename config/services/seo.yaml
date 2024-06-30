@@ -1,0 +1,48 @@
+services:
+    Adeliom\SyliusHappyCMSPlugin\Twig\Seo\SeoExtension:
+        arguments:
+            - "@twig"
+            - "@event_dispatcher"
+            - "@happy_cms_seo.breadcrumb"
+            - '%happy_cms.seo.title%'
+            - '%happy_cms.seo.breadcrumbs%'
+        tags:
+            - twig.extension
+    
+    happy_cms_seo.breadcrumb:
+        class: Adeliom\SyliusHappyCMSPlugin\Services\Seo\BreadcrumbCollection
+        public: true
+        calls:
+            - [ 'setGenerator', [ '@router.default' ] ]
+    
+    Adeliom\SyliusHappyCMSPlugin\Services\Seo\BreadcrumbCollection:
+        alias: happy_cms_seo.breadcrumb
+    
+    Adeliom\SyliusHappyCMSPlugin\Form\Seo\SeoType:
+        public: true
+    
+    Adeliom\SyliusHappyCMSPlugin\DataCollector\Seo\SeoCollector:
+        arguments:
+            - '@happy_cms_seo.breadcrumb'
+            - '%happy_cms.seo.title%'
+            - '%happy_cms.seo.enable_profiler%'
+            - '%happy_cms.seo.ignore_profiler%'
+        tags:
+            -   name: data_collector
+                template: '@SyliusHappyCMSPlugin/profiler/seo/collector.html.twig'
+                id: Adeliom\SyliusHappyCMSPlugin\DataCollector\Seo\SeoCollector
+    
+    happy_cms.seo.sitemap_subscriber:
+        class: Adeliom\SyliusHappyCMSPlugin\EventListener\Seo\SitemapSubscriber
+        arguments:
+            - "%happy_cms.page.sitemap%"
+            - !tagged_iterator happy_cms.seo.sitemap_dumpable
+            - "@event_dispatcher"
+        tags:
+            - { name: "kernel.event_subscriber", priority: 100 }
+            
+    Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\PagesSitemapDumper:
+        public: true
+        autowire: true
+        tags:
+            - 'happy_cms.seo.sitemap_dumpable'

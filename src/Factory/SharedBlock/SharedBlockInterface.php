@@ -1,0 +1,42 @@
+<?php
+
+namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
+
+interface SharedBlockInterface
+{
+    public function getName(): string;
+
+    /**
+     * @return string|mixed[]
+     */
+    public function getIcon(): string|array;
+
+    public function getPosition(): int;
+
+    public function getFrontEndTemplatePath(): string;
+
+    /**
+     * Declare here the assets that make front working as expected
+     * @return array<string, string[]>
+     */
+    public function configureAssets(): array;
+
+    /**
+     * Declare here the assets that make back-office working as expected
+     * @return array<string, string[]>
+     */
+    public function configureAdminAssets(): array;
+
+    /**
+     * Declare here the form themes path that make back-office form display as expected
+     * @return string[]
+     */
+    public function configureAdminFormThemes(): array;
+
+    /**
+     * @return string[]
+     */
+    public static function researchableProperties(): array;
+
+    public function supports(string $objectClass, ?object $instance = null): bool;
+}

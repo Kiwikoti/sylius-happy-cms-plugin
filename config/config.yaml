@@ -1,0 +1,5 @@
+imports:
+  - { resource: "./packages/cmf_routing.yaml" }
+  - { resource: "./packages/doctrine.yaml" }
+  - { resource: "./packages/sylius_ui.yaml" }
+  - { resource: "./packages/sylius_resource.yaml" }

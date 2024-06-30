@@ -1,0 +1,27 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+{% trans_default_domain 'SyliusHappyCMSPlugin' %}
+
+{% block page_title %}{{ 'happy_cms.media.title'|trans|striptags|raw }}{% endblock %}
+
+{% block content %}
+    <div id="media-holder" style="display:none">
+        {% include '@SyliusHappyCMSPlugin/media/manager.html.twig' %}
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('media-form.css', 'sylius.happy.cms.assets.package') }}"/>
+    <style>
+        .content-wrapper{
+            padding: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('media-form.js', 'sylius.happy.cms.assets.package') }}"></script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% trans_default_domain 'SyliusHappyCMSPlugin' %}
+<!DOCTYPE html>
+<html lang="{{ langCode }}">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ 'happy_cms.media.title'|trans|striptags|raw }}</title>
+{#        <script src="//cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>#}
+        {{ encore_entry_link_tags('media-form') }}
+    </head>
+    <body>
+        <div id="media-holder" class="fullscreen">
+            {% include '@SyliusHappyCMSPlugin/media/manager.html.twig' with {'browser': true, 'modal': true, "restrict": restrict, 'hideExt' : ["jpeg"]}  %}
+        </div>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>
+        {{ encore_entry_script_tags('media-form') }}
+        <style>
+            html, body, #media-holder{
+                overflow: hidden;
+                height: 100%;
+            }
+        </style>
+        <script>
+            window.addEventListener("load", function(event) {
+                window.EventHub.listen('file_selected_datas', (datas) => {
+                    var funcNum = '{{ CKEditorFuncNum }}';
+                    var fileUrl = datas.path;
+                    var alt = datas.metas.alt ? datas.metas.alt : null;
+                    window.opener.CKEDITOR.tools.callFunction( funcNum, fileUrl, function() {
+                        var dialog = this.getDialog();
+                        if ( dialog.getName() == 'image' ) {
+                            var element = dialog.getContentElement( 'info', 'txtAlt' );
+                            if ( element && alt)
+                                element.setValue( alt );
+                        }
+                    } );
+                })
+            });
+        </script>
+    </body>
+</html>

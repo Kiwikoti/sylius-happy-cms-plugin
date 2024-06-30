@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route methods="GET" id="media.index" controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::index"
+           path="/happy-cms-media/medias/"/>
+    <route methods="GET" id="media.browse" controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::browse"
+           path="/happy-cms-media/medias/browse"/>
+
+    <route methods="POST" id="media.upload" controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::upload"
+           path="/happy-cms-media/medias/upload"/>
+    <route methods="POST" id="media.uploadCropped"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::uploadEditedImage"
+           path="/happy-cms-media/medias/upload-cropped"/>
+    <route methods="POST" id="media.uploadLink"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::uploadLink"
+           path="/happy-cms-media/medias/upload-link"/>
+
+    <route methods="POST" id="media.get_files" controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::getFiles"
+           path="/happy-cms-media/medias/get-files"/>
+    <route methods="POST" id="media.get_file_info"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::getItemInfos"
+           path="/happy-cms-media/medias/get-file-info"/>
+    <route methods="POST" id="media.new_folder"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::createNewFolder"
+           path="/happy-cms-media/medias/create-new-folder"/>
+    <route methods="POST" id="media.delete_file"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::deleteItem"
+           path="/happy-cms-media/medias/delete-file"/>
+    <route methods="POST" id="media.move_file" controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::moveItem"
+           path="/happy-cms-media/medias/move-file"/>
+    <route methods="POST" id="media.rename_file"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::renameItem"
+           path="/happy-cms-media/medias/rename-file"/>
+    <route methods="POST" id="media.edit_metas_file"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::editMetasItem"
+           path="/happy-cms-media/medias/edit-metas-file"/>
+    <route methods="POST" id="media.generate_alt_file"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::generateAltItem"
+           path="/happy-cms-media/medias/generate-alt-file"/>
+    <route methods="POST" id="media.generate_alt_group"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::generateAltGroup"
+           path="/happy-cms-media/medias/generate-alt-group"/>
+    <route methods="POST" id="media.generate_all_alt"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::generateAllAlt"
+           path="/happy-cms-media/medias/generate-all-alt"/>
+
+    <route methods="GET" id="media.global_search"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::globalSearch"
+           path="/happy-cms-media/medias/global-search"/>
+
+    <route methods="POST" id="media.folder_download"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::downloadFolder"
+           path="/happy-cms-media/medias/folder-download"/>
+    <route methods="POST" id="media.files_download"
+           controller="Adeliom\SyliusHappyCMSPlugin\Controller\Media\MediaController::downloadFiles"
+           path="/happy-cms-media/medias/files-download"/>
+
+</routes>

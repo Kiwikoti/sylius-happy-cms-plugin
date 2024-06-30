@@ -1,0 +1,21 @@
+services:        
+    Adeliom\SyliusHappyCMSPlugin\EventListener\Page\DoctrineMappingListener:
+        arguments:
+            - '%happy_cms.page.page_class%'
+            - '%happy_cms.menu.menu.class%'
+            - '%happy_cms.menu.menu_item.class%'
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata }
+    
+    happy_cms_page.admin:
+        class: App\Admin\HappyCMS\Page\PageAdmin
+        arguments:
+            - App\Entity\Page\Page
+            - [ ]
+            - "@adeliom.sylius.crud.admin.factory"
+        tags:
+            - { name: form.type }
+    
+    App\Admin\HappyCMS\Page\PageAdmin:
+        alias: happy_cms_page.admin
+        public: true

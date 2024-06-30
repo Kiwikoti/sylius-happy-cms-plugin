@@ -1,0 +1,21 @@
+<?php
+
+namespace Adeliom\SyliusHappyCMSPlugin\Twig\Block;
+
+use Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
+
+class BlockExtension extends AbstractExtension
+{
+    /**
+     * @return TwigFunction[]
+     */
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('happy_cms_block_render', [Helper::class, 'renderBlock'], ['is_safe' => ['js', 'html']]),
+            new TwigFunction('happy_cms_block_assets', [Helper::class, 'includeAssets'], ['is_safe' => ['js', 'html'], 'needs_context' => true, 'needs_environment' => true]),
+        ];
+    }
+}

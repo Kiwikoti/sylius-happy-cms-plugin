@@ -1,0 +1,186 @@
+{% block flexible_content_empty_collection %}
+    <div class="empty-flexible-content ui message">
+        <p>Choose a block on right column and add it here.</p>
+    </div>
+{% endblock flexible_content_empty_collection %}
+
+{% block flexible_content_collection_row %}
+
+    {% set row_attr = row_attr|merge({
+        'data-sylius-flexible-content-field': 'true',
+        'data-entry-is-complex': form_parent(form).vars.errors.form.config.attributes.field.customOptions.get('entryIsComplex') ?? false,
+        'data-allow-add': allow_add ? 'true' : 'false',
+        'data-allow-delete': allow_delete ? 'true' : 'false',
+        'data-num-items': form.children|length,
+        'data-form-type-name-placeholder': prototype is defined ? prototype.vars.name : '',
+        'data-form-type-id': id,
+        'data-form-type-parent-id': form.parent is defined ? form.parent.vars.id : '',
+        'data-form-type-parent-name': form.parent is defined ? form.parent.vars.name : '',
+        'data-form-property-full-name': form.vars.full_name,
+        'data-form-property-name': form.vars.name
+    }) %}
+
+    <div class="{% if required %}required {% endif %}field field-collection{% if (not compound or force_error|default(false)) and not valid %} error{% endif %}"
+        {% with { attr: row_attr } %}{{ block('attributes') }}{% endwith %}
+    >
+        {{- form_label(form) -}}
+        {{- form_widget(form) -}}
+        {{- form_help(form) -}}
+        {{- form_errors(form) -}}
+    </div>
+
+{% endblock flexible_content_collection_row %}
+
+{% macro w_block(title, content, display = 'none') %}
+    <div style="padding: {{ display == 'none' ? '1em' : '3.5em' }} 1em 1em" class="ui top attached brown segment bloc-wrapper">
+        <div data-layer="content" style="display:{{ display }}">
+            {{ content | raw }}
+        </div>
+        <div class="ui top attached label" style="line-height: 20px;">
+            <span data-layer="title" >
+                {{ title }}
+            </span>
+            <i data-action="delete" style="float: right; margin-left: 8px;" class="trash red link icon"></i>
+            <i data-action="view" style="float: right; margin-left: 8px;" class="external alternate link icon"></i>
+            <i data-action="move" style="float: right; margin-left: 8px;" class="arrows alternate link icon"></i>
+            <i data-action="toggle" style="float: right; margin-left: 8px;" class="chevron {{ display == 'none' ? 'down' : 'up' }} link icon"></i>
+            <div style="float: right; margin-right: 16px;" class="ui checkbox block_published">
+                <input type="checkbox">
+                <label style="font-size: 12px; font-weight: normal;">
+                    {{ "happy_cms.editor.published" | trans }}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div style="padding: 1em 0; cursor:pointer; display:none" class="ui horizontal divider move-here">
+        Move here
+    </div>
+{% endmacro %}
+
+{% block flexible_content_collection_widget %}
+    {# the "is iterable" check is needed because if an object implements __toString() and
+               returns an empty string, "is empty" returns true even if it's not a collection #}
+    {% set isEmptyCollection = value is null or (value is iterable and value is empty) %}
+    <div class="ui grid">
+        <div class="ten wide column w-flexible-content">
+            {% if isEmptyCollection %}
+                {{ block('flexible_content_empty_collection') }}
+            {% else %}
+                <div style="padding: 1em 0; cursor:pointer; display:none" class="ui horizontal divider move-here">
+                    Move here
+                </div>
+                {% for child in form.children %}
+                    {% set blockData = null %}
+                    {% for type, block in blocks %}
+                        {% if child.vars.value['block_type'] == type %}
+                            {% set blockData = block %}
+                        {% endif %}
+                    {% endfor %}
+                    {{ _self.w_block(blockData.name, form_widget(child), loop.first ? 'none' : 'none') }}
+                {% endfor %}
+            {% endif %}
+            <div id="w-wrapper-prototype" style="display:none">
+                {{ _self.w_block('Nouveau bloc', '', 'block') }}
+            </div>
+        </div>
+
+        {% if isEmptyCollection or form.vars.prototype is defined %}
+            {% set attr = attr|merge({'data-empty-collection': block('flexible_content_empty_collection') }) %}
+        {% endif %}
+
+        <div class="six wide column w-flexible-blocks">
+            {% set tabs = [] %}
+            {% for type, block in blocks %}
+                {% set tab = ("happy_cms.editor.blocks" | trans ) %}
+                {% if block.getTab() is defined %}
+                    {% set tab = block.getTab() %}
+                {% endif %}
+                {% if tab not in tabs %}
+                    {% set tabs = tabs|merge([tab]) %}
+                {% endif %}
+            {% endfor %}
+            <div class="ui fluid search selection dropdown block-categories">
+                <i class="dropdown icon"></i>
+                <div class="default text">Block categories</div>
+                <div class="menu">
+                    {% for tab in tabs %}
+                        {% set tabKey = tab|replace({" ":"_"})|lower %}
+                        <div class="item" data-value="{{ tabKey }}">
+                            {{- tab | trans -}}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% set blockCount = 0 %}
+            <div style="margin-top: 16px;" class="ui cards">
+                {% for type, block in blocks %}
+                    {% set blockTab = ("happy_cms.editor.blocks" | trans ) %}
+                    {% if block.getTab is defined %}
+                        {% set blockTab = block.getTab() %}
+                    {% endif %}
+                    {% set tabKey = blockTab|replace({" ":"_"})|lower %}
+                    <div class="ui card" data-block-category="{{ tabKey }}">
+                        <div class="content">
+                            <div class="ui sub header">
+                                {% if block.icon is not iterable and (block.icon starts with '<span' or block.icon starts with '<i ' or block.icon starts with '<svg') %}
+                                    {{ block.icon|raw }}
+                                {% endif %}
+                                {{ block.name }}
+                            </div>
+                        </div>
+                        {% if block.icon is iterable %}
+                            <div class="content">
+                                <div id="carouselBlockControlsNoTouching{{ blockCount }}" class="carousel carousel-dark slide"  data-bs-ride="carousel">
+                                    <div class="carousel-indicators">
+                                        {% for icon in block.icon %}
+                                            <button type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}"  {{ loop.first ? ' class="active" aria-current="true" ' : '' }} data-bs-slide-to="{{ loop.index0 }}"></button>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="carousel-inner">
+                                        {% for icon in block.icon %}
+                                            <div class="carousel-item {{ loop.first ? 'active' : '' }}" data-bs-interval="10000">
+                                                {{ icon | raw }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">{{ "happy_cms.editor.previous" | trans }}</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">{{ "happy_cms.editor.next" | trans }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        {% elseif block.icon starts with '<img' %}
+                            <div class="content">
+                                {{ block.icon|raw }}
+                            </div>
+                        {% endif %}
+                        <div class="extra content">
+                            {% set please_save %}
+                                <div class="ui warning segment">
+                                    <i class="save icon"></i>
+                                    {{ "happy_cms.editor.please_saves_changes" | trans }}
+                                </div>
+                            {% endset %}
+                            <button
+                                class="add-flexible-block ui button"
+                                data-block-type="{{ type }}"
+                                data-block-icon="{{ block.icon is not iterable ? block.icon : '' }}"
+                                data-block-name="{{ block.name }}"
+                                data-prototype='{{ (form_row(prototypes[type]) ~ please_save)|e('html_attr') }}'
+                                data-num-items='{{ form.children|length }}'
+                                data-form-type-name-placeholder='{{ prototypes[type] is defined ? prototypes[type].vars.name : '' }}'
+                            >
+                                {{ "happy_cms.editor.add" | trans }}
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div id="confirm_sentence" style="display: none" >{{ 'sylius.ui.are_your_sure_you_want_to_perform_this_action'|trans }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

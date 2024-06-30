@@ -1,0 +1,122 @@
+{% trans_default_domain 'SyliusHappyCMSPlugin' %}
+
+{% block happy_cms.media_row %}
+    {% set row_attr = row_attr|merge({
+        class: row_attr.class|default('') ~ ' form-group'
+    }) %}
+
+    {% set options = {
+        'baseUrl' : happy_cms.media.base_url,
+        'hideFilesExt' : happy_cms.media.hide_files_ext,
+        'mimeTypes' : happy_cms.media.extended_mimes,
+        'broadcasting' : happy_cms.media.enable_broadcasting,
+        'generating_alts' : happy_cms.media.enable_generating_alts,
+        'locales' : happy_cms.media.locales,
+    } %}
+
+    {% set routes = {
+        'file_infos' : path('media.get_file_info'),
+    } %}
+
+<div class="{{ form.vars.ea_crud_form.ea_field.columns ?? form.vars.ea_crud_form.ea_field.defaultColumns ?? '' }}">
+    <div {% with { attr: row_attr|merge({
+        'data-row-id': id
+    }) } %}{{ block('attributes') }}{% endwith %}>
+        {{- form_label(form) -}}
+
+        <div class="form-widget happy-cms-media-widget" data-widget="{{ form.vars.id }}">
+            <happy-cms-media-modal inline-template v-cloak :config="{{ options|json_encode }}" :routes="{{ routes|json_encode }}" >
+                <div>
+                    <div v-if="inputName">{% include '@SyliusHappyCMSPlugin/media/extras/modal.html.twig' %}</div>
+                    {% include '@SyliusHappyCMSPlugin/media/extras/editor.html.twig' %}
+
+                    <media-modal item="media" {% if value is not empty %}old="{{ value }}" {% endif %} :name="inputName"></media-modal>
+                    <!--media-modal item="links" :name="inputName" :multi="true"></media-modal-->
+
+                    <section>
+                        <button type="button" class="btn btn-primary" @click="toggleModalFor('media')">{{ 'happy_cms.media.select.file'|trans }}</button>
+
+                        <div class="selection-preview" v-if="selectedFile">
+                            <div class="__box-data" @click.stop="toggleModal('preview_modal')">
+                                <div class="__box-preview">
+                                    <template v-if="fileTypeIs(selectedFile, 'image')">
+                                        <div class="__box-img">
+                                            <img v-if="selectedFile.path"
+                                                 :src="selectedFile.path"
+                                                 loading="lazy">
+                                        </div>
+                                    </template>
+
+                                    <template v-else-if="fileTypeIs(selectedFile, 'oembed')">
+                                        <img v-if="selectedFile.metas.icon" :src="selectedFile.metas.icon">
+                                        <icon v-else name="external-link-alt" scale="2.6"></icon>
+                                    </template>
+
+                                    <span v-else class="icon is-large">
+                                            <icon v-if="fileTypeIs(selectedFile, 'folder')" name="folder" scale="2.6"></icon>
+                                            <icon v-else-if="fileTypeIs(selectedFile, 'application')" name="cogs" scale="2.6"></icon>
+                                            <icon v-else-if="fileTypeIs(selectedFile, 'compressed')" name="regular/file-archive" scale="2.6"></icon>
+                                            <icon v-else-if="fileTypeIs(selectedFile, 'video')" name="film" scale="2.6"></icon>
+                                            <icon v-else-if="fileTypeIs(selectedFile, 'audio')" name="music" scale="2.6"></icon>
+                                            <icon v-else-if="fileTypeIs(selectedFile, 'pdf')" name="regular/file-pdf" scale="2.6"></icon>
+                                            <icon v-else-if="fileTypeIs(selectedFile, 'text')" name="regular/file-alt" scale="2.6"></icon>
+                                    </span>
+                                </div>
+
+                                <div class="__box-info">
+                                    {# folder #}
+                                    <template v-if="fileTypeIs(selectedFile, 'folder')">
+                                        <h4>{% verbatim %}{{ selectedFile.name }}{% endverbatim %}</h4>
+                                    </template>
+
+                                    {# any other #}
+                                    <template v-else>
+                                        <h4>{% verbatim %}{{ selectedFile.name }}{% endverbatim %}</h4>
+                                        <small class="__info-file-size" v-if="selectedFile.size">{% verbatim %}{{ getFileSize(selectedFile.size) }}{% endverbatim %}</small>
+                                    </template>
+                                </div>
+
+                                <div class="__box-delete">
+                                    <span class="delete bg-danger" @click.stop="clearFile()" v-tippy="{arrow: true, placement: 'top'}" title="{{ 'happy_cms.media.remove'|trans }}"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# preview_modal #}
+                        <div v-if="isActiveModal('preview_modal')"
+                             class="modal mm-animated fadeIn is-active __modal-preview">
+                            <div class="modal-background link" @click.stop="toggleModal()"></div>
+                            <div class="mm-animated fadeInDown __modal-content-wrapper">
+                                <div class="modal-content" :key="selectedFile.path">
+                                    {# card v #}
+                                    {% include '@SyliusHappyCMSPlugin/media/partials/card.html.twig' with {"light": true} %}
+                                </div>
+                            </div>
+                            <button type="button" class="modal-close is-large" @click.stop="toggleModal()"></button>
+                        </div>
+                        {{ form_widget(form, {'type': 'text', 'attr': {'v-model': 'media', "style": "display:none"} }) }}
+                    </section>
+                </div>
+            </happy-cms-media-modal>
+
+
+            {% if ea.field.help ?? false %}
+                <small class="form-help">{{ 'happy_cms.media.' ~ ea.field.help|raw }}</small>
+            {% elseif form.vars.help ?? false %}
+                <small class="form-help">{{ 'happy_cms.media.' ~ form.vars.help|trans(form.vars.help_translation_parameters, form.vars.translation_domain)|raw }}</small>
+            {% endif %}
+
+            {{- form_errors(form) -}}
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        window.addEventListener("DOMContentLoaded", function() {
+            var vueElement = document.querySelector(".happy-cms-media-widget[data-widget='{{ form.vars.id }}']");
+            if(vueElement && !vueElement.__vue__){
+                new window.Vue({ el: vueElement });
+            }
+        });
+    </script>
+</div>
+{% endblock %}

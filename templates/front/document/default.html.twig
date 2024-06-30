@@ -1,0 +1,22 @@
+{% extends '@SyliusShop/layout.html.twig' %}
+
+{% block title %}
+    {%- set translation = resource.translation(app.request.locale) | default(false) -%}
+    {%- if translation and translation.seo is defined and translation.seo.title is defined %}
+        {{- seo_title(translation.seo.title) -}}
+    {% else %}
+        {{- seo_title(parent()) -}}
+    {% endif -%}
+{% endblock %}
+
+{% block content %}
+    {{ dump() }}
+    {{ dump(path('cmf_routing_object', {'_route_object' : resource.onlineRoute, '_locale': 'en_US'})) }}
+    {{ dump(path('cmf_routing_object', {'_route_object' : resource.onlineRoute, '_locale': 'fr_FR'})) }}
+    {{ dump(path('cmf_routing_object', {'_route_object' : resource.onlineRoute})) }}
+
+    {% for block in (resource.translation(app.request.locale) | default({ content: []})).content %}
+        {{ happy_cms_block_render(block, preview) }}
+    {% endfor %}
+    {{ happy_cms_block_assets() }}
+{% endblock %}

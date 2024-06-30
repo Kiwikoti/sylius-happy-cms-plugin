@@ -1,0 +1,67 @@
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+{% import _self as tree %}
+
+{% macro render(menu_items) %}
+    {% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+    {% import _self as tree %}
+
+    <ul>
+        {% for menu_item in menu_items|filter(menu_item => menu_item.id is not null) %}
+            <li data-id="{{ menu_item.id }}" {% if menu_item.children is not empty %}data-sylius-js-tree-parent="{{ menu_item.id }}"{% endif %}>
+                <div class="sylius-tree__item">
+                    <div class="sylius-tree__icon" {% if menu_item.children is not empty %}data-sylius-js-tree-trigger="{{ menu_item.id }}"{% endif %}>
+                        <i class="{{ menu_item.children is not empty ? 'caret down' : 'angle left' }} icon"></i>
+                    </div>
+                    <div class="sylius-tree__title">
+                        <a href="{{ path('happy_cms_admin_menu_item_update', { 'id': menu_item.id }) }}"{% if not menu_item.publishState is same as 'published' %} class="text gray"{% endif %}>
+                            {{ menu_item.name }}
+                        </a>
+                    </div>
+                    <div class="sylius-tree__action">
+                        <form action="{{ path('happy_cms_admin_menu_item_delete', { 'id': menu_item.id }) }}" method="post">
+                            <div class="ui tiny basic icon top right pointing dropdown button sylius-tree__action__trigger">
+                                <i class="ellipsis horizontal icon"></i>
+                                <div class="menu">
+                                    <a class="item" href="{{ path('happy_cms_admin_menu_item_create', { 'id': menu_item.menu.id}) }}">
+                                        <i class="plus icon blue"></i>{{ 'sylius.ui.create'|trans }}
+                                    </a>
+                                    <a class="item" href="{{ path('happy_cms_admin_menu_item_update', { 'id': menu_item.id }) }}">
+                                        <i class="pencil icon grey"></i>{{ 'sylius.ui.edit'|trans }}
+                                    </a>
+                                    <button class="item" type="submit" style="width: 100%;" data-requires-confirmation>
+                                        <i class="icon trash red"></i>{{ 'sylius.ui.delete'|trans }}
+                                    </button>
+
+                                    <div class="divider"></div>
+
+                                    <div class="item sylius-menu_item-move-up" data-url="{{ path('happy_cms_admin_menu_item_update_move_up', { id: menu_item.id }) }}">
+                                        <i class="arrow up icon grey"></i>{{ 'sylius.ui.move_up'|trans }}
+                                    </div>
+                                    <div class="item sylius-menu_item-move-down" data-url="{{ path('happy_cms_admin_menu_item_update_move_down', { id: menu_item.id }) }}">
+                                        <i class="arrow down icon grey"></i>{{ 'sylius.ui.move_down'|trans }}
+                                    </div>
+
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token(menu_item.id) }}" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {{ tree.render(menu_item.children) }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endmacro %}
+
+<div class="ui segment sylius-tree hidden" data-sylius-js-tree>
+    <a href="{{ path('happy_cms_admin_menu_item_create', { 'id': menu }) }}" class="ui fluid labeled icon primary button">
+        <i class="plus icon"></i>
+        {{ 'sylius.ui.create'|trans }}
+    </a>
+
+    <a href="#" class="sylius-tree__toggle-all" data-sylius-js-tree-trigger>
+        <i class="icon">&bull;</i>{{ 'sylius.ui.toggle_all'|trans }}
+    </a>
+    {{ tree.render(menu_items) }}
+</div>

@@ -1,0 +1,4 @@
+doctrine:
+    dbal:
+        types:
+            adeliom_happy_cms_flexible_content_type : Adeliom\SyliusHappyCMSPlugin\Doctrine\FlexibleContentType

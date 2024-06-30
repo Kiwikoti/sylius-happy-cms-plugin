@@ -1,0 +1,168 @@
+happy_cms:
+    home: Homepage
+    page:
+        admin:
+            action:
+                manage_content: Manage content
+            crud:
+                title:
+                    page:
+                        edit: Page edition
+                        index: Pages list
+                        new: New page
+                        detail: Page details
+                label:
+                    page:
+                        singular: page
+                        plural: pages
+                        new: New page
+                        edit: Edit
+                        delete: Delete
+                        saveAndReturn: Save and return
+                        saveAndContinue: Save and continue
+                        saveAndAddAnother: Save and add another
+            menu:
+                pages: Pages
+                contents: Contents
+            panel:
+                information: Informations
+                metadatas: Metadatas
+                seo: SEO
+                publication: PUblication
+            field:
+                action: Action
+                action_help: "To apply change you have to clear symfony cache"
+                parent: Parent page
+                home_page: Homepage
+                name: Name
+                state: Status
+                publishDate: Publish date
+                unpublishDate: Unpublish date
+                slug: Permalink
+                slug_edit: "Are you sure you want to edit this permalink ?"
+                category: Category
+                seo: SEO
+            tab:
+                page: Page
+                seo: SEO
+            ui:
+                index: Pages
+                create: Create page
+                update: Update page
+                subheader: Manage your pages
+        front:
+            categories: Categories
+            category: Category
+            entries: Questions
+            readmore: Read more
+    seo:
+        admin:
+            field:
+                title: Title
+                cover: Cover
+                canonical: canonical URL
+                description: Description
+                keywords: Keywords
+                key: Page key
+                robots: Robots
+                sitemap: Include in sitemap
+    config:
+        admin:
+            field:
+                key: Key
+                name: Name
+                description: Description
+                type: Type
+                enabled: Enabled
+                value: Value
+                value_bool: Active
+            type:
+                code: Code
+                email: Email
+                image: Image
+                file: File
+                color: Color
+                date: Date
+                time: Hour
+                datetime: Date and Hour
+                number: Numbre
+                json: JSON
+                text: Text
+                textarea: Text area
+                wysiwyg: WYSIWYG
+                boolean: Boolean
+            tab:
+                configuration: Configuration
+            ui:
+                index: Configurations
+                create: Create configuration
+                update: Update configuration
+                subheader: Manage your configurations
+    editor:
+        add: Add
+        next: Next
+        previous: Previous
+        blocks: Blocks
+        empty_block_collection: Empty block collection
+        please_saves_changes: To access the configuration of this block please click on the “Save changes” button below
+        published: Published content
+    shared_block:
+        admin:
+            field:
+                name: Name
+                key: Key
+                type: Type
+                status: Status
+                translations: Translations
+                content: Content
+            tab:
+                configuration: Configuration
+                content: Content
+            action:
+                create: Create shared block
+                choose: Choose this shared block
+            ui:
+                index: Shared blocks
+                create: Create shared block
+                update: Update shared block
+                subheader: Manage your shared blocks
+                choose: Choose a shared block type
+    menu:
+        admin:
+            field:
+                name: Name
+                code: Code
+                status: Active
+            tab:
+                menu: Menu
+            actions:
+                manage: Manage menu items
+            ui:
+                index: Menus
+                create: Create menu
+                update: Update menu
+                subheader: Manage your menus
+    menu_item:
+        admin:
+            field:
+                menu: Menu
+                parent: Parent item menu
+                name: Name
+                url: URL
+                classAttr: Class attribute
+                target: Open in a new tab
+                position: Position
+                state: Active
+            tab:
+                menu_item: Menu item
+                link: Link
+            action:
+                create: Create menu item
+                list: List menu items
+            ui:
+                index: Menu items
+                create: Create menu item
+                update: Update menu item
+                subheader: Manage your menu items
+            data:
+                menu_item_root: Root item

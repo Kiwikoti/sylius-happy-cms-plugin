@@ -1,0 +1,88 @@
+<?php
+
+namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Seo;
+
+use Adeliom\SyliusHappyCMSPlugin\Event\Seo\AfterSitemapEntities;
+use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
+use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SeoInterface;
+use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SitemapDumperInterface;
+use Presta\SitemapBundle\Event\SitemapPopulateEvent;
+use Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Sylius\Component\Resource\Model\AbstractTranslation;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+class SitemapSubscriber implements EventSubscriberInterface
+{
+    public function __construct(
+        private bool $sitemap,
+        private iterable $sitemapDumpables,
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            SitemapPopulateEvent::class => 'populate',
+        ];
+    }
+
+    public function populate(SitemapPopulateEvent $event): void
+    {
+        if ($this->sitemap) {
+            $urls = $event->getUrlContainer();
+            $urlGenerator = $event->getUrlGenerator();
+            foreach ($this->sitemapDumpables as $sitemapDumpable) {
+                $event = $this->eventDispatcher->dispatch(new AfterSitemapEntities($sitemapDumpable->getEntities()));
+                $entities = $event->getEntities();
+                $replaceUrl = \Closure::fromCallable([$sitemapDumpable, 'replaceUrl']);
+                if ($entities) {
+                    foreach ($entities as $entity) {
+                        /** @var SeoInterface&AbstractTranslation $canonicalTranslation */
+                        $canonicalTranslation = $entity->getTranslation();
+                        if ($canonicalTranslation->getSEO()->sitemap) {
+                            $url = $this->getUrl($urlGenerator, $sitemapDumpable, $entity, $canonicalTranslation, $replaceUrl);
+                            $concreteUrl = new UrlConcrete($url, $sitemapDumpable->getLastModifiedDate($entity));
+                            $decoratedUrl = new GoogleMultilangUrlDecorator($concreteUrl);
+
+                            foreach ($entity->getTranslations() as $translation) {
+                                /** @var SeoInterface&AbstractTranslation $translation */
+                                if ($canonicalTranslation !== $translation && $translation->getSEO()->sitemap) {
+                                    $url = $this->getUrl($urlGenerator, $sitemapDumpable, $entity, $translation, $replaceUrl);
+                                    $decoratedUrl->addLink($url, $translation->getLocale());
+                                }
+                            }
+                            $urls->addUrl($decoratedUrl, $sitemapDumpable->getSitemapSection());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private function getUrl(UrlGeneratorInterface $urlGenerator, SitemapDumperInterface $sitemapDumpable, CmsRoutableInterface $entity, SeoInterface $translation, ?callable $replaceUrl = null, ?int $page = null): string
+    {
+        /** @var SeoInterface&AbstractTranslation $translation */
+        $params = $sitemapDumpable->getSitemapRouteParams($entity);
+        $params['_locale'] = $translation->getLocale();
+
+
+        $url = $urlGenerator->generate(
+            $sitemapDumpable->getSitemapRoute(),
+            $params,
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        if ($updatedUrl = $replaceUrl($url, $entity)) {
+            $url = $updatedUrl;
+        }
+
+        return $url;
+    }
+}
