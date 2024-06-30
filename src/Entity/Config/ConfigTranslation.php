@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
-use Adeliom\SyliusHappyCMSPlugin\Enum\Config\ConfigTypeEnum;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Model\AbstractTranslation;
-use Doctrine\ORM\Mapping\MappedSuperclass;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Adeliom\SyliusHappyCMSPlugin\Enum\Config\ConfigTypeEnum;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\MappedSuperclass;
+use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Component\Resource\Model\ResourceInterface;
 
 #[HasLifecycleCallbacks]
 #[MappedSuperclass]
@@ -38,12 +40,10 @@ class ConfigTranslation extends AbstractTranslation implements ResourceInterface
         if ($translatable->getType()) {
             return $translatable->getType();
         }
+
         return null;
     }
 
-    /**
-     * @return null
-     */
     public function __get($name)
     {
         if ($this->getType() == $name) {

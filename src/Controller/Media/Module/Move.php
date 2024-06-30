@@ -17,7 +17,7 @@ trait Move
      */
     public function moveItem(Request $request)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $destinationId = $data['destination'];
         $movedFiles = $data['moved_files'];
         $destination = null;
@@ -42,10 +42,11 @@ trait Move
 
             $new_path = sprintf('/%s', $file_name);
             if ($destination) {
-                $new_path = $destination->getPath().$new_path;
+                $new_path = $destination->getPath() . $new_path;
             }
 
             $defaults['new_path'] = $new_path;
+
             try {
                 if ('folder' === $file_type && ($destination && $destination->getId() === $id)) {
                     throw new \Exception($this->translator->trans('error.move_into_self', [], 'SyliusHappyCMSPlugin'));
@@ -75,7 +76,7 @@ trait Move
             } catch (\Exception $e) {
                 $result[] = [
                     'success' => false,
-                    'message' => sprintf('"%s" ', $old_path).$e->getMessage(),
+                    'message' => sprintf('"%s" ', $old_path) . $e->getMessage(),
                 ];
             }
         }

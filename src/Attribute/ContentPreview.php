@@ -10,7 +10,7 @@ use Attribute;
 class ContentPreview
 {
     public function __construct(
-        private array $roles
+        private array $roles,
     ) {
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
@@ -51,7 +53,7 @@ class Helper
         /**
          * @readonly
          */
-        private FormFactory $formFactory
+        private FormFactory $formFactory,
     ) {
     }
 
@@ -66,20 +68,20 @@ class Helper
             $html .= "<style media='all'>";
 
             foreach ($this->assets['css'] as $stylesheet) {
-                $html .= "\n".sprintf('@import url(%s);', $stylesheet);
+                $html .= "\n" . sprintf('@import url(%s);', $stylesheet);
             }
 
             $html .= "\n</style>";
         }
 
         foreach ($this->assets['js'] as $javascript) {
-            $html .= "\n".sprintf('<script src="%s" type="text/javascript"></script>', $javascript);
+            $html .= "\n" . sprintf('<script src="%s" type="text/javascript"></script>', $javascript);
         }
 
         foreach ($this->assets['webpack'] as $webpack) {
             try {
-                $html .= "\n".$this->twig->createTemplate(sprintf("{{ encore_entry_link_tags('%s') }}", $webpack))->render();
-                $html .= "\n".$this->twig->createTemplate(sprintf("{{ encore_entry_script_tags('%s') }}", $webpack))->render();
+                $html .= "\n" . $this->twig->createTemplate(sprintf("{{ encore_entry_link_tags('%s') }}", $webpack))->render();
+                $html .= "\n" . $this->twig->createTemplate(sprintf("{{ encore_entry_script_tags('%s') }}", $webpack))->render();
             } catch (LoaderError|SyntaxError) {
                 $html .= '';
             }
@@ -165,7 +167,7 @@ class Helper
             }
 
             ++$blockLoopIndex;
-            $blockSettings['attr_id'] = 'block-'.$blockLoopIndex;
+            $blockSettings['attr_id'] = 'block-' . $blockLoopIndex;
         }
 
         // Tranform settings way 2 : with dispatch / event listeners

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Doctrine;
 
 use Doctrine\DBAL\Types\JsonType;
@@ -15,5 +17,4 @@ class FlexibleContentType extends JsonType
     {
         return self::ADELIOM_SYLIUS_CMS_FLEXIBLE_CONTENT_TYPE; // modify to match your constant name
     }
-
 }

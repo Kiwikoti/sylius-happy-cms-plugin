@@ -29,8 +29,8 @@ trait Upload
             $folder = $this->manager->getFolder($upload_folder_id);
         }
 
-        $random_name = filter_var($request->request->get('random_names'), FILTER_VALIDATE_BOOLEAN);
-        $custom_attr = json_decode($request->request->get('custom_attrs', '[]'), true, 512, JSON_THROW_ON_ERROR);
+        $random_name = filter_var($request->request->get('random_names'), \FILTER_VALIDATE_BOOLEAN);
+        $custom_attr = json_decode($request->request->get('custom_attrs', '[]'), true, 512, \JSON_THROW_ON_ERROR);
         $result = [];
 
         if (($one = $request->files->get('file')) && $this->allowUpload($one)) {
@@ -96,7 +96,7 @@ trait Upload
     public function uploadEditedImage(Request $request)
     {
         if ($this->allowUpload()) {
-            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
             $upload_folder_id = $data['folder'];
             $folder = null;
@@ -106,7 +106,7 @@ trait Upload
 
             $upload_path = $folder ? $folder->getPath() : null;
             $original = $data['name'];
-            $name_only = pathinfo((string) $original, PATHINFO_FILENAME).'_'.$this->helper->getRandomString();
+            $name_only = pathinfo((string) $original, \PATHINFO_FILENAME) . '_' . $this->helper->getRandomString();
 
             try {
                 $beforeFileCreatedEvent = $this->eventDispatcher->dispatch(new MediaBeforeFileCreated($data['data'], $upload_path, $name_only), MediaBeforeFileCreated::NAME);
@@ -143,7 +143,7 @@ trait Upload
     public function uploadLink(Request $request)
     {
         if ($this->allowUpload()) {
-            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
             $url = $data['url'];
             $upload_folder_id = $data['folder'];
             $folder = null;
@@ -152,7 +152,7 @@ trait Upload
             }
 
             try {
-                $random_name = filter_var($data['random_names'], FILTER_VALIDATE_BOOLEAN);
+                $random_name = filter_var($data['random_names'], \FILTER_VALIDATE_BOOLEAN);
                 $name = $random_name ? $this->helper->getRandomString() : null;
 
                 $beforeFileCreatedEvent = $this->eventDispatcher->dispatch(new MediaBeforeFileCreated($url, $folder ? $folder->getPath() : null, $name), MediaBeforeFileCreated::NAME);
@@ -217,7 +217,7 @@ trait Upload
 
         $filename = str_replace([' ', '(', ')'], '_', $filename); // remove problematic symbols
         $info = pathinfo($filename);
-        $extension = isset($info['extension']) ? '.'.strtolower($info['extension']) : '';
+        $extension = isset($info['extension']) ? '.' . strtolower($info['extension']) : '';
         $filename = $info['filename'];
 
         $totalSize = (int) $request->get('dztotalfilesize', 0);
@@ -242,7 +242,7 @@ trait Upload
     private static function checkAllParts(string $fileChunksFolder, string $filename, string $extension, int $totalSize, int $totalChunks, string $chunksDir, array &$successes, array &$errors, array &$warnings)
     {
         $parts = glob(Path::normalize(sprintf('%s/*', $fileChunksFolder)));
-        $successes[] = count($parts).sprintf(' of %d parts done so far in %s', $totalChunks, $fileChunksFolder);
+        $successes[] = count($parts) . sprintf(' of %d parts done so far in %s', $totalChunks, $fileChunksFolder);
         $filesystem = new Filesystem();
 
         // check if all the parts present, and create the final destination file
@@ -262,7 +262,7 @@ trait Upload
                     $chunksDir,
                     $successes,
                     $errors,
-                    $warnings
+                    $warnings,
                 )
             ) {
                 $filesystem->remove(Path::normalize($fileChunksFolder));
@@ -276,7 +276,7 @@ trait Upload
 
     private static function createFileFromChunks(string $fileChunksFolder, string $fileName, string $extension, int $totalSize, int $totalChunks, string $chunksDir, array &$successes, array &$errors, array &$warnings)
     {
-        $relPath = Path::normalize($chunksDir.'/assembled');
+        $relPath = Path::normalize($chunksDir . '/assembled');
         $filesystem = new Filesystem();
         $filesystem->mkdir($relPath);
 
@@ -294,7 +294,7 @@ trait Upload
         }
 
         for ($i = 0; $i < $totalChunks; ++$i) {
-            fwrite($fp, file_get_contents(Path::normalize($fileChunksFolder.'/'.$fileName.'.part'.$i)));
+            fwrite($fp, file_get_contents(Path::normalize($fileChunksFolder . '/' . $fileName . '.part' . $i)));
         }
 
         fclose($fp);
@@ -306,7 +306,7 @@ trait Upload
     {
         if (file_exists(Path::normalize(sprintf('%s/%s%s', $relPath, $origFileName, $extension)))) {
             $i = 0;
-            while (file_exists(Path::normalize(sprintf('%s/%s_', $relPath, $origFileName).(++$i).$extension)) && $i < 10000) {
+            while (file_exists(Path::normalize(sprintf('%s/%s_', $relPath, $origFileName) . (++$i) . $extension)) && $i < 10000) {
             }
 
             /** @phpstan-ignore-next-line */
@@ -316,7 +316,7 @@ trait Upload
                 return false;
             }
 
-            return $origFileName.'_'.$i;
+            return $origFileName . '_' . $i;
         }
 
         return $origFileName;

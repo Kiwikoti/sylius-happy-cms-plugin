@@ -52,3 +52,11 @@ services:
 
   Adeliom\SyliusHappyCMSPlugin\Routing\MediaLoader:
     tags: [ routing.loader ]
+
+  # pages
+  # ===============================
+
+
+
+  # seo
+  # ===============================

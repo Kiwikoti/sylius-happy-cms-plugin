@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 interface BlockInterface
@@ -17,18 +19,21 @@ interface BlockInterface
 
     /**
      * Declare here the assets that make front working as expected
+     *
      * @return array<string, string[]>
      */
     public function configureAssets(): array;
 
     /**
      * Declare here the assets that make back-office working as expected
+     *
      * @return array<string, string[]>
      */
     public function configureAdminAssets(): array;
 
     /**
      * Declare here the form themes path that make back-office form display as expected
+     *
      * @return string[]
      */
     public function configureAdminFormThemes(): array;

@@ -24,7 +24,7 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
         /**
          * @readonly
          */
-        private MediaManager $manager
+        private MediaManager $manager,
     ) {
     }
 
@@ -90,7 +90,7 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
                 }
 
                 return $mediaId;
-            }
+            },
         ));
     }
 
@@ -127,11 +127,11 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
     {
         return [
             'js' => [
-                (Asset::new('media-form.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME)
+                (Asset::new('media-form.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
             ],
             'css' => [
-                (Asset::new('media-form.css'))->package(AssetHappyCMSPackage::PACKAGE_NAME)
-            ]
+                (Asset::new('media-form.css'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
+            ],
         ];
     }
 

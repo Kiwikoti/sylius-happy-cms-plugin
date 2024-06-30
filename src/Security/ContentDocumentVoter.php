@@ -13,9 +13,10 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 class ContentDocumentVoter implements VoterInterface
 {
     public const PREVIEW = 'preview';
+
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
-        if (! ($subject instanceof CmsRoutableInterface)) {
+        if (!($subject instanceof CmsRoutableInterface)) {
             return VoterInterface::ACCESS_ABSTAIN;
         }
 

@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Asset;
 
 use Symfony\Component\Asset\PackageInterface;
 use Symfony\Component\Asset\PathPackage;
 use Symfony\Component\Asset\VersionStrategy\JsonManifestVersionStrategy;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * This defines a Symfony Asset named package that groups all the assets provided
@@ -26,8 +27,8 @@ final class AssetHappyCMSPackage implements PackageInterface
     {
         $this->package = new PathPackage(
             '/bundles/syliushappycmsplugin',
-            new JsonManifestVersionStrategy(__DIR__.'/../../public/manifest.json'),
-            null
+            new JsonManifestVersionStrategy(__DIR__ . '/../../public/manifest.json'),
+            null,
         );
     }
 

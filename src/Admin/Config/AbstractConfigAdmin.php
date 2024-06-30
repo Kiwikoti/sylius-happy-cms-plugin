@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Config;
 
-use Adeliom\SyliusHappyCMSPlugin\DataMapperInterface\ConfigTranslatableDataMapper;
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
+use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ChoiceMaskField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
+use Adeliom\SyliusHappyCMSPlugin\DataMapperInterface\ConfigTranslatableDataMapper;
 use Adeliom\SyliusHappyCMSPlugin\Enum\Config\ConfigTypeEnum;
-use App\Entity\Config\Config;
 use Symfony\Component\Form\FormBuilderInterface;
 
-abstract class AbstractConfigAdmin extends AbstractAdmin
+abstract class AbstractConfigAdmin extends AbstractAdmin implements AdminInterface
 {
     public static function getDefaultSortColumn(): string
     {
@@ -53,7 +53,7 @@ abstract class AbstractConfigAdmin extends AbstractAdmin
         foreach ($typeKeys as $typeKey) {
             yield TranslationField::new(sprintf('translations_%s', $typeKey), 'sylius_happy_cms.config.admin.type.' . $typeKey)
                 ->addField(
-                    ConfigTypeEnum::getAdminField($typeKey)
+                    ConfigTypeEnum::getAdminField($typeKey),
                 )
                 ->hideOnIndex();
         }

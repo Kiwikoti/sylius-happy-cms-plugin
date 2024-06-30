@@ -1,130 +1,139 @@
 services:
-    Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockCollection:
-        autoconfigure: true
-        public: true
-        arguments:
-            - !tagged adeliom.sylius.cms.block
-    
-    adeliom.sylius.cms.block_collection:
-        alias: Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockCollection
-    
-    Adeliom\SyliusHappyCMSPlugin\Admin\Field\Configurator\FlexibleContentConfigurator:
-        public: true
-        arguments:
-            - "@adeliom.sylius.cms.block_collection"
-        tags: 
-            - 'easy.fields.configurator'
-    
-    Adeliom\SyliusHappyCMSPlugin\Twig\Block\BlockExtension:
-        public: true
-        tags:
-            - { name: twig.extension }
-    
-    adeliom.sylius.cms.block.twig_extension:
-        alias: Adeliom\SyliusHappyCMSPlugin\Twig\Block\BlockExtension
-    
-    Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper:
-        public: true
-        arguments:
-            - '@twig'
-            - '@event_dispatcher'
-            - '@adeliom.sylius.cms.block_collection'
-            - '@form.factory'
-            - '@doctrine.orm.entity_manager'
-        tags:
-            - { name: twig.runtime }
-    
-    adeliom.sylius.cms.block_helper:
-        alias: Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper
-    
-    adeliom.sylius.cms.maker.make_block:
-        class: Adeliom\SyliusHappyCMSPlugin\Maker\Block\MakeBlock
-        public: false
-        arguments:
-            - '@maker.file_manager'
-        tags:
-            - { name: maker.command }
-                
-    adeliom.sylius.cms.maker.make_happy_cms:
-        class: Adeliom\SyliusHappyCMSPlugin\Maker\CMS\MakeHappyCMS
-        public: false
-        arguments:
-            - '@maker.file_manager'
-        tags:
-            - { name: maker.command }
-    
-    Adeliom\SyliusHappyCMSPlugin\DataCollector\Block\BlockCollector:
-        arguments:
-            - "@adeliom.sylius.cms.block_helper"
-        tags:
-            -   name: data_collector
-                template: '@SyliusHappyCMSPlugin/profiler/block/collector.html.twig'
-                id: Adeliom\SyliusHappyCMSPlugin\DataCollector\Block\BlockCollector
-    
-    
-    # shared block
-    
-    Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection:
-        autoconfigure: true
-        public: true
-        arguments:
-            - !tagged adeliom.sylius.cms.shared_block
-    
-    adeliom.sylius.cms.shared_block.block_collection:
-        alias: Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection
-    
-    Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock\SharedBlockExtension:
-        public: true
-        tags:
-            - { name: twig.extension }
-    
-    adeliom.sylius.cms.shared_block.twig_extension:
-        alias: Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock\SharedBlockExtension
-    
-    adeliom.sylius.cms.shared_block.shared_block_type:
-        class: Adeliom\SyliusHappyCMSPlugin\SharedBlock\SharedBlockType
-        public: true
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@translator'
-            - '@form.factory'
-        tags: [ 'adeliom.sylius.cms.block', 'form.type' ]
-    
-    adeliom.sylius.cms.shared_block.maker.make_shared_block:
-        class: Adeliom\SyliusHappyCMSPlugin\Maker\SharedBlock\MakeSharedBlock
-        public: false
-        arguments:
-            - '@maker.file_manager'
-        tags:
-            - { name: maker.command }
-    
-    Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper:
-        public: true
-        arguments:
-            - '@twig'
-            - '@event_dispatcher'
-            - '@adeliom.sylius.cms.shared_block.block_collection'
-            - '@doctrine.orm.entity_manager'
-            - '%sylius_happy_cms.block.block_class%'
-            - '@form.factory'
-        tags:
-            - { name: twig.runtime }
-    
-    adeliom.sylius.cms.shared_block.block_helper:
-        alias: Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper
-    
-    Adeliom\SyliusHappyCMSPlugin\DataCollector\SharedBlock\SharedBlockCollector:
-        arguments:
-            - "@adeliom.sylius.cms.shared_block.block_helper"
-        tags:
-            -   name: data_collector
-                template: '@SyliusHappyCMSPlugin/profiler/shared_block/collector.html.twig'
-                id: Adeliom\SyliusHappyCMSPlugin\DataCollector\SharedBlock\SharedBlockCollector
+  _defaults:
+    autowire: true
+    autoconfigure: true
 
-    Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock\SharedBlockController:
-        arguments:
-            - "@twig"
-            - "@adeliom.sylius.cms.shared_block.block_collection"
-        tags:
-            - controller.service_arguments
-            - container.service_subscriber
+  Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockCollection:
+    autoconfigure: true
+    public: true
+    arguments:
+      - !tagged adeliom.sylius.cms.block
+
+  adeliom.sylius.cms.block_collection:
+    alias: Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockCollection
+
+  Adeliom\SyliusHappyCMSPlugin\Admin\Field\Configurator\FlexibleContentConfigurator:
+    public: true
+    arguments:
+      - "@adeliom.sylius.cms.block_collection"
+    tags:
+      - 'easy.fields.configurator'
+
+  Adeliom\SyliusHappyCMSPlugin\Twig\Block\BlockExtension:
+    public: true
+    tags:
+      - { name: twig.extension }
+
+  adeliom.sylius.cms.block.twig_extension:
+    alias: Adeliom\SyliusHappyCMSPlugin\Twig\Block\BlockExtension
+
+  Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper:
+    public: true
+    arguments:
+      - '@twig'
+      - '@event_dispatcher'
+      - '@adeliom.sylius.cms.block_collection'
+      - '@form.factory'
+      - '@doctrine.orm.entity_manager'
+    tags:
+      - { name: twig.runtime }
+
+  adeliom.sylius.cms.block_helper:
+    alias: Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper
+
+  adeliom.sylius.cms.maker.make_block:
+    class: Adeliom\SyliusHappyCMSPlugin\Maker\Block\MakeBlock
+    public: false
+    arguments:
+      - '@maker.file_manager'
+    tags:
+      - { name: maker.command }
+
+  adeliom.sylius.cms.maker.make_happy_cms:
+    class: Adeliom\SyliusHappyCMSPlugin\Maker\CMS\MakeHappyCMS
+    public: false
+    arguments:
+      - '@maker.file_manager'
+    tags:
+      - { name: maker.command }
+
+  Adeliom\SyliusHappyCMSPlugin\DataCollector\Block\BlockCollector:
+    arguments:
+      - "@adeliom.sylius.cms.block_helper"
+    tags:
+      - name: data_collector
+        template: '@SyliusHappyCMSPlugin/profiler/block/collector.html.twig'
+        id: Adeliom\SyliusHappyCMSPlugin\DataCollector\Block\BlockCollector
+
+
+  # shared block
+
+  Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection:
+    autoconfigure: true
+    public: true
+    arguments:
+      - !tagged adeliom.sylius.cms.shared_block
+
+  adeliom.sylius.cms.shared_block.block_collection:
+    alias: Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection
+
+  Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock\SharedBlockExtension:
+    public: true
+    tags:
+      - { name: twig.extension }
+
+  adeliom.sylius.cms.shared_block.twig_extension:
+    alias: Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock\SharedBlockExtension
+
+  adeliom.sylius.cms.shared_block.shared_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\SharedBlock\SharedBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'adeliom.sylius.cms.block', 'form.type' ]
+
+  adeliom.sylius.cms.shared_block.maker.make_shared_block:
+    class: Adeliom\SyliusHappyCMSPlugin\Maker\SharedBlock\MakeSharedBlock
+    public: false
+    arguments:
+      - '@maker.file_manager'
+    tags:
+      - { name: maker.command }
+
+  Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper:
+    public: true
+    arguments:
+      - '@twig'
+      - '@event_dispatcher'
+      - '@adeliom.sylius.cms.shared_block.block_collection'
+      - '@doctrine.orm.entity_manager'
+      - '%sylius_happy_cms.block.block_class%'
+      - '@form.factory'
+    tags:
+      - { name: twig.runtime }
+
+  adeliom.sylius.cms.shared_block.block_helper:
+    alias: Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper
+
+  Adeliom\SyliusHappyCMSPlugin\DataCollector\SharedBlock\SharedBlockCollector:
+    arguments:
+      - "@adeliom.sylius.cms.shared_block.block_helper"
+    tags:
+      - name: data_collector
+        template: '@SyliusHappyCMSPlugin/profiler/shared_block/collector.html.twig'
+        id: Adeliom\SyliusHappyCMSPlugin\DataCollector\SharedBlock\SharedBlockCollector
+
+  Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock\SharedBlockController:
+    arguments:
+      - "@twig"
+      - "@adeliom.sylius.cms.shared_block.block_collection"
+    tags:
+      - controller.service_arguments
+      - container.service_subscriber
+
+  sylius_happy_cms_shared_block_admin:
+    class: Adeliom\SyliusHappyCMSPlugin\Admin\SharedBlock\SharedBlockAdmin
+    tags:
+      - { name: form.type }

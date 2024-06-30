@@ -42,7 +42,7 @@ final class AdminMenuListener
         $cms = $children['adeliom-sylius-cms'];
         unset($children['adeliom-sylius-cms']);
         $menu->reorderChildren(array_keys([
-            'adeliom-sylius-cms' => $cms
+            'adeliom-sylius-cms' => $cms,
         ] + $children));
 
         $children['configuration']

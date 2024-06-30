@@ -19,7 +19,7 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
 
     public function mapDataToForms(mixed $viewData, \Traversable $forms): void
     {
-        if (! $viewData instanceof Config) {
+        if (!$viewData instanceof Config) {
             return;
         }
 
@@ -41,7 +41,7 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
 
     public function mapFormsToData(\Traversable $forms, mixed &$viewData): void
     {
-        if (! $viewData instanceof Config) {
+        if (!$viewData instanceof Config) {
             return;
         }
 
@@ -52,6 +52,7 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
             // on set les valeurs scalaires basiques (key, name, description, type)
             if ($this->propertyAccessor->isWritable($viewData, $key)) {
                 $this->propertyAccessor->setValue($viewData, $key, $form->getData());
+
                 continue;
             }
             // si on est sur le bon type de champ (code, email, etc...) avec les translations
@@ -60,7 +61,7 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
                 // si la donnée est l'ancienne translation elle est sous forme de collection doctrine, sinon la nouvelle donnée est un tableau simple
                 $translationLocalesToKeep = $newTranslations instanceof Collection ? $newTranslations->toArray() : $newTranslations;
                 foreach ($viewData->getTranslations() as $translation) {
-                    if (! in_array($translation->getLocale(), array_keys($translationLocalesToKeep))) {
+                    if (!in_array($translation->getLocale(), array_keys($translationLocalesToKeep))) {
                         // si une ancienne locale n'est pas dans les données soumises on la supprime
                         $viewData->removeTranslation($translation);
                     } else {
@@ -72,5 +73,4 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
             }
         }
     }
-
 }

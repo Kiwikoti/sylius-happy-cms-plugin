@@ -27,14 +27,10 @@ class Folder
 
     protected ?Folder $parent = null;
 
-    /**
-     * @var Collection<Folder>
-     */
+    /** @var Collection<Folder> */
     protected Collection $children;
 
-    /**
-     * @var Collection<Media>
-     */
+    /** @var Collection<Media> */
     protected Collection $medias;
 
     public function __construct()
@@ -82,7 +78,7 @@ class Folder
         return $this->children;
     }
 
-    public function addChild(Folder $child): void
+    public function addChild(self $child): void
     {
         $this->children[] = $child;
         $child->setParent($this);
@@ -99,7 +95,7 @@ class Folder
         $media->setFolder($this);
     }
 
-    public function setParent(?Folder $parent = null): void
+    public function setParent(?self $parent = null): void
     {
         $this->parent = $parent;
     }
@@ -109,7 +105,7 @@ class Folder
         $tree = '';
         $current = $this;
         do {
-            $tree = $current->getSlug().$separator.$tree;
+            $tree = $current->getSlug() . $separator . $tree;
             $current = $current->getParent();
         } while ($current);
 

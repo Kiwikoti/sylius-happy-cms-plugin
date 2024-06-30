@@ -7,14 +7,14 @@ $mainClassData = [
     'lowerNames' => [
         'singular' => mb_strtolower(Str::asSnakeCase($entityClassName)),
         'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($entityClassName))),
-    ]
+    ],
 ];
 $relationClassData = [
     'className' => $relationClassName,
     'lowerNames' => [
         'singular' => mb_strtolower(Str::asSnakeCase($relationClassName)),
         'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
-    ]
+    ],
 ];
 $scope = mb_strtolower($scope);
 ?>
@@ -79,7 +79,7 @@ class <?= $mainClassData['className'] ?> implements ResourceInterface, Translata
 <?php } ?>
     protected Collection $<?= $relationClassData['lowerNames']['plural'] ?>;
 
-<?php if ( true === $options['hasRouting']) { ?>
+<?php if (true === $options['hasRouting']) { ?>
     #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ["persist", "remove"])]
     #[ORM\JoinTable('happy_cms_<?= $scope ?>__<?= $mainClassData['lowerNames']['singular'] ?>_route')]
     protected Collection $routes;
@@ -98,7 +98,7 @@ class <?= $mainClassData['className'] ?> implements ResourceInterface, Translata
         $this->initializeTranslationsCollection();
         $this->publishableConstruct();
         $this->timestampableConstruct();
-    <?php if ( true === $options['hasRouting']) { ?>
+    <?php if (true === $options['hasRouting']) { ?>
         $this->entityRouteConstruct();
     <?php } ?>
 
@@ -193,7 +193,7 @@ class <?= $mainClassData['className'] ?> implements ResourceInterface, Translata
         $this->js = $js;
     }
 
-<?php if ( true === $options['hasRouting']) { ?>
+<?php if (true === $options['hasRouting']) { ?>
     public function getRouteUnikName(): string
     {
         return 'happy_cms_<?= $scope ?>_' . $this->getId();

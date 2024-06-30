@@ -38,7 +38,6 @@ class MediaType extends Type
         } catch (\Exception) {
             return null;
         }
-
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
@@ -60,7 +59,7 @@ class MediaType extends Type
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {

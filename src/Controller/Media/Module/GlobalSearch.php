@@ -18,6 +18,7 @@ trait GlobalSearch
                 $path = $file->path();
                 $time = $file->lastModified();
                 $mimeType = $file->mimeType();
+
                 return [
                     'name' => basename($file->path()),
                     'type' => $mimeType,

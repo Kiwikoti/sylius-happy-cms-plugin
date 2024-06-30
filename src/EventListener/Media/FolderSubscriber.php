@@ -27,14 +27,14 @@ class FolderSubscriber
         }
 
         if ($args->hasChangedField('parent')) {
-            $oldPath = ($args->getOldValue('parent') ? $args->getOldValue('parent')->getPath() : '').DIRECTORY_SEPARATOR.$folder->getSlug();
-            $newPath = ($args->getNewValue('parent') ? $args->getNewValue('parent')->getPath() : '').DIRECTORY_SEPARATOR.$folder->getSlug();
+            $oldPath = ($args->getOldValue('parent') ? $args->getOldValue('parent')->getPath() : '') . \DIRECTORY_SEPARATOR . $folder->getSlug();
+            $newPath = ($args->getNewValue('parent') ? $args->getNewValue('parent')->getPath() : '') . \DIRECTORY_SEPARATOR . $folder->getSlug();
             $this->manager->move($oldPath, $newPath);
         }
 
         if ($args->hasChangedField('slug')) {
-            $oldPath = basename($folder->getPath()).DIRECTORY_SEPARATOR.$args->getOldValue('slug');
-            $newPath = basename($folder->getPath()).DIRECTORY_SEPARATOR.$args->getNewValue('slug');
+            $oldPath = basename($folder->getPath()) . \DIRECTORY_SEPARATOR . $args->getOldValue('slug');
+            $newPath = basename($folder->getPath()) . \DIRECTORY_SEPARATOR . $args->getNewValue('slug');
             $this->manager->move($oldPath, $newPath);
         }
     }

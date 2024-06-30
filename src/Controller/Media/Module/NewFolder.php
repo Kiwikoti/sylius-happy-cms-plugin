@@ -15,11 +15,10 @@ trait NewFolder
      * create new folder.
      *
      * @param Request $request [description]
-     *
      */
     public function createNewFolder(Request $request)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
         $currentFolderId = $data['folder'];
         $currentFolder = empty($currentFolderId) ? null : $this->manager->getFolder($currentFolderId);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Twig\Menu;
 
 use Adeliom\SyliusHappyCMSPlugin\Exceptions\Menu\MenuNotFoundException;
@@ -18,10 +20,10 @@ class MenuExtension extends AbstractExtension
     /*
     * @param \Doctrine\ORM\EntityRepository $menuClass
     */
-   public function __construct(
-       /**
-        * @readonly
-        */
+    public function __construct(
+        /**
+         * @readonly
+         */
         private Environment $twig,
         /**
          * @readonly
@@ -34,7 +36,7 @@ class MenuExtension extends AbstractExtension
         /**
          * @readonly
          */
-        private string $menuItemClass
+        private string $menuItemClass,
     ) {
     }
 
@@ -49,7 +51,6 @@ class MenuExtension extends AbstractExtension
     }
 
     /**
-     * @param $code
      * @param array $extra
      *
      * @throws LoaderError
@@ -64,7 +65,7 @@ class MenuExtension extends AbstractExtension
             throw new MenuNotFoundException($code);
         }
 
-        $template = '@SyliusHappyCMSPlugin/front/menus/'.$code.'.html.twig';
+        $template = '@SyliusHappyCMSPlugin/front/menus/' . $code . '.html.twig';
 
         if (!empty($extra['template'])) {
             $template = $extra['template'];

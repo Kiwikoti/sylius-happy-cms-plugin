@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Twig\Seo;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Seo\Seo;

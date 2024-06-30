@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Form\Seo;
 
-use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Seo\Seo;
 use Adeliom\SyliusEasyCrudPlugin\Form\AdminFormTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Seo\Seo;
+use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,7 +35,7 @@ class SeoType extends AbstractType implements AdminFormTypeInterface
                 'constraints' => [
 //                    new NotBlank(),
 //                    new Url(),
-                ]
+                ],
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'sylius_happy_cms.seo.admin.field.description',

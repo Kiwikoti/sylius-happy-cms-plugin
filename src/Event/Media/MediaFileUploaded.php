@@ -43,6 +43,4 @@ class MediaFileUploaded extends Event
     {
         return $this->options;
     }
-
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Page;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
@@ -73,7 +75,7 @@ class DoctrineMappingListener
                         'onDelete' => 'SET NULL',
                     ],
                 ],
-                'nullable' => true
+                'nullable' => true,
             ]);
         }
     }
@@ -101,7 +103,7 @@ class DoctrineMappingListener
             $classMetadata->mapManyToOne([
                 'fieldName' => 'menu',
                 'targetEntity' => $this->menuClass,
-                'inversedBy' => 'items'
+                'inversedBy' => 'items',
             ]);
         }
         if (!$classMetadata->hasAssociation('parent')) {
@@ -120,7 +122,7 @@ class DoctrineMappingListener
                 'nullable' => true,
                 'orderBy' => [
                     'position' => 'ASC',
-                ]
+                ],
             ]);
         }
 

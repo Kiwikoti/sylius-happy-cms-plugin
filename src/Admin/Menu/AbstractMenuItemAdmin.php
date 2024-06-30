@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
+use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\EnumField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
@@ -14,6 +14,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Actions;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Crud;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\GridBundle\Builder\GridBuilderInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSubscriberInterface
+abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
 {
     public static function getSubscribedServices(): array
     {
@@ -32,7 +33,7 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
 
     public static function getName(): string
     {
-        return 'happy_cms_menu_item_admin';
+        return 'sylius_happy_cms_menu_item_admin';
     }
 
     public static function getDefaultSortColumn(): string
@@ -108,10 +109,9 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
                 ->setFormTypeOption('placeholder', false)
                 ->setFormTypeOption(
                     'query_builder',
-                    fn (EntityRepository $er): QueryBuilder =>
-                $er->createQueryBuilder('m')
+                    fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('m')
                     ->andWhere('m.id = :id')
-                    ->setParameter('id', $menuId)
+                    ->setParameter('id', $menuId),
                 )
             ;
         }
@@ -124,12 +124,11 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
             $parentField
                 ->setFormTypeOption(
                     'query_builder',
-                    fn (EntityRepository $er): QueryBuilder =>
-                $er->createQueryBuilder('mi')
+                    fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('mi')
                     ->andWhere('mi.id != :id')
                     ->andWhere('mi.menu = :menuId')
                     ->setParameter('id', $this->getResource()->getId())
-                    ->setParameter('menuId', $menuId)
+                    ->setParameter('menuId', $menuId),
                 );
         }
 
@@ -169,6 +168,7 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
         }
 
         $menuId = (int) $this->getResourceFieldValueInRequest(formName: 'menu_item_admin', fieldName: 'menu');
+
         return $menuId ?: null;
     }
 }

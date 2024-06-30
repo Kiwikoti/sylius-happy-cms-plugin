@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use League\Flysystem\FilesystemException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 trait GetContent
 {
@@ -18,11 +17,10 @@ trait GetContent
      * get files in path.
      *
      * @param Request $request [description]
-     *
      */
     public function getFiles(Request $request)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $folder = null;
         $path = '/';
         if (!empty($data['folder'])) {
@@ -64,7 +62,7 @@ trait GetContent
      */
     public function getItemInfos(Request $request)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $mediaId = $data['item'];
 
         if ($media = $this->helper->getMediaRepository()->findOneBy(['id' => $mediaId])) {
@@ -154,36 +152,37 @@ trait GetContent
         $folderQuery = $this->helper->getFolderRepository()->createQueryBuilder('f');
         $mediaQuery = $this->helper->getMediaRepository()->createQueryBuilder('m');
 
-        if($folder === null) {
-            $folderQuery->andWhere("f.parent IS NULL");
-            $mediaQuery->andWhere("m.folder IS NULL");
+        if ($folder === null) {
+            $folderQuery->andWhere('f.parent IS NULL');
+            $mediaQuery->andWhere('m.folder IS NULL');
         } else {
-            $folderQuery->andWhere("f.parent = :folder")->setParameter('folder', $folder);
-            $mediaQuery->andWhere("m.folder = :folder")->setParameter('folder', $folder);
+            $folderQuery->andWhere('f.parent = :folder')->setParameter('folder', $folder);
+            $mediaQuery->andWhere('m.folder = :folder')->setParameter('folder', $folder);
         }
 
-        if(!empty($search)) {
-            if(!$rec) {
-                $folderQuery->andWhere("f.name LIKE :search")->setParameter('search', '%'.trim($search).'%');
+        if (!empty($search)) {
+            if (!$rec) {
+                $folderQuery->andWhere('f.name LIKE :search')->setParameter('search', '%' . trim($search) . '%');
             }
-            $mediaQuery->andWhere("m.name LIKE :search")->setParameter('search', '%'.trim($search).'%');
+            $mediaQuery->andWhere('m.name LIKE :search')->setParameter('search', '%' . trim($search) . '%');
         }
 
         $folders = $folderQuery->getQuery()->getResult();
         $medias = $mediaQuery->getQuery()->getResult();
 
         $results = array_merge($folders, $medias);
-        if($rec) {
+        if ($rec) {
             foreach ($folders as $f) {
                 $results = array_merge($results, $this->getFolderContent($f, $rec, $search));
             }
         }
 
-        if($rec) {
+        if ($rec) {
             $results = array_filter($results, static function ($item) {
                 return $item instanceof Media;
             });
         }
+
         return $results;
     }
 

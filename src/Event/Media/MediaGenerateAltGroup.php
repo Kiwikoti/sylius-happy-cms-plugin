@@ -13,7 +13,7 @@ class MediaGenerateAltGroup extends Event
      */
     public const NAME = 'em.file.alt.generate_alt_group';
 
-    /** @var array<int> $files */
+    /** @var array<int> */
     private array $files;
 
     public function __construct(array $files)

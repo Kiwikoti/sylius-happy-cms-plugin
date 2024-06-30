@@ -57,7 +57,7 @@ class <?= $mainClassData['className'] ?>Translation extends AbstractTranslation 
 <?php
 if (!empty($extraFields)) {
     foreach ($extraFields as $fieldData) {
-    ?>
+        ?>
     #[ORM\Column(type: Types::<?= mb_strtoupper($fieldData['columnType']) ?>)]
     protected ?<?= $fieldData['phpType'] ?> $<?= $fieldData['name'] ?> = null;
 

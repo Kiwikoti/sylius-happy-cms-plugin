@@ -291,7 +291,7 @@ class MediaRuntime implements RuntimeExtensionInterface
                         'set' => sprintf(
                             '%s %dw',
                             $this->path($media),
-                            $box['width'] ?: null
+                            $box['width'] ?: null,
                         ),
                     ];
 
@@ -340,6 +340,6 @@ class MediaRuntime implements RuntimeExtensionInterface
 
     private function getFormat(string $format)
     {
-        return array_filter($this->filterManager->getFilterConfiguration()->all(), static fn ($config, $key) => 'default' === $key || str_starts_with((string) $key, $format), ARRAY_FILTER_USE_BOTH);
+        return array_filter($this->filterManager->getFilterConfiguration()->all(), static fn ($config, $key) => 'default' === $key || str_starts_with((string) $key, $format), \ARRAY_FILTER_USE_BOTH);
     }
 }

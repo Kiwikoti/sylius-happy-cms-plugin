@@ -89,12 +89,12 @@ platform:
 		(cd ${APP_DIR} && sed -i'' -e 's|APP_DEBUG: 0|APP_DEBUG: 1|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|- "80:80"|- "$(DOCKER_PHP_PORT):80"\n        depends_on:\n            - php|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|            - public-media:/srv/sylius/public/media:ro,nocopy|            - public-media:/srv/sylius/public/media:ro,nocopy\n            - ../../:/srv/sylius/lib/sylius-happy-cms-plugin:rw|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\SyliusHappyCMSPlugin\\\SyliusHappyCMSPlugin::class => ['all' => true],\n];|g" config/bundles.php); \
+		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\SyliusHappyCMSPlugin\\\SyliusHappyCMSPlugin::class => ['all' => true],\n    Adeliom\\\SyliusEasyCrudPlugin\\\SyliusEasyCrudPlugin::class => ['all' => true],\n];|g" config/bundles.php); \
 		(cd ${APP_DIR} && sed -i'' -e 's|            "App\\": "src/",|            "App\\": "src/",\n            "Adeliom\\SyliusHappyCMSPlugin\\": "lib/sylius-happy-cms-plugin/src/"|g' composer.json); \
 		(cd ${APP_DIR} && sed -i'' -e 's|"App\\\\": "src/"|"Adeliom\\\\SyliusHappyCMSPlugin\\\\": "lib/sylius-happy-cms-plugin/src/",\n            "App\\\\": "src/"|g' composer.json); \
 		(cd ${APP_DIR} && sed -i'' -e 's|type: annotation|type: attribute|g' config/packages/doctrine.yaml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@SyliusHappyCMSPlugin/config/config.yaml" }|g' config/packages/_sylius.yaml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|webhook_routing.yaml"|webhook_routing.yaml"\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"|g' config/routes.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@SyliusHappyCMSPlugin/config/config.yaml" }\n    - { resource: "@SyliusEasyCrudPlugin/config/config.yaml" }|g' config/packages/_sylius.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|webhook_routing.yaml"|webhook_routing.yaml"\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"\nsylius_easy_crud:\n  resource: "@SyliusEasyCrudPlugin/config/routes.yaml"|g' config/routes.yaml); \
 		(cd ${APP_DIR} && rm -rf config/packages/doctrine.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/packages/_sylius.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/routes.yaml-e); \
@@ -116,6 +116,7 @@ platform:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer global config allow-plugins.${PLUGIN_NAME} true)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer dump-autoload)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="*@dev")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --dev symfony/maker-bundle)
 	${MAKE} platform_up
 	${MAKE} platform_assets
 
@@ -168,8 +169,8 @@ bundle_assets_build:
 
 HELP += $(call help,bundle_install_test_files,			Build bundles assets in watch mode)
 bundle_install_test_files:
-#	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:happy-cms:create-entity Post)
-#	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:happy-cms:generate Post)
-#	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
-#	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)
-#	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:mig -n)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:easy-crud:create-entity Post)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:easy-crud:generate Post)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:mig -n)

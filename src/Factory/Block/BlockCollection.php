@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use Doctrine\Common\Collections\ArrayCollection;

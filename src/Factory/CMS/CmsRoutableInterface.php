@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\CMS;
 
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\TranslationInterface;
-use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Cmf\Component\Routing\RouteReferrersInterface;
 
@@ -12,6 +13,7 @@ interface CmsRoutableInterface extends RouteReferrersInterface
 {
     /**
      * @return Collection|TranslationInterface[]
+     *
      * @psalm-return Collection<array-key, TranslationInterface>
      */
     public function getTranslations(): Collection;

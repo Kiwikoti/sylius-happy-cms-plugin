@@ -16,9 +16,7 @@ trait Download
     /**
      * zip folder.
      *
-     * @param Request $request
      *
-     * @return StreamedResponse
      *
      * @throws \League\Flysystem\FilesystemException
      */
@@ -36,7 +34,7 @@ trait Download
         if ([] !== $allPaths) {
             return $this->zipAndDownloadDir(
                 $name,
-                $allPaths
+                $allPaths,
             );
         }
 
@@ -45,19 +43,15 @@ trait Download
 
     /**
      * zip files.
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function downloadFiles(Request $request): StreamedResponse
     {
-        $list = json_decode($request->request->get('list', []), true, 512, JSON_THROW_ON_ERROR);
+        $list = json_decode($request->request->get('list', []), true, 512, \JSON_THROW_ON_ERROR);
         $name = $request->request->get('name');
 
         return $this->zipAndDownload(
-            $name.'-files',
-            $list
+            $name . '-files',
+            $list,
         );
     }
 
@@ -75,7 +69,7 @@ trait Download
                 defaultDeflateLevel: 9,
                 sendHttpHeaders: true,
                 outputName: sprintf('%s.zip', $name),
-                contentType: 'application/octet-stream'
+                contentType: 'application/octet-stream',
             );
 
             foreach ($list as $file) {
@@ -107,12 +101,12 @@ trait Download
                 defaultDeflateLevel: 9,
                 sendHttpHeaders: true,
                 outputName: sprintf('%s.zip', $name),
-                contentType: 'application/octet-stream'
+                contentType: 'application/octet-stream',
             );
 
             foreach ($list as $file) {
-                $dir_name = pathinfo($file, PATHINFO_DIRNAME);
-                $file_name = pathinfo($file, PATHINFO_BASENAME);
+                $dir_name = pathinfo($file, \PATHINFO_DIRNAME);
+                $file_name = pathinfo($file, \PATHINFO_BASENAME);
                 $full_name = sprintf('%s/%s', $dir_name, $file_name);
                 $streamRead = $this->filesystem->readStream($file);
 
@@ -128,7 +122,6 @@ trait Download
             $zip->finish();
         });
     }
-
 
     /**
      * @throws \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException

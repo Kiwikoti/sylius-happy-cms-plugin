@@ -7,14 +7,14 @@ $mainClassData = [
     'lowerNames' => [
         'singular' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($entityClassName))),
         'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($entityClassName))),
-    ]
+    ],
 ];
 $relationClassData = [
     'className' => $relationClassName,
     'lowerNames' => [
         'singular' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
         'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
-    ]
+    ],
 ];
 $scope = mb_strtolower($scope);
 ?>

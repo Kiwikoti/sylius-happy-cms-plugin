@@ -1,19 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Seo;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class BreadcrumbCollection
 {
-    /**
-     * @var array
-     */
     protected array $items = [];
 
-    /**
-     * @var UrlGeneratorInterface
-     */
     protected UrlGeneratorInterface $generator;
 
     /**

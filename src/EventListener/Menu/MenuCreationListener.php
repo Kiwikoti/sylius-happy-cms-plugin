@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Menu;
 
+use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
-use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Sylius\Component\Locale\Provider\LocaleProviderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -37,7 +39,7 @@ class MenuCreationListener
             $translation = new $menuItemTranslationClass();
             $translation->setLocale($locale);
             $translation->setName(
-                $this->translator->trans('sylius_happy_cms.menu_item.admin.data.menu_item_root', locale: $locale)
+                $this->translator->trans('sylius_happy_cms.menu_item.admin.data.menu_item_root', locale: $locale),
             );
             $rootItem->addTranslation($translation);
         }

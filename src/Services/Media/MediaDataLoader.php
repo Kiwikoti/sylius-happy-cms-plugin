@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Media;
 
-use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Liip\ImagineBundle\Binary\BinaryInterface;
-use Liip\ImagineBundle\Binary\Loader\FileSystemLoader;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
-use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
 use Symfony\Component\Mime\MimeTypesInterface;
 
@@ -31,7 +30,7 @@ class MediaDataLoader implements LoaderInterface
             return new Binary(
                 $this->filesystem->read($path),
                 $mimeType,
-                $extension
+                $extension,
             );
         } catch (FilesystemException $filesystemException) {
             return $this->defaultLoader->find($path);

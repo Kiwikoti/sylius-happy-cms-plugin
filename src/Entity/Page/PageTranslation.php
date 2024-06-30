@@ -1,24 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Page;
 
-use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SeoInterface;
-use Adeliom\SyliusHappyCMSPlugin\Traits\Seo\EntitySeoTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameSlugTrait;
+use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SeoInterface;
+use Adeliom\SyliusHappyCMSPlugin\Traits\Seo\EntitySeoTrait;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Model\AbstractTranslation;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\MappedSuperclass;
-use Doctrine\ORM\Mapping\PreRemove;
-use Doctrine\ORM\Mapping\PrePersist;
-use Doctrine\ORM\Mapping\PreUpdate;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\MappedSuperclass;
+use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreRemove;
+use Doctrine\ORM\Mapping\PreUpdate;
+use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -29,9 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PageTranslation extends AbstractTranslation implements ResourceInterface, \Stringable, SeoInterface
 {
     use EntityIdTrait;
-
     use EntityNameSlugTrait;
-
     use EntitySeoTrait {
         EntitySeoTrait::__construct as private SEOConstruct;
     }
@@ -41,9 +41,7 @@ class PageTranslation extends AbstractTranslation implements ResourceInterface, 
     #[ORM\Column]
     protected ?int $id = null;
 
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     #[Groups('main')]
     #[Column(name: 'content', type: Types::JSON, nullable: true)]
     #[Assert\Type('array')]
@@ -72,7 +70,7 @@ class PageTranslation extends AbstractTranslation implements ResourceInterface, 
         do {
             $slug = method_exists($current, 'getPageSlug') ? $current->getPageSlug() : $current->getSlug();
             $tree = $name ? $current->getName() . $separator . $tree : $slug . $separator . $tree;
-            if (!is_null($current->getTranslatable())) {
+            if (null !== $current->getTranslatable()) {
                 $current = $current->getTranslatable()->getParent() ?? null;
             } else {
                 $current = null;
@@ -89,7 +87,7 @@ class PageTranslation extends AbstractTranslation implements ResourceInterface, 
         $current = $this;
         do {
             $tree = '―' . $tree;
-            if (!is_null($current->getTranslatable())) {
+            if (null !== $current->getTranslatable()) {
                 $current = $current->getTranslatable()->getParent() ?? null;
             } else {
                 $current = null;

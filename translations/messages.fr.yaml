@@ -1,8 +1,8 @@
-happy_cms:
+sylius_happy_cms:
     home: Page d'accueil
     page:
         admin:
-            action: 
+            action:
                 manage_content: Gérer le contenu
             crud:
                 title:

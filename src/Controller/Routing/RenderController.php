@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Controller\Routing;
 
 use Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer;
@@ -21,14 +23,13 @@ class RenderController extends AbstractController
         protected RouterInterface $router,
         protected RequestConfigurationFactory $requestConfigurationFactory,
         protected Environment $twig,
-    )
-    {}
+    ) {
+    }
 
     public function renderAction(
         CmsRoutableInterface $contentDocument,
-        Request $request
-    ): Response
-    {
+        Request $request,
+    ): Response {
         /**
          * @var Route $route
          */
@@ -36,20 +37,20 @@ class RenderController extends AbstractController
 
         [$metadata, $configuration] = $this->contentDocumentAsResource(
             get_class($contentDocument),
-            $request
+            $request,
         );
 
         $template = $contentDocument->getRouteTemplate();
-        if (is_null($template)) {
+        if (null === $template) {
             $template = '@SyliusHappyCMSPlugin/front/document/default.html.twig';
         }
 
         $controller = $contentDocument->getRouteController();
-        if (!is_null($controller)) {
+        if (null !== $controller) {
             try {
                 $this->forward($controller, [
                     $contentDocument,
-                    $request
+                    $request,
                 ]);
             } catch (\RuntimeException $runtimeException) {
                 throw $this->createAccessDeniedException($controller . ' not exists');
@@ -77,9 +78,8 @@ class RenderController extends AbstractController
 
     private function contentDocumentAsResource(
         string $model,
-        Request $request
-    ) : array
-    {
+        Request $request,
+    ): array {
         try {
             /** @var array $resources */
             $resources = $this->container->get('parameter_bag')->get('sylius.resources');
@@ -93,10 +93,11 @@ class RenderController extends AbstractController
                 $configuration = $this->requestConfigurationFactory
                     ->create(
                         $metadata,
-                        $request
+                        $request,
                     );
             }
         }
+
         return [$metadata, $configuration];
     }
 }

@@ -17,7 +17,7 @@ class MediaHelper
     public function __construct(
         protected ContainerBagInterface $parameters,
         protected EntityManagerInterface $em,
-        protected RouterInterface $router
+        protected RouterInterface $router,
     ) {
     }
 
@@ -72,7 +72,7 @@ class MediaHelper
     {
         $class = $this->getMediaClassName();
         if (!is_string($media) && !is_numeric($media) && !$media instanceof $class) {
-            throw new \TypeError(sprintf('Media parameter must be either an identifier or the media itself for Twig functions, "%s" given.',  'instance of '.$media::class));
+            throw new \TypeError(sprintf('Media parameter must be either an identifier or the media itself for Twig functions, "%s" given.', 'instance of ' . $media::class));
         }
 
         try {
@@ -80,7 +80,7 @@ class MediaHelper
                 $media = $this->getMediaRepository()->find($media);
             }
 
-            if($media instanceof $class) {
+            if ($media instanceof $class) {
                 return $this->getMediaRepository()->find($media->getId());
             }
 
@@ -97,9 +97,10 @@ class MediaHelper
     public function getPath(int|string|Media $media): ?string
     {
         try {
-            if($media = $this->getMedia($media)) {
+            if ($media = $this->getMedia($media)) {
                 return $media->getPath();
             }
+
             return null;
         } catch (\Exception) {
             return null;

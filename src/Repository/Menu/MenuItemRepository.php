@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -95,7 +96,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
         return $this->createListQueryBuilder($locale)
             ->andWhere('entity.menu = :menu')
             ->setParameter('menu', $menuId)
-            ;
+        ;
     }
 
     public function findPreviousMenuItem(MenuItem $menuItem): MenuItem | null
@@ -112,7 +113,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
             ->getQuery()
             ->setMaxResults(1)
             ->getSingleResult()
-            ;
+        ;
     }
 
     public function findNextMenuItem(MenuItem $menuItem): MenuItem | null
@@ -129,6 +130,6 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
             ->getQuery()
             ->setMaxResults(1)
             ->getSingleResult()
-            ;
+        ;
     }
 }

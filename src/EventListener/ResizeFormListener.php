@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener;
 
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
@@ -10,8 +12,11 @@ use Symfony\Component\Form\FormInterface;
 class ResizeFormListener extends \Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener
 {
     protected $type;
+
     protected $options;
+
     protected $allowAdd;
+
     protected $allowDelete;
 
     private \Closure|bool $deleteEmpty;
@@ -59,7 +64,7 @@ class ResizeFormListener extends \Symfony\Component\Form\Extension\Core\EventLis
         foreach ($data as $name => $value) {
             if (!empty($value['block_type'])) {
                 $form->add($name, $value['block_type'], array_replace([
-                    'property_path' => '['.$name.']',
+                    'property_path' => '[' . $name . ']',
                 ], $this->options));
             }
         }
@@ -88,7 +93,7 @@ class ResizeFormListener extends \Symfony\Component\Form\Extension\Core\EventLis
             foreach ($data as $name => $value) {
                 if (!$form->has($name)) {
                     $form->add($name, $value['block_type'], array_replace([
-                        'property_path' => '['.$name.']',
+                        'property_path' => '[' . $name . ']',
                     ], $this->options));
                 }
             }

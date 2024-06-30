@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Form\Block;
 
-use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
-use Adeliom\SyliusHappyCMSPlugin\EventListener\ResizeFormListener;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusEasyCrudPlugin\Form\AdminFormTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
+use Adeliom\SyliusHappyCMSPlugin\EventListener\ResizeFormListener;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,7 +23,7 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
         if ($options['allow_add'] && $options['prototype']) {
             $prototypeOptions = array_replace([
                 'required' => $options['required'],
-                'label' => $options['prototype_name'].'label__',
+                'label' => $options['prototype_name'] . 'label__',
             ], $options['entry_options']);
 
             if (null !== $options['prototype_data']) {
@@ -39,11 +41,11 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
                     !empty($prototypeOptions['label']) &&
                     str_contains('label__', (string) $prototypeOptions['label'])
                 ) {
-                    $prototypeOptions['label'] = $name.'label__';
+                    $prototypeOptions['label'] = $name . 'label__';
                 }
 
                 $form = $builder->create($name, $block::class, $prototypeOptions);
-                foreach($form as $child) {
+                foreach ($form as $child) {
                     if (!in_array($child->getName(), ['block_type', 'block_published', 'position'])) {
                         $form->remove($child->getName());
                     }
@@ -59,7 +61,7 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
             $options['entry_options'],
             $options['allow_add'],
             $options['allow_delete'],
-            $options['delete_empty']
+            $options['delete_empty'],
         );
 
         $builder->addEventSubscriber($resizeListener);
@@ -106,7 +108,7 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
             'blocks' => [],
             'invalid_message' => static fn (
                 Options $options,
-                $previousValue
+                $previousValue,
             ) => ($options['legacy_error_messages'] ?? true)
                 ? $previousValue
                 : 'The collection is invalid.',
@@ -119,7 +121,7 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
@@ -138,7 +140,7 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
             array_splice($entryView->vars['block_prefixes'], $prefixOffset, 0, 'editor_collection_entry');
         }
 
-        /* @var FormInterface $prototype */
+        /** @var FormInterface $prototype */
         if ($prototypes = $form->getConfig()->getAttribute('prototypes')) {
             foreach ($prototypes as $type => $prototype) {
                 if ($view->vars['prototypes'][$type]->vars['multipart']) {
@@ -163,15 +165,15 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
     {
         return [
             'js' => [
-                (Asset::new('flexible-content.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME)
-            ]
+                (Asset::new('flexible-content.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
+            ],
         ];
     }
 
     public static function configureAdminFormThemes(): array
     {
         return [
-            '@SyliusHappyCMSPlugin/field/flexible_content/form.html.twig'
+            '@SyliusHappyCMSPlugin/field/flexible_content/form.html.twig',
         ];
     }
 }

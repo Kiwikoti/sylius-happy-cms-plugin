@@ -12,14 +12,10 @@ trait Delete
 {
     /**
      * delete files/folders.
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteItem(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 
         $result = [];
         $toBroadCast = [];

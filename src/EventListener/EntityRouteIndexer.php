@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
@@ -10,20 +12,21 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\ContentRepository;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 #[AsDoctrineListener('postPersist')]
 #[AsDoctrineListener('postUpdate')]
 class EntityRouteIndexer
 {
     public const ROUTE_PREVIEW = 'route_preview_';
+
     public const ROUTE_ONLINE = 'route_online_';
+
     public const OPTION_PREVIEW = 'preview_behavior';
 
     public function __construct(
-        protected ContentRepository $contentRepository
-    )
-    {}
+        protected ContentRepository $contentRepository,
+    ) {
+    }
 
     public function postPersist(PostPersistEventArgs $event): void
     {
@@ -47,8 +50,8 @@ class EntityRouteIndexer
 
         $event->getObjectManager()->persist($entity);
         $event->getObjectManager()->flush();
-
     }
+
     public function postUpdate(PostUpdateEventArgs $event): void
     {
         $entity = $event->getObject();
@@ -73,11 +76,9 @@ class EntityRouteIndexer
         $event->getObjectManager()->flush();
     }
 
-    private function manageRoutes(CmsRoutableInterface &$entity, string $routeNamePrefix = '')
-    : void
+    private function manageRoutes(CmsRoutableInterface &$entity, string $routeNamePrefix = ''): void
     {
         foreach ($entity->getTranslations() as $translation) {
-
             $routeName = $routeNamePrefix .
                 $translation->getLocale() . '_' .
                 $entity->getRouteUnikName()
@@ -85,8 +86,7 @@ class EntityRouteIndexer
 
             // Route exists ?
             $route = $entity->getRoutes()->filter(
-                static fn (Route $route) =>
-                    $route->getName() === $routeName
+                static fn (Route $route) => $route->getName() === $routeName,
             )->first();
 
             if (!($route instanceof Route)) {
@@ -100,15 +100,14 @@ class EntityRouteIndexer
             $route->setSchemes($entity->getRouteSchemes($translation));
             $route->setHost($entity->getRouteHost($translation));
             $route->setStaticPrefix(
-                $entity->getRouteStaticPrefix($translation, $routeNamePrefix === self::ROUTE_PREVIEW)
+                $entity->getRouteStaticPrefix($translation, $routeNamePrefix === self::ROUTE_PREVIEW),
             );
             $route->setVariablePattern(
-                $entity->getVariablePattern($translation, $routeNamePrefix === self::ROUTE_PREVIEW)
+                $entity->getVariablePattern($translation, $routeNamePrefix === self::ROUTE_PREVIEW),
             );
             $route->setOption(self::OPTION_PREVIEW, $routeNamePrefix === self::ROUTE_PREVIEW);
             $route->setDefault(RouteObjectInterface::CONTENT_ID, $this->contentRepository->getContentId($entity));
             $entity->addRoute($route);
-
         }
     }
 }

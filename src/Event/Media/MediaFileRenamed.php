@@ -15,7 +15,7 @@ class MediaFileRenamed extends Event
 
     public function __construct(
         public string $oldPath,
-        public string $newPath
+        public string $newPath,
     ) {
     }
 }

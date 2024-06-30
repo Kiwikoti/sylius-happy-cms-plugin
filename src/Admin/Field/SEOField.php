@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Field;
 
-use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
-use Adeliom\SyliusHappyCMSPlugin\Form\Seo\SeoType;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldInterface;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldTrait;
-use Adeliom\SyliusEasyCrudPlugin\Form\AdminFormTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Form\Seo\SeoType;
 
 final class SEOField implements FieldInterface
 {

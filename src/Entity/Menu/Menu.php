@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__menu')]
 #[UniqueEntity('code')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuRepository::class)]
@@ -21,25 +25,20 @@ class Menu implements ResourceInterface, \Stringable
         EntityTimestampableTrait::__construct as private timestampableConstruct;
     }
     use EntityStatusTrait;
+
     public $menuItems;
 
-    /**
-     * @var ArrayCollection<MenuItem>|null
-     */
+    /** @var ArrayCollection<MenuItem>|null */
     protected $items;
 
-    /**
-     * @var string
-     **/
+    /** @var string * */
     #[ORM\Column(name: 'code', type: \Doctrine\DBAL\Types\Types::STRING, length: 30)]
     protected ?string $code = null;
 
     #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     protected ?string $name = null;
 
-    /**
-     * @var MenuItem|null
-     */
+    /** @var MenuItem|null */
     protected $rootItem;
 
     /**

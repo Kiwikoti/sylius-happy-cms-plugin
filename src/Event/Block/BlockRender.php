@@ -12,7 +12,7 @@ class BlockRender extends Event
     public function __construct(
         private AbstractBlock $block,
         private array $datas,
-        private array $assets
+        private array $assets,
     ) {
     }
 

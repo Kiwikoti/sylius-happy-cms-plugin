@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Form\Seo;
 
-use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Seo\Seo;
+use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Adeliom\SyliusHappyCMSPlugin\Form\Seo\Fields\TextareaCounterType;
 use Adeliom\SyliusHappyCMSPlugin\Form\Seo\Fields\TextCounterType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;

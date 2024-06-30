@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Field;
 
-use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldInterface;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldTrait;
+use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 
 class MediaField implements FieldInterface
 {
@@ -29,6 +29,7 @@ class MediaField implements FieldInterface
             ->setFormType(MediaType::class)
             ->addCssClass('field-happy-cms-media')
         ;
+
         return $field;
     }
 }

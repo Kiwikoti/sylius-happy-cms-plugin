@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,7 +22,8 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
         protected EntityManagerInterface $entityManager,
         protected TranslatorInterface $translator,
         protected FormFactoryInterface $formFactory,
-    ){}
+    ) {
+    }
 
     public function getManager(): EntityManagerInterface
     {
@@ -49,13 +52,13 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
 
     private function tempBuilder(): void
     {
-        if (is_null($this->tempBuilder)) {
+        if (null === $this->tempBuilder) {
             $this->tempBuilder = $this->formFactory
                 ->createNamedBuilder(
                     'fake_builder',
-                    get_class($this),
+                    static::class,
                     null,
-                    []
+                    [],
                 );
             $this->buildBlock($this->tempBuilder, []);
         }
@@ -78,6 +81,7 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
 
     /**
      * Declare here the assets that make front working as expected
+     *
      * @return array<string, string[]>
      */
     public function configureAssets(): array
@@ -91,6 +95,7 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
 
     /**
      * Declare here the assets that make back-office working as expected
+     *
      * @return array<string, string[]>
      */
     public function configureAdminAssets(): array
@@ -101,7 +106,7 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
             'css' => [],
             'webpack' => [],
         ];
-        foreach($this->tempBuilder->getForm() as $child) {
+        foreach ($this->tempBuilder->getForm() as $child) {
             $formTypeClass = get_class($child->getConfig()->getType()->getInnerType());
             if (method_exists($formTypeClass, 'configureAdminAssets')) {
                 $assets = call_user_func([$formTypeClass, 'configureAdminAssets']);
@@ -110,18 +115,20 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
                 }
             }
         }
+
         return $adminAssets;
     }
 
     /**
      * Declare here the form themes path that make back-office form display as expected
+     *
      * @return string[]
      */
     public function configureAdminFormThemes(): array
     {
         $this->tempBuilder();
         $adminFormThemes = [];
-        foreach($this->tempBuilder->getForm() as $child) {
+        foreach ($this->tempBuilder->getForm() as $child) {
             $formTypeClass = get_class($child->getConfig()->getType()->getInnerType());
             if (method_exists($formTypeClass, 'configureAdminFormThemes')) {
                 $formThemes = call_user_func([$formTypeClass, 'configureAdminFormThemes']);
@@ -130,6 +137,7 @@ abstract class AbstractBlock extends AbstractType implements BlockInterface
                 }
             }
         }
+
         return $adminFormThemes;
     }
 

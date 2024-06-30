@@ -128,7 +128,7 @@ class Media implements ResourceInterface, \Stringable
         $current = $this->getFolder();
         if (null !== $current) {
             do {
-                $tree = $current->getSlug().$separator.$tree;
+                $tree = $current->getSlug() . $separator . $tree;
                 $current = $current->getParent();
             } while ($current);
         }

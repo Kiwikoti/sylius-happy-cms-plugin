@@ -2,7 +2,7 @@ doctrine:
   dbal:
     types:
       adeliom_happy_cms_flexible_content_type: Adeliom\SyliusHappyCMSPlugin\Doctrine\FlexibleContentType
-
+      happy_cms_media_type: Adeliom\SyliusHappyCMSPlugin\Types\MediaType
   orm:
     entity_managers:
       default:
@@ -10,6 +10,12 @@ doctrine:
           SyliusHappyCMSPlugin:
             is_bundle: true
             type: attribute
-            dir: 'src/Entity/Media'
+            dir: 'src/Entity'
             prefix: 'Adeliom\SyliusHappyCMSPlugin'
             alias: Adeliom\SyliusHappyCMSPlugin
+#          SyliusHappyCMSPluginPage:
+#            is_bundle: true
+#            type: attribute
+#            dir: 'src/Entity/Page'
+#            prefix: 'Adeliom\SyliusHappyCMSPlugin'
+#            alias: Adeliom\SyliusHappyCMSPlugin

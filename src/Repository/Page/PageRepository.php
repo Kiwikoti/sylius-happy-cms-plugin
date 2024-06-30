@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Page;
 
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -13,14 +15,11 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 class PageRepository extends EntityRepository implements RepositoryInterface, TranslationRepositoryInterface
 {
     use TranslationRepositoryTrait;
-    /**
-     * @var bool
-     */
+
+    /** @var bool */
     protected $cacheEnabled = false;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $cacheTtl;
 
     public function setConfig(array $cacheConfig)
@@ -175,8 +174,8 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
 
             $constructedKeys = array_keys($tempConstructedTree);
 
-            if($hasNonPageElement) {
-                if($constructedKeys !== $slugs) {
+            if ($hasNonPageElement) {
+                if ($constructedKeys !== $slugs) {
                     return [];
                 }
             }
@@ -184,6 +183,7 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
             if ($constructedKeys === $slugs) {
                 $useConstructedTree = true;
                 $constructedTree = $tempConstructedTree;
+
                 break;
             }
         }

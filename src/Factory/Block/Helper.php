@@ -1,12 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Component\Form\FormFactory;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\SyntaxError;
@@ -52,7 +51,7 @@ class Helper
         if (!empty($this->assets['css'])) {
             $html .= "<style media='all'>";
             foreach ($this->assets['css'] as $stylesheet) {
-                $html .= "\n".sprintf('@import url(%s);', $stylesheet);
+                $html .= "\n" . sprintf('@import url(%s);', $stylesheet);
             }
 
             $html .= "\n</style>";
@@ -60,15 +59,15 @@ class Helper
 
         if (!empty($this->assets['js'])) {
             foreach ($this->assets['js'] as $javascript) {
-                $html .= "\n".sprintf('<script src="%s" type="text/javascript"></script>', $javascript);
+                $html .= "\n" . sprintf('<script src="%s" type="text/javascript"></script>', $javascript);
             }
         }
 
         if (!empty($this->assets['webpack'])) {
             foreach ($this->assets['webpack'] as $webpack) {
                 try {
-                    $html .= "\n".$this->twig->createTemplate(sprintf("{{ encore_entry_link_tags('%s') }}", $webpack))->render();
-                    $html .= "\n".$this->twig->createTemplate(sprintf("{{ encore_entry_script_tags('%s') }}", $webpack))->render();
+                    $html .= "\n" . $this->twig->createTemplate(sprintf("{{ encore_entry_link_tags('%s') }}", $webpack))->render();
+                    $html .= "\n" . $this->twig->createTemplate(sprintf("{{ encore_entry_script_tags('%s') }}", $webpack))->render();
                 } catch (LoaderError|SyntaxError) {
                     $html .= '';
                 }
@@ -149,7 +148,7 @@ class Helper
             }
 
             ++$blockLoopIndex;
-            $blockDatas['attr_id'] = 'block-'.$blockLoopIndex;
+            $blockDatas['attr_id'] = 'block-' . $blockLoopIndex;
         }
 
         $stats['settings'] = $blockDatas;

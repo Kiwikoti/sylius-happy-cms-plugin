@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\SharedBlock;
 
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
+use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Action\Action;
@@ -16,7 +17,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements ServiceSubscriberInterface
+abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
 {
     public static function getSubscribedServices(): array
     {
@@ -27,7 +28,7 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
 
     public static function getName(): string
     {
-        return 'happy_cms_shared_block_admin';
+        return 'sylius_happy_cms_shared_block_admin';
     }
 
     public static function getDefaultSortColumn(): string
@@ -37,7 +38,7 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
 
     public function configureFields(string $pageName, ?string $context = null): iterable
     {
-        /** @var \Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock | null $block */
+        /** @var \Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock|null $block */
         $block = $this->getResource();
         yield TabField::new('configuration', 'sylius_happy_cms.shared_block.admin.tab.configuration');
 
@@ -62,7 +63,7 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
                     Field::new('content', 'sylius_happy_cms.shared_block.admin.field.content')
                         ->setFormType($blockType)
                         ->setDisabled(false)
-                        ->setRequired(true)
+                        ->setRequired(true),
                 )
                 ->hideOnIndex();
         }
@@ -76,8 +77,9 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
             Crud::PAGE_INDEX,
             Action::new('shared_block.select', 'sylius_happy_cms.shared_block.admin.action.create', 'plus')
                 ->linkToRoute('sylius_happy_cms_admin_shared_block_select')
-                ->addCssClass('primary')
+                ->addCssClass('primary'),
         );
+
         return $actions;
     }
 }

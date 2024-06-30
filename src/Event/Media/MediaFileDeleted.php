@@ -13,7 +13,6 @@ class MediaFileDeleted extends Event
      */
     public const NAME = 'em.file.deleted';
 
-
     public function __construct(public string $filePath, public bool $isFolder)
     {
     }

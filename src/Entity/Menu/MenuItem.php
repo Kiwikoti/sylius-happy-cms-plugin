@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityPublishableTrait;
-use Adeliom\SyliusEasyCrudPlugin\Traits\EntityThreeStateStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -16,6 +17,8 @@ use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__menu_item')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuItemRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
@@ -28,7 +31,6 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
     use EntityPublishableTrait {
         EntityPublishableTrait::__construct as private publishableConstruct;
     }
-
     use TranslatableTrait {
         TranslatableTrait::__construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
@@ -50,40 +52,26 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
     #[Gedmo\TreeRoot]
     protected ?int $root = null;
 
-    /**
-     * @var Menu|null
-     */
+    /** @var Menu|null */
     protected $menu;
 
-    /**
-     * @var string
-     */
-
+    /** @var string */
     #[ORM\Column(name: 'class_attribute', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     protected ?string $classAttribute = null;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     #[ORM\Column(name: 'position', type: \Doctrine\DBAL\Types\Types::SMALLINT, options: ['unsigned' => true], nullable: true)]
     protected ?int $position = null;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     #[ORM\Column(name: 'target', type: \Doctrine\DBAL\Types\Types::BOOLEAN, nullable: true, options: ['default' => false])]
     protected ?bool $target = null;
 
-    /**
-     * @var MenuItem|null
-     */
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
     protected ?MenuItem $parent = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection<MenuItem>
-     */
+    /** @var \Doctrine\Common\Collections\Collection<MenuItem> */
     #[ORM\OrderBy(['lft' => 'ASC'])]
     protected \Doctrine\Common\Collections\Collection $children;
 
@@ -215,19 +203,16 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
         $this->menu = $menu;
     }
 
-    /**
-     * @return MenuItem|null
-     */
-    public function getParent(): ?MenuItem
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?MenuItem $parent)
+    public function setParent(?self $parent)
     {
         $this->parent = $parent;
 
-        if (!is_null($parent)) {
+        if (null !== $parent) {
             $parent->addChild($this);
         }
     }
@@ -235,7 +220,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
     /**
      * Add child.
      */
-    public function addChild(MenuItem $child)
+    public function addChild(self $child)
     {
         $this->children[] = $child;
     }
@@ -243,7 +228,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
     /**
      * Remove child.
      */
-    public function removeChild(MenuItem $child)
+    public function removeChild(self $child)
     {
         $this->children->removeElement($child);
     }
@@ -273,8 +258,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
      */
     public function getPublishedChildren()
     {
-        return $this->children->filter(static fn (MenuItem $child) => $child->getPublishState() == ThreeStateStatusEnum::PUBLISHED
-            ());
+        return $this->children->filter(static fn (MenuItem $child) => $child->getPublishState() == ThreeStateStatusEnum::PUBLISHED());
     }
 
     #[ORM\PreRemove]
@@ -296,7 +280,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
      */
     public function hasParent(): bool
     {
-        return !is_null($this->parent);
+        return null !== $this->parent;
     }
 
     public function getParents($parents = [], $parent = null)

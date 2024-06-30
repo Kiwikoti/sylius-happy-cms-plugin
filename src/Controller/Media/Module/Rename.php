@@ -14,12 +14,10 @@ trait Rename
      * rename item.
      *
      * @param Request $request [description]
-     *
-
      */
     public function renameItem(Request $request)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $file = $data['file'];
 
         $type = $file['type'];

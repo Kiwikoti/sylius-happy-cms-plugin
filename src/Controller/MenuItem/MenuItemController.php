@@ -41,7 +41,7 @@ class MenuItemController
 
         return new Response($this->twig->render('@SyliusHappyCMSPlugin/menu_item/_treeWithButtons.html.twig', [
             'menu_items' => $menuItems,
-            'menu' => $menuId
+            'menu' => $menuId,
         ]));
     }
 

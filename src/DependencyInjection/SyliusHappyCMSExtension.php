@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\DependencyInjection;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockInterface;
@@ -16,6 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class SyliusHappyCMSExtension extends AbstractResourceExtension implements PrependExtensionInterface
 {
     use PrependDoctrineMigrationsTrait;
+
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
@@ -40,32 +43,31 @@ class SyliusHappyCMSExtension extends AbstractResourceExtension implements Prepe
             ->addTag('sylius_happy_cms.seo.sitemap_dumpable')
         ;
 
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config'));
         $loader->load('services.yaml');
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../../config/media'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../../config/media'));
         $loader->load('services.xml');
-
     }
 
     private function processPageConfiguration(array $config, ContainerBuilder $container)
     {
         foreach ($config as $key => $value) {
-            $container->setParameter('sylius_happy_cms.page.'.$key, $value);
+            $container->setParameter('sylius_happy_cms.page.' . $key, $value);
         }
     }
 
     private function processSeoConfiguration(array $config, ContainerBuilder $container)
     {
         foreach ($config as $key => $value) {
-            $container->setParameter('sylius_happy_cms.seo.'.$key, $value);
+            $container->setParameter('sylius_happy_cms.seo.' . $key, $value);
         }
     }
 
     private function processConfigConfiguration(array $config, ContainerBuilder $container)
     {
         foreach ($config as $key => $value) {
-            $container->setParameter('sylius_happy_cms.config.'.$key, $value);
+            $container->setParameter('sylius_happy_cms.config.' . $key, $value);
         }
     }
 
@@ -96,7 +98,7 @@ class SyliusHappyCMSExtension extends AbstractResourceExtension implements Prepe
     private function processMediaConfiguration(array $config, ContainerBuilder $container)
     {
         foreach ($config as $key => $value) {
-            $container->setParameter('sylius_happy_cms.media.'.$key, $value);
+            $container->setParameter('sylius_happy_cms.media.' . $key, $value);
         }
 
         $container->setAlias('happy.cms.media.storage', $container->getParameter('sylius_happy_cms.media.storage_name'));
@@ -113,7 +115,7 @@ class SyliusHappyCMSExtension extends AbstractResourceExtension implements Prepe
 
         $container->prependExtensionConfig('media', $config);
         $twigConfig = [];
-        $twigConfig['paths'][__DIR__.'/../../templates/media'] = 'media';
+        $twigConfig['paths'][__DIR__ . '/../../templates/media'] = 'media';
         $twigConfig['globals']['sylius_happy_cms'] = [];
         $twigConfig['globals']['sylius_happy_cms']['media'] = [];
         foreach ($config as $k => $v) {

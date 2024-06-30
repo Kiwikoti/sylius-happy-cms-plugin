@@ -26,14 +26,14 @@ class ContentTranslatableDataMapper implements DataMapperInterface
         } else {
             $this->locale = array_values(array_filter(
                 $this->localeProvider->getAvailableLocalesCodes(),
-                static fn (string $locale): bool => str_ends_with($context, $locale)
+                static fn (string $locale): bool => str_ends_with($context, $locale),
             ))[0] ?? $defaultLocale;
         }
     }
 
     public function mapDataToForms(mixed $viewData, \Traversable $forms)
     {
-        if (! (($viewData::class === $this->class || is_subclass_of($viewData, $this->class)) && $viewData instanceof TranslatableInterface)) {
+        if (!(($viewData::class === $this->class || is_subclass_of($viewData, $this->class)) && $viewData instanceof TranslatableInterface)) {
             return;
         }
 
@@ -50,7 +50,7 @@ class ContentTranslatableDataMapper implements DataMapperInterface
 
     public function mapFormsToData(\Traversable $forms, mixed &$viewData)
     {
-        if (! (($viewData::class === $this->class || is_subclass_of($viewData, $this->class)) && $viewData instanceof TranslatableInterface)) {
+        if (!(($viewData::class === $this->class || is_subclass_of($viewData, $this->class)) && $viewData instanceof TranslatableInterface)) {
             return;
         }
 

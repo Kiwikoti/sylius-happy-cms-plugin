@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\DataCollector\Seo;
 
 use Adeliom\SyliusHappyCMSPlugin\Services\Seo\BreadcrumbCollection;
@@ -8,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 use function Symfony\Component\String\u;
 
 final class SeoCollector extends AbstractDataCollector
@@ -64,11 +65,12 @@ final class SeoCollector extends AbstractDataCollector
 
         $uri = $request->getPathInfo();
         $match = array_filter($this->ignore, static function ($ignore) use ($uri) {
-            return preg_match('{'.$ignore.'}', rawurldecode($uri));
+            return preg_match('{' . $ignore . '}', rawurldecode($uri));
         });
 
         if (!empty($match) || in_array($request->attributes->get('_route'), $this->ignore)) {
             $this->data['ignored'] = true;
+
             return;
         }
 

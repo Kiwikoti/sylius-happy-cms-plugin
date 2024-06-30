@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
@@ -9,7 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SharedBlockType extends AbstractBlock implements BlockInterface
 {
-
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {
         $builder

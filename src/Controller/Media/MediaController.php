@@ -40,14 +40,23 @@ class MediaController extends AbstractController
     use GlobalSearch;
 
     protected TranslatorInterface $translator;
+
     protected EventDispatcherInterface $eventDispatcher;
+
     protected string $ignoreFiles;
+
     protected string $chunksDir;
+
     protected $paginationAmount;
+
     protected FilesystemOperator $filesystem;
+
     protected ObjectManager $em;
+
     protected MediaHelper $helper;
+
     protected MediaManager $manager;
+
     protected ManagerRegistry $managerRegistry;
 
     public function __construct(MediaManager $manager, ManagerRegistry $managerRegistry, ParameterBagInterface $bag, EventDispatcherInterface $dispatcher, TranslatorInterface $translator)
@@ -58,7 +67,7 @@ class MediaController extends AbstractController
 
         $this->ignoreFiles = $bag->get('sylius_happy_cms.media.ignore_files');
         $this->paginationAmount = $bag->get('sylius_happy_cms.media.pagination_amount');
-        $this->chunksDir = $bag->get('kernel.project_dir').'/var/chunks_upload';
+        $this->chunksDir = $bag->get('kernel.project_dir') . '/var/chunks_upload';
         $this->helper = $manager->getHelper();
         $this->filesystem = $manager->getFilesystem();
 

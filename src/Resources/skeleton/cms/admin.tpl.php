@@ -12,7 +12,7 @@ if (isset($relationClassName)) {
         'lowerNames' => [
             'singular' => mb_strtolower(Str::asSnakeCase($relationClassName)),
             'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
-        ]
+        ],
     ];
 }
 $scope = mb_strtolower($scope);
@@ -153,7 +153,7 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
                 <?php
             }
         }
-        ?>
+?>
                 ->hideOnIndex();
 
             yield ColumnField::new('sylius_happy_cms.<?= $scope ?>.admin.panel.publication')

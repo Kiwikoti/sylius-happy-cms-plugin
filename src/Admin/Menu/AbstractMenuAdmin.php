@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Menu;
 
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
+use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Action\Action;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Actions;
@@ -12,7 +13,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Crud;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractMenuAdmin extends AbstractAdmin implements ServiceSubscriberInterface
+abstract class AbstractMenuAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
 {
     public static function getSubscribedServices(): array
     {
@@ -21,7 +22,7 @@ abstract class AbstractMenuAdmin extends AbstractAdmin implements ServiceSubscri
 
     public static function getName(): string
     {
-        return 'happy_cms_menu_admin';
+        return 'sylius_happy_cms_menu_admin';
     }
 
     public static function getDefaultSortColumn(): string

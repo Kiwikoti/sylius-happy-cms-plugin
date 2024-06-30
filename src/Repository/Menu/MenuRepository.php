@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Menu;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-class MenuRepository extends ServiceEntityRepository implements RepositoryInterface
+class MenuRepository extends EntityRepository implements RepositoryInterface
 {
     use ResourceRepositoryTrait;
 

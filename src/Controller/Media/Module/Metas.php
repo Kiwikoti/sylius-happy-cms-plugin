@@ -8,7 +8,6 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Adeliom\SyliusHappyCMSPlugin\Event\Media\MediaGenerateAllAlt;
 use Adeliom\SyliusHappyCMSPlugin\Event\Media\MediaGenerateAlt;
 use Adeliom\SyliusHappyCMSPlugin\Event\Media\MediaGenerateAltGroup;
-use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +20,7 @@ trait Metas
      */
     public function editMetasItem(Request $request)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $file = $data['file'];
         $metas = $data['new_metas'];
         $message = '';
@@ -38,8 +37,6 @@ trait Metas
         return new JsonResponse(['message' => $message, 'metas' => $metas]);
     }
 
-
-
     /**
      * Dispatch an event to allow to generate an alt for the selected file
      *
@@ -47,7 +44,7 @@ trait Metas
      */
     public function generateAltItem(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $file = $data['file'];
         $error = '';
 
@@ -59,7 +56,7 @@ trait Metas
 
             $event = $this->eventDispatcher->dispatch(
                 new MediaGenerateAlt($object, $data['path'] ?? '', $oldAlt),
-                MediaGenerateAlt::NAME
+                MediaGenerateAlt::NAME,
             );
             $newAlt = $event->getAlt();
             if (!empty($newAlt) && $newAlt !== $oldAlt) {
@@ -87,8 +84,9 @@ trait Metas
             $files = json_decode($request->getContent(), true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
             $this->eventDispatcher->dispatch(
                 new MediaGenerateAltGroup($files['files']),
-                MediaGenerateAltGroup::NAME
+                MediaGenerateAltGroup::NAME,
             );
+
             return new JsonResponse(['error' => null, 'data' => 'generating']);
         } catch (\Exception $exception) {
             return new JsonResponse(['error' => $exception->getMessage(), 'data' => '']);
@@ -104,6 +102,7 @@ trait Metas
     {
         try {
             $this->eventDispatcher->dispatch(new MediaGenerateAllAlt($request), MediaGenerateAllAlt::NAME);
+
             return new JsonResponse(['error' => null, 'data' => 'generating']);
         } catch (\Exception $exception) {
             return new JsonResponse(['error' => $exception->getMessage(), 'data' => '']);

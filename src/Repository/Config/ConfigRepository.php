@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
@@ -10,6 +12,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 class ConfigRepository extends EntityRepository implements RepositoryInterface, TranslationRepositoryInterface
 {
     use TranslationRepositoryTrait;
+
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

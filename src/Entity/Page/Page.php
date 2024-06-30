@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Page;
 
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
-use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityPublishableTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityRouteTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
+use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -31,36 +33,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInterface
 {
     use EntityIdTrait;
-
     use TranslatableTrait {
         TranslatableTrait::__construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
     }
-
     use EntityTimestampableTrait {
         EntityTimestampableTrait::__construct as private timestampableConstruct;
     }
-
     use EntityPublishableTrait {
         EntityPublishableTrait::__construct as private publishableConstruct;
     }
-
     use EntityRouteTrait {
         EntityRouteTrait::__construct as private entityRouteConstruct;
     }
 
-    #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ["persist", "remove"])]
+    #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinTable('happy_cms_page__page_route')]
     protected Collection $routes;
 
     public const HOMEPAGE = 'homepage';
 
-    #[Assert\Type(Page::class)]
+    #[Assert\Type(self::class)]
+    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'SET NULL')]
     protected ?Page $parent = null;
 
-    /**
-     * @var Page[]|Collection
-     */
+    /** @var Page[]|Collection */
     protected Collection $children;
 
     #[ORM\Column(name: 'action', type: Types::STRING, nullable: true)]
@@ -107,7 +104,7 @@ class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInter
         return PageTranslation::class;
     }
 
-    public function setParent(?Page $parent = null): void
+    public function setParent(?self $parent = null): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
@@ -137,7 +134,7 @@ class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInter
         return $this->children;
     }
 
-    public function addChildren(Page $page): void
+    public function addChildren(self $page): void
     {
         $this->children->add($page);
 
@@ -146,12 +143,10 @@ class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInter
         }
     }
 
-    public function removeChildren(Page $page): void
+    public function removeChildren(self $page): void
     {
         $this->children->removeElement($page);
     }
-
-
 
     public function isHomepage(): bool
     {

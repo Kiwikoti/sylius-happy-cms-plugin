@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap;
 
-
 use Adeliom\SyliusHappyCMSPlugin\Entity\Seo\Seo;
 
 interface SeoInterface

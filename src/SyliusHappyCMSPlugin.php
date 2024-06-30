@@ -6,7 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin;
 
 use Adeliom\SyliusHappyCMSPlugin\DependencyInjection\SyliusHappyCMSExtension;
 use Sylius\Bundle\CoreBundle\Application\SyliusPluginTrait;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 

@@ -56,20 +56,20 @@ class MediaManager
 
     public function publicUrl(Media $media): array|string|null
     {
-        if($mediaPath = $this->getPath($media)) {
+        if ($mediaPath = $this->getPath($media)) {
             try {
                 if (method_exists($this->getFilesystem(), 'publicUrl')) {
                     $publicUrl = $this->getFilesystem()->publicUrl($mediaPath);
                 } else {
-                    $publicUrl = $this->helper->getBaseUrl() . DIRECTORY_SEPARATOR . $mediaPath;
+                    $publicUrl = $this->helper->getBaseUrl() . \DIRECTORY_SEPARATOR . $mediaPath;
                 }
                 if (false !== strpos($this->helper->getBaseUrl(), '://')) {
-                    $baseUrlPath = parse_url($this->helper->getBaseUrl(), PHP_URL_PATH) ?? "";
+                    $baseUrlPath = parse_url($this->helper->getBaseUrl(), \PHP_URL_PATH) ?? '';
                     $baseUrl = '/';
                     if ($baseUrlPath) {
                         $baseUrl = str_replace($baseUrlPath, '', $this->helper->getBaseUrl());
                     }
-                    $filePath = parse_url($publicUrl, PHP_URL_PATH);
+                    $filePath = parse_url($publicUrl, \PHP_URL_PATH);
                     $path = array_filter(explode('/', $baseUrlPath) + explode('/', $filePath));
                     $publicUrl = $this->helper->clearDblSlash(sprintf('%s/%s', $baseUrl, implode('/', $path)));
                 }
@@ -100,7 +100,7 @@ class MediaManager
 
     public function directoryExists(string $path): bool
     {
-        return is_dir($this->parameters->get('kernel.project_dir'). DIRECTORY_SEPARATOR . 'public' . $this->helper->getBaseUrl() . DIRECTORY_SEPARATOR . $path);
+        return is_dir($this->parameters->get('kernel.project_dir') . \DIRECTORY_SEPARATOR . 'public' . $this->helper->getBaseUrl() . \DIRECTORY_SEPARATOR . $path);
     }
 
     /**
@@ -110,7 +110,7 @@ class MediaManager
      */
     public function folderByPath(?string $path): Folder|null|false
     {
-        if (is_null($path) || $this->directoryExists($path)) {
+        if (null === $path || $this->directoryExists($path)) {
             $slugs = array_values(array_filter(explode('/', (string) $path)));
             $parent = null;
             foreach ($slugs as $i => $slug) {
@@ -201,7 +201,7 @@ class MediaManager
 
         if (str_starts_with((string) $source, 'data:')) {
             $entity = $this->createFromBase64($entity, $source);
-        } elseif (false !== filter_var($source, FILTER_VALIDATE_URL)) {
+        } elseif (false !== filter_var($source, \FILTER_VALIDATE_URL)) {
             if ($imageType = @exif_imagetype($source)) {
                 $entity = $this->createFromImageURL($entity, $source, $imageType);
             } else {
@@ -310,7 +310,7 @@ class MediaManager
         }
 
         $entity->setName($this->helper->cleanName(''));
-        $filename = strtolower((new AsciiSlugger())->slug(strtolower((string) $entity->getName()))->toString().'.'.MediaHelper::mime2ext($infos['mime']));
+        $filename = strtolower((new AsciiSlugger())->slug(strtolower((string) $entity->getName()))->toString() . '.' . MediaHelper::mime2ext($infos['mime']));
         $entity->setSlug($filename);
 
         if (!empty($this->getHelper()->getMediaRepository()->findBy(['folder' => $entity->getFolder(), 'name' => $entity->getName()]))) {
@@ -356,14 +356,14 @@ class MediaManager
      */
     private function createFromImageURL(Media $entity, $source, $type): Media
     {
-        $urlPath = parse_url((string) $source, PHP_URL_PATH);
+        $urlPath = parse_url((string) $source, \PHP_URL_PATH);
         $original = substr((string) $urlPath, strrpos($urlPath, '/') + 1);
-        $name = $entity->getName() ?: pathinfo($original, PATHINFO_FILENAME);
+        $name = $entity->getName() ?: pathinfo($original, \PATHINFO_FILENAME);
 
         $file_type = image_type_to_mime_type($type);
-        $ext_only = MediaHelper::mime2ext($file_type) ?? pathinfo($original, PATHINFO_EXTENSION);
+        $ext_only = MediaHelper::mime2ext($file_type) ?? pathinfo($original, \PATHINFO_EXTENSION);
 
-        $final_name_slug = strtolower((new AsciiSlugger())->slug(strtolower((string) $name))->toString().sprintf('.%s', $ext_only));
+        $final_name_slug = strtolower((new AsciiSlugger())->slug(strtolower((string) $name))->toString() . sprintf('.%s', $ext_only));
         $entity->setSlug($final_name_slug);
 
         if (empty($entity->getName())) {
@@ -428,8 +428,8 @@ class MediaManager
 
         if ($source instanceof UploadedFile) {
             $orig_name = $source->getClientOriginalName();
-            $name = $entity->getName() ?: pathinfo($orig_name, PATHINFO_FILENAME);
-            $ext_only = pathinfo($orig_name, PATHINFO_EXTENSION);
+            $name = $entity->getName() ?: pathinfo($orig_name, \PATHINFO_FILENAME);
+            $ext_only = pathinfo($orig_name, \PATHINFO_EXTENSION);
             if (($type = $source->getClientMimeType()) !== '' && ($type = $source->getClientMimeType()) !== '0') {
                 $entity->setMime($type);
                 if ($ext = MediaHelper::mime2ext($type)) {
@@ -442,8 +442,8 @@ class MediaManager
             }
         } else {
             $orig_name = $source->getFilename();
-            $name = $entity->getName() ?: $source->getBasename('.'.$source->getExtension());
-            $ext_only = pathinfo($orig_name, PATHINFO_EXTENSION);
+            $name = $entity->getName() ?: $source->getBasename('.' . $source->getExtension());
+            $ext_only = pathinfo($orig_name, \PATHINFO_EXTENSION);
             if ($type = $source->getMimeType()) {
                 $entity->setMime($type);
                 if ($ext = MediaHelper::mime2ext($type)) {
@@ -456,7 +456,7 @@ class MediaManager
             }
         }
 
-        $final_name_slug = strtolower((new AsciiSlugger())->slug(strtolower((string) $name))->toString().sprintf('.%s', $ext_only));
+        $final_name_slug = strtolower((new AsciiSlugger())->slug(strtolower((string) $name))->toString() . sprintf('.%s', $ext_only));
         $entity->setSlug($final_name_slug);
         $entity->setSize($source->getSize());
         $entity->setLastModified($source->getMTime());

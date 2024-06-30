@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Menu;
 
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
@@ -13,7 +15,7 @@ class DoctrineMappingListener
 {
     public function __construct(
         private string $menuClass,
-        private string $menuItemClass
+        private string $menuItemClass,
     ) {
     }
 
@@ -36,14 +38,14 @@ class DoctrineMappingListener
 
     private function processMenuItemMetadata(ClassMetadata $classMetadata): void
     {
-        if (! $classMetadata->hasAssociation('menu')) {
+        if (!$classMetadata->hasAssociation('menu')) {
             $classMetadata->mapManyToOne([
                 'fieldName' => 'menu',
                 'targetEntity' => $this->menuClass,
                 'inversedBy' => 'items',
             ]);
         }
-        if (! $classMetadata->hasAssociation('parent')) {
+        if (!$classMetadata->hasAssociation('parent')) {
             $classMetadata->mapManyToOne([
                 'fieldName' => 'parent',
                 'targetEntity' => $this->menuItemClass,
@@ -63,7 +65,7 @@ class DoctrineMappingListener
             ]);
         }
 
-        if (! $classMetadata->hasAssociation('children')) {
+        if (!$classMetadata->hasAssociation('children')) {
             $classMetadata->mapOneToMany([
                 'fieldName' => 'children',
                 'targetEntity' => $this->menuItemClass,
@@ -78,7 +80,7 @@ class DoctrineMappingListener
 
     private function processMenuMetadata(ClassMetadata $classMetadata): void
     {
-        if (! $classMetadata->hasAssociation('items')) {
+        if (!$classMetadata->hasAssociation('items')) {
             $classMetadata->mapOneToMany([
                 'fieldName' => 'items',
                 'targetEntity' => $this->menuItemClass,

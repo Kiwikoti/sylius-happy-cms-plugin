@@ -1,12 +1,12 @@
-happy_cms_page_admin:
+sylius_happy_cms_page_admin:
   resource: |
     alias: sylius_happy_cms.page
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
-    grid: happy_cms_page_admin
+    grid: sylius_happy_cms_page_admin
     form: 
-        type: App\Admin\Page\PageAdmin
+        type: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
         options:
             context: $context
     vars:
@@ -34,13 +34,13 @@ happy_cms_page_admin:
   type: sylius.resource
   prefix: admin
 
-happy_cms_config_admin:
+sylius_happy_cms_config_admin:
   resource: |
     alias: sylius_happy_cms.config
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
-    grid: happy_cms_config_admin
+    grid: sylius_happy_cms_config_admin
     form: 
         type: App\Admin\Config\ConfigAdmin
         options:
@@ -70,13 +70,13 @@ happy_cms_config_admin:
   type: sylius.resource
   prefix: admin
 
-happy_cms_menu_admin:
+sylius_happy_cms_menu_admin:
   resource: |
     alias: sylius_happy_cms.menu
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
-    grid: happy_cms_menu_admin
+    grid: sylius_happy_cms_menu_admin
     form: 
         type: App\Admin\Menu\MenuAdmin
         options:
@@ -106,14 +106,14 @@ happy_cms_menu_admin:
   type: sylius.resource
   prefix: admin
 
-happy_cms_menu_item_admin:
+sylius_happy_cms_menu_item_admin:
   resource: |
     alias: sylius_happy_cms.menu_item
     except: ['index']
     section: admin
     templates: "@SyliusHappyCMSPlugin\\menu_item\\crud"
     redirect: update
-    grid: happy_cms_menu_item_admin
+    grid: sylius_happy_cms_menu_item_admin
     form: 
         type: App\Admin\Menu\MenuItemAdmin
         options:
@@ -144,17 +144,18 @@ happy_cms_menu_item_admin:
   type: sylius.resource
   prefix: admin
 
-happy_cms_shared_block_admin_select:
-  resource: Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock\SharedBlockController
-  type: attribute
+sylius_happy_cms_admin_shared_block_select:
+  controller: Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock\SharedBlockController::select
+  path: /admin/shared-blocks/select
+  methods: ['GET']
 
-happy_cms_shared_block_admin:
+sylius_happy_cms_shared_block_admin:
   resource: |
     alias: sylius_happy_cms.shared_block
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
-    grid: happy_cms_shared_block_admin
+    grid: sylius_happy_cms_shared_block_admin
     form: 
         type: App\Admin\SharedBlock\SharedBlockAdmin
         options:
@@ -194,7 +195,7 @@ sylius_happy_cms_admin_menu_item_index:
 
 sylius_happy_cms_admin_partial_menu_item_tree:
   path: /tree
-  methods: [GET]
+  methods: [ GET ]
   defaults:
     _controller: Adeliom\SyliusHappyCMSPlugin\Controller\MenuItem\MenuItemController::treeAction
     _sylius:
@@ -205,7 +206,7 @@ sylius_happy_cms_admin_partial_menu_item_tree:
 
 sylius_happy_cms_admin_menu_item_update_move_up:
   path: /admin/menu-items/{id}/move-up
-  methods: [PUT]
+  methods: [ PUT ]
   defaults:
     _controller: Adeliom\SyliusHappyCMSPlugin\Controller\MenuItem\MenuItemController::moveUpAction
     _format: json
@@ -214,7 +215,7 @@ sylius_happy_cms_admin_menu_item_update_move_up:
 
 sylius_happy_cms_admin_menu_item_update_move_down:
   path: /admin/menu-items/{id}/move-down
-  methods: [PUT]
+  methods: [ PUT ]
   defaults:
     _controller: Adeliom\SyliusHappyCMSPlugin\Controller\MenuItem\MenuItemController::moveDownAction
     _format: json

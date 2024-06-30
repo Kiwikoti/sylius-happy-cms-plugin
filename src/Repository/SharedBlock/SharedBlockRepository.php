@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 use Doctrine\ORM\QueryBuilder;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-class SharedBlockRepository extends ServiceEntityRepository implements RepositoryInterface, TranslationRepositoryInterface
+class SharedBlockRepository extends EntityRepository implements RepositoryInterface, TranslationRepositoryInterface
 {
     use ResourceRepositoryTrait;
     use TranslationRepositoryTrait;

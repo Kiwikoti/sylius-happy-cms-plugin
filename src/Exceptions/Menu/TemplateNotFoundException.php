@@ -19,7 +19,7 @@ final class TemplateNotFoundException extends \RuntimeException
     {
         parent::__construct(sprintf(
             'Could not find template "%s".',
-            $template
+            $template,
         ));
     }
 }

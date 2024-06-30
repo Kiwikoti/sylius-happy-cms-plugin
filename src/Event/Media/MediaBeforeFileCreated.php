@@ -56,5 +56,4 @@ class MediaBeforeFileCreated extends Event
     {
         $this->name = $name;
     }
-
 }

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock;
 
-use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
+use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
@@ -14,17 +16,17 @@ use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__shared_block')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: SharedBlockRepository::class)]
 class SharedBlock implements ResourceInterface, TranslatableInterface
 {
     use EntityIdTrait;
-
     use TranslatableTrait {
         TranslatableTrait::__construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
     }
-
     use EntityTimestampableTrait {
         EntityTimestampableTrait::__construct as private timestampableConstruct;
     }

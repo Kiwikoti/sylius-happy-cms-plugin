@@ -19,7 +19,7 @@ final class MenuNotFoundException extends \RuntimeException
     {
         parent::__construct(sprintf(
             'Could not find menu with code "%s".',
-            $code
+            $code,
         ));
     }
 }

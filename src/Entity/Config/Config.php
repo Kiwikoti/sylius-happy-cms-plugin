@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
@@ -18,7 +20,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Config implements ResourceInterface, TranslatableInterface
 {
     use EntityIdTrait;
-
     use TranslatableTrait {
         __construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
@@ -95,9 +96,6 @@ class Config implements ResourceInterface, TranslatableInterface
         return $this;
     }
 
-    /**
-     * @return null
-     */
     public function getDescription()
     {
         return $this->description;

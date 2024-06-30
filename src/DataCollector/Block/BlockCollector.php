@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\DataCollector\Block;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper;

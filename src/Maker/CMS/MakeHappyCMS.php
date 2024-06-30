@@ -17,18 +17,20 @@ use Symfony\Component\Console\Input\InputInterface;
 
 final class MakeHappyCMS extends AbstractMaker
 {
-    const BLOG_SCOPE = 'Blog';
-    const FAQ_SCOPE = 'Faq';
-    const SCOPES = [
+    public const BLOG_SCOPE = 'Blog';
+
+    public const FAQ_SCOPE = 'Faq';
+
+    public const SCOPES = [
         self::BLOG_SCOPE,
         self::FAQ_SCOPE,
     ];
 
-    const TPL_FILES = [
-        'entity'      => __DIR__ . '/../../Resources/skeleton/cms/entity.tpl.php',
+    public const TPL_FILES = [
+        'entity' => __DIR__ . '/../../Resources/skeleton/cms/entity.tpl.php',
         'translation' => __DIR__ . '/../../Resources/skeleton/cms/translation.tpl.php',
-        'repository'  => __DIR__ . '/../../Resources/skeleton/cms/repository.tpl.php',
-        'admin'       => __DIR__ . '/../../Resources/skeleton/cms/admin.tpl.php',
+        'repository' => __DIR__ . '/../../Resources/skeleton/cms/repository.tpl.php',
+        'admin' => __DIR__ . '/../../Resources/skeleton/cms/admin.tpl.php',
     ];
 
     public static function getCommandName(): string
@@ -46,14 +48,17 @@ final class MakeHappyCMS extends AbstractMaker
         $command
             ->setDescription(self::getCommandDescription())
             ->addArgument('scope', InputArgument::OPTIONAL, 'Scope of classes to create')
-            ->addArgument('entryClassName',
+            ->addArgument(
+                'entryClassName',
                 InputArgument::OPTIONAL,
                 'Entity name for %s entries',
-                'Entry')
-            ->addArgument('categoryClassName',
+                'Entry',
+            )
+            ->addArgument(
+                'categoryClassName',
                 InputArgument::OPTIONAL,
                 'Entity name for %s categories',
-                'Category'
+                'Category',
             )
         ;
         $inputConfig->setArgumentAsNonInteractive('scope');
@@ -70,7 +75,7 @@ final class MakeHappyCMS extends AbstractMaker
             $arg = $command->getDefinition()->getArgument($argName);
             $input->setArgument(
                 $arg->getName(),
-                $io->ask(sprintf($arg->getDescription(), $scope), $arg->getDefault())
+                $io->ask(sprintf($arg->getDescription(), $scope), $arg->getDefault()),
             );
         }
     }
@@ -85,14 +90,14 @@ final class MakeHappyCMS extends AbstractMaker
 
         $scope = $input->getArgument('scope');
         $namespaces = [
-            'entity' => 'App\\Entity\\HappyCMS\\'. $scope .'\\',
-            'repository' => 'App\\Repository\\HappyCMS\\'. $scope .'\\',
-            'admin' => 'App\\Admin\\HappyCMS\\'. $scope .'\\'
+            'entity' => 'App\\Entity\\HappyCMS\\' . $scope . '\\',
+            'repository' => 'App\\Repository\\HappyCMS\\' . $scope . '\\',
+            'admin' => 'App\\Admin\\HappyCMS\\' . $scope . '\\',
         ];
 
         // ENTITY
         $generator->generateClass(
-            $namespaces['entity'] .$entryClassName,
+            $namespaces['entity'] . $entryClassName,
             self::TPL_FILES['entity'],
             [
                 'scope' => $scope,
@@ -100,18 +105,18 @@ final class MakeHappyCMS extends AbstractMaker
                 'entityClassName' => $entryClassName,
                 'relationClassName' => $categoryClassName,
                 'repository' => [
-                    'name' => $entryClassName.'Repository',
-                    'FQCN' => $namespaces['repository'] .$entryClassName.'Repository',
+                    'name' => $entryClassName . 'Repository',
+                    'FQCN' => $namespaces['repository'] . $entryClassName . 'Repository',
                 ],
                 'options' => [
                     'isOwningSide' => true,
                     'hasRouting' => false,
-                ]
-            ]
+                ],
+            ],
         );
         // TRANSLATION
         $generator->generateClass(
-            $namespaces['entity'] .$entryClassName.'Translation',
+            $namespaces['entity'] . $entryClassName . 'Translation',
             self::TPL_FILES['translation'],
             [
                 'scope' => $scope,
@@ -120,25 +125,25 @@ final class MakeHappyCMS extends AbstractMaker
                 'withFlexibleContent' => self::BLOG_SCOPE === $scope,
                 'extraFields' => self::FAQ_SCOPE === $scope ?
                     [
-                        ['name' => 'answer', 'columnType' => \Doctrine\DBAL\Types\Types::TEXT, 'phpType' => 'string']
+                        ['name' => 'answer', 'columnType' => \Doctrine\DBAL\Types\Types::TEXT, 'phpType' => 'string'],
                     ] :
                     null,
-            ]
+            ],
         );
         //REPOSITORY
         $generator->generateClass(
-            $namespaces['repository'] .$entryClassName.'Repository',
+            $namespaces['repository'] . $entryClassName . 'Repository',
             self::TPL_FILES['repository'],
             [
                 'scope' => $scope,
                 'namespace' => $namespaces['repository'],
                 'entityClassName' => $entryClassName,
                 'relationClassName' => $categoryClassName,
-            ]
+            ],
         );
         //ADMIN
         $generator->generateClass(
-            $namespaces['admin'] .$entryClassName.'Admin',
+            $namespaces['admin'] . $entryClassName . 'Admin',
             self::TPL_FILES['admin'],
             [
                 'scope' => $scope,
@@ -148,15 +153,15 @@ final class MakeHappyCMS extends AbstractMaker
                 'withFlexibleContent' => self::BLOG_SCOPE === $scope,
                 'extraFields' => self::FAQ_SCOPE === $scope ?
                     [
-                        ['name' => 'answer']
+                        ['name' => 'answer'],
                     ] :
                     null,
-            ]
+            ],
         );
 
         //ENTITY
         $generator->generateClass(
-            $namespaces['entity'] .$categoryClassName,
+            $namespaces['entity'] . $categoryClassName,
             self::TPL_FILES['entity'],
             [
                 'scope' => $scope,
@@ -164,45 +169,45 @@ final class MakeHappyCMS extends AbstractMaker
                 'entityClassName' => $categoryClassName,
                 'relationClassName' => $entryClassName,
                 'repository' => [
-                    'name' => $categoryClassName.'Repository',
-                    'FQCN' => $namespaces['repository'] .$categoryClassName.'Repository',
+                    'name' => $categoryClassName . 'Repository',
+                    'FQCN' => $namespaces['repository'] . $categoryClassName . 'Repository',
                 ],
                 'options' => [
                     'isOwningSide' => false,
                     'hasRouting' => true,
-                ]
-            ]
+                ],
+            ],
         );
         //TRANSLATION
         $generator->generateClass(
-            $namespaces['entity'] .$categoryClassName.'Translation',
+            $namespaces['entity'] . $categoryClassName . 'Translation',
             self::TPL_FILES['translation'],
             [
                 'scope' => $scope,
                 'namespace' => $namespaces['entity'],
                 'entityClassName' => $categoryClassName,
-            ]
+            ],
         );
         //REPOSITORY
         $generator->generateClass(
-            $namespaces['repository'] .$categoryClassName.'Repository',
+            $namespaces['repository'] . $categoryClassName . 'Repository',
             self::TPL_FILES['repository'],
             [
                 'scope' => $scope,
                 'namespace' => $namespaces['repository'],
                 'entityClassName' => $categoryClassName,
                 'relationClassName' => $entryClassName,
-            ]
+            ],
         );
         //ADMIN
         $generator->generateClass(
-            $namespaces['admin'] .$categoryClassName.'Admin',
+            $namespaces['admin'] . $categoryClassName . 'Admin',
             self::TPL_FILES['admin'],
             [
                 'scope' => $scope,
                 'namespace' => $namespaces['admin'],
                 'entityClassName' => $categoryClassName,
-            ]
+            ],
         );
 
         $generator->writeChanges();
@@ -210,9 +215,9 @@ final class MakeHappyCMS extends AbstractMaker
         $resourceConfigGenerator = new ResourceConfigGeneratorService($scope, $namespaces);
         $updatedFiles = $resourceConfigGenerator->generateConfig(
             $entryClassName,
-            $categoryClassName
+            $categoryClassName,
         );
-        $io->writeln('Updated : '. implode(', ', $updatedFiles));
+        $io->writeln('Updated : ' . implode(', ', $updatedFiles));
 
         $this->writeSuccessMessage($io);
     }

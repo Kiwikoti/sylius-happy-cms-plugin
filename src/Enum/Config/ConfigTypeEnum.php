@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Enum\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\CodeEditorField;
@@ -28,18 +30,31 @@ use Adeliom\SyliusEasyCrudPlugin\Helper\Enum;
 class ConfigTypeEnum extends Enum
 {
     private const CODE = 'code';
+
     private const EMAIL = 'email';
+
     private const NUMBER = 'number';
+
     private const JSON = 'json';
+
     private const TEXT = 'text';
+
     private const TEXTAREA = 'textarea';
+
     private const WYSIWYG = 'wysiwyg';
+
     private const BOOLEAN = 'boolean';
+
     private const IMAGE = 'image';
+
     private const FILE = 'file';
+
     private const COLOR = 'color';
+
     private const DATE = 'date';
+
     private const TIME = 'time';
+
     private const DATETIME = 'datetime';
 
     public static function getAdminField(string $typeKey): FieldInterface
@@ -55,6 +70,7 @@ class ConfigTypeEnum extends Enum
 
         $field->setLabel('sylius_happy_cms.config.admin.type.' . $typeKey);
         $field->setDisabled(false);
+
         return $field;
     }
 }

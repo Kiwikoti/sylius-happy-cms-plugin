@@ -1,22 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\DependencyInjection;
 
-use Adeliom\SyliusHappyCMSPlugin\Admin\Page\AbstractPageAdmin;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin;
-use Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageController;
-use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
-use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository;
+use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -94,7 +94,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('enable_profiler')->defaultValue('%kernel.debug%')->end()
                         ->arrayNode('ignore_profiler')
                             ->defaultValue([
-                                   '^/admin*'
+                                   '^/admin*',
                                ])->scalarPrototype()->end()
                         ->end()
                         ->arrayNode('title')
@@ -129,6 +129,7 @@ class Configuration implements ConfigurationInterface
                                     if (!class_exists($value) || !is_a($value, Config::class, true)) {
                                         throw new InvalidConfigurationException(sprintf('Config class must be a valid class extending %s. "%s" given.', Config::class, $value));
                                     }
+
                                     return $value;
                                 })
                             ->end()

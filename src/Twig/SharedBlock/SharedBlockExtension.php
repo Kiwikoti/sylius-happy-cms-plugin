@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper;

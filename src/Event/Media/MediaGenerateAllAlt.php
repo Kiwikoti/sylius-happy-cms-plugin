@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Media;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\Event;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Seo;
 
 use Adeliom\SyliusHappyCMSPlugin\Event\Seo\AfterSitemapEntities;
@@ -24,7 +26,7 @@ class SitemapSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getSubscribedEvents(): array
     {
@@ -72,11 +74,10 @@ class SitemapSubscriber implements EventSubscriberInterface
         $params = $sitemapDumpable->getSitemapRouteParams($entity);
         $params['_locale'] = $translation->getLocale();
 
-
         $url = $urlGenerator->generate(
             $sitemapDumpable->getSitemapRoute(),
             $params,
-            UrlGeneratorInterface::ABSOLUTE_URL
+            UrlGeneratorInterface::ABSOLUTE_URL,
         );
 
         if ($updatedUrl = $replaceUrl($url, $entity)) {
