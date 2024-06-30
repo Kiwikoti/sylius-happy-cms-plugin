@@ -15,7 +15,7 @@
         <object v-if="selectedFileIs('pdf') || selectedFileIs('text')"
                 :data="selectedFile.path"
                 :type="selectedFile.type">
-            <p v-if="selectedFileIs('pdf')">{{ 'happy_cms.media.pdf'|trans }}</p>
+            <p v-if="selectedFileIs('pdf')">{{ 'sylius_happy_cms.media.pdf'|trans }}</p>
         </object>
 
         {# oembed #}
@@ -31,7 +31,7 @@
                    preload="metadata"
                    data-player
                    :src="selectedFile.path">
-                {{ 'happy_cms.media.video_support'|trans }}
+                {{ 'sylius_happy_cms.media.video_support'|trans }}
             </video>
         </div>
 
@@ -53,7 +53,7 @@
                    preload="metadata"
                    data-player
                    :src="selectedFile.path">
-                {{ 'happy_cms.media.audio.support'|trans }}
+                {{ 'sylius_happy_cms.media.audio.support'|trans }}
             </audio>
         </div>
 
@@ -98,7 +98,7 @@
                            v-if="selectedFileIs('pdf') || selectedFileIs('text')"
                            rel="noreferrer noopener"
                            target="_blank"
-                           title="{{ 'happy_cms.media.public_url'|trans }}"
+                           title="{{ 'sylius_happy_cms.media.public_url'|trans }}"
                            v-tippy="{arrow: true}">
                             <icon name="search" scale="1.1"></icon>
                         </a-->

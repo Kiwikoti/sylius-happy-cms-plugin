@@ -14,7 +14,7 @@ use Adeliom\SyliusEasyCrudPlugin\Admin\Field\AssociationField;
 // You have to add this form theme @SyliusEasyCrudPlugin/form/association_widget.html.twig
 ...
 yield ResourceChoiceField::new('page')
-    ->setResource('happy_cms.page')
+    ->setResource('sylius_happy_cms.page')
 ;
 ```
 

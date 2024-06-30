@@ -47,7 +47,7 @@
             <div style="float: right; margin-right: 16px;" class="ui checkbox block_published">
                 <input type="checkbox">
                 <label style="font-size: 12px; font-weight: normal;">
-                    {{ "happy_cms.editor.published" | trans }}
+                    {{ "sylius_happy_cms.editor.published" | trans }}
                 </label>
             </div>
         </div>
@@ -91,7 +91,7 @@
         <div class="six wide column w-flexible-blocks">
             {% set tabs = [] %}
             {% for type, block in blocks %}
-                {% set tab = ("happy_cms.editor.blocks" | trans ) %}
+                {% set tab = ("sylius_happy_cms.editor.blocks" | trans ) %}
                 {% if block.getTab() is defined %}
                     {% set tab = block.getTab() %}
                 {% endif %}
@@ -114,7 +114,7 @@
             {% set blockCount = 0 %}
             <div style="margin-top: 16px;" class="ui cards">
                 {% for type, block in blocks %}
-                    {% set blockTab = ("happy_cms.editor.blocks" | trans ) %}
+                    {% set blockTab = ("sylius_happy_cms.editor.blocks" | trans ) %}
                     {% if block.getTab is defined %}
                         {% set blockTab = block.getTab() %}
                     {% endif %}
@@ -145,11 +145,11 @@
                                     </div>
                                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">{{ "happy_cms.editor.previous" | trans }}</span>
+                                        <span class="visually-hidden">{{ "sylius_happy_cms.editor.previous" | trans }}</span>
                                     </button>
                                     <button class="carousel-control-next" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">{{ "happy_cms.editor.next" | trans }}</span>
+                                        <span class="visually-hidden">{{ "sylius_happy_cms.editor.next" | trans }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -162,7 +162,7 @@
                             {% set please_save %}
                                 <div class="ui warning segment">
                                     <i class="save icon"></i>
-                                    {{ "happy_cms.editor.please_saves_changes" | trans }}
+                                    {{ "sylius_happy_cms.editor.please_saves_changes" | trans }}
                                 </div>
                             {% endset %}
                             <button
@@ -174,7 +174,7 @@
                                 data-num-items='{{ form.children|length }}'
                                 data-form-type-name-placeholder='{{ prototypes[type] is defined ? prototypes[type].vars.name : '' }}'
                             >
-                                {{ "happy_cms.editor.add" | trans }}
+                                {{ "sylius_happy_cms.editor.add" | trans }}
                             </button>
                         </div>
                     </div>

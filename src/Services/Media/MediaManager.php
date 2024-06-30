@@ -370,7 +370,7 @@ class MediaManager
             $entity->setName($name);
         }
 
-        $ignore = array_merge($this->parameters->get('happy_cms.media.unallowed_mimes'), ['application/octet-stream']);
+        $ignore = array_merge($this->parameters->get('sylius_happy_cms.media.unallowed_mimes'), ['application/octet-stream']);
 
         // check for mime type
         if (Str::contains($file_type, $ignore)) {
@@ -462,12 +462,12 @@ class MediaManager
         $entity->setLastModified($source->getMTime());
 
         // check for mime type
-        if (Str::contains($entity->getMime(), $this->parameters->get('happy_cms.media.unallowed_mimes'))) {
+        if (Str::contains($entity->getMime(), $this->parameters->get('sylius_happy_cms.media.unallowed_mimes'))) {
             throw new ExtNotAllowed($this->translator->trans('not_allowed_file_ext', [], 'SyliusHappyCMSPlugin'));
         }
 
         // check for extension
-        if (Str::contains($ext_only, $this->parameters->get('happy_cms.media.unallowed_ext'))) {
+        if (Str::contains($ext_only, $this->parameters->get('sylius_happy_cms.media.unallowed_ext'))) {
             throw new ExtNotAllowed($this->translator->trans('not_allowed_file_ext', [], 'SyliusHappyCMSPlugin'));
         }
 

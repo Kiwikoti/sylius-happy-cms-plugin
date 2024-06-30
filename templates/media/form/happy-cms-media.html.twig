@@ -1,17 +1,17 @@
 {% trans_default_domain 'SyliusHappyCMSPlugin' %}
 
-{% block happy_cms.media_row %}
+{% block sylius_happy_cms.media_row %}
     {% set row_attr = row_attr|merge({
         class: row_attr.class|default('') ~ ' form-group'
     }) %}
 
     {% set options = {
-        'baseUrl' : happy_cms.media.base_url,
-        'hideFilesExt' : happy_cms.media.hide_files_ext,
-        'mimeTypes' : happy_cms.media.extended_mimes,
-        'broadcasting' : happy_cms.media.enable_broadcasting,
-        'generating_alts' : happy_cms.media.enable_generating_alts,
-        'locales' : happy_cms.media.locales,
+        'baseUrl' : sylius_happy_cms.media.base_url,
+        'hideFilesExt' : sylius_happy_cms.media.hide_files_ext,
+        'mimeTypes' : sylius_happy_cms.media.extended_mimes,
+        'broadcasting' : sylius_happy_cms.media.enable_broadcasting,
+        'generating_alts' : sylius_happy_cms.media.enable_generating_alts,
+        'locales' : sylius_happy_cms.media.locales,
     } %}
 
     {% set routes = {
@@ -34,7 +34,7 @@
                     <!--media-modal item="links" :name="inputName" :multi="true"></media-modal-->
 
                     <section>
-                        <button type="button" class="btn btn-primary" @click="toggleModalFor('media')">{{ 'happy_cms.media.select.file'|trans }}</button>
+                        <button type="button" class="btn btn-primary" @click="toggleModalFor('media')">{{ 'sylius_happy_cms.media.select.file'|trans }}</button>
 
                         <div class="selection-preview" v-if="selectedFile">
                             <div class="__box-data" @click.stop="toggleModal('preview_modal')">
@@ -77,7 +77,7 @@
                                 </div>
 
                                 <div class="__box-delete">
-                                    <span class="delete bg-danger" @click.stop="clearFile()" v-tippy="{arrow: true, placement: 'top'}" title="{{ 'happy_cms.media.remove'|trans }}"></span>
+                                    <span class="delete bg-danger" @click.stop="clearFile()" v-tippy="{arrow: true, placement: 'top'}" title="{{ 'sylius_happy_cms.media.remove'|trans }}"></span>
                                 </div>
                             </div>
                         </div>
@@ -101,9 +101,9 @@
 
 
             {% if ea.field.help ?? false %}
-                <small class="form-help">{{ 'happy_cms.media.' ~ ea.field.help|raw }}</small>
+                <small class="form-help">{{ 'sylius_happy_cms.media.' ~ ea.field.help|raw }}</small>
             {% elseif form.vars.help ?? false %}
-                <small class="form-help">{{ 'happy_cms.media.' ~ form.vars.help|trans(form.vars.help_translation_parameters, form.vars.translation_domain)|raw }}</small>
+                <small class="form-help">{{ 'sylius_happy_cms.media.' ~ form.vars.help|trans(form.vars.help_translation_parameters, form.vars.translation_domain)|raw }}</small>
             {% endif %}
 
             {{- form_errors(form) -}}

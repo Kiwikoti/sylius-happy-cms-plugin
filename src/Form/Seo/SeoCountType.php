@@ -21,26 +21,26 @@ class SeoCountType extends AbstractType
     {
         $builder
             ->add('title', TextCounterType::class, [
-                'label' => 'happy_cms.seo.admin.field.title',
+                'label' => 'sylius_happy_cms.seo.admin.field.title',
             ])
             ->add('cover', MediaType::class, [
-                'label' => 'happy_cms.seo.admin.field.cover',
+                'label' => 'sylius_happy_cms.seo.admin.field.cover',
                 'restrictions_uploadTypes' => ['image/*'],
             ])
             ->add('canonical', UrlType::class, [
-                'label' => 'happy_cms.seo.admin.field.canonical',
+                'label' => 'sylius_happy_cms.seo.admin.field.canonical',
             ])
             ->add('description', TextareaCounterType::class, [
-                'label' => 'happy_cms.seo.admin.field.description',
+                'label' => 'sylius_happy_cms.seo.admin.field.description',
             ])
             ->add('keywords', TextType::class, [
-                'label' => 'happy_cms.seo.admin.field.keywords',
+                'label' => 'sylius_happy_cms.seo.admin.field.keywords',
             ])
             ->add('key', TextType::class, [
-                'label' => 'happy_cms.seo.admin.field.key',
+                'label' => 'sylius_happy_cms.seo.admin.field.key',
             ])
             ->add('robots', ChoiceType::class, [
-                'label' => 'happy_cms.seo.admin.field.robots',
+                'label' => 'sylius_happy_cms.seo.admin.field.robots',
                 'multiple' => 'true',
                 'attr' => [
                     'data-ea-widget' => 'ea-autocomplete',
@@ -55,7 +55,7 @@ class SeoCountType extends AbstractType
                 ],
             ])
             ->add('sitemap', CheckboxType::class, [
-                'label' => 'happy_cms.seo.admin.field.sitemap',
+                'label' => 'sylius_happy_cms.seo.admin.field.sitemap',
             ]);
     }
 

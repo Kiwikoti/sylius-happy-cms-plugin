@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Media;
 
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\MappedSuperclass]
-class Media implements \Stringable
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__media')]
+class Media implements ResourceInterface, \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

@@ -38,8 +38,8 @@
         </service>
 
         <service id="happy.cms.media.event_listener.doctrine_mapping_listener" class="Adeliom\SyliusHappyCMSPlugin\EventListener\Media\DoctrineMappingListener" public="true" autowire="true">
-            <argument type="string">%happy_cms.media.media_entity%</argument>
-            <argument type="string">%happy_cms.media.folder_entity%</argument>
+            <argument type="string">%sylius_happy_cms.media.media_entity%</argument>
+            <argument type="string">%sylius_happy_cms.media.folder_entity%</argument>
             <tag name="doctrine.event_listener" event="loadClassMetadata" />
         </service>
 

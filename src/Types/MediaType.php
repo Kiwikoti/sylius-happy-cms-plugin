@@ -28,7 +28,7 @@ class MediaType extends Type
             $listener = array_shift($listeners);
             /** @var ContainerInterface $container */
             $container = $listener->getContainer();
-            $class = $container->getParameter('happy_cms.media.media_entity');
+            $class = $container->getParameter('sylius_happy_cms.media.media_entity');
 
             if ($value) {
                 return $container->get('doctrine.orm.entity_manager')->getRepository($class)->find($value);

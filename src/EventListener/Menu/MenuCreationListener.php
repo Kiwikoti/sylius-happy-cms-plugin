@@ -37,7 +37,7 @@ class MenuCreationListener
             $translation = new $menuItemTranslationClass();
             $translation->setLocale($locale);
             $translation->setName(
-                $this->translator->trans('happy_cms.menu_item.admin.data.menu_item_root', locale: $locale)
+                $this->translator->trans('sylius_happy_cms.menu_item.admin.data.menu_item_root', locale: $locale)
             );
             $rootItem->addTranslation($translation);
         }

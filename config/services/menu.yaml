@@ -1,40 +1,40 @@
 services:
     happy_cms_menu.menu.repository:
-        class: '%happy_cms.menu.menu.repository%'
+        class: '%sylius_happy_cms.menu.menu.repository%'
         arguments:
             - '@doctrine'
-            - '%happy_cms.menu.menu.class%'
+            - '%sylius_happy_cms.menu.menu.class%'
         calls:
-            - [ 'setConfig', [ '%happy_cms.menu.cache%' ] ]
+            - [ 'setConfig', [ '%sylius_happy_cms.menu.cache%' ] ]
         tags: [ doctrine.repository_service ]
     
     happy_cms_menu.menu_item.repository:
-        class: '%happy_cms.menu.menu_item.repository%'
+        class: '%sylius_happy_cms.menu.menu_item.repository%'
         arguments:
             - '@doctrine'
-            - '%happy_cms.menu.menu_item.class%'
+            - '%sylius_happy_cms.menu.menu_item.class%'
         calls:
-            - [ 'setConfig', [ '%happy_cms.menu.cache%' ] ]
+            - [ 'setConfig', [ '%sylius_happy_cms.menu.cache%' ] ]
         tags: [ doctrine.repository_service ]
     
     Adeliom\SyliusHappyCMSPlugin\EventListener\Menu\DoctrineMappingListener:
         arguments:
-            - '%happy_cms.menu.menu.class%'
-            - '%happy_cms.menu.menu_item.class%'
+            - '%sylius_happy_cms.menu.menu.class%'
+            - '%sylius_happy_cms.menu.menu_item.class%'
         tags:
             - { name: doctrine.event_listener, event: loadClassMetadata, priority: 1024 }
     
     Adeliom\SyliusHappyCMSPlugin\EventListener\Menu\MenuCreationListener:
         arguments:
-            - '%happy_cms.menu.menu.class%'
-            - '%happy_cms.menu.menu_item.class%'
+            - '%sylius_happy_cms.menu.menu.class%'
+            - '%sylius_happy_cms.menu.menu_item.class%'
             - '@sylius.locale_provider'
             - '@translator'
         tags:
             - # these are the options required to define the entity listener
                 name: 'doctrine.orm.entity_listener'
                 event: 'prePersist'
-                entity: '%happy_cms.menu.menu.class%'
+                entity: '%sylius_happy_cms.menu.menu.class%'
                 lazy: true
     
     Adeliom\SyliusHappyCMSPlugin\Twig\Menu\MenuExtension:
@@ -42,8 +42,8 @@ services:
         arguments:
             - '@twig'
             - '@doctrine.orm.entity_manager'
-            - '%happy_cms.menu.menu.class%'
-            - '%happy_cms.menu.menu_item.class%'
+            - '%sylius_happy_cms.menu.menu.class%'
+            - '%sylius_happy_cms.menu.menu_item.class%'
         tags:
             - { name: twig.extension }
     
@@ -51,7 +51,7 @@ services:
         public: true
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '%happy_cms.menu.menu_item.class%'
+            - '%sylius_happy_cms.menu.menu_item.class%'
             - '@twig'
             - '@router'
         tags:

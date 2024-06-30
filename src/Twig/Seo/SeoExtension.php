@@ -63,7 +63,7 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
         /**
          * @var GenericEvent $result;
          */
-        $result = $this->eventDispatcher->dispatch($event, 'happy_cms.seo.breadcrumb');
+        $result = $this->eventDispatcher->dispatch($event, 'sylius_happy_cms.seo.breadcrumb');
 
         return new Markup($this->twig->render('@SyliusHappyCMSPlugin/front/seo/block-breadcrumb.html.twig', ['data' => $result->getArgument('items')]), 'UTF-8');
     }
@@ -87,7 +87,7 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
         /**
          * @var GenericEvent $result;
          */
-        $result = $this->eventDispatcher->dispatch($event, 'happy_cms.seo.title');
+        $result = $this->eventDispatcher->dispatch($event, 'sylius_happy_cms.seo.title');
 
         return $result->getArgument('title') ?: $title;
     }
@@ -102,7 +102,7 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
         /**
          * @var GenericEvent $result;
          */
-        $result = $this->eventDispatcher->dispatch($event, 'happy_cms.seo.render_meta');
+        $result = $this->eventDispatcher->dispatch($event, 'sylius_happy_cms.seo.render_meta');
 
         return new Markup($this->twig->render('@SyliusHappyCMSPlugin/front/seo/block-metas.html.twig', ['data' => ($result->getArgument('datas') ?: $seo)]), 'UTF-8');
     }

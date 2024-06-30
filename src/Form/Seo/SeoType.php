@@ -22,34 +22,34 @@ class SeoType extends AbstractType implements AdminFormTypeInterface
     {
         $builder
             ->add('title', TextType::class, [
-                'label' => 'happy_cms.seo.admin.field.title',
+                'label' => 'sylius_happy_cms.seo.admin.field.title',
             ])
             ->add('cover', MediaType::class, [
-                'label' => 'happy_cms.seo.admin.field.cover',
+                'label' => 'sylius_happy_cms.seo.admin.field.cover',
                 'restrictions_uploadTypes' => ['image/*'],
             ])
             ->add('canonical', UrlType::class, [
-                'label' => 'happy_cms.seo.admin.field.canonical',
+                'label' => 'sylius_happy_cms.seo.admin.field.canonical',
                 'constraints' => [
 //                    new NotBlank(),
 //                    new Url(),
                 ]
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'happy_cms.seo.admin.field.description',
+                'label' => 'sylius_happy_cms.seo.admin.field.description',
             ])
             ->add('keywords', TextType::class, [
-                'label' => 'happy_cms.seo.admin.field.keywords',
+                'label' => 'sylius_happy_cms.seo.admin.field.keywords',
             ])
             // Todo : remove and put key into cms routing behavior
             //->add('key', TextType::class, [
-            //    'label' => 'happy_cms.seo.admin.field.key',
+            //    'label' => 'sylius_happy_cms.seo.admin.field.key',
             //])
             ->add('sitemap', CheckboxType::class, [
-                'label' => 'happy_cms.seo.admin.field.sitemap',
+                'label' => 'sylius_happy_cms.seo.admin.field.sitemap',
             ])
             ->add('robots', ChoiceType::class, [
-                'label' => 'happy_cms.seo.admin.field.robots',
+                'label' => 'sylius_happy_cms.seo.admin.field.robots',
                 'multiple' => 'true',
                 'attr' => [
                     'data-ea-widget' => 'ea-autocomplete',

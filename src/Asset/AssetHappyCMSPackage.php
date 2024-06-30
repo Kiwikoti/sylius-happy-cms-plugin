@@ -26,7 +26,7 @@ final class AssetHappyCMSPackage implements PackageInterface
     {
         $this->package = new PathPackage(
             '/bundles/syliushappycmsplugin',
-            new JsonManifestVersionStrategy(__DIR__.'/../Resources/public/manifest.json'),
+            new JsonManifestVersionStrategy(__DIR__.'/../../public/manifest.json'),
             null
         );
     }

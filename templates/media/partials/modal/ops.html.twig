@@ -39,7 +39,7 @@
         <div class="modal-card mm-animated fadeInDown">
             <header class="modal-card-head is-black">
                 <p class="modal-card-title">
-                    <span>{{ 'happy_cms.media.save.link'|trans }}</span>
+                    <span>{{ 'sylius_happy_cms.media.save.link'|trans }}</span>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
@@ -48,19 +48,19 @@
                 <section class="modal-card-body">
                     <input class="input" type="text"
                            v-model="urlToUpload"
-                           placeholder="{{ 'happy_cms.media.add.url'|trans }}"
+                           placeholder="{{ 'sylius_happy_cms.media.add.url'|trans }}"
                            ref="save_link_modal_input">
                 </section>
                 <footer class="modal-card-foot">
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'happy_cms.media.cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             class="button is-link"
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}"
                             @click.prevent="saveLinkForm($event)">
-                        {{ 'happy_cms.media.upload.main'|trans }}
+                        {{ 'sylius_happy_cms.media.upload.main'|trans }}
                     </button>
                 </footer>
             </div>
@@ -75,7 +75,7 @@
         <div class="modal-card mm-animated fadeInDown">
             <header class="modal-card-head is-link">
                 <p class="modal-card-title">
-                    <span>{{ 'happy_cms.media.add.new_folder'|trans }}</span>
+                    <span>{{ 'sylius_happy_cms.media.add.new_folder'|trans }}</span>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
@@ -84,19 +84,19 @@
                 <section class="modal-card-body">
                     <input class="input" type="text"
                            v-model="newFolderName"
-                           placeholder="{{ 'happy_cms.media.new.folder_name'|trans }}"
+                           placeholder="{{ 'sylius_happy_cms.media.new.folder_name'|trans }}"
                            ref="new_folder_modal_input">
                 </section>
                 <footer class="modal-card-foot">
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'happy_cms.media.cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             class="button is-link"
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}"
                             @click.prevent="NewFolderForm($event)">
-                        {{ 'happy_cms.media.new.create_folder'|trans }}
+                        {{ 'sylius_happy_cms.media.new.create_folder'|trans }}
                     </button>
                 </footer>
             </div>
@@ -112,20 +112,20 @@
         <div class="modal-card mm-animated fadeInDown">
             <header class="modal-card-head is-link">
                 <p class="modal-card-title">
-                    <span>{{ 'happy_cms.media.edit_metas.modal_title'|trans }}</span>
+                    <span>{{ 'sylius_happy_cms.media.edit_metas.modal_title'|trans }}</span>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
 
-            <div action="{{ path('media.edit_metas_file') }}" {{ happy_cms.media.enable_generating_alts | default(false) ? 'data-generate-alt-action=' ~ path('media.generate_alt_file') : '' }}>
+            <div action="{{ path('media.edit_metas_file') }}" {{ sylius_happy_cms.media.enable_generating_alts | default(false) ? 'data-generate-alt-action=' ~ path('media.generate_alt_file') : '' }}>
 
                 <section class="modal-card-body">
-                    <label class="input-label">{{ 'happy_cms.media.languages'|trans }}</label>
+                    <label class="input-label">{{ 'sylius_happy_cms.media.languages'|trans }}</label>
                     <br />
                     <button :style="!locale ? 'font-weight: bold; margin-right: 10px;' : 'margin-right: 10px;'"
                             type="button"
                             @click.stop="changeLocale(null)">
-                        {{  'happy_cms.media.default'|trans }}
+                        {{  'sylius_happy_cms.media.default'|trans }}
                     </button>
                     <button v-for="(localeCode, i) in config.locales"
                             :key="localeCode"
@@ -138,7 +138,7 @@
 
                 <section v-show="!locale" class="modal-card-body">
                     <div class="">
-                        <label class="input-label">{{ 'happy_cms.media.seo.title'|trans }}</label>
+                        <label class="input-label">{{ 'sylius_happy_cms.media.seo.title'|trans }}</label>
                         <input class="input" type="text"
                                v-if="selectedFile"
                                v-model="newMetas.title"
@@ -146,7 +146,7 @@
                                @focus="newMetas.title = selectedFile.metas.title ? selectedFile.metas.title : ''">
                     </div>
                     <div class="mt-4">
-                        <label class="input-label">{{ 'happy_cms.media.seo.alt'|trans }}</label>
+                        <label class="input-label">{{ 'sylius_happy_cms.media.seo.alt'|trans }}</label>
                         <input class="input" type="text"
                                v-if="selectedFile"
                                v-model="newMetas.alt"
@@ -154,7 +154,7 @@
                                @focus="newMetas.alt = selectedFile.metas.alt ? selectedFile.metas.alt : ''">
                     </div>
                     <div class="mt-4">
-                        <label class="input-label">{{ 'happy_cms.media.seo.description'|trans }}</label>
+                        <label class="input-label">{{ 'sylius_happy_cms.media.seo.description'|trans }}</label>
                         <textarea class="textarea"
                                  v-if="selectedFile"
                                  v-model="newMetas.description"
@@ -166,7 +166,7 @@
                 <section v-for="(localeCode, i) in config.locales"
                          :key="localeCode" v-if="localeCode == locale" class="modal-card-body">
                     <div class="">
-                        <label class="input-label">{{ 'happy_cms.media.seo.title'|trans }}</label>
+                        <label class="input-label">{{ 'sylius_happy_cms.media.seo.title'|trans }}</label>
                         <input class="input" type="text"
                                v-if="selectedFile"
                                v-model="localizedMetas[localeCode].title"
@@ -174,7 +174,7 @@
                                @focus="localizedMetas[localeCode].title = selectedFile.metas.localizedMetas[localeCode].title ? selectedFile.metas.localizedMetas[localeCode].title : ''">
                     </div>
                     <div class="mt-4">
-                        <label class="input-label">{{ 'happy_cms.media.seo.alt'|trans }}</label>
+                        <label class="input-label">{{ 'sylius_happy_cms.media.seo.alt'|trans }}</label>
                         <input class="input" type="text"
                                v-if="selectedFile"
                                v-model="localizedMetas[localeCode].alt"
@@ -182,7 +182,7 @@
                                @focus="localizedMetas[localeCode].alt = selectedFile.metas.localizedMetas[localeCode].alt ? selectedFile.metas.localizedMetas[localeCode].alt : ''">
                     </div>
                     <div class="mt-4">
-                        <label class="input-label">{{ 'happy_cms.media.seo.description'|trans }}</label>
+                        <label class="input-label">{{ 'sylius_happy_cms.media.seo.description'|trans }}</label>
                         <textarea class="textarea"
                                   v-if="selectedFile"
                                   v-model="localizedMetas[localeCode].description"
@@ -192,22 +192,22 @@
                 </section>
 
                 <footer class="modal-card-foot">
-                    {% if happy_cms.media.enable_generating_alts | default(false) %}
+                    {% if sylius_happy_cms.media.enable_generating_alts | default(false) %}
                     <button type="reset" class="button" @click.stop="GenerateAlt($event)"
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}">
-                        {{ 'happy_cms.media.alt.generate_alt'|trans }}
+                        {{ 'sylius_happy_cms.media.alt.generate_alt'|trans }}
                     </button>
                     {% endif %}
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'happy_cms.media.cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             class="button is-link"
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}"
                             @click.prevent="EditMetasFileForm($event)">
-                        {{ 'happy_cms.media.save.main'|trans }}
+                        {{ 'sylius_happy_cms.media.save.main'|trans }}
                     </button>
                 </footer>
             </div>
@@ -397,7 +397,7 @@
 
 
     {# generate_all_alt_modal #}
-    {% if happy_cms.media.enable_generating_alts | default(false) %}
+    {% if sylius_happy_cms.media.enable_generating_alts | default(false) %}
     <div class="modal mm-animated fadeIn"
          :class="{'is-active': isActiveModal('generate_all_alt_modal')}"
          v-if="enableRename">

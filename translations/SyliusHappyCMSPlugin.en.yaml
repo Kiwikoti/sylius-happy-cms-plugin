@@ -1,4 +1,4 @@
-happy_cms:
+sylius_happy_cms:
     media:
         default: Default
         languages: Language

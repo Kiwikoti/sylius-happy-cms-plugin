@@ -1,4 +1,15 @@
 doctrine:
-    dbal:
-        types:
-            adeliom_happy_cms_flexible_content_type : Adeliom\SyliusHappyCMSPlugin\Doctrine\FlexibleContentType
+  dbal:
+    types:
+      adeliom_happy_cms_flexible_content_type: Adeliom\SyliusHappyCMSPlugin\Doctrine\FlexibleContentType
+
+  orm:
+    entity_managers:
+      default:
+        mappings:
+          SyliusHappyCMSPlugin:
+            is_bundle: true
+            type: attribute
+            dir: 'src/Entity/Media'
+            prefix: 'Adeliom\SyliusHappyCMSPlugin'
+            alias: Adeliom\SyliusHappyCMSPlugin

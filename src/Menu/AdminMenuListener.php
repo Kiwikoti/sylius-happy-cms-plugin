@@ -17,7 +17,7 @@ final class AdminMenuListener
             ->setLabel('Cms')
         ;
         $newSubmenu
-            ->addChild('happy_cms_page', ['route' => 'happy_cms_admin_page_index'])
+            ->addChild('happy_cms_page', ['route' => 'sylius_happy_cms_admin_page_index'])
             ->setLabel('Pages')
             ->setLabelAttribute('icon', 'file')
         ;
@@ -27,12 +27,12 @@ final class AdminMenuListener
             ->setLabelAttribute('icon', 'image')
         ;
         $newSubmenu
-            ->addChild('happy_cms_menu', ['route' => 'happy_cms_admin_menu_index'])
+            ->addChild('happy_cms_menu', ['route' => 'sylius_happy_cms_admin_menu_index'])
             ->setLabel('Menus')
             ->setLabelAttribute('icon', 'bars')
         ;
         $newSubmenu
-            ->addChild('happy_cms_block', ['route' => 'happy_cms_admin_shared_block_index'])
+            ->addChild('happy_cms_block', ['route' => 'sylius_happy_cms_admin_shared_block_index'])
             ->setLabel('Blocs partagés')
             ->setLabelAttribute('icon', 'box')
         ;
@@ -46,7 +46,7 @@ final class AdminMenuListener
         ] + $children));
 
         $children['configuration']
-            ->addChild('adeliom-sylius-easy-config', ['route' => 'happy_cms_admin_config_index'])
+            ->addChild('adeliom-sylius-easy-config', ['route' => 'sylius_happy_cms_admin_config_index'])
                 ->setLabel('Configurations')
                 ->setLabelAttribute('icon', 'cogs');
     }

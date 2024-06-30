@@ -54,7 +54,7 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
 
     public static function getName(): string
     {
-        return 'happy_cms_admin_<?= $scope ?>_<?= $mainClassData['lowerName'] ?>';
+        return 'sylius_happy_cms_admin_<?= $scope ?>_<?= $mainClassData['lowerName'] ?>';
     }
 
     public static function getEntityFqcn(): string
@@ -71,7 +71,7 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
-        $contentAction = Action::new('content', 'happy_cms.page.admin.action.manage_content', 'flag outline')
+        $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'flag outline')
             ->addSubAction(
                 Action::new('fr_FR', 'fr_FR', 'flag outline')
                     ->linkToRoute('happy_cms_admin_page_update', [
@@ -80,7 +80,7 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
             )
             ->addSubAction(
                 Action::new('de_DE', 'de_DE', 'flag outline')
-                    ->linkToRoute('happy_cms_admin_page_update', [
+                    ->linkToRoute('sylius_happy_cms_admin_page_update', [
                         'context' => 'flexible_content:de_DE',
                     ])
             );
@@ -97,9 +97,9 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
     {
         if (is_null($context)) {
 
-            yield TabField::new('<?= $mainClassData['lowerName'] ?>', 'happy_cms.<?= $scope ?>.admin.tab.<?= $mainClassData['lowerName'] ?>');
+            yield TabField::new('<?= $mainClassData['lowerName'] ?>', 'sylius_happy_cms.<?= $scope ?>.admin.tab.<?= $mainClassData['lowerName'] ?>');
 
-            yield ColumnField::new('happy_cms.<?= $scope ?>.admin.panel.metadatas')
+            yield ColumnField::new('sylius_happy_cms.<?= $scope ?>.admin.panel.metadatas')
                 ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
 
             yield Field::new('name')
@@ -109,7 +109,7 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
 
         <?php if (isset($relationClassData)) { ?>
             yield ResourceAutocompleteChoiceField::new('<?= $relationClassData['lowerNames']['plural'] ?>', '<?= $relationClassData['lowerNames']['plural'] ?>')
-                ->setResource('happy_cms.<?= $scope ?>_<?= $relationClassData['lowerNames']['singular'] ?>')
+                ->setResource('sylius_happy_cms.<?= $scope ?>_<?= $relationClassData['lowerNames']['singular'] ?>')
                 ->setMultiple()
                 ->setChoiceValue('id')
                 ->setChoiceName('name')
@@ -156,7 +156,7 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
         ?>
                 ->hideOnIndex();
 
-            yield ColumnField::new('happy_cms.<?= $scope ?>.admin.panel.publication')
+            yield ColumnField::new('sylius_happy_cms.<?= $scope ?>.admin.panel.publication')
                 ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
 
             yield FormTypeField::new('publishDate', 'Date de publication', DateTimeType::class)
@@ -175,11 +175,11 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
                 ->renderExpanded()
                 ->hideOnIndex();
 
-            yield TabField::new('seo', 'happy_cms.page.admin.tab.seo');
+            yield TabField::new('seo', 'sylius_happy_cms.page.admin.tab.seo');
 
-            yield TranslationField::new('seoTranslations', 'happy_cms.page.admin.field.seo.translations')
+            yield TranslationField::new('seoTranslations', 'sylius_happy_cms.page.admin.field.seo.translations')
                 ->addField(
-                    SEOField::new('seo', 'happy_cms.page.admin.field.seo')
+                    SEOField::new('seo', 'sylius_happy_cms.page.admin.field.seo')
                         ->setDisabled(false)
                         ->setRequired(true)
                         ->setFormTypeOption('constraints', [

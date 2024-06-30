@@ -56,8 +56,8 @@ class MediaController extends AbstractController
         $this->managerRegistry = $managerRegistry;
         $this->em = $this->managerRegistry->getManager();
 
-        $this->ignoreFiles = $bag->get('happy_cms.media.ignore_files');
-        $this->paginationAmount = $bag->get('happy_cms.media.pagination_amount');
+        $this->ignoreFiles = $bag->get('sylius_happy_cms.media.ignore_files');
+        $this->paginationAmount = $bag->get('sylius_happy_cms.media.pagination_amount');
         $this->chunksDir = $bag->get('kernel.project_dir').'/var/chunks_upload';
         $this->helper = $manager->getHelper();
         $this->filesystem = $manager->getFilesystem();

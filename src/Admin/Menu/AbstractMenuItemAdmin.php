@@ -83,8 +83,8 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
         $menuId = $this->getMenuId() ?? $this->getResource()?->getMenu()?->getId();
         if ($menuId) {
             $actions->remove(Crud::PAGE_INDEX, Action::NEW);
-            $newMenuItem = Action::new('menu_items.new', 'happy_cms.menu_item.admin.action.create', 'plus')
-                ->linkToRoute('happy_cms_admin_menu_item_create', ['id' => $menuId])
+            $newMenuItem = Action::new('menu_items.new', 'sylius_happy_cms.menu_item.admin.action.create', 'plus')
+                ->linkToRoute('sylius_happy_cms_admin_menu_item_create', ['id' => $menuId])
                 ->addCssClass('primary');
             $actions->addGlobalAction(Crud::PAGE_INDEX, $newMenuItem);
 
@@ -98,10 +98,10 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
     {
         $menuId = $this->getMenuId();
 
-        yield TabField::new('menu', 'happy_cms.menu_item.admin.tab.menu_item');
+        yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item');
 
         if ($menuId && $this->locator->has('parameter_bag')) {
-            yield Field::new('menu', 'happy_cms.menu_item.admin.field.menu')
+            yield Field::new('menu', 'sylius_happy_cms.menu_item.admin.field.menu')
                 ->onlyOnForms()
                 ->setFormType(EntityType::class)
                 ->setFormTypeOption('class', $this->locator->get('parameter_bag')->get('happy_cms_menu.menu.class'))
@@ -116,7 +116,7 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
             ;
         }
 
-        $parentField = Field::new('parent', 'happy_cms.menu_item.admin.field.parent')
+        $parentField = Field::new('parent', 'sylius_happy_cms.menu_item.admin.field.parent')
             ->setFormTypeOption('choice_label', fn (MenuItem $choice): string => $choice->getFlattenParents())
             ->setGridTemplatePath('@SyliusHappyCMSPlugin/field/menu/grid_menu_item_parent.html.twig');
 
@@ -135,30 +135,30 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
 
         yield $parentField;
 
-        yield Field::new('name', 'happy_cms.menu_item.admin.field.name')
+        yield Field::new('name', 'sylius_happy_cms.menu_item.admin.field.name')
             ->setSortablePath('translations.name')
             ->onlyOnIndex();
 
         //        // TODO fix exception "Can't get a way to read the property "url" in class "App\Entity\EasyMenu\MenuItem"."
-        //        yield Field::new('url', 'happy_cms.menu_item.admin.field.url')
+        //        yield Field::new('url', 'sylius_happy_cms.menu_item.admin.field.url')
         //            ->setSortablePath('translations.url')
         //            ->onlyOnIndex();
 
-        yield Field::new('target', 'happy_cms.menu_item.admin.field.target');
+        yield Field::new('target', 'sylius_happy_cms.menu_item.admin.field.target');
 
-        yield Field::new('position', 'happy_cms.menu_item.admin.field.position');
+        yield Field::new('position', 'sylius_happy_cms.menu_item.admin.field.position');
 
-        yield EnumField::new('publishState', 'happy_cms.menu_item.admin.field.state')
+        yield EnumField::new('publishState', 'sylius_happy_cms.menu_item.admin.field.state')
             ->setEnum(ThreeStateStatusEnum::class)
             ->hideOnIndex()
             ->setFormTypeOption('placeholder', false)
             ->renderExpanded();
 
-        yield TabField::new('link', 'happy_cms.menu_item.admin.tab.link');
+        yield TabField::new('link', 'sylius_happy_cms.menu_item.admin.tab.link');
 
-        yield TranslationField::new('translations', 'happy_cms.menu_item.admin.field.translations')
-            ->addField(Field::new('name', 'happy_cms.menu_item.admin.field.name'))
-            ->addField(Field::new('url', 'happy_cms.menu_item.admin.field.url'))
+        yield TranslationField::new('translations', 'sylius_happy_cms.menu_item.admin.field.translations')
+            ->addField(Field::new('name', 'sylius_happy_cms.menu_item.admin.field.name'))
+            ->addField(Field::new('url', 'sylius_happy_cms.menu_item.admin.field.url'))
             ->hideOnIndex();
     }
 

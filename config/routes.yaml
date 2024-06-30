@@ -1,27 +1,27 @@
 happy_cms_page_admin:
   resource: |
-    alias: happy_cms.page
+    alias: sylius_happy_cms.page
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
     grid: happy_cms_page_admin
     form: 
-        type: App\Admin\HappyCMS\Page\PageAdmin
+        type: App\Admin\Page\PageAdmin
         options:
             context: $context
     vars:
         all:
             icon: 'file'
-            subheader: happy_cms.page.admin.ui.subheader
-            breadcrumb: happy_cms.page.admin.ui.index
+            subheader: sylius_happy_cms.page.admin.ui.subheader
+            breadcrumb: sylius_happy_cms.page.admin.ui.index
             templates:
                 form: "@SyliusEasyCrudPlugin\\crud\\form\\_form.html.twig"
         index:
-            header: happy_cms.page.admin.ui.index
+            header: sylius_happy_cms.page.admin.ui.index
         create:
-            header: happy_cms.page.admin.ui.create
+            header: sylius_happy_cms.page.admin.ui.create
         update:
-            header: happy_cms.page.admin.ui.update
+            header: sylius_happy_cms.page.admin.ui.update
             redirect: 
                 route: update
                 parameters:
@@ -36,28 +36,28 @@ happy_cms_page_admin:
 
 happy_cms_config_admin:
   resource: |
-    alias: happy_cms.config
+    alias: sylius_happy_cms.config
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
     grid: happy_cms_config_admin
     form: 
-        type: App\Admin\HappyCMS\Config\ConfigAdmin
+        type: App\Admin\Config\ConfigAdmin
         options:
             context: $context
     vars:
         all:
             icon: 'cog'
-            subheader: happy_cms.config.admin.ui.subheader
-            breadcrumb: happy_cms.config.admin.ui.index
+            subheader: sylius_happy_cms.config.admin.ui.subheader
+            breadcrumb: sylius_happy_cms.config.admin.ui.index
             templates:
                 form: "@SyliusEasyCrudPlugin\\crud\\form\\_form.html.twig"
         index:
-            header: happy_cms.config.admin.ui.index
+            header: sylius_happy_cms.config.admin.ui.index
         create:
-            header: happy_cms.config.admin.ui.create
+            header: sylius_happy_cms.config.admin.ui.create
         update:
-            header: happy_cms.config.admin.ui.update
+            header: sylius_happy_cms.config.admin.ui.update
             redirect: 
                 route: update
                 parameters:
@@ -72,28 +72,28 @@ happy_cms_config_admin:
 
 happy_cms_menu_admin:
   resource: |
-    alias: happy_cms.menu
+    alias: sylius_happy_cms.menu
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
     grid: happy_cms_menu_admin
     form: 
-        type: App\Admin\HappyCMS\Menu\MenuAdmin
+        type: App\Admin\Menu\MenuAdmin
         options:
             context: $context
     vars:
         all:
             icon: 'bars'
-            subheader: happy_cms.menu.admin.ui.subheader
-            breadcrumb: happy_cms.menu.admin.ui.index
+            subheader: sylius_happy_cms.menu.admin.ui.subheader
+            breadcrumb: sylius_happy_cms.menu.admin.ui.index
             templates:
                 form: "@SyliusEasyCrudPlugin\\crud\\form\\_form.html.twig"
         index:
-            header: happy_cms.menu.admin.ui.index
+            header: sylius_happy_cms.menu.admin.ui.index
         create:
-            header: happy_cms.menu.admin.ui.create
+            header: sylius_happy_cms.menu.admin.ui.create
         update:
-            header: happy_cms.menu.admin.ui.update
+            header: sylius_happy_cms.menu.admin.ui.update
             redirect: 
                 route: update
                 parameters:
@@ -108,27 +108,27 @@ happy_cms_menu_admin:
 
 happy_cms_menu_item_admin:
   resource: |
-    alias: happy_cms.menu_item
+    alias: sylius_happy_cms.menu_item
     except: ['index']
     section: admin
     templates: "@SyliusHappyCMSPlugin\\menu_item\\crud"
     redirect: update
     grid: happy_cms_menu_item_admin
     form: 
-        type: App\Admin\HappyCMS\Menu\MenuItemAdmin
+        type: App\Admin\Menu\MenuItemAdmin
         options:
             context: $context
     vars:
         all:
             icon: 'bars'
-            subheader: happy_cms.menu_item.admin.ui.subheader
-            breadcrumb: happy_cms.menu.admin.ui.index
+            subheader: sylius_happy_cms.menu_item.admin.ui.subheader
+            breadcrumb: sylius_happy_cms.menu.admin.ui.index
             templates:
                 form: "@SyliusEasyCrudPlugin\\crud\\form\\_form.html.twig"
         create:
-            header: happy_cms.menu_item.admin.ui.create
+            header: sylius_happy_cms.menu_item.admin.ui.create
         update:
-            header: happy_cms.menu_item.admin.ui.update
+            header: sylius_happy_cms.menu_item.admin.ui.update
             templates:
                 form: "@SyliusEasyCrudPlugin\\crud\\form\\_form.html.twig"
                 breadcrumb: "@SyliusEasyCrudPlugin\\crud\\Update\\MenuItem\\_breadcrumb.html.twig"
@@ -150,28 +150,28 @@ happy_cms_shared_block_admin_select:
 
 happy_cms_shared_block_admin:
   resource: |
-    alias: happy_cms.shared_block
+    alias: sylius_happy_cms.shared_block
     section: admin
     templates: "@SyliusEasyCrudPlugin\\crud"
     redirect: update
     grid: happy_cms_shared_block_admin
     form: 
-        type: App\Admin\HappyCMS\SharedBlock\SharedBlockAdmin
+        type: App\Admin\SharedBlock\SharedBlockAdmin
         options:
             context: $context
     vars:
         all:
             icon: 'box'
-            subheader: happy_cms.shared_block.admin.ui.subheader
-            breadcrumb: happy_cms.shared_block.admin.ui.index
+            subheader: sylius_happy_cms.shared_block.admin.ui.subheader
+            breadcrumb: sylius_happy_cms.shared_block.admin.ui.index
             templates:
                 form: "@SyliusEasyCrudPlugin\\crud\\form\\_form.html.twig"
         index:
-            header: happy_cms.shared_block.admin.ui.index
+            header: sylius_happy_cms.shared_block.admin.ui.index
         create:
-            header: happy_cms.shared_block.admin.ui.create
+            header: sylius_happy_cms.shared_block.admin.ui.create
         update:
-            header: happy_cms.shared_block.admin.ui.update
+            header: sylius_happy_cms.shared_block.admin.ui.update
             redirect: 
                 route: update
                 parameters:
@@ -184,15 +184,15 @@ happy_cms_shared_block_admin:
   type: sylius.resource
   prefix: admin
 
-happy_cms_admin_menu_item_index:
+sylius_happy_cms_admin_menu_item_index:
   path: /admin/menu-items/
   methods: [ GET ]
   defaults:
     _controller: Adeliom\SyliusHappyCMSPlugin\Controller\MenuItem\MenuItemController::indexAction
-    route: happy_cms_admin_menu_index
+    route: sylius_happy_cms_admin_menu_index
     permanent: true
 
-happy_cms_admin_partial_menu_item_tree:
+sylius_happy_cms_admin_partial_menu_item_tree:
   path: /tree
   methods: [GET]
   defaults:
@@ -203,7 +203,7 @@ happy_cms_admin_partial_menu_item_tree:
       vars: $vars
       permission: true
 
-happy_cms_admin_menu_item_update_move_up:
+sylius_happy_cms_admin_menu_item_update_move_up:
   path: /admin/menu-items/{id}/move-up
   methods: [PUT]
   defaults:
@@ -212,7 +212,7 @@ happy_cms_admin_menu_item_update_move_up:
     _sylius:
       permission: true
 
-happy_cms_admin_menu_item_update_move_down:
+sylius_happy_cms_admin_menu_item_update_move_down:
   path: /admin/menu-items/{id}/move-down
   methods: [PUT]
   defaults:

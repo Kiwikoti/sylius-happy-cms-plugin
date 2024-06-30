@@ -12,11 +12,8 @@ cmf_routing:
             - de_DE
             - fr_FR
             - es_ES
-            - es_MX
             - pl_PL
-            - pt_PT
-            - zh_CN
-        match_implicit_locale: false    
+        match_implicit_locale: false
         controllers_by_class:
             Symfony\Cmf\Component\Routing\RedirectRouteInterface: cmf_routing.redirect_controller:redirectAction
             Symfony\Cmf\Component\Routing\RouteReferrersInterface: adeliom.sylius.cms.plugin.controller.render::renderAction

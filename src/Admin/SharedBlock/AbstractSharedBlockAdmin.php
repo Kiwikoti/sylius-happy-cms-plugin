@@ -39,27 +39,27 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
     {
         /** @var \Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock | null $block */
         $block = $this->getResource();
-        yield TabField::new('configuration', 'happy_cms.shared_block.admin.tab.configuration');
+        yield TabField::new('configuration', 'sylius_happy_cms.shared_block.admin.tab.configuration');
 
-        yield Field::new('name', 'happy_cms.shared_block.admin.field.name')
+        yield Field::new('name', 'sylius_happy_cms.shared_block.admin.field.name')
             ->setRequired(true);
 
-        yield Field::new('key', 'happy_cms.shared_block.admin.field.key')
+        yield Field::new('key', 'sylius_happy_cms.shared_block.admin.field.key')
             ->setRequired(true);
 
         $blockType = $block?->getType() ?? $this->getResourceFieldValueInRequest(formName: 'shared_block_admin', fieldName: 'type', queryKey: 'block_type');
-        yield Field::new('type', 'happy_cms.shared_block.admin.field.type')
+        yield Field::new('type', 'sylius_happy_cms.shared_block.admin.field.type')
             ->setFormType(null === $blockType ? TextType::class : HiddenType::class)
             ->setFormTypeOption('data', $blockType)
             ->setRequired(true);
 
-        yield Field::new('status', 'happy_cms.shared_block.admin.field.status');
+        yield Field::new('status', 'sylius_happy_cms.shared_block.admin.field.status');
 
         if (null !== $blockType) {
-            yield TabField::new('tabContent', 'happy_cms.shared_block.admin.tab.content');
-            yield TranslationField::new('translations', 'happy_cms.shared_block.admin.field.translations')
+            yield TabField::new('tabContent', 'sylius_happy_cms.shared_block.admin.tab.content');
+            yield TranslationField::new('translations', 'sylius_happy_cms.shared_block.admin.field.translations')
                 ->addField(
-                    Field::new('content', 'happy_cms.shared_block.admin.field.content')
+                    Field::new('content', 'sylius_happy_cms.shared_block.admin.field.content')
                         ->setFormType($blockType)
                         ->setDisabled(false)
                         ->setRequired(true)
@@ -74,8 +74,8 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
         $actions->remove(Crud::PAGE_INDEX, Action::NEW);
         $actions->addGlobalAction(
             Crud::PAGE_INDEX,
-            Action::new('shared_block.select', 'happy_cms.shared_block.admin.action.create', 'plus')
-                ->linkToRoute('happy_cms_admin_shared_block_select')
+            Action::new('shared_block.select', 'sylius_happy_cms.shared_block.admin.action.create', 'plus')
+                ->linkToRoute('sylius_happy_cms_admin_shared_block_select')
                 ->addCssClass('primary')
         );
         return $actions;

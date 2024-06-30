@@ -60,15 +60,14 @@ apply_dist:
 ###
 ### SYLIUS
 ### ¯¯¯¯¯¯¯¯
-sylius: sylius_install install_bundle messenger.setup
+sylius: sylius_install configure_bundle messenger.setup
 
 sylius_install:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec -it -u root php rm -rf public/media/image)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run php bin/console doctrine:database:drop --if-exists --force)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console sylius:install -s default -n)
 
-install_bundle:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies ${PLUGIN_NAME}="*@dev")
+configure_bundle:
 	${MAKE} bundle_dependencies_install
 	${MAKE} bundle_assets_build
 	${MAKE} bundle_install_test_files
@@ -95,9 +94,10 @@ platform:
 		(cd ${APP_DIR} && sed -i'' -e 's|"App\\\\": "src/"|"Adeliom\\\\SyliusHappyCMSPlugin\\\\": "lib/sylius-happy-cms-plugin/src/",\n            "App\\\\": "src/"|g' composer.json); \
 		(cd ${APP_DIR} && sed -i'' -e 's|type: annotation|type: attribute|g' config/packages/doctrine.yaml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@SyliusHappyCMSPlugin/config/config.yaml" }|g' config/packages/_sylius.yaml); \
-		(cd ${APP_DIR} && echo -e 'sylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"' config/routes.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|webhook_routing.yaml"|webhook_routing.yaml"\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"|g' config/routes.yaml); \
 		(cd ${APP_DIR} && rm -rf config/packages/doctrine.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/packages/_sylius.yaml-e); \
+		(cd ${APP_DIR} && rm -rf config/routes.yaml-e); \
 		(cd ${APP_DIR} && rm -rf compose.override.yml-e); \
 		(cd ${APP_DIR} && rm -rf config/bundles.php-e); \
 		(cd ${APP_DIR} && rm -rf composer.json-e); \
@@ -109,13 +109,13 @@ platform:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config minimum-stability dev)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config extra.symfony.allow-contrib true)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.plugin '{"type": "path", "url": "../../"}')
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.adeliom '{"type":"vcs","url":"$(PLUGIN_URL)"}')
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.adeliom_cms '{"type":"vcs","url":"$(PLUGIN_URL)"}')
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.adeliom_crud '{"type":"vcs","url":"git@github.com:agence-adeliom/sylius-easy-crud-plugin.git"}')
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config extra.symfony.require "~${SYMFONY_VERSION}")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-install --no-scripts --no-progress sylius/sylius="~${SYLIUS_VERSION}")
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-install --no-scripts --no-progress --dev friendsoftwig/twigcs)
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-install --no-scripts --no-progress --dev symfony/maker-bundle)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer global config allow-plugins.${PLUGIN_NAME} true)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer dump-autoload)
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer install --no-interaction --no-scripts --prefer-dist)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="*@dev")
 	${MAKE} platform_up
 	${MAKE} platform_assets
 

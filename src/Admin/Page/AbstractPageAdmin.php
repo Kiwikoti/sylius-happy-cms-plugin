@@ -41,16 +41,16 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements ServiceSubscri
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
-        $contentAction = Action::new('content', 'happy_cms.page.admin.action.manage_content', 'flag outline')
+        $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'flag outline')
             ->addSubAction(
                 Action::new('fr_FR', 'fr_FR', 'flag outline')
-                    ->linkToRoute('happy_cms_admin_page_update', [
+                    ->linkToRoute('sylius_happy_cms_admin_page_update', [
                         'context' => 'flexible_content:fr_FR',
                     ])
             )
             ->addSubAction(
                 Action::new('de_DE', 'de_DE', 'flag outline')
-                    ->linkToRoute('happy_cms_admin_page_update', [
+                    ->linkToRoute('sylius_happy_cms_admin_page_update', [
                         'context' => 'flexible_content:de_DE',
                     ])
             );
@@ -66,24 +66,24 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements ServiceSubscri
     {
         if (is_null($context)) {
 
-            yield TabField::new('Page', 'happy_cms.page.admin.tab.page');
+            yield TabField::new('Page', 'sylius_happy_cms.page.admin.tab.page');
 
-            yield ResourceAutocompleteChoiceField::new('parent', 'happy_cms.page.admin.field.parent')
+            yield ResourceAutocompleteChoiceField::new('parent', 'sylius_happy_cms.page.admin.field.parent')
                 ->setMultiple(false)
-                ->setResource('happy_cms.page');
+                ->setResource('sylius_happy_cms.page');
 
-            yield Field::new('name', 'happy_cms.page.admin.field.name')
+            yield Field::new('name', 'sylius_happy_cms.page.admin.field.name')
                 ->setSortablePath('translations.name')
                 ->onlyOnIndex();
 
-            yield Field::new('slug', 'happy_cms.page.admin.field.slug')
+            yield Field::new('slug', 'sylius_happy_cms.page.admin.field.slug')
                 ->setSortablePath('translations.slug')
                 ->onlyOnIndex();
 
-            yield ColumnField::new('happy_cms.page.admin.panel.metadatas')
+            yield ColumnField::new('sylius_happy_cms.page.admin.panel.metadatas')
                 ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
 
-            yield TranslationField::new('translations', 'happy_cms.page.admin.field.translations')
+            yield TranslationField::new('translations', 'sylius_happy_cms.page.admin.field.translations')
                 ->addField(
                     Field::new('name')
                         ->setFormTypeOption('constraints', [
@@ -92,26 +92,26 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements ServiceSubscri
                 )
                 ->addField(
                     SlugField::new('slug')
-                        ->setLabel('happy_cms.page.admin.field.slug')
+                        ->setLabel('sylius_happy_cms.page.admin.field.slug')
                         ->setFormTypeOption('constraints', [
                             //new NotBlank(),
                         ])
                 )
                 ->hideOnIndex();
 
-            yield ColumnField::new('happy_cms.page.admin.panel.publication')
+            yield ColumnField::new('sylius_happy_cms.page.admin.panel.publication')
                 ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
 
-            yield EnumField::new('publishState', 'happy_cms.page.admin.field.state')
+            yield EnumField::new('publishState', 'sylius_happy_cms.page.admin.field.state')
                 ->setEnum(ThreeStateStatusEnum::class)
                 ->hideOnIndex()
                 ->renderExpanded(true);
 
-            yield TabField::new('seo', 'happy_cms.page.admin.tab.seo');
+            yield TabField::new('seo', 'sylius_happy_cms.page.admin.tab.seo');
 
-            yield TranslationField::new('seoTranslations', 'happy_cms.page.admin.field.seo.translations')
+            yield TranslationField::new('seoTranslations', 'sylius_happy_cms.page.admin.field.seo.translations')
                 ->addField(
-                    SEOField::new('seo', 'happy_cms.page.admin.field.seo')
+                    SEOField::new('seo', 'sylius_happy_cms.page.admin.field.seo')
                         ->setDisabled(false)
                         ->setRequired(true)
                         ->setFormTypeOption('constraints', [

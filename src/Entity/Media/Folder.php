@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\MappedSuperclass]
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__folder')]
 class Folder
 {
     #[ORM\Id]

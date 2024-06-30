@@ -23,7 +23,7 @@ class MediaHelper
 
     public function getFolderClassName()
     {
-        return $this->parameters->get('happy_cms.media.folder_entity');
+        return $this->parameters->get('sylius_happy_cms.media.folder_entity');
     }
 
     public function getFolderRepository(): EntityRepository
@@ -33,7 +33,7 @@ class MediaHelper
 
     public function getMediaClassName()
     {
-        return $this->parameters->get('happy_cms.media.media_entity');
+        return $this->parameters->get('sylius_happy_cms.media.media_entity');
     }
 
     public function getMediaRepository(): EntityRepository
@@ -43,17 +43,17 @@ class MediaHelper
 
     public function getBaseUrl()
     {
-        return $this->parameters->get('happy_cms.media.base_url');
+        return $this->parameters->get('sylius_happy_cms.media.base_url');
     }
 
     public function getRandomString()
     {
-        return call_user_func($this->parameters->get('happy_cms.media.sanitized_text'));
+        return call_user_func($this->parameters->get('sylius_happy_cms.media.sanitized_text'));
     }
 
     public function cleanName($text, $folder = false)
     {
-        $pattern = $this->filePattern($this->parameters->get(sprintf('happy_cms.media.%s', $folder ? 'allowed_folderNames_chars' : 'allowed_fileNames_chars')));
+        $pattern = $this->filePattern($this->parameters->get(sprintf('sylius_happy_cms.media.%s', $folder ? 'allowed_folderNames_chars' : 'allowed_fileNames_chars')));
         $text = preg_replace($pattern, '', $text);
 
         return $text ?: $this->getRandomString();
@@ -65,7 +65,7 @@ class MediaHelper
      */
     public function getItemTime($time): ?string
     {
-        return $time ? (new \DateTime(sprintf('@%s', $time)))->format($this->parameters->get('happy_cms.media.last_modified_format')) : null;
+        return $time ? (new \DateTime(sprintf('@%s', $time)))->format($this->parameters->get('sylius_happy_cms.media.last_modified_format')) : null;
     }
 
     public function getMedia(int|string|Media $media): ?Media
@@ -341,7 +341,7 @@ class MediaHelper
         if ($type instanceof Media) {
             $type = $type->getMime();
         }
-        $mimes = $this->parameters->get('happy_cms.media.extended_mimes');
+        $mimes = $this->parameters->get('sylius_happy_cms.media.extended_mimes');
         if ($type) {
             foreach (['image', 'video', 'audio'] as $test) {
                 if ((str_contains($type, $test) || in_array($type, $mimes[$test] ?? [])) && $test === $compare) {

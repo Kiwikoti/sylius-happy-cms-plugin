@@ -32,8 +32,8 @@ abstract class AbstractMenuAdmin extends AbstractAdmin implements ServiceSubscri
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
-        $manageMenuItems = Action::new('manage.menu_items', 'happy_cms.menu.admin.action.manage', 'bars')
-            ->linkToRoute('happy_cms_admin_menu_item_create');
+        $manageMenuItems = Action::new('manage.menu_items', 'sylius_happy_cms.menu.admin.action.manage', 'bars')
+            ->linkToRoute('sylius_happy_cms_admin_menu_item_create');
 
         $actions->addItemAction(Crud::PAGE_INDEX, $manageMenuItems);
         $actions->addItemAction(Crud::PAGE_DETAIL, $manageMenuItems);
@@ -43,12 +43,12 @@ abstract class AbstractMenuAdmin extends AbstractAdmin implements ServiceSubscri
 
     public function configureFields(string $pageName, ?string $context = null): iterable
     {
-        yield TabField::new('menu', 'happy_cms.menu.admin.tab.menu');
+        yield TabField::new('menu', 'sylius_happy_cms.menu.admin.tab.menu');
 
-        yield Field::new('name', 'happy_cms.menu.admin.field.name');
+        yield Field::new('name', 'sylius_happy_cms.menu.admin.field.name');
 
-        yield Field::new('code', 'happy_cms.menu.admin.field.code');
+        yield Field::new('code', 'sylius_happy_cms.menu.admin.field.code');
 
-        yield Field::new('status', 'happy_cms.menu.admin.field.status');
+        yield Field::new('status', 'sylius_happy_cms.menu.admin.field.status');
     }
 }

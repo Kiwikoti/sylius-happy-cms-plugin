@@ -1,21 +1,21 @@
 <table class="ui very basic celled table">
     <tbody>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.title' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.title' | trans }}</strong></td>
         <td>
             {{ data.title ?: "" }}
         </td>
     </tr>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.cover' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.cover' | trans }}</strong></td>
         <td>
             {% if data.cover %}
-                {% include '@SyliusHappyCMSPlugin/media/admin/field/happy-cms-media.html.twig' with {'field': {'value': field.value.cover, 'uniqueId': field.uniqueId, 'label': 'happy_cms.seo.admin.field.cover' | trans}} %}
+                {% include '@SyliusHappyCMSPlugin/media/admin/field/happy-cms-media.html.twig' with {'field': {'value': field.value.cover, 'uniqueId': field.uniqueId, 'label': 'sylius_happy_cms.seo.admin.field.cover' | trans}} %}
             {% endif %}
         </td>
     </tr>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.canonical' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.canonical' | trans }}</strong></td>
         <td>
             {% if data.canonical and field.value is not null %}
                 <a href="{{ data.canonical }}" target="_blank" rel="noopener noreferrer">{{ field.value.canonical }}</a>
@@ -23,25 +23,25 @@
         </td>
     </tr>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.description' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.description' | trans }}</strong></td>
         <td>
             {{ data.description ?: "" }}
         </td>
     </tr>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.keywords' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.keywords' | trans }}</strong></td>
         <td>
             {{ data.keywords ?: "" }}
         </td>
     </tr>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.key' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.key' | trans }}</strong></td>
         <td>
             {{ data.key ?: "" }}
         </td>
     </tr>
     <tr>
-        <td class="five wide"><strong class="gray text">{{ 'happy_cms.seo.admin.field.robots' | trans }}</strong></td>
+        <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.robots' | trans }}</strong></td>
         <td>
             {{ data.robots ? data.robots|join(", ") : "" }}
         </td>

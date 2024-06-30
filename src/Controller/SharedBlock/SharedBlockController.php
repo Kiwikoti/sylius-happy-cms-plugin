@@ -20,7 +20,7 @@ class SharedBlockController implements ServiceSubscriberInterface
     ) {
     }
 
-    #[Route('/admin/shared-blocks/select', name: 'happy_cms_admin_shared_block_select', methods: ['GET'])]
+    #[Route('/admin/shared-blocks/select', name: 'sylius_happy_cms_admin_shared_block_select', methods: ['GET'])]
     public function select(): Response
     {
         return new Response($this->twig->render('@SyliusHappyCMSPlugin/shared_block/select.html.twig', [

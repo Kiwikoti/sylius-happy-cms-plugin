@@ -3,10 +3,10 @@
 {% block happy_cms_media_row %}
 
     {% set options = {
-        'baseUrl' : happy_cms.media.base_url,
-        'hideFilesExt' : happy_cms.media.hide_files_ext,
-        'mimeTypes' : happy_cms.media.extended_mimes,
-        'broadcasting' : happy_cms.media.enable_broadcasting,
+        'baseUrl' : sylius_happy_cms.media.base_url,
+        'hideFilesExt' : sylius_happy_cms.media.hide_files_ext,
+        'mimeTypes' : sylius_happy_cms.media.extended_mimes,
+        'broadcasting' : sylius_happy_cms.media.enable_broadcasting,
     } %}
 
     {% set routes = {
@@ -28,7 +28,7 @@
                     <section>
                         <button type="button" class="ui labeled icon button" @click="toggleModalFor('media')">
                             <i class="file outline icon"></i>
-                            {{ 'happy_cms.media.select.file'|trans }}
+                            {{ 'sylius_happy_cms.media.select.file'|trans }}
                         </button>
 
                         <div class="ui placeholder"  v-if="!selectedFile">
@@ -76,7 +76,7 @@
                                 </div>
 
                                 <div class="__box-delete">
-                                    <span class="ui red button" @click.stop="clearFile()" v-tippy="{arrow: true, placement: 'top'}" title="{{ 'happy_cms.media.remove'|trans }}">{{ 'happy_cms.media.remove'|trans }}</span>
+                                    <span class="ui red button" @click.stop="clearFile()" v-tippy="{arrow: true, placement: 'top'}" title="{{ 'sylius_happy_cms.media.remove'|trans }}">{{ 'sylius_happy_cms.media.remove'|trans }}</span>
                                 </div>
                             </div>
                         </div>
@@ -100,9 +100,9 @@
 
 
             {% if ea.field.help ?? false %}
-                <small class="form-help">{{ 'happy_cms.media.' ~ ea.field.help|raw }}</small>
+                <small class="form-help">{{ 'sylius_happy_cms.media.' ~ ea.field.help|raw }}</small>
             {% elseif form.vars.help ?? false %}
-                <small class="form-help">{{ 'happy_cms.media.' ~ form.vars.help|trans(form.vars.help_translation_parameters, form.vars.translation_domain)|raw }}</small>
+                <small class="form-help">{{ 'sylius_happy_cms.media.' ~ form.vars.help|trans(form.vars.help_translation_parameters, form.vars.translation_domain)|raw }}</small>
             {% endif %}
 
             {{- form_errors(form) -}}

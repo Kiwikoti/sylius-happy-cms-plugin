@@ -105,7 +105,7 @@ services:
             - '@event_dispatcher'
             - '@adeliom.sylius.cms.shared_block.block_collection'
             - '@doctrine.orm.entity_manager'
-            - '%happy_cms.block.block_class%'
+            - '%sylius_happy_cms.block.block_class%'
             - '@form.factory'
         tags:
             - { name: twig.runtime }

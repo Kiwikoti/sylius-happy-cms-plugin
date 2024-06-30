@@ -53,7 +53,7 @@ class ConfigTypeEnum extends Enum
                 ->setLanguage('json');
         }
 
-        $field->setLabel('happy_cms.config.admin.type.' . $typeKey);
+        $field->setLabel('sylius_happy_cms.config.admin.type.' . $typeKey);
         $field->setDisabled(false);
         return $field;
     }

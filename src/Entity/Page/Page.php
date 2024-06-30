@@ -26,6 +26,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: PageRepository::class)]
 #[Serializer\ExclusionPolicy('ALL')]
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__page')]
 class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInterface
 {
     use EntityIdTrait;
@@ -239,5 +241,10 @@ class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInter
     public function getName(): ?string
     {
         return $this->getTranslation()->getName();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 }

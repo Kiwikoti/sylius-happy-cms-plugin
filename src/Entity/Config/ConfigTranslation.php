@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[HasLifecycleCallbacks]
 #[MappedSuperclass]
+#[ORM\Entity]
+#[ORM\Table(name: 'sylius_happy_cms__config_translation')]
 class ConfigTranslation extends AbstractTranslation implements ResourceInterface, \Stringable
 {
     use EntityIdTrait;

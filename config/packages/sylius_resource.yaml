@@ -1,60 +1,60 @@
 sylius_resource:
     resources:
-        happy_cms.page:
+        sylius_happy_cms.page:
             driver: doctrine/orm
             classes:
-                model: App\Entity\HappyCMS\Page\Page
+                model: Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page
                 controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                repository: App\Repository\HappyCMS\Page\PageRepository
-                form: App\Admin\HappyCMS\Page\PageAdmin
+                repository: Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository
+                form: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
             translation:
                 classes:
-                    model: App\Entity\HappyCMS\Page\PageTranslation
+                    model: Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageTranslation
                     controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                    form: App\Admin\HappyCMS\Page\PageAdmin
-        happy_cms.config:
+                    form: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
+        sylius_happy_cms.config:
             driver: doctrine/orm
             classes:
-                model: App\Entity\HappyCMS\Config\Config
+                model: Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config
                 controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                repository: App\Repository\HappyCMS\Config\ConfigRepository
-                form: App\Admin\HappyCMS\Config\ConfigAdmin
+                repository: Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository
+                form: Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdmin
             translation:
                 classes:
-                    model: App\Entity\HappyCMS\Config\ConfigTranslation
+                    model: Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigTranslation
                     controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                    form: App\Admin\HappyCMS\Config\ConfigAdmin
-        happy_cms.menu:
+                    form: Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdmin
+        sylius_happy_cms.menu:
             driver: doctrine/orm
             classes:
-                model: App\Entity\HappyCMS\Menu\Menu
+                model: Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu
                 controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                repository: App\Repository\HappyCMS\Menu\MenuRepository
-                form: App\Admin\HappyCMS\Menu\MenuAdmin
-        happy_cms.menu_item:
+                repository: Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository
+                form: Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuAdmin
+        sylius_happy_cms.menu_item:
             driver: doctrine/orm
             classes:
-                model: App\Entity\HappyCMS\Menu\MenuItem
+                model: Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem
                 controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                repository: App\Repository\HappyCMS\Menu\MenuItemRepository
-                form: App\Admin\HappyCMS\Menu\MenuItemAdmin
+                repository: Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository
+                form: Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuItemAdmin
             translation:
                 classes:
-                    model: App\Entity\HappyCMS\Menu\MenuItemTranslation
+                    model: Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemTranslation
                     controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                    form: App\Admin\HappyCMS\Menu\MenuItemAdmin
-        happy_cms.shared_block:
+                    form: Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuItemAdmin
+        sylius_happy_cms.shared_block:
             driver: doctrine/orm
             classes:
-                model: App\Entity\HappyCMS\Block\SharedBlock
+                model: Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock
                 controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                repository: App\Repository\HappyCMS\Block\SharedBlockRepository
-                form: App\Admin\HappyCMS\SharedBlock\SharedBlockAdmin
+                repository: Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository
+                form: Adeliom\SyliusHappyCMSPlugin\Admin\SharedBlock\SharedBlockAdmin
             translation:
                 classes:
-                    model: App\Entity\HappyCMS\Block\SharedBlockTranslation
+                    model: Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslation
                     controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-                    form: App\Admin\HappyCMS\SharedBlock\SharedBlockAdmin
-        happy_cms.media:
+                    form: Adeliom\SyliusHappyCMSPlugin\Admin\SharedBlock\SharedBlockAdmin
+        sylius_happy_cms.media:
             classes:
-                model: App\Entity\HappyCMS\Media\Media
+                model: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media

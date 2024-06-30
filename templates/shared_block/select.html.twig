@@ -1,6 +1,6 @@
 {% extends '@SyliusAdmin/layout.html.twig' %}
 
-{% block title %}{{ 'happy_cms.shared_block.admin.ui.choose' | trans }}{% endblock %}
+{% block title %}{{ 'sylius_happy_cms.shared_block.admin.ui.choose' | trans }}{% endblock %}
 
 {% block content %}
     {% if (blocks | default([])) | length %}
@@ -16,7 +16,7 @@
                         <div class="ui dimmer">
                             <div class="content">
                                 <div class="center">
-                                    <div class="ui inverted button"><a href="{{ path('happy_cms_admin_shared_block_create', { 'block_type': type }) }}">{{ 'happy_cms.shared_block.admin.action.choose' | trans }}</a></div>
+                                    <div class="ui inverted button"><a href="{{ path('sylius_happy_cms_admin_shared_block_create', { 'block_type': type }) }}">{{ 'sylius_happy_cms.shared_block.admin.action.choose' | trans }}</a></div>
                                 </div>
                             </div>
                         </div>

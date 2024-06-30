@@ -29,20 +29,20 @@ abstract class AbstractConfigAdmin extends AbstractAdmin
 
     public function configureFields(string $pageName, ?string $context = null): iterable
     {
-        yield TabField::new('happy_cms.config.admin.tab.configuration');
+        yield TabField::new('sylius_happy_cms.config.admin.tab.configuration');
 
-        yield Field::new('key', 'happy_cms.config.admin.field.key')
+        yield Field::new('key', 'sylius_happy_cms.config.admin.field.key')
             ->setRequired(true);
 
-        yield Field::new('name', 'happy_cms.config.admin.field.name')
+        yield Field::new('name', 'sylius_happy_cms.config.admin.field.name')
             ->setRequired(true);
 
-        yield Field::new('description', 'happy_cms.config.admin.field.description');
+        yield Field::new('description', 'sylius_happy_cms.config.admin.field.description');
 
         $typeKeys = array_values(ConfigTypeEnum::toArray());
-        $transTypeKeys = preg_filter('/^/', 'happy_cms.config.admin.type.', $typeKeys);
+        $transTypeKeys = preg_filter('/^/', 'sylius_happy_cms.config.admin.type.', $typeKeys);
 
-        yield ChoiceMaskField::new('type', 'happy_cms.config.admin.field.type')
+        yield ChoiceMaskField::new('type', 'sylius_happy_cms.config.admin.field.type')
             ->setRequired(true)
             ->renderExpanded(false)
             ->setChoices(array_combine($transTypeKeys, $typeKeys))
@@ -51,7 +51,7 @@ abstract class AbstractConfigAdmin extends AbstractAdmin
             ->hideOnIndex();
 
         foreach ($typeKeys as $typeKey) {
-            yield TranslationField::new(sprintf('translations_%s', $typeKey), 'happy_cms.config.admin.type.' . $typeKey)
+            yield TranslationField::new(sprintf('translations_%s', $typeKey), 'sylius_happy_cms.config.admin.type.' . $typeKey)
                 ->addField(
                     ConfigTypeEnum::getAdminField($typeKey)
                 )

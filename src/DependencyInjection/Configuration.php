@@ -2,6 +2,8 @@
 
 namespace Adeliom\SyliusHappyCMSPlugin\DependencyInjection;
 
+use Adeliom\SyliusHappyCMSPlugin\Admin\Page\AbstractPageAdmin;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin;
 use Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageController;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config;
@@ -28,7 +30,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('happy_cms');
+        $treeBuilder = new TreeBuilder('sylius_happy_cms');
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
@@ -57,6 +59,20 @@ class Configuration implements ConfigurationInterface
                                 ->ifString()
                                 ->then(function ($value) {
                                     if (!class_exists($value) || !is_a($value, PageRepository::class, true)) {
+                                        throw new InvalidConfigurationException(sprintf('Page repository must be a valid class extending %s. "%s" given.', PageRepository::class, $value));
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
+
+                        ->scalarNode('page_admin')
+                            ->defaultValue(PageAdmin::class)
+                            ->validate()
+                                ->ifString()
+                                ->then(function ($value) {
+                                    if (!class_exists($value) || !is_a($value, PageAdmin::class, true)) {
                                         throw new InvalidConfigurationException(sprintf('Page repository must be a valid class extending %s. "%s" given.', PageRepository::class, $value));
                                     }
 

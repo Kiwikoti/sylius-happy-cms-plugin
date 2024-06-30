@@ -8,18 +8,18 @@
     <li id="library-bc" key="library-bc">
         <a v-if="pathBarDirsList.length > 0 && !(isBulkSelecting() || isLoading)"
            v-tippy="{arrow: true}"
-           title="{{ 'happy_cms.media.backspace'|trans }}"
+           title="{{ 'sylius_happy_cms.media.backspace'|trans }}"
            @click.stop="goToFolder(0)">
-            {{ 'happy_cms.media.library'|trans }}
+            {{ 'sylius_happy_cms.media.library'|trans }}
         </a>
-        <p v-else>{{ 'happy_cms.media.library'|trans }}</p>
+        <p v-else>{{ 'sylius_happy_cms.media.library'|trans }}</p>
     </li>
 
     <li v-for="(folder, index) in pathBarDirsList" :id="folder + '-bc'" :key="`${index}_${folder}`">
         <p v-if="isLastItemByIndex(index, pathBarDirsList) || isBulkSelecting() || isLoading">{% verbatim %}{{ folder }}{% endverbatim %}</p>
         <a v-else
            v-tippy="{arrow: true}"
-           title="{{ 'happy_cms.media.backspace'|trans }}"
+           title="{{ 'sylius_happy_cms.media.backspace'|trans }}"
            @click.stop="pathBarDirsList.length > 1 ? goToFolder(index+1) : false">
             {% verbatim %}{{ folder }}{% endverbatim %}
         </a>

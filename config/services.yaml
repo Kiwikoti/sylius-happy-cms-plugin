@@ -49,3 +49,6 @@ services:
   Adeliom\SyliusHappyCMSPlugin\Security\ContentDocumentVoter:
     tags:
       - "security.voter"
+
+  Adeliom\SyliusHappyCMSPlugin\Routing\MediaLoader:
+    tags: [ routing.loader ]
