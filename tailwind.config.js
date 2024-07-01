@@ -1,14 +1,14 @@
 module.exports = {
     important: ".media-manager",
     purge: [
-        './src/**/*.html.twig',
-        './src/**/*.html.twig',
-        './src/**/*.html',
-        './src/**/*.vue',
+        './templates/**/*.html.twig',
+        './templates/**/*.html.twig',
+        './templates/**/*.html',
+        './templates/**/*.vue',
         './assets/**/*.vue',
         './assets/**/*.scss',
         './assets/**/*.js',
-        './src/**/*.jsx',
+        './templates/**/*.jsx',
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {

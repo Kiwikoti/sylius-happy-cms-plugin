@@ -10,7 +10,7 @@
     "lint": "eslint -c .eslintrc.cjs ./assets/js",
     "lint-style": "stylelint --fix --no-cache \"./assets/**/*.css\""
   },
-  "devDependencies": {
+  "dependencies": {
     "@symfony/webpack-encore": "^2.0",
     "buffer": "^6.0.3",
     "process": "^0.11.10",
@@ -24,7 +24,7 @@
     "stylelint": "^16.3.0",
     "stylelint-config-standard": "^36.0.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "annyang": "^2.6.1",
     "axios": "^0.21.2",
     "cropperjs": "^1.5.12",

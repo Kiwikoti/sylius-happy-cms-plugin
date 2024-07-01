@@ -12,7 +12,7 @@ function dynamicallyLoadScript(url) {
     document.head.appendChild(script);
 }
 
-dynamicallyLoadScript("//cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js");
+dynamicallyLoadScript("https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js");
 
 if (!String.prototype.includes) {
     String.prototype.includes = function(search, start) {
@@ -58,7 +58,9 @@ window.loadMediaManager = function(event, widgetId = null) {
 
 if (document.readyState == 'loading') {
   // still loading, wait for the event
-  window.addEventListener("DOMContentLoaded", loadMediaManager);
+  window.addEventListener("DOMContentLoaded", () => {
+      loadMediaManager();
+  });
 } else {
   // DOM is ready!
   loadMediaManager();

@@ -162,6 +162,11 @@ class MediaManager
 
         $entity->setParent($folder ?: null);
 
+        // Verify if media root folder presence, otherwise create it
+        if (!$this->filesystem->fileExists('./')) {
+            $this->filesystem->createDirectory('./');
+        }
+
         if (!$this->directoryExists($entity->getPath())) {
             $this->filesystem->createDirectory($entity->getPath(), []);
         }

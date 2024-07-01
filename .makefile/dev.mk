@@ -44,7 +44,7 @@ php.ini: php.ini.dist
 ${APP_DIR}:
 	(symfony composer create-project --no-interaction --prefer-dist --no-scripts --no-progress --no-install sylius/sylius-standard="${SYLIUS_VERSION}" ${APP_DIR})
 	cd ${APP_DIR} && chmod -R 777 public
-	echo "COMPOSE_PROJECT_NAME=sylius-happy-cms-plugin" >> ${APP_DIR}/.env
+	echo "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}" >> ${APP_DIR}/.env
 	${MAKE} apply_dist
 
 apply_dist:
@@ -84,17 +84,17 @@ platform:
 	@if [ ! -e ${APP_DIR}/compose.override.yml ]; then \
 		(cd ${APP_DIR} && cp compose.override.dist.yml compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|3306:3306|${DOCKER_MYSQL_PORT}:3306|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|          - public-media:/srv/sylius/public/media:rw|          - public-media:/srv/sylius/public/media:rw\n          - ../../:/srv/sylius/lib/sylius-happy-cms-plugin:rw|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|            - ./public:/srv/sylius/public:rw,delegated|            - ./public:/srv/sylius/public:rw,delegated\n            - ../../:/srv/sylius/lib/sylius-happy-cms-plugin:rw|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|          - public-media:/srv/sylius/public/media:rw|          - public-media:/srv/sylius/public/media:rw\n          - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|            - ./public:/srv/sylius/public:rw,delegated|            - ./public:/srv/sylius/public:rw,delegated\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|APP_DEBUG: 0|APP_DEBUG: 1|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|- "80:80"|- "$(DOCKER_PHP_PORT):80"\n        depends_on:\n            - php|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|            - public-media:/srv/sylius/public/media:ro,nocopy|            - public-media:/srv/sylius/public/media:ro,nocopy\n            - ../../:/srv/sylius/lib/sylius-happy-cms-plugin:rw|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\SyliusHappyCMSPlugin\\\SyliusHappyCMSPlugin::class => ['all' => true],\n    Adeliom\\\SyliusEasyCrudPlugin\\\SyliusEasyCrudPlugin::class => ['all' => true],\n];|g" config/bundles.php); \
-		(cd ${APP_DIR} && sed -i'' -e 's|            "App\\": "src/",|            "App\\": "src/",\n            "Adeliom\\SyliusHappyCMSPlugin\\": "lib/sylius-happy-cms-plugin/src/"|g' composer.json); \
-		(cd ${APP_DIR} && sed -i'' -e 's|"App\\\\": "src/"|"Adeliom\\\\SyliusHappyCMSPlugin\\\\": "lib/sylius-happy-cms-plugin/src/",\n            "App\\\\": "src/"|g' composer.json); \
+		(cd ${APP_DIR} && sed -i'' -e 's|            - public-media:/srv/sylius/public/media:ro,nocopy|            - public-media:/srv/sylius/public/media:ro,nocopy\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\${PLUGIN_NAMESPACE}\\\${PLUGIN_NAMESPACE}::class => ['all' => true],\n    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n];|g" config/bundles.php); \
+		(cd ${APP_DIR} && sed -i'' -e 's|            "App\\": "src/",|            "App\\": "src/",\n            "Adeliom\\${PLUGIN_NAMESPACE}\\": "${PLUGIN_DIR}/src/"|g' composer.json); \
+		(cd ${APP_DIR} && sed -i'' -e 's|"App\\\\": "src/"|"Adeliom\\\\${PLUGIN_NAMESPACE}\\\\": "${PLUGIN_DIR}/src/",\n            "App\\\\": "src/"|g' composer.json); \
 		(cd ${APP_DIR} && sed -i'' -e 's|type: annotation|type: attribute|g' config/packages/doctrine.yaml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@SyliusHappyCMSPlugin/config/config.yaml" }\n    - { resource: "@SyliusEasyCrudPlugin/config/config.yaml" }|g' config/packages/_sylius.yaml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|webhook_routing.yaml"|webhook_routing.yaml"\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"\nsylius_easy_crud:\n  resource: "@SyliusEasyCrudPlugin/config/routes.yaml"|g' config/routes.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@${PLUGIN_NAMESPACE}/config/config.yaml" }\n    - { resource: "@${CRUD_PLUGIN_NAMESPACE}/config/config.yaml" }|g' config/packages/_sylius.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|webhook_routing.yaml"|webhook_routing.yaml"\n${PLUGIN_ALIAS}:\n  resource: "@${PLUGIN_NAMESPACE}/config/routes.yaml"\n${CRUD_PLUGIN_ALIAS}:\n  resource: "@${CRUD_PLUGIN_NAMESPACE}/config/routes.yaml"|g' config/routes.yaml); \
 		(cd ${APP_DIR} && rm -rf config/packages/doctrine.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/packages/_sylius.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/routes.yaml-e); \
@@ -110,7 +110,7 @@ platform:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config extra.symfony.allow-contrib true)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.plugin '{"type": "path", "url": "../../"}')
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.adeliom_cms '{"type":"vcs","url":"$(PLUGIN_URL)"}')
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.adeliom_crud '{"type":"vcs","url":"git@github.com:agence-adeliom/sylius-easy-crud-plugin.git"}')
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config repositories.adeliom_crud '{"type":"vcs","url":"$(CRUD_PLUGIN_URL)"}')
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer config extra.symfony.require "~${SYMFONY_VERSION}")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-install --no-scripts --no-progress sylius/sylius="~${SYLIUS_VERSION}")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer global config allow-plugins.${PLUGIN_NAME} true)
@@ -151,21 +151,22 @@ node-watch:
 
 HELP += $(call help,bundle_dependencies_install,			Install bundles assets npm dependencies)
 bundle_dependencies_install:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm install --prefix ./lib/sylius-happy-cms-plugin")
-	cd ${APP_DIR}/lib/sylius-happy-cms-plugin && (ENV=$(ENV) docker compose run --rm php composer install --no-interaction --no-scripts --prefer-dist)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm install --prefix ./${PLUGIN_DIR}")
+#	cd ${APP_DIR}/${PLUGIN_DIR} && (ENV=$(ENV) docker compose run --rm php composer config github-oauth.github.com ${GITHUB_TOKEN})
+#	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer install --no-interaction --no-scripts --working-dir=${PLUGIN_DIR})
 	${MAKE} symfony_assets_install
 
 HELP += $(call help,symfony_assets_install,			Install bundles assets npm dependencies)
 symfony_assets_install:
-	cd ${APP_DIR}/lib/sylius-happy-cms-plugin && (ENV=$(ENV) docker compose run --rm php bin/console assets:install --symlink)
+	cd ${APP_DIR}/${PLUGIN_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console assets:install --symlink)
 
 HELP += $(call help,bundle_assets_watch,			Build bundles assets in watch mode)
 bundle_assets_watch:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run watch --prefix ./lib/sylius-happy-cms-plugin")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run watch --prefix ./${PLUGIN_DIR}")
 
 HELP += $(call help,bundle_assets_build,			Build bundles assets in watch mode)
 bundle_assets_build:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run build --prefix ./lib/sylius-happy-cms-plugin")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run build --prefix ./${PLUGIN_DIR}")
 
 HELP += $(call help,bundle_install_test_files,			Build bundles assets in watch mode)
 bundle_install_test_files:
