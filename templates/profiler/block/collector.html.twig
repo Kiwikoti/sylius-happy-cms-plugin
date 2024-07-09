@@ -13,9 +13,8 @@
         </div>
     {% endset %}
 
-    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', {link: true}) }}
 {% endblock %}
-
 
 {% block menu %}
     <span class="label {% if not collector.blocks|length %}disabled{% endif %}">
@@ -58,9 +57,7 @@
                 </td>
             </tr>
 
-            {% if (block.assets.js is defined and block.assets.js|length > 0) or
-                (block.assets.css is defined and block.assets.css|length > 0) or
-                (block.assets.webpack is defined and block.assets.webpack|length > 0)  %}
+            {% if (block.assets.js is defined and block.assets.js|length > 0) or (block.assets.css is defined and block.assets.css|length > 0) or (block.assets.webpack is defined and block.assets.webpack|length > 0) %}
                 <tr>
                     <th>Assets</th>
                     <td>

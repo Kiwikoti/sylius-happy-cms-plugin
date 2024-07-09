@@ -21,7 +21,7 @@
     }) %}
 
     <div class="{% if required %}required {% endif %}field field-collection{% if (not compound or force_error|default(false)) and not valid %} error{% endif %}"
-        {% with { attr: row_attr } %}{{ block('attributes') }}{% endwith %}
+        {% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}
     >
         {{- form_label(form) -}}
         {{- form_widget(form) -}}
@@ -31,10 +31,10 @@
 
 {% endblock flexible_content_collection_row %}
 
-{% macro w_block(title, content, display = 'none') %}
+{% macro w_block(title, content, display='none') %}
     <div style="padding: {{ display == 'none' ? '1em' : '3.5em' }} 1em 1em" class="ui top attached brown segment bloc-wrapper">
         <div data-layer="content" style="display:{{ display }}">
-            {{ content | raw }}
+            {{ content|raw }}
         </div>
         <div class="ui top attached label" style="line-height: 20px;">
             <span data-layer="title" >
@@ -47,7 +47,7 @@
             <div style="float: right; margin-right: 16px;" class="ui checkbox block_published">
                 <input type="checkbox">
                 <label style="font-size: 12px; font-weight: normal;">
-                    {{ "sylius_happy_cms.editor.published" | trans }}
+                    {{ 'sylius_happy_cms.editor.published'|trans }}
                 </label>
             </div>
         </div>
@@ -60,23 +60,23 @@
 {% block flexible_content_collection_widget %}
     {# the "is iterable" check is needed because if an object implements __toString() and
                returns an empty string, "is empty" returns true even if it's not a collection #}
-    {% set isEmptyCollection = value is null or (value is iterable and value is empty) %}
+    {% set is_empty_collection = value is null or (value is iterable and value is empty) %}
     <div class="ui grid">
         <div class="ten wide column w-flexible-content">
-            {% if isEmptyCollection %}
+            {% if is_empty_collection %}
                 {{ block('flexible_content_empty_collection') }}
             {% else %}
                 <div style="padding: 1em 0; cursor:pointer; display:none" class="ui horizontal divider move-here">
                     Move here
                 </div>
                 {% for child in form.children %}
-                    {% set blockData = null %}
+                    {% set block_data = null %}
                     {% for type, block in blocks %}
                         {% if child.vars.value['block_type'] == type %}
-                            {% set blockData = block %}
+                            {% set block_data = block %}
                         {% endif %}
                     {% endfor %}
-                    {{ _self.w_block(blockData.name, form_widget(child), loop.first ? 'none' : 'none') }}
+                    {{ _self.w_block(block_data.name, form_widget(child), loop.first ? 'none' : 'none') }}
                 {% endfor %}
             {% endif %}
             <div id="w-wrapper-prototype" style="display:none">
@@ -84,14 +84,14 @@
             </div>
         </div>
 
-        {% if isEmptyCollection or form.vars.prototype is defined %}
-            {% set attr = attr|merge({'data-empty-collection': block('flexible_content_empty_collection') }) %}
+        {% if is_empty_collection or form.vars.prototype is defined %}
+            {% set attr = attr|merge({'data-empty-collection': block('flexible_content_empty_collection')}) %}
         {% endif %}
 
         <div class="six wide column w-flexible-blocks">
             {% set tabs = [] %}
             {% for type, block in blocks %}
-                {% set tab = ("sylius_happy_cms.editor.blocks" | trans ) %}
+                {% set tab = ('sylius_happy_cms.editor.blocks'|trans) %}
                 {% if block.getTab() is defined %}
                     {% set tab = block.getTab() %}
                 {% endif %}
@@ -104,22 +104,22 @@
                 <div class="default text">Block categories</div>
                 <div class="menu">
                     {% for tab in tabs %}
-                        {% set tabKey = tab|replace({" ":"_"})|lower %}
-                        <div class="item" data-value="{{ tabKey }}">
-                            {{- tab | trans -}}
+                        {% set tab_key = tab|replace({' ': '_'})|lower %}
+                        <div class="item" data-value="{{ tab_key }}">
+                            {{- tab|trans -}}
                         </div>
                     {% endfor %}
                 </div>
             </div>
-            {% set blockCount = 0 %}
+            {% set block_count = 0 %}
             <div style="margin-top: 16px;" class="ui cards">
                 {% for type, block in blocks %}
-                    {% set blockTab = ("sylius_happy_cms.editor.blocks" | trans ) %}
+                    {% set block_tab = ('sylius_happy_cms.editor.blocks'|trans) %}
                     {% if block.getTab is defined %}
-                        {% set blockTab = block.getTab() %}
+                        {% set block_tab = block.getTab() %}
                     {% endif %}
-                    {% set tabKey = blockTab|replace({" ":"_"})|lower %}
-                    <div class="ui card" data-block-category="{{ tabKey }}">
+                    {% set tab_key = block_tab|replace({' ': '_'})|lower %}
+                    <div class="ui card" data-block-category="{{ tab_key }}">
                         <div class="content">
                             <div class="ui sub header">
                                 {% if block.icon is not iterable and (block.icon starts with '<span' or block.icon starts with '<i ' or block.icon starts with '<svg') %}
@@ -130,26 +130,26 @@
                         </div>
                         {% if block.icon is iterable %}
                             <div class="content">
-                                <div id="carouselBlockControlsNoTouching{{ blockCount }}" class="carousel carousel-dark slide"  data-bs-ride="carousel">
+                                <div id="carouselBlockControlsNoTouching{{ block_count }}" class="carousel carousel-dark slide"  data-bs-ride="carousel">
                                     <div class="carousel-indicators">
                                         {% for icon in block.icon %}
-                                            <button type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}"  {{ loop.first ? ' class="active" aria-current="true" ' : '' }} data-bs-slide-to="{{ loop.index0 }}"></button>
+                                            <button type="button" data-bs-target="#carouselBlockControlsNoTouching{{ block_count }}"  {{ loop.first ? ' class="active" aria-current="true" ' : '' }} data-bs-slide-to="{{ loop.index0 }}"></button>
                                         {% endfor %}
                                     </div>
                                     <div class="carousel-inner">
                                         {% for icon in block.icon %}
                                             <div class="carousel-item {{ loop.first ? 'active' : '' }}" data-bs-interval="10000">
-                                                {{ icon | raw }}
+                                                {{ icon|raw }}
                                             </div>
                                         {% endfor %}
                                     </div>
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}" data-bs-slide="prev">
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ block_count }}" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">{{ "sylius_happy_cms.editor.previous" | trans }}</span>
+                                        <span class="visually-hidden">{{ 'sylius_happy_cms.editor.previous'|trans }}</span>
                                     </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ blockCount }}" data-bs-slide="next">
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselBlockControlsNoTouching{{ block_count }}" data-bs-slide="next">
                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">{{ "sylius_happy_cms.editor.next" | trans }}</span>
+                                        <span class="visually-hidden">{{ 'sylius_happy_cms.editor.next'|trans }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -162,7 +162,7 @@
                             {% set please_save %}
                                 <div class="ui warning segment">
                                     <i class="save icon"></i>
-                                    {{ "sylius_happy_cms.editor.please_saves_changes" | trans }}
+                                    {{ 'sylius_happy_cms.editor.please_saves_changes'|trans }}
                                 </div>
                             {% endset %}
                             <button
@@ -174,7 +174,7 @@
                                 data-num-items='{{ form.children|length }}'
                                 data-form-type-name-placeholder='{{ prototypes[type] is defined ? prototypes[type].vars.name : '' }}'
                             >
-                                {{ "sylius_happy_cms.editor.add" | trans }}
+                                {{ 'sylius_happy_cms.editor.add'|trans }}
                             </button>
                         </div>
                     </div>

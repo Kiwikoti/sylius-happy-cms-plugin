@@ -51,9 +51,8 @@
         {% endset %}
     {% endif %}
 
-    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', {link: true}) }}
 {% endblock %}
-
 
 {% block menu %}
     <span class="label ">
@@ -133,7 +132,6 @@
             </tr>
         {% endif %}
 
-
         {% if collector.description is defined and collector.description is not empty %}
             <tr>
                 <th>Description</th>
@@ -175,7 +173,6 @@
                 <td><a href="{{ collector.cover['value'] }}" target="_blank" rel="noopener">{{ collector.cover['value'] }}</a></td>
             </tr>
         {% endif %}
-
 
         {% if collector.breadcrumb is defined and collector.breadcrumb is not empty %}
             <tr>

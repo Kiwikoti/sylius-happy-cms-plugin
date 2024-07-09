@@ -1,10 +1,10 @@
 {% trans_default_domain 'SyliusHappyCMSPlugin' %}
 
-{% set lightMode = (light is defined and light) ? true : false %}
+{% set light_mode = (light is defined and light) ? true : false %}
 
 <v-touch class="card"
          :class="{'pdf-prev': selectedFileIs('pdf') || selectedFileIs('text')}"
-         {% if not lightMode %}
+         {% if not light_mode %}
          @swiperight="cardSwipGesture"
          @swipeleft="cardSwipGesture"
          @swipeup="cardSwipGesture"
@@ -59,9 +59,9 @@
 
         {# image #}
         <image-preview v-else
-                       {% if not lightMode %}:show-ops="!ops_btn_disable"{% endif %}
+                       {% if not light_mode %}:show-ops="!ops_btn_disable"{% endif %}
                        :trans="trans"
-                       {% if not lightMode %}:ops_btn_disable="ops_btn_disable"
+                       {% if not light_mode %}:ops_btn_disable="ops_btn_disable"
                        :in-movable-list="inMovableList"
                        :rename-item="renameItem"
                        :delete-item="deleteItem"
@@ -86,7 +86,7 @@
                     <p class="title">
                         <span class="link"
                               v-if="!selectedFileIs('oembed')"
-                              {% if not lightMode %}@click.stop="copyLink(selectedFile.path)"
+                              {% if not light_mode %}@click.stop="copyLink(selectedFile.path)"
                               :title="linkCopied ? trans('copied') : trans('to_cp')"
                               v-tippy="{arrow: true, hideOnClick: false, followCursor: true}"
                               @hidden="linkCopied = false"{% endif %}>
@@ -118,9 +118,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
         <div class="card-details">
             <table>

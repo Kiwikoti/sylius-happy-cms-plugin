@@ -11,7 +11,7 @@
                         appear>
                 <div class="modal-content" :key="selectedFile.path">
                     {# card v #}
-                    {% include '@SyliusHappyCMSPlugin/media/partials/card.html.twig' %}
+                    {{ include('@SyliusHappyCMSPlugin/media/partials/card.html.twig') }}
                 </div>
             </transition>
         </div>
@@ -103,7 +103,6 @@
         </div>
     </div>
 
-
     {# edit_metas_modal #}
     <div class="modal mm-animated fadeIn"
          :class="{'is-active': isActiveModal('edit_metas_modal')}"
@@ -117,7 +116,7 @@
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
 
-            <div action="{{ path('media.edit_metas_file') }}" {{ sylius_happy_cms.media.enable_generating_alts | default(false) ? 'data-generate-alt-action=' ~ path('media.generate_alt_file') : '' }}>
+            <div action="{{ path('media.edit_metas_file') }}" {{ sylius_happy_cms.media.enable_generating_alts|default(false) ? 'data-generate-alt-action=' ~ path('media.generate_alt_file') : '' }}>
 
                 <section class="modal-card-body">
                     <label class="input-label">{{ 'sylius_happy_cms.media.languages'|trans }}</label>
@@ -125,7 +124,7 @@
                     <button :style="!locale ? 'font-weight: bold; margin-right: 10px;' : 'margin-right: 10px;'"
                             type="button"
                             @click.stop="changeLocale(null)">
-                        {{  'sylius_happy_cms.media.default'|trans }}
+                        {{ 'sylius_happy_cms.media.default'|trans }}
                     </button>
                     <button v-for="(localeCode, i) in config.locales"
                             :key="localeCode"
@@ -192,7 +191,7 @@
                 </section>
 
                 <footer class="modal-card-foot">
-                    {% if sylius_happy_cms.media.enable_generating_alts | default(false) %}
+                    {% if sylius_happy_cms.media.enable_generating_alts|default(false) %}
                     <button type="reset" class="button" @click.stop="GenerateAlt($event)"
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}">
@@ -213,7 +212,6 @@
             </div>
         </div>
     </div>
-
 
     {# rename_file_modal #}
     <div class="modal mm-animated fadeIn"
@@ -283,7 +281,7 @@
                     <span class="tag is-black is-medium">{% verbatim %}{{ files.path || '/' }}{% endverbatim %}</span>
                 </h5>
 
-                {% include '@SyliusHappyCMSPlugin/media/partials/modal/mov-files-info.html.twig' %}
+                {{ include('@SyliusHappyCMSPlugin/media/partials/modal/mov-files-info.html.twig') }}
             </section>
 
             <footer class="modal-card-foot">
@@ -334,7 +332,7 @@
 
             <div action="{{ path('media.delete_file') }}" >
                 <section class="modal-card-body">
-                    {% include '@SyliusHappyCMSPlugin/media/partials/modal/del-files-info.html.twig' %}
+                    {{ include('@SyliusHappyCMSPlugin/media/partials/modal/del-files-info.html.twig') }}
 
                     {# deleting folder warning #}
                     <h5 v-show="folderDeleteWarning" class="__modal-folder-warning">
@@ -375,7 +373,7 @@
             <div action="{{ path('media.generate_alt_group') }}" >
                 <section class="modal-card-body">
                     <label class="input-label">{{ 'alt.generate_alt_group_content'|trans }}</label>
-                    {% include '@SyliusHappyCMSPlugin/media/partials/modal/del-files-info.html.twig' %}
+                    {{ include('@SyliusHappyCMSPlugin/media/partials/modal/del-files-info.html.twig') }}
                 </section>
 
                 <footer class="modal-card-foot">
@@ -395,9 +393,8 @@
         </div>
     </div>
 
-
     {# generate_all_alt_modal #}
-    {% if sylius_happy_cms.media.enable_generating_alts | default(false) %}
+    {% if sylius_happy_cms.media.enable_generating_alts|default(false) %}
     <div class="modal mm-animated fadeIn"
          :class="{'is-active': isActiveModal('generate_all_alt_modal')}"
          v-if="enableRename">

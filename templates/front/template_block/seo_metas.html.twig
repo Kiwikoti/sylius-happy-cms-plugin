@@ -1,4 +1,4 @@
 {% block happy_cms_page_head_metas %}
-    {% set seo = resource.seo | default(resource.translation(app.request.locale).seo | default(null)) %}
+    {% set seo = resource.seo|default(resource.translation(app.request.locale).seo|default(null)) %}
     {{- seo_metas(seo) -}}
 {% endblock %}

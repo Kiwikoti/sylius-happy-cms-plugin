@@ -98,7 +98,6 @@
                                 </button>
                             </div>
 
-
                             {# editor #}
                             <div class="control" v-show="!isBulkSelecting() && !editor_btn_disable">
                                 <button type="button" class="button is-link"
@@ -219,7 +218,7 @@
                                     <p class="control">
                                         <button type="button" class="button is-black" :disabled="!searchFor"
                                                 v-tippy="{arrow: true}"
-                                                title="{{ 'sylius_happy_cms.media.clear'|trans({'attr' : 'sylius_happy_cms.media.search.main'|trans|lower }) }}"
+                                                title="{{ 'sylius_happy_cms.media.clear'|trans({attr: 'sylius_happy_cms.media.search.main'|trans|lower}) }}"
                                                 @click.stop="resetInput('searchFor')">
                                             <span class="icon"><icon name="times"></icon></span>
                                         </button>

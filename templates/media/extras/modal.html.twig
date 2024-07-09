@@ -3,7 +3,7 @@
     <button type="button" class="modal-close is-large is-hidden-touch" @click.stop="hideInputModal()"></button>
     <div class="modal-content mm-animated fadeInDown">
         <div class="box">
-            {% include '@SyliusHappyCMSPlugin/media/manager.html.twig' with {'modal': true}  %}
+            {{ include('@SyliusHappyCMSPlugin/media/manager.html.twig', {modal: true}) }}
         </div>
     </div>
 </div>

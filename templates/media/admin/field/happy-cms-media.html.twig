@@ -7,10 +7,10 @@
     {% set html_id = 'happy-cms-media-field-' ~ data.id %}
     {% set infos = data|media_infos %}
     {% if infos %}
-        {% if file_is_type(data, "image") %}
+        {% if file_is_type(data, 'image') %}
                     <img src="{{ happy_cms_media_path(data) }}" alt="" class="ui image sylius-grid-image" />
-                {% elseif file_is_type(data, "oembed") and data|media_meta("icon") %}
-                    <img src="{{ data|media_meta("icon") }}" alt="" class="ui image sylius-grid-image" />
+                {% elseif file_is_type(data, 'oembed') and data|media_meta('icon') %}
+                    <img src="{{ data|media_meta('icon') }}" alt="" class="ui image sylius-grid-image" />
                 {% else %}
 
                 {% endif %}

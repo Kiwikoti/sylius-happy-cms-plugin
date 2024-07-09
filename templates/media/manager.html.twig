@@ -1,140 +1,140 @@
 {% trans_default_domain 'SyliusHappyCMSPlugin' %}
 
-{% set isModal = (modal is defined and modal) ? true : false %}
-{% set isBrowser = (browser is defined and browser) ? true : false %}
+{% set is_modal = (modal is defined and modal) ? true : false %}
+{% set is_browser = (browser is defined and browser) ? true : false %}
 
 {# sylius_happy_cms.media.base_url #}
 {% set options = {
-    'baseUrl' : sylius_happy_cms.media.base_url,
-    'hideFilesExt' : sylius_happy_cms.media.hide_files_ext,
-    'mimeTypes' : sylius_happy_cms.media.extended_mimes,
-    'broadcasting' : sylius_happy_cms.media.enable_broadcasting,
-    'generatingAlts' : sylius_happy_cms.media.enable_generating_alts,
-    'locales' : sylius_happy_cms.media.locales,
+    baseUrl: sylius_happy_cms.media.base_url,
+    hideFilesExt: sylius_happy_cms.media.hide_files_ext,
+    mimeTypes: sylius_happy_cms.media.extended_mimes,
+    broadcasting: sylius_happy_cms.media.enable_broadcasting,
+    generatingAlts: sylius_happy_cms.media.enable_generating_alts,
+    locales: sylius_happy_cms.media.locales,
 } %}
 
 {% set routes = {
-    'files' : path('media.get_files'),
-    'upload' : path('media.upload'),
+    files: path('media.get_files'),
+    upload: path('media.upload'),
 } %}
 
 {% set translations = {
-    'add_to_list' : 'sylius_happy_cms.media.add.list'|trans,
-    'added' : 'sylius_happy_cms.media.add.added'|trans,
-    'already_exists' : 'sylius_happy_cms.media.error.already_exists'|trans,
-    'application' : 'sylius_happy_cms.media.application'|trans,
-    'pdf' : 'sylius_happy_cms.media.filter.type.pdf'|trans,
-    'oembed' : 'sylius_happy_cms.media.filter.type.oembed'|trans,
-    'audio' : 'sylius_happy_cms.media.audio.main'|trans,
-    'bm_add_to_list' : 'sylius_happy_cms.media.bookmarks.add'|trans,
-    'bm' : 'sylius_happy_cms.media.bookmarks.main'|trans,
-    'clear' : 'sylius_happy_cms.media.clear'|trans({'attr' : 'sylius_happy_cms.media.crop.selection'|trans}),
-    'copy_success' : 'sylius_happy_cms.media.copy.success'|trans,
-    'copy' : 'sylius_happy_cms.media.copy.main'|trans,
-    'create_folder_notif' : 'sylius_happy_cms.media.new.create_folder_notif'|trans,
-    'create_success' : 'sylius_happy_cms.media.create_success'|trans,
-    'crop_apply' : 'sylius_happy_cms.media.crop.apply'|trans,
-    'crop_flip_horizontal' : 'sylius_happy_cms.media.crop.flip_horizontal'|trans,
-    'crop_flip_vertical' : 'sylius_happy_cms.media.crop.flip_vertical'|trans,
-    'crop_reset_filters' : 'sylius_happy_cms.media.crop.reset_filters'|trans,
-    'crop_reset' : 'sylius_happy_cms.media.crop.reset'|trans,
-    'crop_cancel' : 'sylius_happy_cms.media.crop.cancel'|trans,
-    'crop_rotate_left' : 'sylius_happy_cms.media.crop.rotate_left'|trans,
-    'crop_rotate_right' : 'sylius_happy_cms.media.crop.rotate_right'|trans,
-    'crop_zoom_in' : 'sylius_happy_cms.media.crop.zoom_in'|trans,
-    'crop_zoom_out' : 'sylius_happy_cms.media.crop.zoom_out'|trans,
-    'crop' : 'sylius_happy_cms.media.crop.main'|trans,
-    'delete_success' : 'sylius_happy_cms.media.delete.success'|trans,
-    'delete' : 'sylius_happy_cms.media.delete.main'|trans,
-    'description' : 'sylius_happy_cms.media.description'|trans,
-    'diff' : 'sylius_happy_cms.media.editor.diff'|trans,
-    'dimension' : 'sylius_happy_cms.media.dimension'|trans,
-    'downloaded' : 'sylius_happy_cms.media.download.downloaded'|trans,
-    'editor' : 'sylius_happy_cms.media.editor.main'|trans,
-    'error_altered_fwli' : 'sylius_happy_cms.media.error.altered_fwli'|trans,
-    'filter_by' : 'sylius_happy_cms.media.filter.by'|trans({'attr' : 'sylius_happy_cms.media.'}),
-    'filtration' : 'sylius_happy_cms.media.filter.filtration'|trans,
-    'find' : 'sylius_happy_cms.media.find'|trans,
-    'focals' : 'sylius_happy_cms.media.focals'|trans,
-    'folder' : 'sylius_happy_cms.media.folder'|trans,
-    'found' : 'sylius_happy_cms.media.found'|trans,
-    'glbl_search_avail' : 'sylius_happy_cms.media.search.glbl_avail'|trans,
-    'glbl_search' : 'sylius_happy_cms.media.search.glbl'|trans,
-    'go_to_folder' : 'sylius_happy_cms.media.go_to_folder'|trans,
-    'image' : 'sylius_happy_cms.media.image'|trans,
-    'last_modified' : 'sylius_happy_cms.media.last_modified'|trans,
-    'locked' : 'sylius_happy_cms.media.locked'|trans,
-    'move_clear' : 'sylius_happy_cms.media.move.clear_list'|trans,
-    'move_success' : 'sylius_happy_cms.media.move.success'|trans,
-    'move' : 'sylius_happy_cms.media.move.main'|trans,
-    'name' : 'sylius_happy_cms.media.name'|trans,
-    'new_uploads_notif' : 'sylius_happy_cms.media.upload.new_uploads_notif'|trans,
-    'no_val' : 'sylius_happy_cms.media.no_val'|trans,
-    'non' : 'sylius_happy_cms.media.non'|trans,
-    'nothing_found' : 'sylius_happy_cms.media.nothing_found'|trans,
-    'open' : 'sylius_happy_cms.media.open'|trans,
-    'close' : 'sylius_happy_cms.media.close'|trans,
-    'options' : 'sylius_happy_cms.media.options'|trans,
-    'presets' : 'sylius_happy_cms.media.crop.presets'|trans,
-    'refresh_notif' : 'sylius_happy_cms.media.refresh_notif'|trans,
-    'rename_success' : 'sylius_happy_cms.media.rename.success'|trans,
-    'rename' : 'sylius_happy_cms.media.rename.main'|trans,
-    'reset' : 'sylius_happy_cms.media.move.reset'|trans,
-    'save_success' : 'sylius_happy_cms.media.save.success'|trans,
-    'save' : 'sylius_happy_cms.media.save.main'|trans,
-    'selected' : 'sylius_happy_cms.media.select.selected'|trans,
-    'sep_download' : 'sylius_happy_cms.media.download.sep'|trans,
-    'size' : 'sylius_happy_cms.media.size'|trans,
-    'sort_by' : 'sylius_happy_cms.media.sort_by'|trans,
-    'stand_by' : 'sylius_happy_cms.media.stand_by'|trans,
-    'text' : 'sylius_happy_cms.media.text'|trans,
-    'to_cp' : 'sylius_happy_cms.media.copy.to_cp'|trans,
-    'upload_in_progress' : 'sylius_happy_cms.media.upload.in_progress'|trans,
-    'upload_success' : 'sylius_happy_cms.media.upload.success'|trans,
-    'video' : 'sylius_happy_cms.media.video'|trans,
-    'clarity' : 'sylius_happy_cms.media.editor.clarity'|trans,
-    'pinhole' : 'sylius_happy_cms.media.editor.pinhole'|trans,
-    'love' : 'sylius_happy_cms.media.editor.love'|trans,
-    'jarques' : 'sylius_happy_cms.media.editor.jarques'|trans,
-    'orange_peel' : 'sylius_happy_cms.media.editor.orange_peel'|trans,
-    'sin_city' : 'sylius_happy_cms.media.editor.sin_city'|trans,
-    'grungy' : 'sylius_happy_cms.media.editor.grungy'|trans,
-    'old_boot' : 'sylius_happy_cms.media.editor.old_boot'|trans,
-    'lomo' : 'sylius_happy_cms.media.editor.lomo'|trans,
-    'vintage' : 'sylius_happy_cms.media.editor.vintage'|trans,
-    'cross_process' : 'sylius_happy_cms.media.editor.cross_process'|trans,
-    'concentrate' : 'sylius_happy_cms.media.editor.concentrate'|trans,
-    'glowing_sun' : 'sylius_happy_cms.media.editor.glowing_sun'|trans,
-    'sunrise' : 'sylius_happy_cms.media.editor.sunrise'|trans,
-    'nostalgia' : 'sylius_happy_cms.media.editor.nostalgia'|trans,
-    'hemingway' : 'sylius_happy_cms.media.editor.hemingway'|trans,
-    'her_majesty' : 'sylius_happy_cms.media.editor.her_majesty'|trans,
-    'hazy_days' : 'sylius_happy_cms.media.editor.hazy_days'|trans,
-    'brightness' : 'sylius_happy_cms.media.editor.brightness'|trans,
-    'contrast' : 'sylius_happy_cms.media.editor.contrast'|trans,
-    'saturation' : 'sylius_happy_cms.media.editor.saturation'|trans,
-    'vibrance' : 'sylius_happy_cms.media.editor.vibrance'|trans,
-    'exposure' : 'sylius_happy_cms.media.editor.exposure'|trans,
-    'hue' : 'sylius_happy_cms.media.editor.hue'|trans,
-    'sepia' : 'sylius_happy_cms.media.editor.sepia'|trans,
-    'gamma' : 'sylius_happy_cms.media.editor.gamma'|trans,
-    'noise' : 'sylius_happy_cms.media.editor.noise'|trans,
-    'clip' : 'sylius_happy_cms.media.editor.clip'|trans,
-    'sharpen' : 'sylius_happy_cms.media.editor.sharpen'|trans,
-    'stack_blur' : 'sylius_happy_cms.media.editor.stack_blur'|trans,
-    'greyscale' : 'sylius_happy_cms.media.editor.greyscale'|trans,
-    'invert' : 'sylius_happy_cms.media.editor.invert'|trans,
-    'public' : 'sylius_happy_cms.media.visibility.public'|trans,
-    'private' : 'sylius_happy_cms.media.visibility.private'|trans,
-    'seo.title' : 'sylius_happy_cms.media.seo.title'|trans,
-    'seo.alt' : 'sylius_happy_cms.media.seo.alt'|trans,
-    'seo.description' : 'sylius_happy_cms.media.seo.description'|trans,
-    'edit_metas_success' : 'sylius_happy_cms.media.seo.edit_metas'|trans,
-    'generate_alt' : 'sylius_happy_cms.media.alt.generate_alt'|trans,
-    'generate_alt_success' : 'sylius_happy_cms.media.alt.generate_alt_success'|trans,
-    'generate_alt_no_change' : 'sylius_happy_cms.media.alt.generate_alt_no_change'|trans,
-    'generate_all_alt' : 'sylius_happy_cms.media.alt.generate_alt' ,
-    'languages' : 'sylius_happy_cms.media.languages' ,
+    add_to_list: 'sylius_happy_cms.media.add.list'|trans,
+    added: 'sylius_happy_cms.media.add.added'|trans,
+    already_exists: 'sylius_happy_cms.media.error.already_exists'|trans,
+    application: 'sylius_happy_cms.media.application'|trans,
+    pdf: 'sylius_happy_cms.media.filter.type.pdf'|trans,
+    oembed: 'sylius_happy_cms.media.filter.type.oembed'|trans,
+    audio: 'sylius_happy_cms.media.audio.main'|trans,
+    bm_add_to_list: 'sylius_happy_cms.media.bookmarks.add'|trans,
+    bm: 'sylius_happy_cms.media.bookmarks.main'|trans,
+    clear: 'sylius_happy_cms.media.clear'|trans({attr: 'sylius_happy_cms.media.crop.selection'|trans}),
+    copy_success: 'sylius_happy_cms.media.copy.success'|trans,
+    copy: 'sylius_happy_cms.media.copy.main'|trans,
+    create_folder_notif: 'sylius_happy_cms.media.new.create_folder_notif'|trans,
+    create_success: 'sylius_happy_cms.media.create_success'|trans,
+    crop_apply: 'sylius_happy_cms.media.crop.apply'|trans,
+    crop_flip_horizontal: 'sylius_happy_cms.media.crop.flip_horizontal'|trans,
+    crop_flip_vertical: 'sylius_happy_cms.media.crop.flip_vertical'|trans,
+    crop_reset_filters: 'sylius_happy_cms.media.crop.reset_filters'|trans,
+    crop_reset: 'sylius_happy_cms.media.crop.reset'|trans,
+    crop_cancel: 'sylius_happy_cms.media.crop.cancel'|trans,
+    crop_rotate_left: 'sylius_happy_cms.media.crop.rotate_left'|trans,
+    crop_rotate_right: 'sylius_happy_cms.media.crop.rotate_right'|trans,
+    crop_zoom_in: 'sylius_happy_cms.media.crop.zoom_in'|trans,
+    crop_zoom_out: 'sylius_happy_cms.media.crop.zoom_out'|trans,
+    crop: 'sylius_happy_cms.media.crop.main'|trans,
+    delete_success: 'sylius_happy_cms.media.delete.success'|trans,
+    delete: 'sylius_happy_cms.media.delete.main'|trans,
+    description: 'sylius_happy_cms.media.description'|trans,
+    diff: 'sylius_happy_cms.media.editor.diff'|trans,
+    dimension: 'sylius_happy_cms.media.dimension'|trans,
+    downloaded: 'sylius_happy_cms.media.download.downloaded'|trans,
+    editor: 'sylius_happy_cms.media.editor.main'|trans,
+    error_altered_fwli: 'sylius_happy_cms.media.error.altered_fwli'|trans,
+    filter_by: 'sylius_happy_cms.media.filter.by'|trans({attr: 'sylius_happy_cms.media.'}),
+    filtration: 'sylius_happy_cms.media.filter.filtration'|trans,
+    find: 'sylius_happy_cms.media.find'|trans,
+    focals: 'sylius_happy_cms.media.focals'|trans,
+    folder: 'sylius_happy_cms.media.folder'|trans,
+    found: 'sylius_happy_cms.media.found'|trans,
+    glbl_search_avail: 'sylius_happy_cms.media.search.glbl_avail'|trans,
+    glbl_search: 'sylius_happy_cms.media.search.glbl'|trans,
+    go_to_folder: 'sylius_happy_cms.media.go_to_folder'|trans,
+    image: 'sylius_happy_cms.media.image'|trans,
+    last_modified: 'sylius_happy_cms.media.last_modified'|trans,
+    locked: 'sylius_happy_cms.media.locked'|trans,
+    move_clear: 'sylius_happy_cms.media.move.clear_list'|trans,
+    move_success: 'sylius_happy_cms.media.move.success'|trans,
+    move: 'sylius_happy_cms.media.move.main'|trans,
+    name: 'sylius_happy_cms.media.name'|trans,
+    new_uploads_notif: 'sylius_happy_cms.media.upload.new_uploads_notif'|trans,
+    no_val: 'sylius_happy_cms.media.no_val'|trans,
+    non: 'sylius_happy_cms.media.non'|trans,
+    nothing_found: 'sylius_happy_cms.media.nothing_found'|trans,
+    open: 'sylius_happy_cms.media.open'|trans,
+    close: 'sylius_happy_cms.media.close'|trans,
+    options: 'sylius_happy_cms.media.options'|trans,
+    presets: 'sylius_happy_cms.media.crop.presets'|trans,
+    refresh_notif: 'sylius_happy_cms.media.refresh_notif'|trans,
+    rename_success: 'sylius_happy_cms.media.rename.success'|trans,
+    rename: 'sylius_happy_cms.media.rename.main'|trans,
+    reset: 'sylius_happy_cms.media.move.reset'|trans,
+    save_success: 'sylius_happy_cms.media.save.success'|trans,
+    save: 'sylius_happy_cms.media.save.main'|trans,
+    selected: 'sylius_happy_cms.media.select.selected'|trans,
+    sep_download: 'sylius_happy_cms.media.download.sep'|trans,
+    size: 'sylius_happy_cms.media.size'|trans,
+    sort_by: 'sylius_happy_cms.media.sort_by'|trans,
+    stand_by: 'sylius_happy_cms.media.stand_by'|trans,
+    text: 'sylius_happy_cms.media.text'|trans,
+    to_cp: 'sylius_happy_cms.media.copy.to_cp'|trans,
+    upload_in_progress: 'sylius_happy_cms.media.upload.in_progress'|trans,
+    upload_success: 'sylius_happy_cms.media.upload.success'|trans,
+    video: 'sylius_happy_cms.media.video'|trans,
+    clarity: 'sylius_happy_cms.media.editor.clarity'|trans,
+    pinhole: 'sylius_happy_cms.media.editor.pinhole'|trans,
+    love: 'sylius_happy_cms.media.editor.love'|trans,
+    jarques: 'sylius_happy_cms.media.editor.jarques'|trans,
+    orange_peel: 'sylius_happy_cms.media.editor.orange_peel'|trans,
+    sin_city: 'sylius_happy_cms.media.editor.sin_city'|trans,
+    grungy: 'sylius_happy_cms.media.editor.grungy'|trans,
+    old_boot: 'sylius_happy_cms.media.editor.old_boot'|trans,
+    lomo: 'sylius_happy_cms.media.editor.lomo'|trans,
+    vintage: 'sylius_happy_cms.media.editor.vintage'|trans,
+    cross_process: 'sylius_happy_cms.media.editor.cross_process'|trans,
+    concentrate: 'sylius_happy_cms.media.editor.concentrate'|trans,
+    glowing_sun: 'sylius_happy_cms.media.editor.glowing_sun'|trans,
+    sunrise: 'sylius_happy_cms.media.editor.sunrise'|trans,
+    nostalgia: 'sylius_happy_cms.media.editor.nostalgia'|trans,
+    hemingway: 'sylius_happy_cms.media.editor.hemingway'|trans,
+    her_majesty: 'sylius_happy_cms.media.editor.her_majesty'|trans,
+    hazy_days: 'sylius_happy_cms.media.editor.hazy_days'|trans,
+    brightness: 'sylius_happy_cms.media.editor.brightness'|trans,
+    contrast: 'sylius_happy_cms.media.editor.contrast'|trans,
+    saturation: 'sylius_happy_cms.media.editor.saturation'|trans,
+    vibrance: 'sylius_happy_cms.media.editor.vibrance'|trans,
+    exposure: 'sylius_happy_cms.media.editor.exposure'|trans,
+    hue: 'sylius_happy_cms.media.editor.hue'|trans,
+    sepia: 'sylius_happy_cms.media.editor.sepia'|trans,
+    gamma: 'sylius_happy_cms.media.editor.gamma'|trans,
+    noise: 'sylius_happy_cms.media.editor.noise'|trans,
+    clip: 'sylius_happy_cms.media.editor.clip'|trans,
+    sharpen: 'sylius_happy_cms.media.editor.sharpen'|trans,
+    stack_blur: 'sylius_happy_cms.media.editor.stack_blur'|trans,
+    greyscale: 'sylius_happy_cms.media.editor.greyscale'|trans,
+    invert: 'sylius_happy_cms.media.editor.invert'|trans,
+    public: 'sylius_happy_cms.media.visibility.public'|trans,
+    private: 'sylius_happy_cms.media.visibility.private'|trans,
+    'seo.title': 'sylius_happy_cms.media.seo.title'|trans,
+    'seo.alt': 'sylius_happy_cms.media.seo.alt'|trans,
+    'seo.description': 'sylius_happy_cms.media.seo.description'|trans,
+    edit_metas_success: 'sylius_happy_cms.media.seo.edit_metas'|trans,
+    generate_alt: 'sylius_happy_cms.media.alt.generate_alt'|trans,
+    generate_alt_success: 'sylius_happy_cms.media.alt.generate_alt_success'|trans,
+    generate_alt_no_change: 'sylius_happy_cms.media.alt.generate_alt_no_change'|trans,
+    generate_all_alt: 'sylius_happy_cms.media.alt.generate_alt',
+    languages: 'sylius_happy_cms.media.languages',
 } %}
 
 <media-manager inline-template
@@ -162,13 +162,12 @@
     <div class="media-manager" >
 
         {# top toolbar #}
-        {% include '@SyliusHappyCMSPlugin/media/partials/manager/toolbar.html.twig' %}
+        {{ include('@SyliusHappyCMSPlugin/media/partials/manager/toolbar.html.twig') }}
         {# ====================================================================== #}
 
         {# dropzone #}
-        {% include '@SyliusHappyCMSPlugin/media/partials/manager/dropzone.html.twig' %}
+        {{ include('@SyliusHappyCMSPlugin/media/partials/manager/dropzone.html.twig') }}
         {# ====================================================================== #}
-
 
         <!--<div class="level-right">
             {# upload preview info #}
@@ -194,22 +193,22 @@
 
         <div class="media-manager__stack">
             {# path toolbar #}
-            {% include '@SyliusHappyCMSPlugin/media/partials/manager/breadcrumb.html.twig' %}
+            {{ include('@SyliusHappyCMSPlugin/media/partials/manager/breadcrumb.html.twig') }}
             {# ====================================================================== #}
 
             <section class="__stack-container">
                 {# upload preview #}
-                {% include '@SyliusHappyCMSPlugin/media/partials/manager/upload-preview.html.twig' %}
+                {{ include('@SyliusHappyCMSPlugin/media/partials/manager/upload-preview.html.twig') }}
 
                 {# loadings #}
-                {% include '@SyliusHappyCMSPlugin/media/partials/manager/loadings.html.twig' %}
+                {{ include('@SyliusHappyCMSPlugin/media/partials/manager/loadings.html.twig') }}
 
                 {# overlay #}
                 <container-click-overlay></container-click-overlay>
 
                 <div class="extra-func-btns" v-if="enableMove">
                     {# intro #}
-{#                    <usage-intro-btn v-show="!isLoading && !waitingForUpload"></usage-intro-btn>#}
+{# <usage-intro-btn v-show="!isLoading && !waitingForUpload"></usage-intro-btn> #}
 
                     {# movable list #}
                     <v-touch v-if="allItemsCount && !isLoading && !waitingForUpload && !inMovableList()"
@@ -237,7 +236,6 @@
 
                 {# ====================================================================== #}
 
-
                 {# files box #}
                 <v-touch class="__stack-files mm-animated"
                          :class="{'__stack-sidebar-hidden' : !infoSidebar}"
@@ -247,7 +245,6 @@
                          @hold="containerClick($event)"
                          @dbltap="containerClick($event)"
                          @pinchin="containerClick($event)">
-
 
                     {# no search #}
                     <section>
@@ -335,12 +332,11 @@
 
             </section>
 
-
         </div>
 
         {# ====================================================================== #}
 
         {# modals #}
-        {% include '@SyliusHappyCMSPlugin/media/partials/modal/ops.html.twig' %}
+        {{ include('@SyliusHappyCMSPlugin/media/partials/modal/ops.html.twig') }}
     </div>
 </media-manager>

@@ -3,14 +3,14 @@
 {% block happy_cms_media_row %}
 
     {% set options = {
-        'baseUrl' : sylius_happy_cms.media.base_url,
-        'hideFilesExt' : sylius_happy_cms.media.hide_files_ext,
-        'mimeTypes' : sylius_happy_cms.media.extended_mimes,
-        'broadcasting' : sylius_happy_cms.media.enable_broadcasting,
+        baseUrl: sylius_happy_cms.media.base_url,
+        hideFilesExt: sylius_happy_cms.media.hide_files_ext,
+        mimeTypes: sylius_happy_cms.media.extended_mimes,
+        broadcasting: sylius_happy_cms.media.enable_broadcasting,
     } %}
 
     {% set routes = {
-        'file_infos' : path('media.get_file_info'),
+        file_infos: path('media.get_file_info'),
     } %}
 
     <div class="field">
@@ -19,8 +19,8 @@
         <div class="form-widget happy-cms-media-widget" data-widget="{{ form.vars.id }}">
             <happy-cms-media-modal inline-template v-cloak :config="{{ options|json_encode }}" :routes="{{ routes|json_encode }}" >
                 <div>
-                    <div v-if="inputName">{% include '@SyliusHappyCMSPlugin/media/extras/modal.html.twig' %}</div>
-                    {% include '@SyliusHappyCMSPlugin/media/extras/editor.html.twig' %}
+                    <div v-if="inputName">{{ include('@SyliusHappyCMSPlugin/media/extras/modal.html.twig') }}</div>
+                    {{ include('@SyliusHappyCMSPlugin/media/extras/editor.html.twig') }}
 
                     <media-modal item="media" {% if value is not empty %}old="{{ value }}" {% endif %} :name="inputName"></media-modal>
                     <!--media-modal item="links" :name="inputName" :multi="true"></media-modal-->
@@ -88,16 +88,15 @@
                             <div class="mm-animated fadeInDown __modal-content-wrapper">
                                 <div class="modal-content" :key="selectedFile.path">
                                     {# card v #}
-                                    {% include '@SyliusHappyCMSPlugin/media/partials/card.html.twig' with {"light": true} %}
+                                    {{ include('@SyliusHappyCMSPlugin/media/partials/card.html.twig', {light: true}) }}
                                 </div>
                             </div>
                             <button type="button" class="modal-close is-large" @click.stop="toggleModal()"></button>
                         </div>
-                        {{ form_widget(form, {'type': 'text', 'attr': {'v-model': 'media', "style": "display:none"} }) }}
+                        {{ form_widget(form, {type: 'text', attr: {'v-model': 'media', style: 'display:none'}}) }}
                     </section>
                 </div>
             </happy-cms-media-modal>
-
 
             {% if ea.field.help ?? false %}
                 <small class="form-help">{{ 'sylius_happy_cms.media.' ~ ea.field.help|raw }}</small>

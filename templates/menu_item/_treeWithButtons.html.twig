@@ -13,19 +13,19 @@
                         <i class="{{ menu_item.children is not empty ? 'caret down' : 'angle left' }} icon"></i>
                     </div>
                     <div class="sylius-tree__title">
-                        <a href="{{ path('sylius_happy_cms_admin_menu_item_update', { 'id': menu_item.id }) }}"{% if not menu_item.publishState is same as 'published' %} class="text gray"{% endif %}>
+                        <a href="{{ path('sylius_happy_cms_admin_menu_item_update', {id: menu_item.id}) }}"{% if not menu_item.publishState is same as 'published' %} class="text gray"{% endif %}>
                             {{ menu_item.name }}
                         </a>
                     </div>
                     <div class="sylius-tree__action">
-                        <form action="{{ path('sylius_happy_cms_admin_menu_item_delete', { 'id': menu_item.id }) }}" method="post">
+                        <form action="{{ path('sylius_happy_cms_admin_menu_item_delete', {id: menu_item.id}) }}" method="post">
                             <div class="ui tiny basic icon top right pointing dropdown button sylius-tree__action__trigger">
                                 <i class="ellipsis horizontal icon"></i>
                                 <div class="menu">
-                                    <a class="item" href="{{ path('sylius_happy_cms_admin_menu_item_create', { 'id': menu_item.menu.id}) }}">
+                                    <a class="item" href="{{ path('sylius_happy_cms_admin_menu_item_create', {id: menu_item.menu.id}) }}">
                                         <i class="plus icon blue"></i>{{ 'sylius.ui.create'|trans }}
                                     </a>
-                                    <a class="item" href="{{ path('happy_cms_admin_menu_item_update', { 'id': menu_item.id }) }}">
+                                    <a class="item" href="{{ path('happy_cms_admin_menu_item_update', {id: menu_item.id}) }}">
                                         <i class="pencil icon grey"></i>{{ 'sylius.ui.edit'|trans }}
                                     </a>
                                     <button class="item" type="submit" style="width: 100%;" data-requires-confirmation>
@@ -34,10 +34,10 @@
 
                                     <div class="divider"></div>
 
-                                    <div class="item sylius-menu_item-move-up" data-url="{{ path('sylius_happy_cms_admin_menu_item_update_move_up', { id: menu_item.id }) }}">
+                                    <div class="item sylius-menu_item-move-up" data-url="{{ path('sylius_happy_cms_admin_menu_item_update_move_up', {id: menu_item.id}) }}">
                                         <i class="arrow up icon grey"></i>{{ 'sylius.ui.move_up'|trans }}
                                     </div>
-                                    <div class="item sylius-menu_item-move-down" data-url="{{ path('sylius_happy_cms_admin_menu_item_update_move_down', { id: menu_item.id }) }}">
+                                    <div class="item sylius-menu_item-move-down" data-url="{{ path('sylius_happy_cms_admin_menu_item_update_move_down', {id: menu_item.id}) }}">
                                         <i class="arrow down icon grey"></i>{{ 'sylius.ui.move_down'|trans }}
                                     </div>
 
@@ -55,7 +55,7 @@
 {% endmacro %}
 
 <div class="ui segment sylius-tree hidden" data-sylius-js-tree>
-    <a href="{{ path('sylius_happy_cms_admin_menu_item_create', { 'id': menu }) }}" class="ui fluid labeled icon primary button">
+    <a href="{{ path('sylius_happy_cms_admin_menu_item_create', {id: menu}) }}" class="ui fluid labeled icon primary button">
         <i class="plus icon"></i>
         {{ 'sylius.ui.create'|trans }}
     </a>
