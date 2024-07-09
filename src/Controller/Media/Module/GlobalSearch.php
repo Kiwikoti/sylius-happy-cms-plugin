@@ -13,8 +13,7 @@ trait GlobalSearch
     public function globalSearch()
     {
         $results = (new ArrayCollection($this->getFolderContent('/', true)))
-            ->filter(fn ($item) => !preg_grep($this->ignoreFiles, [$item->path()]) && !$item->isDir())->map(function ($file) {
-                /** @var FileAttributes $file */
+            ->filter(fn ($item) => !preg_grep($this->ignoreFiles, [$item->path()]) && !$item->isDir())->map(function (FileAttributes $file) {
                 $path = $file->path();
                 $time = $file->lastModified();
                 $mimeType = $file->mimeType();

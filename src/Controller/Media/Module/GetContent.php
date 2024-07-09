@@ -65,8 +65,9 @@ trait GetContent
         $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $mediaId = $data['item'];
 
-        if ($media = $this->helper->getMediaRepository()->findOneBy(['id' => $mediaId])) {
-            /** @var Media $media */
+        /** @var Media|null $media */
+        $media = $this->helper->getMediaRepository()->findOneBy(['id' => $mediaId]);
+        if ($media) {
             $path = $media->getPath();
             $time = $media->getLastModified() ?? null;
             $metas = $media->getMetas();
@@ -103,8 +104,8 @@ trait GetContent
         $storageFiles = array_filter($this->getFolderListByType($dirList, 'file'), [$this, 'ignoreFiles']);
 
         // folders
+        /** @var Folder $folder */
         foreach ($storageFolders as $folder) {
-            /** @var Folder $folder */
             $path = $folder->getPath();
             $list[] = [
                 'id' => $folder->getId(),
@@ -116,8 +117,8 @@ trait GetContent
         }
 
         // files
+        /** @var Media $file */
         foreach ($storageFiles as $file) {
-            /** @var Media $file */
             $path = $file->getPath();
             $time = $file->getLastModified() ?? null;
             $metas = $file->getMetas();

@@ -140,8 +140,9 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
             array_splice($entryView->vars['block_prefixes'], $prefixOffset, 0, 'editor_collection_entry');
         }
 
-        /** @var FormInterface $prototype */
-        if ($prototypes = $form->getConfig()->getAttribute('prototypes')) {
+        /** @var FormInterface[] $prototypes */
+        $prototypes = $form->getConfig()->getAttribute('prototypes');
+        if ($prototypes) {
             foreach ($prototypes as $type => $prototype) {
                 if ($view->vars['prototypes'][$type]->vars['multipart']) {
                     $view->vars['multipart'] = true;

@@ -68,9 +68,9 @@ class SitemapSubscriber implements EventSubscriberInterface
         }
     }
 
+    /** @param SeoInterface&AbstractTranslation $translation */
     private function getUrl(UrlGeneratorInterface $urlGenerator, SitemapDumperInterface $sitemapDumpable, CmsRoutableInterface $entity, SeoInterface $translation, ?callable $replaceUrl = null, ?int $page = null): string
     {
-        /** @var SeoInterface&AbstractTranslation $translation */
         $params = $sitemapDumpable->getSitemapRouteParams($entity);
         $params['_locale'] = $translation->getLocale();
 
