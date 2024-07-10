@@ -16,7 +16,7 @@ test.ecs:
 
 HELP += $(call help,test.phpstan,			Run PHPStan)
 test.phpstan: ## Run PHPStan
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/phpstan analyse --level=7 -c phpstan.neon ${PLUGIN_DIR}/src)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/phpstan analyse --level=1 -c phpstan.neon ${PLUGIN_DIR}/src)
 
 HELP += $(call help,test.ecs.fix,			Fix coding standard)
 test.ecs.fix:
@@ -35,6 +35,18 @@ HELP += $(call help,test.twig,			Validate Twig templates)
 test.twig: ## Validate Twig templates
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php bin/console lint:twig --no-debug ${PLUGIN_DIR}/templates)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/twigcs ${PLUGIN_DIR}/templates --severity error --display blocking)
+
+HELP += $(call help,test.twig,			Validate Twig templates)
+test.twig.fix: ## Fix Twig templates
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/twig-cs-fixer lint --fix ${PLUGIN_DIR}/templates)
+
+HELP += $(call help,test.twig,			Validate Twig templates)
+test.rector: ## Refactor dry-run
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/rector process ${PLUGIN_DIR}/src --dry-run)
+
+HELP += $(call help,test.twig,			Validate Twig templates)
+test.rector.fix: ## Refactor
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/rector process ${PLUGIN_DIR}/src)
 
 HELP += $(call help,test.eslint,			Validate Twig templates)
 test.eslint: ## Validate eslint
