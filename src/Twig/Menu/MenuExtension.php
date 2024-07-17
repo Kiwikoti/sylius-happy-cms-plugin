@@ -21,22 +21,10 @@ class MenuExtension extends AbstractExtension
     * @param \Doctrine\ORM\EntityRepository $menuClass
     */
     public function __construct(
-        /**
-         * @readonly
-         */
-        private Environment $twig,
-        /**
-         * @readonly
-         */
-        private EntityManagerInterface $em,
-        /**
-         * @readonly
-         */
-        private string $menuClass,
-        /**
-         * @readonly
-         */
-        private string $menuItemClass,
+        private readonly Environment $twig,
+        private readonly EntityManagerInterface $em,
+        private readonly string $menuClass,
+        private readonly string $menuItemClass,
     ) {
     }
 
@@ -46,20 +34,35 @@ class MenuExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('happy_cms_menu', \Closure::fromCallable(fn (Environment $env, array $context, $code, array $extra = []): Markup => $this->renderMenu($env, $context, $code, $extra)), ['is_safe' => ['js', 'html'], 'needs_context' => true, 'needs_environment' => true]),
+            new TwigFunction(
+                'happy_cms_menu',
+                (fn(Environment $env, array $context, $code, array $extra = []): Markup => $this->renderMenu($env, $context, $code, $extra))(...),
+                ['is_safe' => ['js', 'html'], 'needs_context' => true, 'needs_environment' => true]
+            ),
         ];
     }
 
     /**
-     * @param array $extra
+     * @param array<string, mixed> $context
+     * @param array<string, mixed> $extra
      *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function renderMenu(Environment $env, array $context, $code, $extra = []): Markup
+    public function renderMenu(Environment $env, array $context, string $code, array $extra = []): Markup
     {
-        $menu = $this->em->getRepository($this->menuClass)->findOneByCode($code);
+        if (!class_exists($this->menuClass) || !class_exists($this->menuItemClass)) {
+            throw new MenuNotFoundException($code);
+        }
+
+
+        $repo = $this->em->getRepository($this->menuClass);
+        if (!method_exists($repo, 'findOneByCode')) {
+            throw new MenuNotFoundException($code);
+        }
+
+        $menu = $repo->findOneByCode($code);
 
         if (empty($menu)) {
             throw new MenuNotFoundException($code);

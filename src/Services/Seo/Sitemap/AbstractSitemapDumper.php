@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 abstract class AbstractSitemapDumper implements SitemapDumperInterface
 {
@@ -16,7 +17,10 @@ abstract class AbstractSitemapDumper implements SitemapDumperInterface
         return 'cmf_routing_object';
     }
 
-    /** @inheritdoc */
+    /**
+     * @param CmsRoutableInterface $entity
+     * @return array<string, ?RouteObjectInterface>
+     */
     public static function getSitemapRouteParams(CmsRoutableInterface $entity): array
     {
         return [
@@ -28,7 +32,7 @@ abstract class AbstractSitemapDumper implements SitemapDumperInterface
 
     public function getLastModifiedDate(CmsRoutableInterface $entity): ?\DateTimeInterface
     {
-        if (in_array(EntityTimestampableTrait::class, class_implements($entity))) {
+        if (in_array(EntityTimestampableTrait::class, class_implements($entity)) && method_exists($entity, 'getUpdatedAt')) {
             return $entity->getUpdatedAt();
         }
 

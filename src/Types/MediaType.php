@@ -7,10 +7,26 @@ namespace Adeliom\SyliusHappyCMSPlugin\Types;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MediaType extends Type
 {
+
+    private EntityManagerInterface $manager;
+    private ParameterBagInterface $parameterBag;
+
+    public function setManager(EntityManagerInterface $manager): void
+    {
+        $this->manager = $manager;
+    }
+
+    public function setParameterBag(ParameterBagInterface $parameterBag): void
+    {
+        $this->parameterBag = $parameterBag;
+    }
+
     /**
      * @var string
      */
@@ -24,16 +40,10 @@ class MediaType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         try {
-            $listeners = $platform->getEventManager()->getListeners('getContainer');
-            $listener = array_shift($listeners);
-            /** @var ContainerInterface $container */
-            $container = $listener->getContainer();
-            $class = $container->getParameter('sylius_happy_cms.media.media_entity');
-
-            if ($value) {
-                return $container->get('doctrine.orm.entity_manager')->getRepository($class)->find($value);
+            $class = $this->parameterBag->get('sylius_happy_cms.media.media_entity');
+            if ($value && is_string($class) && class_exists($class)) {
+                return $this->manager->getRepository($class)->find($value);
             }
-
             return null;
         } catch (\Exception) {
             return null;

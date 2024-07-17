@@ -36,7 +36,19 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
      */
     public const MAX_DESCRITION_LENGTH = 155;
 
-    public function __construct(protected Environment $twig, protected EventDispatcherInterface $eventDispatcher, protected BreadcrumbCollection $breadcrumb, protected $titleConfig, protected $breadcrumbConfig)
+    /**
+     * @param Environment $twig
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param BreadcrumbCollection $breadcrumb
+     * @param array<string, mixed> $titleConfig
+     * @param array<string, mixed> $breadcrumbConfig
+     */
+    public function __construct(
+        protected Environment $twig,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected BreadcrumbCollection $breadcrumb,
+        protected array $titleConfig,
+        protected array $breadcrumbConfig)
     {
     }
 
@@ -70,7 +82,7 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
         return new Markup($this->twig->render('@SyliusHappyCMSPlugin/front/seo/block-breadcrumb.html.twig', ['data' => $result->getArgument('items')]), 'UTF-8');
     }
 
-    public function renderSeoTitle($seo): string
+    public function renderSeoTitle(string|SEO $seo): string
     {
         $title = '';
         if (is_string($seo)) {

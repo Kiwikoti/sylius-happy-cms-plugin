@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Serializer\ExclusionPolicy('ALL')]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__page')]
-class Page implements ResourceInterface, TranslatableInterface, CmsRoutableInterface
+class Page implements ResourceInterface, PageInterface, TranslatableInterface, CmsRoutableInterface
 {
     use EntityIdTrait;
     use TranslatableTrait {

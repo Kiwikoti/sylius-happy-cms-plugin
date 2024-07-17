@@ -11,7 +11,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 #[ORM\MappedSuperclass]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__media')]
-class Media implements ResourceInterface, \Stringable
+class Media implements ResourceInterface, MediaInterface, \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

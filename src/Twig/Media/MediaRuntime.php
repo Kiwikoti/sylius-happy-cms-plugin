@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Twig\Media;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaHelper;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Twig\Extension\RuntimeExtensionInterface;
 
 class MediaRuntime implements RuntimeExtensionInterface
@@ -19,9 +26,9 @@ class MediaRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @return array|string|string[]|null
+     * @return array<string, mixed>|string|null
      */
-    public function resolveMedia(int|string|Media $media)
+    public function resolveMedia(int|string|Media $media): array|string|null
     {
         $media = $this->getMedia($media);
         if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
@@ -32,11 +39,9 @@ class MediaRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param mixed|null $default
-     *
-     * @return array|mixed|null
+     * @return array<string, mixed>|string|null
      */
-    public function mediaMeta(int|string|Media $media, ?string $key = null, $default = null)
+    public function mediaMeta(int|string|Media $media, ?string $key = null, string|null $default = null): array|string|null
     {
         $media = $this->getMedia($media);
         if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
@@ -51,9 +56,9 @@ class MediaRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @return array|null
+     * @return array<string, mixed>|null
      */
-    public function mediaInfos(int|string|Media $media)
+    public function mediaInfos(int|string|Media $media): ?array
     {
         $media = $this->getMedia($media);
         if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
@@ -64,24 +69,25 @@ class MediaRuntime implements RuntimeExtensionInterface
         $time = $media->getLastModified();
         $metas = $media->getMetas();
 
-        return [
-            'id' => $media->getId(),
-            'name' => $media->getName(),
-            'type' => $media->getMime(),
-            'size' => $media->getSize(),
-            'path' => $this->path($media),
-            'download_url' => $this->downloadUrl($media),
-            'storage_path' => $path,
-            'last_modified' => $time,
-            'last_modified_formated' => $time ? $this->manager->getHelper()->getItemTime($time) : null,
-            'metas' => $metas,
-        ];
+        try {
+            return [
+                'id' => $media->getId(),
+                'name' => $media->getName(),
+                'type' => $media->getMime(),
+                'size' => $media->getSize(),
+                'path' => $this->path($media),
+                'download_url' => $this->downloadUrl($media),
+                'storage_path' => $path,
+                'last_modified' => $time,
+                'last_modified_formated' => $time ? $this->manager->getHelper()->getItemTime($time) : null,
+                'metas' => $metas,
+            ];
+        } catch (NotFoundExceptionInterface|ContainerExceptionInterface $e) {
+            return null;
+        }
     }
 
-    /**
-     * @return bool|null
-     */
-    public function fileIsType(int|string|Media $media, string $compare)
+    public function fileIsType(int|string|Media $media, string $compare): ?bool
     {
         $media = $this->getMedia($media);
         if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
@@ -93,10 +99,7 @@ class MediaRuntime implements RuntimeExtensionInterface
         return $this->manager->getHelper()->fileIsType($type, $compare);
     }
 
-    /**
-     * @return string
-     */
-    public function getMimeIcon(string $mime_type)
+    public function getMimeIcon(string $mime_type): string
     {
         return MediaHelper::mime2icon($mime_type);
     }
@@ -136,17 +139,23 @@ class MediaRuntime implements RuntimeExtensionInterface
             return '';
         }
 
-        return $this->twig->render($template, [
-            'media' => $media,
-            'format' => $format,
-            'options' => $options,
-        ]);
+        try {
+            return $this->twig->render($template, [
+                'media' => $media,
+                'format' => $format,
+                'options' => $options,
+            ]);
+        } catch (LoaderError|RuntimeError|SyntaxError $e) {
+            return '';
+        }
     }
 
     /**
-     * @param mixed[]|string $format
+     * @param int|string|Media $media
+     * @param array<string, mixed>|string $format
+     * @return string|null
      */
-    public function path(int|string|Media $media, array|string $format = 'reference'): ?string
+    public function path(int|string|Media $media, array|string $format = 'reference'): string|null
     {
         $media = $this->getMedia($media);
         if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
@@ -168,16 +177,23 @@ class MediaRuntime implements RuntimeExtensionInterface
         return $this->manager->publicUrl($media);
     }
 
-    public function downloadUrl(int|string|Media $media): string
+    /**
+     * @return array<string, mixed>|string|null
+     */
+    public function downloadUrl(int|string|Media $media): array|string|null
     {
         $media = $this->getMedia($media);
-        if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
+        if (!$media instanceof MediaInterface) {
             return '';
         }
 
         return $this->manager->downloadUrl($media);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function getVideoHelperProperties(Media $media, string $format = 'reference', array $options = []): array
     {
         $params = [
@@ -193,6 +209,10 @@ class MediaRuntime implements RuntimeExtensionInterface
         return array_merge($params, $options);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function getOembedHelperProperties(Media $media, string $format = 'reference', array $options = []): array
     {
         $params = [
@@ -206,6 +226,10 @@ class MediaRuntime implements RuntimeExtensionInterface
         return array_merge($params, ['attributes' => $options]);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     private function getImageHelperProperties(Media $media, string $format = 'reference', array $options = []): array
     {
         if (isset($options['srcset'], $options['picture'])) {
@@ -278,10 +302,15 @@ class MediaRuntime implements RuntimeExtensionInterface
                     $params = ['picture' => $pictureParams];
                 } else {
                     foreach ($srcSetFormats as $formatName => $settings) {
+                        /** @var string $formatName */
                         [$width, $height] = $settings['filters']['thumbnail']['size'];
                         $srcSet[] = [
                             'width' => $width ?: null,
-                            'set' => sprintf('%s %dw', $this->path($media, $formatName), $width),
+                            'set' => sprintf(
+                                '%s %dw',
+                                $this->path($media, $formatName),
+                                $width
+                            ),
                         ];
                     }
 
@@ -304,9 +333,10 @@ class MediaRuntime implements RuntimeExtensionInterface
                     $params['sizes'] = sprintf('(max-width: %1$dpx) 100vw, %1$dpx', $box['width'] ?: null);
                 }
             }
-        } elseif ((is_countable($formats) ? count($formats) : 0) > 1) {
+        } elseif (count($formats) > 1) {
             $pictureParams = [];
             foreach ($formats as $formatName => $settings) {
+                /** @var string $formatName */
                 $src = $this->path($media, $formatName);
                 [$width, $height] = $settings['filters']['thumbnail']['size'];
                 $mediaQuery = $width ? sprintf('(max-width: %dpx)', $width) : null;
@@ -338,7 +368,10 @@ class MediaRuntime implements RuntimeExtensionInterface
         return array_merge($params, $options);
     }
 
-    private function getFormat(string $format)
+    /**
+     * @return array<int, mixed>
+     */
+    private function getFormat(string $format): array
     {
         return array_filter($this->filterManager->getFilterConfiguration()->all(), static fn ($config, $key) => 'default' === $key || str_starts_with((string) $key, $format), \ARRAY_FILTER_USE_BOTH);
     }
