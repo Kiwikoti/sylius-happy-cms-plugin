@@ -16,7 +16,7 @@ test.ecs:
 
 HELP += $(call help,test.phpstan,			Run PHPStan)
 test.phpstan: ## Run PHPStan
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/phpstan analyse --level=1 -c phpstan.neon ${PLUGIN_DIR}/src)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose exec php vendor/bin/phpstan analyse --level=7 -c phpstan.neon ${PLUGIN_DIR}/src)
 
 HELP += $(call help,test.ecs.fix,			Fix coding standard)
 test.ecs.fix:
