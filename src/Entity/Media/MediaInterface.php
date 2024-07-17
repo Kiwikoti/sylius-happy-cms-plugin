@@ -6,5 +6,4 @@ namespace Adeliom\SyliusHappyCMSPlugin\Entity\Media;
 
 interface MediaInterface
 {
-
 }

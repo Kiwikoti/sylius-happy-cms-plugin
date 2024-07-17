@@ -71,7 +71,7 @@ class MediaManager
                     }
                     $filePath = parse_url($publicUrl, \PHP_URL_PATH);
                     $path = array_filter(explode('/', $baseUrlPath) + explode('/', $filePath));
-                    $url  =$this->helper->clearDblSlash(sprintf('%s/%s', $baseUrl, implode('/', $path)));
+                    $url = $this->helper->clearDblSlash(sprintf('%s/%s', $baseUrl, implode('/', $path)));
                     if (is_string($url)) {
                         $publicUrl = $url;
                     }

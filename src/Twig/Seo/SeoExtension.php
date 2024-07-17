@@ -37,9 +37,6 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
     public const MAX_DESCRITION_LENGTH = 155;
 
     /**
-     * @param Environment $twig
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param BreadcrumbCollection $breadcrumb
      * @param array<string, mixed> $titleConfig
      * @param array<string, mixed> $breadcrumbConfig
      */
@@ -48,7 +45,8 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
         protected EventDispatcherInterface $eventDispatcher,
         protected BreadcrumbCollection $breadcrumb,
         protected array $titleConfig,
-        protected array $breadcrumbConfig)
+        protected array $breadcrumbConfig,
+    )
     {
     }
 

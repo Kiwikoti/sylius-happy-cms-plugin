@@ -8,13 +8,12 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MediaType extends Type
 {
-
     private EntityManagerInterface $manager;
+
     private ParameterBagInterface $parameterBag;
 
     public function setManager(EntityManagerInterface $manager): void
@@ -44,6 +43,7 @@ class MediaType extends Type
             if ($value && is_string($class) && class_exists($class)) {
                 return $this->manager->getRepository($class)->find($value);
             }
+
             return null;
         } catch (\Exception) {
             return null;

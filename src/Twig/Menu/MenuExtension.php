@@ -36,8 +36,8 @@ class MenuExtension extends AbstractExtension
         return [
             new TwigFunction(
                 'happy_cms_menu',
-                (fn(Environment $env, array $context, $code, array $extra = []): Markup => $this->renderMenu($env, $context, $code, $extra))(...),
-                ['is_safe' => ['js', 'html'], 'needs_context' => true, 'needs_environment' => true]
+                (fn (Environment $env, array $context, $code, array $extra = []): Markup => $this->renderMenu($env, $context, $code, $extra))(...),
+                ['is_safe' => ['js', 'html'], 'needs_context' => true, 'needs_environment' => true],
             ),
         ];
     }
@@ -55,7 +55,6 @@ class MenuExtension extends AbstractExtension
         if (!class_exists($this->menuClass) || !class_exists($this->menuItemClass)) {
             throw new MenuNotFoundException($code);
         }
-
 
         $repo = $this->em->getRepository($this->menuClass);
         if (!method_exists($repo, 'findOneByCode')) {

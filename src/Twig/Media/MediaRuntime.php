@@ -9,7 +9,6 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaHelper;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaManager;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
-use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -151,9 +150,7 @@ class MediaRuntime implements RuntimeExtensionInterface
     }
 
     /**
-     * @param int|string|Media $media
      * @param array<string, mixed>|string $format
-     * @return string|null
      */
     public function path(int|string|Media $media, array|string $format = 'reference'): string|null
     {
@@ -192,6 +189,7 @@ class MediaRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $options
+     *
      * @return array<string, mixed>
      */
     private function getVideoHelperProperties(Media $media, string $format = 'reference', array $options = []): array
@@ -211,6 +209,7 @@ class MediaRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $options
+     *
      * @return array<string, mixed>
      */
     private function getOembedHelperProperties(Media $media, string $format = 'reference', array $options = []): array
@@ -228,6 +227,7 @@ class MediaRuntime implements RuntimeExtensionInterface
 
     /**
      * @param array<string, mixed> $options
+     *
      * @return array<string, mixed>
      */
     private function getImageHelperProperties(Media $media, string $format = 'reference', array $options = []): array
@@ -309,7 +309,7 @@ class MediaRuntime implements RuntimeExtensionInterface
                             'set' => sprintf(
                                 '%s %dw',
                                 $this->path($media, $formatName),
-                                $width
+                                $width,
                             ),
                         ];
                     }

@@ -18,7 +18,6 @@ abstract class AbstractSitemapDumper implements SitemapDumperInterface
     }
 
     /**
-     * @param CmsRoutableInterface $entity
      * @return array<string, ?RouteObjectInterface>
      */
     public static function getSitemapRouteParams(CmsRoutableInterface $entity): array

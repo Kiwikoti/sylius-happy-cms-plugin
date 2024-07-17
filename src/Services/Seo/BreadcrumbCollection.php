@@ -8,9 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class BreadcrumbCollection
 {
-    /**
-     * @var array <int, mixed>
-     */
+    /** @var array <int, mixed> */
     protected array $items = [];
 
     protected UrlGeneratorInterface $generator;
@@ -39,6 +37,7 @@ class BreadcrumbCollection
 
     /**
      * Return all Breadcrumbs.
+     *
      * @return  array<int, mixed> $route
      */
     public function getItems(): array
