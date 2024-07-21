@@ -20,7 +20,7 @@ class MediaDataLoader implements LoaderInterface
     ) {
     }
 
-    public function find($path): BinaryInterface|string
+    public function find(mixed $path): BinaryInterface|string
     {
         try {
             $mimeType = $this->filesystem->mimeType($path);

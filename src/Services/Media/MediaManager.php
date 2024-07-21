@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Media;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Media\MediaBeforeSetMetas;
 use Adeliom\SyliusHappyCMSPlugin\Exceptions\Media\AlreadyExist;
 use Adeliom\SyliusHappyCMSPlugin\Exceptions\Media\ExtNotAllowed;
@@ -49,12 +50,12 @@ class MediaManager
         return $this->helper;
     }
 
-    public function getPath(Media $media): ?string
+    public function getPath(MediaInterface $media): ?string
     {
         return $this->getHelper()->getPath($media);
     }
 
-    public function publicUrl(Media $media): string|null
+    public function publicUrl(MediaInterface $media): string|null
     {
         if ($mediaPath = $this->getPath($media)) {
             try {
@@ -70,10 +71,9 @@ class MediaManager
                         $baseUrl = str_replace($baseUrlPath, '', $this->helper->getBaseUrl());
                     }
                     $filePath = parse_url($publicUrl, \PHP_URL_PATH);
-                    $path = array_filter(explode('/', $baseUrlPath) + explode('/', $filePath));
-                    $url = $this->helper->clearDblSlash(sprintf('%s/%s', $baseUrl, implode('/', $path)));
-                    if (is_string($url)) {
-                        $publicUrl = $url;
+                    if (is_string($baseUrlPath) && is_string($filePath)) {
+                        $path = array_filter(explode('/', $baseUrlPath) + explode('/', $filePath));
+                        $publicUrl = $this->helper->clearDblSlash(sprintf('%s/%s', $baseUrl, implode('/', $path)));
                     }
                 }
 
@@ -86,17 +86,22 @@ class MediaManager
         return null;
     }
 
-    public function downloadUrl(Media $media): array|string|null
+    public function downloadUrl(MediaInterface $media): string|null
     {
         return $this->publicUrl($media);
     }
 
-    public function getFolder($id): ?Folder
+    public function getFolder(int $id): ?FolderInterface
     {
-        return $this->getHelper()->getFolderRepository()->find($id);
+        /**
+         * @var ?FolderInterface $folder
+         */
+        $folder = $this->getHelper()->getFolderRepository()->find($id);
+
+        return $folder;
     }
 
-    public function getMedia(int|string|Media $media): ?Media
+    public function getMedia(int|string|MediaInterface $media): ?MediaInterface
     {
         return $this->getHelper()->getMedia($media);
     }
@@ -107,21 +112,21 @@ class MediaManager
     }
 
     /**
-     * @return Folder|false
-     *
      * @throws FilesystemException
      */
-    public function folderByPath(?string $path): Folder|null|false
+    public function folderByPath(?string $path): FolderInterface|null|false
     {
         if (null === $path || $this->directoryExists($path)) {
             $slugs = array_values(array_filter(explode('/', (string) $path)));
             $parent = null;
             foreach ($slugs as $i => $slug) {
+                /** @var ?FolderInterface $folder */
+                $folder = $this->getHelper()->getFolderRepository()->findOneBy([
+                   'parent' => $parent,
+                   'slug' => $slug,
+               ]);
                 if (
-                    ($folder = $this->getHelper()->getFolderRepository()->findOneBy([
-                    'parent' => $parent,
-                    'slug' => $slug,
-                    ])) !== null
+                    ($folder) !== null
                 ) {
                     $parent = $folder;
                 }
@@ -140,14 +145,14 @@ class MediaManager
     /**
      * @throws FilesystemException|FolderNotExist|FolderAlreadyExist
      */
-    public function createFolder(?string $name, ?string $path = null): ?Folder
+    public function createFolder(?string $name, ?string $path = null): ?FolderInterface
     {
         if ('.' === $path) {
             $path = '';
         }
 
         $class = $this->getHelper()->getFolderClassName();
-        /** @var Folder $entity */
+        /** @var FolderInterface $entity */
         $entity = new $class();
 
         if ($name) {
@@ -190,10 +195,10 @@ class MediaManager
      * @throws NotFoundExceptionInterface
      * @throws ProviderNotFound
      */
-    public function createMedia($source, ?string $path = null, ?string $name = null): Media
+    public function createMedia(string|File $source, ?string $path = null, ?string $name = null): MediaInterface
     {
         $class = $this->getHelper()->getMediaClassName();
-        /** @var Media $entity */
+        /** @var MediaInterface $entity */
         $entity = new $class();
 
         if ($name) {
@@ -207,9 +212,9 @@ class MediaManager
 
         $entity->setFolder($folder ?: null);
 
-        if (str_starts_with((string) $source, 'data:')) {
+        if (is_string($source) && str_starts_with($source, 'data:')) {
             $entity = $this->createFromBase64($entity, $source);
-        } elseif (false !== filter_var($source, \FILTER_VALIDATE_URL)) {
+        } elseif (is_string($source) && false !== filter_var($source, \FILTER_VALIDATE_URL)) {
             if ($imageType = @exif_imagetype($source)) {
                 $entity = $this->createFromImageURL($entity, $source, $imageType);
             } else {
@@ -227,15 +232,15 @@ class MediaManager
     /**
      * @throws FilesystemException
      */
-    public function delete($item, $flush = true): void
+    public function delete(MediaInterface|FolderInterface $item, ?bool $flush = true): void
     {
         $this->em->remove($item);
 
-        if ($item instanceof Folder) {
+        if ($item instanceof FolderInterface) {
             $this->filesystem->deleteDirectory($item->getPath());
         }
 
-        if ($item instanceof Media) {
+        if ($item instanceof MediaInterface) {
             $this->filesystem->delete($item->getPath());
         }
 
@@ -244,7 +249,7 @@ class MediaManager
         }
     }
 
-    public function save($item, $flush = true): void
+    public function save(MediaInterface|FolderInterface $item, ?bool $flush = true): void
     {
         $this->em->persist($item);
         if ($flush) {
@@ -255,14 +260,16 @@ class MediaManager
     /**
      * @throws FilesystemException
      */
-    public function move($oldPath, $newPath): void
+    public function move(string $oldPath, string $newPath): void
     {
-        if ($this->getFilesystem()->fileExists($this->helper->clearDblSlash($oldPath)) || $this->directoryExists($this->helper->clearDblSlash($oldPath))) {
-            $this->getFilesystem()->move($this->helper->clearDblSlash($oldPath), $this->helper->clearDblSlash($newPath));
+        $source = $this->helper->clearDblSlash($oldPath);
+        $destination = $this->helper->clearDblSlash($newPath);
+        if ($this->getFilesystem()->fileExists($source) || $this->directoryExists($source)) {
+            $this->getFilesystem()->move($source, $destination);
         }
     }
 
-    private function createFromOembed(Media $entity, $source): Media
+    private function createFromOembed(MediaInterface $entity, string $source): MediaInterface
     {
         $embed = new Embed();
         $infos = $embed->get($source);
@@ -306,7 +313,7 @@ class MediaManager
      * @throws FilesystemException
      * @throws NoFile
      */
-    private function createFromBase64(Media $entity, $source): Media
+    private function createFromBase64(MediaInterface $entity, string $source): MediaInterface
     {
         if (preg_match('#^data\:([a-zA-Z]+\/[a-zA-Z]+);base64\,([a-zA-Z0-9\+\/]+\=*)$#', (string) $source, $matches)) {
             $infos = [
@@ -337,10 +344,22 @@ class MediaManager
             $tmp = tmpfile();
             if (false !== $tmp) {
                 fwrite($tmp, $this->filesystem->read($entity->getPath()));
+                $meta = stream_get_meta_data($tmp);
+                if (isset($meta['uri'])) {
+                    $path = $meta['uri'];
+                    $this->setImageMetas($entity, $path, $source);
+                }
             }
+        }
 
-            $path = stream_get_meta_data($tmp)['uri'];
-            [$width, $height] = getimagesize($path);
+        return $entity;
+    }
+
+    private function setImageMetas(MediaInterface &$entity, string $path, null | string | File $source): void
+    {
+        $imageSize = getimagesize($path);
+        if (is_array($imageSize)) {
+            [$width, $height] = $imageSize;
             $beforeSetMetasEvent = $this->eventDispatcher->dispatch(new MediaBeforeSetMetas($entity, $source, [
                 'dimensions' => [
                     'width' => $width,
@@ -350,8 +369,6 @@ class MediaManager
             ]), MediaBeforeSetMetas::NAME);
             $entity->setMetas($beforeSetMetasEvent->getMetas());
         }
-
-        return $entity;
     }
 
     /**
@@ -362,14 +379,14 @@ class MediaManager
      * @throws FilesystemException
      * @throws NoFile
      */
-    private function createFromImageURL(Media $entity, $source, $type): Media
+    private function createFromImageURL(MediaInterface $entity, string $source, int $type): MediaInterface
     {
-        $urlPath = parse_url((string) $source, \PHP_URL_PATH);
-        $original = substr((string) $urlPath, strrpos($urlPath, '/') + 1);
+        $urlPath = parse_url($source, \PHP_URL_PATH);
+        $original = substr((string) $urlPath, strrpos((string) $urlPath, '/') + 1);
         $name = $entity->getName() ?: pathinfo($original, \PATHINFO_FILENAME);
 
         $file_type = image_type_to_mime_type($type);
-        $ext_only = MediaHelper::mime2ext($file_type) ?? pathinfo($original, \PATHINFO_EXTENSION);
+        $ext_only = MediaHelper::mime2ext($file_type) ?: pathinfo($original, \PATHINFO_EXTENSION);
 
         $final_name_slug = strtolower((new AsciiSlugger())->slug(strtolower((string) $name))->toString() . sprintf('.%s', $ext_only));
         $entity->setSlug($final_name_slug);
@@ -390,20 +407,26 @@ class MediaManager
         }
 
         try {
-            if (!$this->filesystem->fileExists($entity->getPath())) {
+            $filepath = $entity->getPath();
+            if (is_string($filepath) && !$this->filesystem->fileExists($filepath)) {
                 $stream = file_get_contents($source);
-                $this->filesystem->write($entity->getPath(), $stream);
+                if ($stream) {
+                    $this->filesystem->write($filepath, $stream);
+                }
             }
 
-            [$width, $height] = getimagesize($source);
-            $beforeSetMetasEvent = $this->eventDispatcher->dispatch(new MediaBeforeSetMetas($entity, $source, [
-                'dimensions' => [
-                    'width' => $width,
-                    'height' => $height,
-                    'ratio' => $height / $width * 100,
-                ],
-            ]), MediaBeforeSetMetas::NAME);
-            $entity->setMetas($beforeSetMetasEvent->getMetas());
+            $fileSize = getimagesize($source);
+            if (is_array($fileSize)) {
+                [$width, $height] = $fileSize;
+                $beforeSetMetasEvent = $this->eventDispatcher->dispatch(new MediaBeforeSetMetas($entity, $source, [
+                    'dimensions' => [
+                        'width' => $width,
+                        'height' => $height,
+                        'ratio' => $height / $width * 100,
+                    ],
+                ]), MediaBeforeSetMetas::NAME);
+                $entity->setMetas($beforeSetMetasEvent->getMetas());
+            }
 
             $entity->setSize($this->filesystem->fileSize($entity->getPath()));
             $entity->setLastModified($this->filesystem->lastModified($entity->getPath()));
@@ -423,7 +446,7 @@ class MediaManager
      * @throws NoFile
      * @throws ExtNotAllowed
      */
-    private function createFromFile(Media $entity, $source): Media
+    private function createFromFile(MediaInterface $entity, string|File|UploadedFile $source): Media
     {
         $datas = [];
         if (is_string($source)) {
@@ -484,22 +507,12 @@ class MediaManager
         }
 
         if (@exif_imagetype($source->getPathname())) {
-            [$width, $height] = getimagesize($source->getPathname());
-            $beforeSetMetasEvent = $this->eventDispatcher->dispatch(new MediaBeforeSetMetas($entity, $source, [
-                'dimensions' => [
-                    'width' => $width,
-                    'height' => $height,
-                    'ratio' => $height / $width * 100,
-                ],
-            ]), MediaBeforeSetMetas::NAME);
-            $entity->setMetas($beforeSetMetasEvent->getMetas());
+            $this->setImageMetas($entity, $source->getPathname(), $source);
         }
 
         try {
             if ($this->helper->fileIsType($entity->getMime(), 'video') || $this->helper->fileIsType($entity->getMime(), 'audio')) {
-                /** @phpstan-ignore-next-line */
                 $getID3 = new \getID3();
-                /** @phpstan-ignore-next-line */
                 $id3Datas = $getID3->analyze($source->getPathname());
 
                 if (isset($id3Datas['video']) && $this->helper->fileIsType($entity->getMime(), 'video')) {
@@ -543,11 +556,14 @@ class MediaManager
         }
 
         // check unexistence
-        if (!$this->filesystem->fileExists($this->helper->clearDblSlash($entity->getPath()))) {
+        $filepath = $this->helper->clearDblSlash($entity->getPath());
+        if (!$this->filesystem->fileExists($filepath)) {
             // throw new AlreadyExist($this->translator->trans('error.already_exists', [], 'SyliusHappyCMSPlugin'));
             $stream = fopen($source->getRealPath(), 'rb+');
-            $this->filesystem->writeStream($entity->getPath(), $stream);
-            fclose($stream);
+            if ($stream) {
+                $this->filesystem->writeStream($entity->getPath(), $stream);
+                fclose($stream);
+            }
         }
 
         return $entity;

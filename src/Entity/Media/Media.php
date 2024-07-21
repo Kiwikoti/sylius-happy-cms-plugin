@@ -36,19 +36,19 @@ class Media implements ResourceInterface, MediaInterface, \Stringable
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::JSON)]
     protected $metas = [];
 
-    protected ?Folder $folder = null;
+    protected ?FolderInterface $folder = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): mixed
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(mixed $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
 
@@ -67,12 +67,12 @@ class Media implements ResourceInterface, MediaInterface, \Stringable
         $this->slug = $slug;
     }
 
-    public function getMime(): mixed
+    public function getMime(): ?string
     {
         return $this->mime;
     }
 
-    public function setMime(mixed $mime = null): void
+    public function setMime(?string $mime = null): void
     {
         $this->mime = $mime;
     }
@@ -97,12 +97,15 @@ class Media implements ResourceInterface, MediaInterface, \Stringable
         $this->lastModified = $lastModified;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getMetas(): array
     {
         return $this->metas;
     }
 
-    public function getMeta(string $key, $default = null)
+    public function getMeta(string $key, mixed $default = null): mixed
     {
         return $this->metas[$key] ?? $default;
     }
@@ -112,17 +115,17 @@ class Media implements ResourceInterface, MediaInterface, \Stringable
         $this->metas = $metas;
     }
 
-    public function getFolder(): ?Folder
+    public function getFolder(): ?FolderInterface
     {
         return $this->folder;
     }
 
-    public function setFolder(?Folder $folder): void
+    public function setFolder(?FolderInterface $folder): void
     {
         $this->folder = $folder;
     }
 
-    public function getPath($separator = '/')
+    public function getPath($separator = '/'): string
     {
         $tree = $this->getSlug();
         $current = $this->getFolder();

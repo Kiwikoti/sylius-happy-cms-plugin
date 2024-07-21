@@ -14,6 +14,9 @@ class ContentDocumentVoter implements VoterInterface
 {
     public const PREVIEW = 'preview';
 
+    /**
+     * @param array<string, mixed> $attributes
+     */
     public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
         if (!($subject instanceof CmsRoutableInterface)) {
@@ -23,7 +26,10 @@ class ContentDocumentVoter implements VoterInterface
         foreach ((new \ReflectionClass($subject))->getAttributes() as $attribute) {
             if ($attribute->getName() === ContentPreview::class) {
                 $instance = $attribute->newInstance();
-                $attributeRoles = $instance->getRoles() ?? [];
+                $attributeRoles = [];
+                if (method_exists($instance, 'getRoles')) {
+                    $attributeRoles = $instance->getRoles() ?? [];
+                }
 
                 if ([] === $attributeRoles) {
                     return VoterInterface::ACCESS_ABSTAIN;

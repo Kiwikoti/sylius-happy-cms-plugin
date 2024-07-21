@@ -100,7 +100,7 @@ class Folder
         $this->parent = $parent;
     }
 
-    public function getPath($separator = '/')
+    public function getPath($separator = '/'): string
     {
         $tree = '';
         $current = $this;

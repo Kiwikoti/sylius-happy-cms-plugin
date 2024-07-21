@@ -46,8 +46,7 @@ class SeoExtension extends AbstractExtension implements GlobalsInterface
         protected BreadcrumbCollection $breadcrumb,
         protected array $titleConfig,
         protected array $breadcrumbConfig,
-    )
-    {
+    ) {
     }
 
     public function getFunctions(): array

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Media;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -23,14 +24,14 @@ class MediaBeforeSetMetas extends Event
     private array $metas;
 
     /** @param array<mixed> $metas */
-    public function __construct(Media $entity, null | string | File $source, array $metas)
+    public function __construct(MediaInterface $entity, null | string | File $source, array $metas)
     {
         $this->entity = $entity;
         $this->source = $source;
         $this->metas = $metas;
     }
 
-    public function getEntity(): Media
+    public function getEntity(): MediaInterface
     {
         return $this->entity;
     }

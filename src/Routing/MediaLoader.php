@@ -9,7 +9,7 @@ use Symfony\Component\Routing\RouteCollection;
 
 class MediaLoader extends Loader
 {
-    public function load($resource, ?string $type = null): RouteCollection
+    public function load(mixed $resource, ?string $type = null): RouteCollection
     {
         $routes = new RouteCollection();
 
@@ -23,7 +23,7 @@ class MediaLoader extends Loader
         return $routes;
     }
 
-    public function supports($resource, ?string $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         return $type === 'attribute';
     }

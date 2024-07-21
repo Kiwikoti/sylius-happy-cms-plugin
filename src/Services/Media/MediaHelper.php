@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Media;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Psr\Container\ContainerExceptionInterface;
@@ -21,37 +23,55 @@ class MediaHelper
     ) {
     }
 
-    public function getFolderClassName()
+    public function getFolderClassName(): string
     {
         return $this->parameters->get('sylius_happy_cms.media.folder_entity');
     }
 
-    public function getFolderRepository(): EntityRepository
+    /**
+     * @phpstan-ignore missingType.generics
+     */
+    public function getFolderRepository(): ?EntityRepository
     {
-        return $this->em->getRepository($this->getFolderClassName());
+        $class = $this->getFolderClassName();
+        if (class_exists($class) && in_array(FolderInterface::class, class_implements($class))) {
+            return $this->em->getRepository($class);
+        }
+
+        return null;
     }
 
-    public function getMediaClassName()
+    public function getMediaClassName(): string
     {
         return $this->parameters->get('sylius_happy_cms.media.media_entity');
     }
 
-    public function getMediaRepository(): EntityRepository
+    /**
+     * @phpstan-ignore missingType.generics
+     */
+    public function getMediaRepository(): ?EntityRepository
     {
-        return $this->em->getRepository($this->getMediaClassName());
+        $class = $this->getMediaClassName();
+        if (class_exists($class) && in_array(MediaInterface::class, class_implements($class))) {
+            return $this->em->getRepository($class);
+        }
+
+        return null;
     }
 
-    public function getBaseUrl()
+    public function getBaseUrl(): string
     {
-        return $this->parameters->get('sylius_happy_cms.media.base_url');
+        return $this->parameters->get('sylius_happy_cms.media.base_url') ?? '';
     }
 
-    public function getRandomString()
+    public function getRandomString(): string
     {
-        return call_user_func($this->parameters->get('sylius_happy_cms.media.sanitized_text'));
+        $randomString = call_user_func($this->parameters->get('sylius_happy_cms.media.sanitized_text'));
+
+        return $randomString ?: '';
     }
 
-    public function cleanName($text, $folder = false)
+    public function cleanName(string $text, ?bool $folder = false): string
     {
         $pattern = $this->filePattern($this->parameters->get(sprintf('sylius_happy_cms.media.%s', $folder ? 'allowed_folderNames_chars' : 'allowed_fileNames_chars')));
         $text = preg_replace($pattern, '', $text);
@@ -63,12 +83,12 @@ class MediaHelper
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function getItemTime($time): ?string
+    public function getItemTime(?int $time): ?string
     {
         return $time ? (new \DateTime(sprintf('@%s', $time)))->format($this->parameters->get('sylius_happy_cms.media.last_modified_format')) : null;
     }
 
-    public function getMedia(int|string|Media $media): ?Media
+    public function getMedia(int|string|MediaInterface $media): ?MediaInterface
     {
         $class = $this->getMediaClassName();
         if (!is_string($media) && !is_numeric($media) && !$media instanceof $class) {
@@ -77,24 +97,27 @@ class MediaHelper
 
         try {
             if (is_numeric($media) || is_string($media)) {
+                /**
+                 * @var ?MediaInterface $media
+                 */
                 $media = $this->getMediaRepository()->find($media);
-            }
 
-            if ($media instanceof $class) {
-                return $this->getMediaRepository()->find($media->getId());
+                return $media;
             }
-
-            return null;
+            if ($media instanceof MediaInterface) {
+                return $media;
+            }
         } catch (\Exception $e) {
-            return null;
         }
+
+        return null;
     }
 
     /**
      * resolve url for "file/dir path" instead of laravel builtIn.
      * which needs to make extra call just to resolve the url.
      */
-    public function getPath(int|string|Media $media): ?string
+    public function getPath(int|string|MediaInterface $media): ?string
     {
         try {
             if ($media = $this->getMedia($media)) {
@@ -107,14 +130,14 @@ class MediaHelper
         }
     }
 
-    public function clearDblSlash($str): array|string
+    public function clearDblSlash(string $str): string
     {
         $str = preg_replace('#\/+#', '/', $str);
 
-        return str_replace(':/', '://', (string) $str);
+        return (string) str_replace(':/', '://', (string) $str);
     }
 
-    public static function mime2ext($mime)
+    public static function mime2ext(string $mime): string|false
     {
         $mime_map = [
             'video/3gpp2' => '3g2',
@@ -301,7 +324,7 @@ class MediaHelper
         return $mime_map[$mime] ?? false;
     }
 
-    public static function mime2icon($mime_type)
+    public static function mime2icon(string $mime_type): string
     {
         // List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml
         $icon_classes = [
@@ -367,7 +390,7 @@ class MediaHelper
         return false;
     }
 
-    protected function filePattern($item): string
+    protected function filePattern(string $item): string
     {
         return sprintf('/(script.*?\/script)|[^(%s)a-zA-Z0-9]+/ius', $item);
     }
