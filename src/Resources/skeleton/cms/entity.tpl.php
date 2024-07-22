@@ -2,6 +2,15 @@
 
 use Symfony\Bundle\MakerBundle\Str;
 
+if (
+isset($namespace) &&
+isset($entityClassName) &&
+isset($relationClassName) &&
+isset($scope) &&
+isset($repository) &&
+isset($options)
+) {
+
 $mainClassData = [
     'className' => $entityClassName,
     'lowerNames' => [
@@ -212,3 +221,5 @@ class <?= $mainClassData['className'] ?> implements ResourceInterface, Translata
         return (string) $this->getName();
     }
 }
+
+<?php } ?>

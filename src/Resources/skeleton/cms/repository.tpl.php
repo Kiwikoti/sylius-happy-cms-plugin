@@ -2,6 +2,13 @@
 
 use Symfony\Bundle\MakerBundle\Str;
 
+if (
+isset($namespace) &&
+isset($entityClassName) &&
+isset($relationClassName) &&
+isset($scope)
+) {
+
 $mainClassData = [
     'className' => $entityClassName,
     'lowerNames' => [
@@ -122,3 +129,4 @@ class <?= $mainClassData['className'] ?>Repository extends EntityRepository impl
     }
 }
 
+<?php } ?>

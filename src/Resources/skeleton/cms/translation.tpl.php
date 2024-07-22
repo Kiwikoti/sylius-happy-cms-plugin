@@ -2,6 +2,12 @@
 
 use Symfony\Bundle\MakerBundle\Str;
 
+if (
+isset($namespace) &&
+isset($entityClassName) &&
+isset($scope)
+) {
+
 $mainClassData = [
     'className' => $entityClassName,
     'lowerName' => mb_strtolower(Str::asSnakeCase($entityClassName)),
@@ -113,3 +119,4 @@ if (!empty($extraFields)) {
     }
 }
 
+<?php } ?>

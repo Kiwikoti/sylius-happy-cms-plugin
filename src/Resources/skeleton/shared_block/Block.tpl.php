@@ -1,5 +1,10 @@
 <?php declare(strict_types=1);
 echo "<?php\n"; ?>
+<?php if(
+    isset($namespace) &&
+    isset($class_name) &&
+    isset($template_name)
+) { ?>
 
 namespace <?php echo $namespace; ?>;
 
@@ -46,3 +51,4 @@ class <?php echo $class_name; ?> extends AbstractSharedBlock<?php echo "\n"; ?>
         ];
     }
 }
+<?php } ?>

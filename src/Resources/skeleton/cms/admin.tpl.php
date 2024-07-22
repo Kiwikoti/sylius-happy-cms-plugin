@@ -2,6 +2,13 @@
 
 use Symfony\Bundle\MakerBundle\Str;
 
+if (
+isset($namespace) &&
+isset($entityClassName) &&
+isset($scope) &&
+isset($repository)
+) {
+
 $mainClassData = [
     'className' => $entityClassName,
     'lowerName' => mb_strtolower(Str::asSnakeCase($entityClassName)),
@@ -204,3 +211,5 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
 <?php } ?>
     }
 }
+
+<?php } ?>
