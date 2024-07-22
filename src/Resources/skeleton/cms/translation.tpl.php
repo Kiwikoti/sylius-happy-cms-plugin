@@ -3,17 +3,14 @@
 use Symfony\Bundle\MakerBundle\Str;
 
 if (
-isset($namespace) &&
-isset($entityClassName) &&
-isset($scope)
+    isset($namespace, $entityClassName, $scope)
 ) {
-
-$mainClassData = [
-    'className' => $entityClassName,
-    'lowerName' => mb_strtolower(Str::asSnakeCase($entityClassName)),
-];
-$scope = mb_strtolower($scope);
-?>
+    $mainClassData = [
+        'className' => $entityClassName,
+        'lowerName' => mb_strtolower(Str::asSnakeCase($entityClassName)),
+    ];
+    $scope = mb_strtolower($scope);
+    ?>
 <?= "<?php\n" ?>
 
 declare(strict_types=1);
@@ -79,7 +76,7 @@ if (!empty($extraFields)) {
 <?php
     }
 }
-?>
+    ?>
 
 <?php if (isset($withFlexibleContent) && $withFlexibleContent) { ?>
     public function getContent(): ?array

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
-interface SharedBlockInterface
+interface SharedBlockAdminInterface
 {
     public function getName(): string;
 

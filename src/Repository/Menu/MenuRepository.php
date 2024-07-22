@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
+/**
+ * @phpstan-ignore missingType.generics
+ */
 class MenuRepository extends EntityRepository implements RepositoryInterface
 {
     use ResourceRepositoryTrait;
@@ -18,6 +21,9 @@ class MenuRepository extends EntityRepository implements RepositoryInterface
 
     protected int $cacheTtl;
 
+    /**
+     * @param array<string, mixed> $cacheConfig
+     */
     public function setConfig(array $cacheConfig): void
     {
         $this->cacheEnabled = (bool) $cacheConfig['enabled'];
@@ -36,7 +42,7 @@ class MenuRepository extends EntityRepository implements RepositoryInterface
     }
 
     /**
-     * @return Menu[]
+     * @return MenuItemInterface[]
      */
     public function getPublished(): array
     {

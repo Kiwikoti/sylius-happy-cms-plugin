@@ -112,7 +112,7 @@ class PageTranslation extends AbstractTranslation implements ResourceInterface, 
     #[PreRemove]
     public function onRemove(PreRemoveEventArgs $event): void
     {
-        /** @var \Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page $page */
+        /** @var PageInterface $page */
         $page = $this->getTranslatable();
         $this->setName($this->getName() . '-' . $page->getId() . '-deleted');
         $this->setSlug($this->getSlug() . '-' . $page->getId() . '-deleted');

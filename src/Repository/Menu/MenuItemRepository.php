@@ -8,13 +8,16 @@ use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
+/**
+ * @phpstan-ignore missingType.generics
+ */
 class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
 {
     use ResourceRepositoryTrait;
@@ -24,6 +27,9 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
 
     protected int $cacheTtl;
 
+    /**
+     * @param array<string, mixed> $cacheConfig
+     */
     public function setConfig(array $cacheConfig): void
     {
         $this->cacheEnabled = (bool) $cacheConfig['enabled'];
@@ -51,7 +57,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
     }
 
     /**
-     * @return array|\Doctrine\ORM\QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])
+     * @return array<MenuItemInterface>|QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])
      */
     public function getPublished(bool $returnQueryBuilder = false): array | QueryBuilder
     {
@@ -70,7 +76,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
     }
 
     /**
-     * @return array|\Doctrine\ORM\QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])
+     * @return array<MenuItemInterface>|QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])
      */
     public function getByMenu(Menu $menu, bool $returnQueryBuilder = false): array | QueryBuilder
     {
@@ -99,7 +105,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
         ;
     }
 
-    public function findPreviousMenuItem(MenuItem $menuItem): MenuItem | null
+    public function findPreviousMenuItem(MenuItemInterface $menuItem): MenuItemInterface | null
     {
         return $this->createQueryBuilder('mi')
             ->andWhere('mi.id != :id')
@@ -116,7 +122,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
         ;
     }
 
-    public function findNextMenuItem(MenuItem $menuItem): MenuItem | null
+    public function findNextMenuItem(MenuItemInterface $menuItem): MenuItemInterface | null
     {
         return $this->createQueryBuilder('mi')
             ->andWhere('mi.id != :id')

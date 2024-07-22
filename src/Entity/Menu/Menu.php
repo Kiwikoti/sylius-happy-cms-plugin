@@ -18,7 +18,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('code')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuRepository::class)]
-class Menu implements ResourceInterface, \Stringable
+class Menu implements MenuInterface, ResourceInterface, \Stringable
 {
     use EntityIdTrait;
     use EntityTimestampableTrait {

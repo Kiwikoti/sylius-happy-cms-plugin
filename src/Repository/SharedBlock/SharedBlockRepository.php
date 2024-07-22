@@ -6,13 +6,16 @@ namespace Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock;
 
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
-use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-class SharedBlockRepository extends EntityRepository implements RepositoryInterface, TranslationRepositoryInterface
+/**
+ * @phpstan-ignore missingType.generics
+ */
+class SharedBlockRepository extends EntityRepository implements SharedBlockRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
 {
     use ResourceRepositoryTrait;
     use TranslationRepositoryTrait;
@@ -29,9 +32,9 @@ class SharedBlockRepository extends EntityRepository implements RepositoryInterf
     }
 
     /**
-     * @return SharedBlock[]
+     * @return SharedBlockInterface[]
      */
-    public function getActive()
+    public function getActive(): array
     {
         $qb = $this->getPublishedQuery();
 
@@ -40,9 +43,9 @@ class SharedBlockRepository extends EntityRepository implements RepositoryInterf
     }
 
     /**
-     * @return SharedBlock[]
+     * @return SharedBlockInterface[]
      */
-    public function getByType(string $type)
+    public function getByType(string $type): array
     {
         $qb = $this->getPublishedQuery();
         $qb->andWhere('block.type = :type')

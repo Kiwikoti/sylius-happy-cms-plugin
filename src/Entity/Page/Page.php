@@ -91,9 +91,8 @@ class Page implements ResourceInterface, PageInterface, TranslatableInterface, C
         return new PageTranslation();
     }
 
-    public function getTranslation(?string $locale = null): PageTranslation
+    public function getTranslation(?string $locale = null): PageTranslationInterface
     {
-        /** @var PageTranslation $translation */
         $translation = $this->doGetTranslation($locale);
 
         return $translation;

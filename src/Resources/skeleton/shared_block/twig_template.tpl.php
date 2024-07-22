@@ -1,8 +1,6 @@
-<?php if(
-        isset($root_directory) &&
-        isset($helper) &&
-        isset($block_path) &&
-        isset($relative_path)
+<?php declare(strict_types=1);
+if (
+    isset($root_directory, $helper, $block_path, $relative_path)
 ) { ?>
 <ul>
     <li>Your shared block at <code><?php echo $helper->getFileLink(sprintf('%s/%s', $root_directory, $block_path), sprintf('%s', $block_path)); ?></code></li>

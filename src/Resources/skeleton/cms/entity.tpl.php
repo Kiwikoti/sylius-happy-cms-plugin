@@ -3,30 +3,24 @@
 use Symfony\Bundle\MakerBundle\Str;
 
 if (
-isset($namespace) &&
-isset($entityClassName) &&
-isset($relationClassName) &&
-isset($scope) &&
-isset($repository) &&
-isset($options)
+    isset($namespace, $entityClassName, $relationClassName, $scope, $repository, $options)
 ) {
-
-$mainClassData = [
-    'className' => $entityClassName,
-    'lowerNames' => [
-        'singular' => mb_strtolower(Str::asSnakeCase($entityClassName)),
-        'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($entityClassName))),
-    ],
-];
-$relationClassData = [
-    'className' => $relationClassName,
-    'lowerNames' => [
-        'singular' => mb_strtolower(Str::asSnakeCase($relationClassName)),
-        'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
-    ],
-];
-$scope = mb_strtolower($scope);
-?>
+    $mainClassData = [
+        'className' => $entityClassName,
+        'lowerNames' => [
+            'singular' => mb_strtolower(Str::asSnakeCase($entityClassName)),
+            'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($entityClassName))),
+        ],
+    ];
+    $relationClassData = [
+        'className' => $relationClassName,
+        'lowerNames' => [
+            'singular' => mb_strtolower(Str::asSnakeCase($relationClassName)),
+            'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
+        ],
+    ];
+    $scope = mb_strtolower($scope);
+    ?>
 <?= "<?php\n" ?>
 
 declare(strict_types=1);

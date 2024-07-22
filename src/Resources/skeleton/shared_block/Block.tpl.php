@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 echo "<?php\n"; ?>
-<?php if(
-    isset($namespace) &&
-    isset($class_name) &&
-    isset($template_name)
+<?php if (
+    isset($namespace, $class_name, $template_name)
 ) { ?>
 
 namespace <?php echo $namespace; ?>;

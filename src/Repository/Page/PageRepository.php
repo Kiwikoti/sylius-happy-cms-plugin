@@ -7,25 +7,30 @@ namespace Adeliom\SyliusHappyCMSPlugin\Repository\Page;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
-class PageRepository extends EntityRepository implements RepositoryInterface, TranslationRepositoryInterface
+/**
+ * @phpstan-ignore missingType.generics
+ */
+class PageRepository extends EntityRepository implements PageRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
 {
     use TranslationRepositoryTrait;
 
-    /** @var bool */
-    protected $cacheEnabled = false;
+    protected bool $cacheEnabled = false;
 
-    /** @var int */
-    protected $cacheTtl;
+    protected int $cacheTtl;
 
-    public function setConfig(array $cacheConfig)
+    /**
+     * @param array<string, mixed> $cacheConfig
+     */
+    public function setConfig(array $cacheConfig): void
     {
-        $this->cacheEnabled = $cacheConfig['enabled'];
-        $this->cacheTtl = $cacheConfig['ttl'];
+        $this->cacheEnabled = $cacheConfig['enabled'] ?? false;
+        $this->cacheTtl = $cacheConfig['ttl'] ?? 0;
     }
 
     public function getPublishedQuery(): QueryBuilder
@@ -49,61 +54,65 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
     }
 
     /**
-     * @return Page[]
+     * @return PageInterface[]
      */
-    public function getPublished()
+    public function getPublished(): array
     {
         $qb = $this->getPublishedQuery();
 
-        return $qb->getQuery()
-            ->enableResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        return $this->getResult($qb->getQuery());
     }
 
     /**
-     * @return Page[]
+     * @return PageInterface[]
      */
-    public function getAllCustom()
+    private function getResult(Query $query): array
+    {
+        if ($this->cacheEnabled) {
+            return $query->enableResultCache($this->cacheTtl)->getResult();
+        }
+
+        return $query->getResult();
+    }
+
+    /**
+     * @return PageInterface[]
+     */
+    public function getAllCustom(): array
     {
         $qb = $this->getPublishedQuery();
         $qb->andWhere("page.action != ''")
             ->andWhere('page.action IS NOT NULL');
 
-        return $qb->getQuery()
-            ->enableResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        return $this->getResult($qb->getQuery());
     }
 
     /**
-     * @return Page[]
+     * @return PageInterface[]
      */
-    public function getByAction(string $action)
+    public function getByAction(string $action): array
     {
         $qb = $this->getPublishedQuery();
         $qb->andWhere('page.action = :action')
             ->setParameter('action', $action);
 
-        return $qb->getQuery()
-            ->enableResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        return $this->getResult($qb->getQuery());
     }
 
     /**
-     * @return Page[]
+     * @return PageInterface[]
      */
-    public function getByTemplate(string $template)
+    public function getByTemplate(string $template): array
     {
         $qb = $this->getPublishedQuery();
         $qb->andWhere('page.template = :template')
             ->setParameter('template', $template);
 
-        return $qb->getQuery()
-            ->enableResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        return $this->getResult($qb->getQuery());
     }
 
     /**
-     * @return Page[]
+     * @return PageInterface[]
      */
     public function getBySlug(string $slug, string $locale): array
     {
@@ -117,9 +126,7 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
         $qb->andWhere('translation.slug = :slug');
         $qb->setParameter('slug', $slug);
 
-        return $qb->getQuery()
-            ->enableResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+        return $this->getResult($qb->getQuery());
     }
 
     /**
@@ -127,7 +134,9 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
      * If slugs are defined, there's no problem in looking for nulled host or locale,
      * because slugs are unique, so it does not.
      *
-     * @return Page[]
+     * @param string[] $slugs
+     *
+     * @return PageInterface[]
      */
     public function findFrontPages(string $locale, array $slugs = [], ?string $host = null): array
     {
@@ -145,47 +154,27 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
             $allItemsPublished = true;
 
             $itemSlug = method_exists($item, 'getPageSlug') ?
-                $item->getPageSlug() :
-                $item->getTranslation($locale)->getSlug();
+                $item->getPageSlug() : (method_exists($item, 'getTranslation') ? $item->getTranslation($locale)->getSlug() : '');
             $tempConstructedTree[$itemSlug] = $item;
 
             while ($item->getParent()) {
                 $item = $item->getParent();
-
-                if (!$item instanceof Page) {
-                    if (method_exists($item, 'getState')) {
-                        // If getState exists, checks if item is published to return (or not) a 404
-                        if ($item->getState() !== ThreeStateStatusEnum::PUBLISHED()->getValue()) {
-                            $allItemsPublished = false;
-                        }
-                    }
-
-                    if (!$hasNonPageElement) {
-                        // Set to true to know whether the tree contains non-page items
-                        $hasNonPageElement = true;
-                    }
+                $itemSlug = $item->getSlug();
+                if ($item->getPublishState() === ThreeStateStatusEnum::UNPUBLISHED) {
+                    $allItemsPublished = false;
                 }
-
-                $itemSlug = method_exists($item, 'getPageSlug') ?
-                    $item->getPageSlug() :
-                    $item->getTranslation($locale)->getSlug();
                 $tempConstructedTree = array_merge([$itemSlug => $item], $tempConstructedTree);
             }
 
             $constructedKeys = array_keys($tempConstructedTree);
 
-            if ($hasNonPageElement) {
-                if ($constructedKeys !== $slugs) {
-                    return [];
-                }
+            if ($constructedKeys !== $slugs) {
+                return [];
             }
+            $useConstructedTree = true;
+            $constructedTree = $tempConstructedTree;
 
-            if ($constructedKeys === $slugs) {
-                $useConstructedTree = true;
-                $constructedTree = $tempConstructedTree;
-
-                break;
-            }
+            break;
         }
 
         if ($useConstructedTree) {
@@ -223,11 +212,8 @@ class PageRepository extends EntityRepository implements RepositoryInterface, Tr
                 ;
             }
 
-            /** @var Page[] $results */
-            $results = $qb->getQuery()
-                ->enableResultCache($this->cacheEnabled, $this->cacheTtl)
-                ->getResult()
-            ;
+            /** @var PageInterface[] $results */
+            $results = $this->getResult($qb->getQuery());
 
             if ([] === $results) {
                 return $results;

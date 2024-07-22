@@ -22,7 +22,7 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuItemRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
-class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
+class MenuItem implements MenuItemInterface, ResourceInterface, TranslatableInterface, \Stringable
 {
     use EntityIdTrait;
     use EntityTimestampableTrait {
@@ -55,15 +55,12 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
     /** @var Menu|null */
     protected $menu;
 
-    /** @var string */
     #[ORM\Column(name: 'class_attribute', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     protected ?string $classAttribute = null;
 
-    /** @var int */
     #[ORM\Column(name: 'position', type: \Doctrine\DBAL\Types\Types::SMALLINT, options: ['unsigned' => true], nullable: true)]
     protected ?int $position = null;
 
-    /** @var bool */
     #[ORM\Column(name: 'target', type: \Doctrine\DBAL\Types\Types::BOOLEAN, nullable: true, options: ['default' => false])]
     protected ?bool $target = null;
 
@@ -101,10 +98,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
         return MenuItemTranslation::class;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLft()
+    public function getLft(): ?int
     {
         return $this->lft;
     }
@@ -114,10 +108,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
         $this->lft = $lft;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getLvl()
+    public function getLvl(): ?int
     {
         return $this->lvl;
     }
@@ -130,7 +121,7 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
     /**
      * @return mixed
      */
-    public function getRgt()
+    public function getRgt(): ?int
     {
         return $this->rgt;
     }
@@ -140,15 +131,12 @@ class MenuItem implements ResourceInterface, TranslatableInterface, \Stringable
         $this->rgt = $rgt;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRoot()
+    public function getRoot(): ?int
     {
         return $this->root;
     }
 
-    public function setRoot(mixed $root): void
+    public function setRoot(?int $root): void
     {
         $this->root = $root;
     }

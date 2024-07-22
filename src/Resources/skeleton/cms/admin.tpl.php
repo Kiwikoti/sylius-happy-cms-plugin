@@ -3,28 +3,24 @@
 use Symfony\Bundle\MakerBundle\Str;
 
 if (
-isset($namespace) &&
-isset($entityClassName) &&
-isset($scope) &&
-isset($repository)
+    isset($namespace, $entityClassName, $scope, $repository)
 ) {
-
-$mainClassData = [
-    'className' => $entityClassName,
-    'lowerName' => mb_strtolower(Str::asSnakeCase($entityClassName)),
-];
-if (isset($relationClassName)) {
-    $relationClassData = [
-        'className' => $relationClassName,
-        'lowerNames' => [
-            'singular' => mb_strtolower(Str::asSnakeCase($relationClassName)),
-            'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
-        ],
+    $mainClassData = [
+        'className' => $entityClassName,
+        'lowerName' => mb_strtolower(Str::asSnakeCase($entityClassName)),
     ];
-}
-$scope = mb_strtolower($scope);
+    if (isset($relationClassName)) {
+        $relationClassData = [
+            'className' => $relationClassName,
+            'lowerNames' => [
+                'singular' => mb_strtolower(Str::asSnakeCase($relationClassName)),
+                'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($relationClassName))),
+            ],
+        ];
+    }
+    $scope = mb_strtolower($scope);
 
-?>
+    ?>
 <?= "<?php\n" ?>
 
 declare(strict_types=1);
@@ -147,9 +143,9 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
                         ])
                 )
         <?php
-        if (!empty($extraFields)) {
-            foreach ($extraFields as $fieldData) {
-                ?>
+            if (!empty($extraFields)) {
+                foreach ($extraFields as $fieldData) {
+                    ?>
                 ->addField(
                     SlugField::new('<?= $fieldData['name'] ?>', '<?= $fieldData['name'] ?>')
                         ->setRequired(true)
@@ -158,9 +154,9 @@ final class <?= $mainClassData['className'] ?>Admin extends AbstractAdmin implem
                         ])
                 )
                 <?php
+                }
             }
-        }
-?>
+    ?>
                 ->hideOnIndex();
 
             yield ColumnField::new('sylius_happy_cms.<?= $scope ?>.admin.panel.publication')

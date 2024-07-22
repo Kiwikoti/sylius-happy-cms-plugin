@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Menu;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -15,14 +16,14 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 #[ORM\Table(name: 'sylius_happy_cms__menu_item_translation')]
 #[HasLifecycleCallbacks]
 #[MappedSuperclass]
-class MenuItemTranslation extends AbstractTranslation implements ResourceInterface, \Stringable
+class MenuItemTranslation extends AbstractTranslation implements MenuItemTranslationInterface, ResourceInterface, \Stringable
 {
     use EntityIdTrait;
 
-    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255)]
     protected ?string $name = null;
 
-    #[ORM\Column(name: 'url', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(name: 'url', type: Types::STRING, length: 255, nullable: true)]
     protected ?string $url = null;
 
     public function getName(): ?string
