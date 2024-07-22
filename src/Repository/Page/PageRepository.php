@@ -14,7 +14,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
- * @phpstan-ignore missingType.generics
+ * @implements RepositoryInterface<PageInterface>
  */
 class PageRepository extends EntityRepository implements PageRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
 {

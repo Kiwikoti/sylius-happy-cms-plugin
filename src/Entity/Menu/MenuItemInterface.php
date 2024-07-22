@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Menu;
 
-interface MenuItemInterface
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\TranslatableInterface;
+
+interface MenuItemInterface extends ResourceInterface, TranslatableInterface, \Stringable
 {
     public function getId(): ?int;
 

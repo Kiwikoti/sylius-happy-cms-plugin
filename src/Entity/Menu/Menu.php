@@ -10,7 +10,6 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity]
@@ -18,7 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[UniqueEntity('code')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuRepository::class)]
-class Menu implements MenuInterface, ResourceInterface, \Stringable
+class Menu implements MenuInterface
 {
     use EntityIdTrait;
     use EntityTimestampableTrait {

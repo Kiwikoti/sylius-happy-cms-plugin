@@ -10,13 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Sylius\Component\Resource\Model\AbstractTranslation;
-use Sylius\Component\Resource\Model\ResourceInterface;
 
 #[HasLifecycleCallbacks]
 #[MappedSuperclass]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__config_translation')]
-class ConfigTranslation extends AbstractTranslation implements ResourceInterface, \Stringable
+class ConfigTranslation extends AbstractTranslation implements ConfigTranslationInterface, \Stringable
 {
     use EntityIdTrait;
 

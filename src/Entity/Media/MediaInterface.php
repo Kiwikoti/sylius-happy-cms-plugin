@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Media;
 
-interface MediaInterface
+use Sylius\Component\Resource\Model\ResourceInterface;
+
+interface MediaInterface extends ResourceInterface
 {
     public function getPath(): string;
 

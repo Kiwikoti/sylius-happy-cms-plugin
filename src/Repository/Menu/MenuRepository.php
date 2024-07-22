@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
- * @phpstan-ignore missingType.generics
+ * @implements RepositoryInterface<MenuInterface>
  */
 class MenuRepository extends EntityRepository implements RepositoryInterface
 {
@@ -42,7 +42,7 @@ class MenuRepository extends EntityRepository implements RepositoryInterface
     }
 
     /**
-     * @return MenuItemInterface[]
+     * @return MenuInterface[]
      */
     public function getPublished(): array
     {

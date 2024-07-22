@@ -6,7 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin\Entity\Page;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameSlugTrait;
-use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SeoInterface;
 use Adeliom\SyliusHappyCMSPlugin\Traits\Seo\EntitySeoTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PrePersistEventArgs;
@@ -20,7 +19,6 @@ use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreRemove;
 use Doctrine\ORM\Mapping\PreUpdate;
 use Sylius\Component\Resource\Model\AbstractTranslation;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[MappedSuperclass]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__page_translation')]
-class PageTranslation extends AbstractTranslation implements ResourceInterface, \Stringable, SeoInterface
+class PageTranslation extends AbstractTranslation implements PageTranslationInterface
 {
     use EntityIdTrait;
     use EntityNameSlugTrait;

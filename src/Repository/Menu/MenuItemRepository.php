@@ -9,16 +9,20 @@ use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
- * @phpstan-ignore missingType.generics
+ * @extends NestedTreeRepository<MenuItemInterface>
+ *
+ * @implements RepositoryInterface<MenuItemInterface>
  */
-class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
+class MenuItemRepository extends NestedTreeRepository implements
+    MenuItemRepositoryInterface,
+    RepositoryInterface,
+    TranslationRepositoryInterface
 {
     use ResourceRepositoryTrait;
     use TranslationRepositoryTrait;
@@ -40,8 +44,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
     {
         $qb = $this->createQueryBuilder('menuitem')
             ->where('menuitem.state = :state')
-            ->andWhere('menuitem.publishDate < :publishDate')
-        ;
+            ->andWhere('menuitem.publishDate < :publishDate');
 
         $orModule = $qb->expr()->orx();
         $orModule->add($qb->expr()->gt('menuitem.unpublishDate', ':unpublishDate'));
@@ -59,7 +62,7 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
     /**
      * @return array<MenuItemInterface>|QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])
      */
-    public function getPublished(bool $returnQueryBuilder = false): array | QueryBuilder
+    public function getPublished(bool $returnQueryBuilder = false): array|QueryBuilder
     {
         $qb = $this->getPublishedQuery();
         if ($returnQueryBuilder) {
@@ -78,12 +81,11 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
     /**
      * @return array<MenuItemInterface>|QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])
      */
-    public function getByMenu(Menu $menu, bool $returnQueryBuilder = false): array | QueryBuilder
+    public function getByMenu(Menu $menu, bool $returnQueryBuilder = false): array|QueryBuilder
     {
         $qb = $this->getPublishedQuery();
         $qb->andWhere('menuitem.menu = :menu')
-            ->setParameter('menu', $menu)
-        ;
+            ->setParameter('menu', $menu);
         if ($returnQueryBuilder) {
             return $qb;
         }
@@ -101,11 +103,10 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
     {
         return $this->createListQueryBuilder($locale)
             ->andWhere('entity.menu = :menu')
-            ->setParameter('menu', $menuId)
-        ;
+            ->setParameter('menu', $menuId);
     }
 
-    public function findPreviousMenuItem(MenuItemInterface $menuItem): MenuItemInterface | null
+    public function findPreviousMenuItem(MenuItemInterface $menuItem): MenuItemInterface|null
     {
         return $this->createQueryBuilder('mi')
             ->andWhere('mi.id != :id')
@@ -118,11 +119,10 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
             ->orderBy('mi.id', 'DESC')
             ->getQuery()
             ->setMaxResults(1)
-            ->getSingleResult()
-        ;
+            ->getSingleResult();
     }
 
-    public function findNextMenuItem(MenuItemInterface $menuItem): MenuItemInterface | null
+    public function findNextMenuItem(MenuItemInterface $menuItem): MenuItemInterface|null
     {
         return $this->createQueryBuilder('mi')
             ->andWhere('mi.id != :id')
@@ -135,7 +135,6 @@ class MenuItemRepository extends NestedTreeRepository implements ServiceEntityRe
             ->orderBy('mi.id', 'ASC')
             ->getQuery()
             ->setMaxResults(1)
-            ->getSingleResult()
-        ;
+            ->getSingleResult();
     }
 }

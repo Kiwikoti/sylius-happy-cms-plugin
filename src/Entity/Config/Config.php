@@ -6,7 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
@@ -17,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\MappedSuperclass(repositoryClass: \Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository::class)]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__config')]
-class Config implements ResourceInterface, TranslatableInterface
+class Config implements ConfigInterface, TranslatableInterface
 {
     use EntityIdTrait;
     use TranslatableTrait {

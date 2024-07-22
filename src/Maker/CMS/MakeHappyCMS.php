@@ -73,10 +73,14 @@ final class MakeHappyCMS extends AbstractMaker
 
         foreach (['entryClassName', 'categoryClassName'] as $argName) {
             $arg = $command->getDefinition()->getArgument($argName);
-            $input->setArgument(
-                $arg->getName(),
-                $io->ask(sprintf($arg->getDescription(), $scope), $arg->getDefault()),
-            );
+            $question = sprintf($arg->getDescription(), $scope);
+            $default = $arg->getDefault();
+            if (is_string($default) || null === $default) {
+                $input->setArgument(
+                    $arg->getName(),
+                    $io->ask($question, $default),
+                );
+            }
         }
     }
 

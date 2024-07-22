@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Media;
 
-interface MediaRepositoryInterface
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
+
+/**
+ * @extends RepositoryInterface<MediaInterface>
+ */
+interface MediaRepositoryInterface extends RepositoryInterface
 {
 }

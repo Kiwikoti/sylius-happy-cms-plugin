@@ -9,7 +9,6 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityPublishableTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityRouteTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -17,8 +16,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
@@ -30,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Serializer\ExclusionPolicy('ALL')]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__page')]
-class Page implements ResourceInterface, PageInterface, TranslatableInterface, CmsRoutableInterface
+class Page implements PageInterface
 {
     use EntityIdTrait;
     use TranslatableTrait {

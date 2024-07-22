@@ -12,7 +12,7 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 #[ORM\MappedSuperclass]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__folder')]
-class Folder
+class Folder implements FolderInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

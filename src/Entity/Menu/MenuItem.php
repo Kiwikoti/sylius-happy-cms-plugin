@@ -12,8 +12,6 @@ use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Sylius\Component\Resource\Model\ResourceInterface;
-use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
@@ -22,7 +20,7 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuItemRepository::class)]
 #[Gedmo\Tree(type: 'nested')]
-class MenuItem implements MenuItemInterface, ResourceInterface, TranslatableInterface, \Stringable
+class MenuItem implements MenuItemInterface
 {
     use EntityIdTrait;
     use EntityTimestampableTrait {
