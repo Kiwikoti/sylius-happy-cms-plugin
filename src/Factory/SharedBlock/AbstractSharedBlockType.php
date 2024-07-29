@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractSharedBlock extends AbstractType implements SharedBlockInterface
+abstract class AbstractSharedBlockType extends AbstractType implements SharedBlockTypeInterface
 {
     public function __construct(protected EntityManagerInterface $manager)
     {
@@ -37,7 +37,9 @@ abstract class AbstractSharedBlock extends AbstractType implements SharedBlockIn
     /**
      * @param array<string, mixed> $options
      */
-    abstract public function buildBlock(FormBuilderInterface $builder, array $options): void;
+    public function buildBlock(FormBuilderInterface $builder, array $options): void
+    {
+    }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -20,6 +20,8 @@ class Helper
     /**
      * This property is a state variable holdings all assets used by the block for the current PHP request
      * It is used to correctly render the javascripts and stylesheets tags on the main layout.
+     *
+     * @var array<string, string[]>
      */
     private array $assets = [
         'js' => [],
@@ -27,40 +29,20 @@ class Helper
         'webpack' => [],
     ];
 
+    /** @var array<int, array<string, mixed>> */
     private array $traces = [];
 
     public function __construct(
-        /**
-         * @readonly
-         */
-        private Environment $twig,
-        /**
-         * @readonly
-         */
-        private EventDispatcherInterface $eventDispatcher,
-        /**
-         * @readonly
-         */
-        private SharedBlockCollection $collection,
-        /**
-         * @readonly
-         */
-        private EntityManagerInterface $em,
-        /**
-         * @readonly
-         */
-        private string $class,
-        /**
-         * @readonly
-         */
-        private FormFactory $formFactory,
+        private readonly Environment $twig,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly SharedBlockCollection $collection,
+        private readonly EntityManagerInterface $em,
+        private readonly string $class,
+        private readonly FormFactory $formFactory,
     ) {
     }
 
-    /**
-     * @return mixed[]|string
-     */
-    public function includeAssets(): array|string
+    public function includeAssets(): string
     {
         $html = '';
 
@@ -92,13 +74,18 @@ class Helper
 
     /**
      * Returns the rendering traces.
+     *
+     * @return array<int, array<string, mixed>>
      */
     public function getTraces(): array
     {
         return $this->traces;
     }
 
-    private function startTracing(SharedBlock $block): array
+    /**
+     * @return array<string, mixed>
+     */
+    private function startTracing(SharedBlockInterface $block): array
     {
         return [
             'id' => uniqid(),
@@ -116,37 +103,48 @@ class Helper
         ];
     }
 
-    private function stopTracing($id, array $stats): void
+    /**
+     * @param array<string, array<string, mixed>> $stats
+     */
+    private function stopTracing(int $id, array $stats): void
     {
         $this->traces[$id] = $stats;
     }
 
     /**
-     * @param mixed $datas
-     * @param array $extra
-     *
-     * @return Markup|null
+     * @param array<string, mixed> $context
+     * @param array<string, mixed> $extra
      *
      * @throws LoaderError
      * @throws SyntaxError
      * @throws RuntimeError
      */
-    public function renderBlock(Environment $env, array $context, $datas, $extra = [])
+    public function renderBlock(Environment $env, array $context, mixed $data, ?array $extra = []): ?Markup
     {
         $block = null;
-        if (is_array($datas)) {
-            $block = $this->em->getRepository($datas['class'])->find($datas['id']);
-        }
-
-        if (is_string($datas)) {
-            if (is_numeric($datas)) {
-                $block = $this->em->getRepository($this->class)->findOneBy(['id' => $datas]);
-            } else {
-                $block = $this->em->getRepository($this->class)->findOneBy(['key' => $datas]);
+        if (is_array($data)) {
+            if (class_exists($data['class'])) {
+                $block = $this->em->getRepository($data['class'])->find($data['id']);
             }
         }
 
-        if (!$block || !$block->getStatus()) {
+        if (class_exists($this->class)) {
+            if (is_numeric($data)) {
+                $block = $this->em->getRepository($this->class)->findOneBy(['id' => $data]);
+            } elseif (is_string($data)) {
+                $block = $this->em->getRepository($this->class)->findOneBy(['key' => $data]);
+            }
+        }
+
+        if (null === $block) {
+            return null;
+        }
+
+        if (!$block instanceof SharedBlockInterface) {
+            return null;
+        }
+
+        if (!$block->getStatus()) {
             return null;
         }
 
@@ -172,7 +170,7 @@ class Helper
 
         // Tranform settings way 2 : with dispatch / event listeners
         $event = new GenericEvent(null, [
-            'datas' => $datas,
+            'data' => $data,
             'block' => $block,
             'blockType' => $blockType,
             'settings' => $blockSettings,
@@ -180,26 +178,26 @@ class Helper
         ]);
 
         /**
-         * @var GenericEvent $result;
+         * @var GenericEvent $result ;
          */
         $result = $this->eventDispatcher->dispatch($event, 'happy_cms_block.render_block');
 
         $block = $result->getArgument('block');
         $blockType = $result->getArgument('blockType');
-        $blockDatas = $result->getArgument('settings');
+        $blockData = $result->getArgument('settings');
 
         // Stats
-        if (isset($blockDatas['block_type'])) {
-            unset($blockDatas['block_type']);
+        if (isset($blockData['block_type'])) {
+            unset($blockData['block_type']);
         }
 
-        if (isset($blockDatas['position'])) {
-            $stats['position'] = $blockDatas['position'];
-            unset($blockDatas['position']);
+        if (isset($blockData['position'])) {
+            $stats['position'] = $blockData['position'];
+            unset($blockData['position']);
         }
 
         $stats['defaultSettings'] = $defaultSetting;
-        $stats['settings'] = $blockDatas;
+        $stats['settings'] = $blockData;
         $stats['extra'] = $extra;
         $stats['type'] = $blockType::class;
         $stats['assets'] = $result->getArgument('assets') ?: [];
@@ -212,11 +210,24 @@ class Helper
         return new Markup($this->twig->render($blockType->getTemplate(), array_merge($context, [
             'block' => $block,
             'blockType' => $blockType,
-            'settings' => $blockDatas,
+            'settings' => $blockData,
         ], $extra)), 'UTF-8');
     }
 
-    public function transformSettingsWithBlockTypeFormBuild($blockType, $block, $defaultSetting)
+    /**
+     * @param array<string, mixed> $defaultSetting
+     *
+     * @return array<string, mixed>
+     *
+     * @throws LoaderError
+     * @throws SyntaxError
+     * @throws RuntimeError
+     */
+    public function transformSettingsWithBlockTypeFormBuild(
+        SharedBlockTypeInterface $blockType,
+        SharedBlockInterface $block,
+        array $defaultSetting,
+    ): array
     {
         $formBuilder = $this->formFactory->createBuilder($block->getType(), null, ['csrf_protection' => false]);
 
@@ -227,8 +238,8 @@ class Helper
         $form = $formBuilder->getForm();
         $form->setData(array_merge($defaultSetting, $block->getSettings()));
 
-        // Put norm datas into block settings
-        // norm data are transfomed data
+        // Put norm data into block settings
+        // norm data are transformed data
         $blockSettings = $form->getNormData();
         if (!empty($form->getNormData())) {
             foreach ($form->getNormData() as $field => $value) {

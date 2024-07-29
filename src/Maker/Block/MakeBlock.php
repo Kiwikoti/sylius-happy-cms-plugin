@@ -26,15 +26,16 @@ final class MakeBlock extends AbstractMaker
         return 'Creates a new block type';
     }
 
-    public function configureCommand(Command $command, InputConfiguration $inputConf)
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
+        $helpContent = file_get_contents(__DIR__ . '/../Resources/help/MakeBlock.txt');
         $command
             ->addArgument('block-type', InputArgument::OPTIONAL, sprintf('Choose a name for your block type (e.g. <fg=yellow>%sType</>)', Str::asClassName(Str::getRandomTerm())))
-            ->setHelp(file_get_contents(__DIR__ . '/../Resources/help/MakeBlock.txt'))
+            ->setHelp($helpContent ?: '')
         ;
     }
 
-    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $blockClassNameDetails = $generator->createClassNameDetails(
             $input->getArgument('block-type'),
@@ -67,7 +68,7 @@ final class MakeBlock extends AbstractMaker
         $io->text('Next: Open your new block type and add some fields!');
     }
 
-    public function configureDependencies(DependencyBuilder $dependencies)
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
     }
 }

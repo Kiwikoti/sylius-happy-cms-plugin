@@ -6,10 +6,10 @@ echo "<?php\n"; ?>
 
 namespace <?php echo $namespace; ?>;
 
-use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\AbstractSharedBlock;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\AbstractSharedBlockType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class <?php echo $class_name; ?> extends AbstractSharedBlock<?php echo "\n"; ?>
+class <?php echo $class_name; ?> extends AbstractSharedBlockType<?php echo "\n"; ?>
 {
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {

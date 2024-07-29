@@ -4,41 +4,46 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class SharedBlockCollection
 {
-    /** @var iterable<SharedBlockInterface> */
-    protected $blocks = [];
+    /** @var array<string, SharedBlockTypeInterface> */
+    protected array $blocks;
 
-    public function __construct(iterable $blocks)
+    /**
+     * @param iterable<SharedBlockTypeInterface> $blocksList
+     */
+    public function __construct(iterable $blocksList)
     {
-        foreach ($blocks as $block) {
-            $this->blocks[$block::class] = $block;
+        $blocks = [];
+        foreach ($blocksList as $block) {
+            $blocks[$block::class] = $block;
         }
 
-        uasort($this->blocks, static fn ($a, $b) => $a->getPosition() <=> $b->getPosition());
-        $this->blocks = new ArrayCollection($this->blocks);
+        uasort($blocks, static fn ($a, $b) => $a->getPosition() <=> $b->getPosition());
+        $this->blocks = $blocks;
     }
 
-    public function enabledSupportFilter()
+    public function enabledSupportFilter(): self
     {
         $this->filterSupportedBlocks();
 
         return $this;
     }
 
-    public function getBlocks()
+    /**
+     * @return array<SharedBlockTypeInterface>
+     */
+    public function getBlocks(): array
     {
         return $this->blocks;
     }
 
     /**
-     * @param array $blockTypes
+     * @param array<SharedBlockTypeInterface> $blockTypes
      *
-     * @return array
+     * @return array<SharedBlockTypeInterface>
      */
-    public function getAllowedBlocks(?array $blockTypes)
+    public function getAllowedBlocks(?array $blockTypes): array
     {
         $blocks = $this->getBlocks();
 
@@ -46,7 +51,11 @@ class SharedBlockCollection
             return $blocks;
         }
 
-        return $blocks->filter(static fn (SharedBlockInterface $block, $type) => in_array($type, $blockTypes));
+        return array_filter(
+            $blocks,
+            static fn (SharedBlockTypeInterface $block, string $type) => in_array($type, $blockTypes),
+            \ARRAY_FILTER_USE_BOTH,
+        );
     }
 
     private function filterSupportedBlocks(): void

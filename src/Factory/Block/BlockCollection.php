@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class BlockCollection
 {
-    /** @var iterable<BlockInterface> */
+    /** @var iterable<BlockTypeInterface> */
     protected $blocks = [];
 
     public function __construct(iterable $blocks)
@@ -25,7 +25,7 @@ class BlockCollection
     {
         //if (null !== $this->entityDto) {
         //    $this->blocks = $this->blocks->filter(
-        //        fn (BlockInterface $block, $type) => $block->supports($this->entityDto->getFqcn(), $this->entityDto->getInstance())
+        //        fn (BlockTypeInterface $block, $type) => $block->supports($this->entityDto->getFqcn(), $this->entityDto->getInstance())
         //    );
         //}
 
@@ -50,6 +50,6 @@ class BlockCollection
             return $blocks;
         }
 
-        return $blocks->filter(static fn (BlockInterface $block, $type) => in_array($type, $blockTypes));
+        return $blocks->filter(static fn (BlockTypeInterface $block, $type) => in_array($type, $blockTypes));
     }
 }

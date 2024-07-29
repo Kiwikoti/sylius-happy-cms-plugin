@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
-use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
@@ -30,7 +29,6 @@ class SharedBlock implements SharedBlockInterface, ResourceInterface, Translatab
     use EntityTimestampableTrait {
         EntityTimestampableTrait::__construct as private timestampableConstruct;
     }
-    use EntityNameTrait;
     use EntityStatusTrait;
 
     #[ORM\Column(name: 'block_key', type: \Doctrine\DBAL\Types\Types::STRING, unique: true)]
@@ -71,6 +69,11 @@ class SharedBlock implements SharedBlockInterface, ResourceInterface, Translatab
         return SharedBlockTranslation::class;
     }
 
+    public function getName(): ?string
+    {
+        return $this->getTranslation()->getName();
+    }
+
     public function getKey(): ?string
     {
         return $this->key;
@@ -91,11 +94,17 @@ class SharedBlock implements SharedBlockInterface, ResourceInterface, Translatab
         $this->type = $type;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function getSettings(): ?array
     {
         return $this->settings;
     }
 
+    /**
+     * @param  array<string, mixed> $settings
+     */
     public function setSettings(?array $settings): void
     {
         $this->settings = $settings;

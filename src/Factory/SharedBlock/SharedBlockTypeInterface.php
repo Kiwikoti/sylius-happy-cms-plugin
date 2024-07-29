@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
+namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
-interface BlockInterface
+use Symfony\Component\Form\FormBuilderInterface;
+
+interface SharedBlockTypeInterface
 {
     public function getName(): string;
 
@@ -42,6 +44,16 @@ interface BlockInterface
      * @return string[]
      */
     public static function researchableProperties(): array;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getDefaultSettings(): array;
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    public function buildBlock(FormBuilderInterface $builder, array $options): void;
 
     public function supports(string $objectClass, ?object $instance = null): bool;
 }
