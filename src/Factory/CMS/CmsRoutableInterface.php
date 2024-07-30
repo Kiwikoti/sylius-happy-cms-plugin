@@ -72,4 +72,6 @@ interface CmsRoutableInterface extends RouteReferrersInterface
     public function getOnlineRoute(): ?RouteObjectInterface;
 
     public function getPreviewRoute(): ?RouteObjectInterface;
+
+    public function getTranslation(?string $locale = null): TranslationInterface;
 }

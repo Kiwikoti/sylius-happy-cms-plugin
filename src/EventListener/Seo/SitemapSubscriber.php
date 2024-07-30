@@ -13,11 +13,15 @@ use Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @param iterable<SitemapDumperInterface> $sitemapDumpables
+     */
     public function __construct(
         private bool $sitemap,
         private iterable $sitemapDumpables,
@@ -26,7 +30,7 @@ class SitemapSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @inheritdoc
+     * @return string[]
      */
     public static function getSubscribedEvents(): array
     {
@@ -41,6 +45,9 @@ class SitemapSubscriber implements EventSubscriberInterface
             $urls = $event->getUrlContainer();
             $urlGenerator = $event->getUrlGenerator();
             foreach ($this->sitemapDumpables as $sitemapDumpable) {
+                /**
+                 * @var AfterSitemapEntities $event
+                 */
                 $event = $this->eventDispatcher->dispatch(new AfterSitemapEntities($sitemapDumpable->getEntities()));
                 $entities = $event->getEntities();
                 $replaceUrl = \Closure::fromCallable([$sitemapDumpable, 'replaceUrl']);
@@ -68,9 +75,14 @@ class SitemapSubscriber implements EventSubscriberInterface
         }
     }
 
-    /** @param SeoInterface&AbstractTranslation $translation */
-    private function getUrl(UrlGeneratorInterface $urlGenerator, SitemapDumperInterface $sitemapDumpable, CmsRoutableInterface $entity, SeoInterface $translation, ?callable $replaceUrl = null, ?int $page = null): string
-    {
+    private function getUrl(
+        UrlGeneratorInterface $urlGenerator,
+        SitemapDumperInterface $sitemapDumpable,
+        CmsRoutableInterface $entity,
+        SeoInterface&TranslationInterface $translation,
+        ?callable $replaceUrl = null,
+        ?int $page = null,
+    ): string {
         $params = $sitemapDumpable->getSitemapRouteParams($entity);
         $params['_locale'] = $translation->getLocale();
 
