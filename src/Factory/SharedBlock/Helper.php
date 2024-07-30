@@ -227,8 +227,7 @@ class Helper
         SharedBlockTypeInterface $blockType,
         SharedBlockInterface $block,
         array $defaultSetting,
-    ): array
-    {
+    ): array {
         $formBuilder = $this->formFactory->createBuilder($block->getType(), null, ['csrf_protection' => false]);
 
         // init blockType form builder

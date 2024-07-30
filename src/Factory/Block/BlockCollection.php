@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 class BlockCollection
 {
-    /** @var iterable<BlockTypeInterface> */
-    protected $blocks = [];
+    /** @var array<string, BlockTypeInterface> */
+    protected array $blocks = [];
 
-    public function __construct(iterable $blocks)
+    /**
+     * @param iterable<BlockTypeInterface> $blocksList
+     */
+    public function __construct(iterable $blocksList)
     {
-        foreach ($blocks as $block) {
-            $this->blocks[$block::class] = $block;
+        $blocks = [];
+        foreach ($blocksList as $block) {
+            $blocks[$block::class] = $block;
         }
 
-        uasort($this->blocks, static fn ($a, $b) => $a->getPosition() <=> $b->getPosition());
-        $this->blocks = new ArrayCollection($this->blocks);
+        uasort($blocks, static fn ($a, $b) => $a->getPosition() <=> $b->getPosition());
+        $this->blocks = $blocks;
     }
 
-    public function enabledSupportFilter()
+    public function enabledSupportFilter(): self
     {
         //if (null !== $this->entityDto) {
         //    $this->blocks = $this->blocks->filter(
@@ -32,17 +34,20 @@ class BlockCollection
         return $this;
     }
 
-    public function getBlocks()
+    /**
+     * @return array<BlockTypeInterface>
+     */
+    public function getBlocks(): array
     {
         return $this->blocks;
     }
 
     /**
-     * @param array $blockTypes
+     * @param array<BlockTypeInterface> $blockTypes
      *
-     * @return array
+     * @return array<BlockTypeInterface>
      */
-    public function getAllowedBlocks(?array $blockTypes)
+    public function getAllowedBlocks(?array $blockTypes): array
     {
         $blocks = $this->getBlocks();
 
@@ -50,6 +55,10 @@ class BlockCollection
             return $blocks;
         }
 
-        return $blocks->filter(static fn (BlockTypeInterface $block, $type) => in_array($type, $blockTypes));
+        return array_filter(
+            $blocks,
+            static fn (BlockTypeInterface $block, string $type) => in_array($type, $blockTypes),
+            \ARRAY_FILTER_USE_BOTH,
+        );
     }
 }

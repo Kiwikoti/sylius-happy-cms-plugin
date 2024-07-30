@@ -4,41 +4,50 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Block;
 
-use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
+use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class BlockRender extends Event
 {
     public function __construct(
-        private AbstractBlock $block,
-        private array $datas,
+        private BlockTypeInterface $block,
+        private array $data,
         private array $assets,
     ) {
     }
 
-    public function getBlock(): AbstractBlock
+    public function getBlock(): BlockTypeInterface
     {
         return $this->block;
     }
 
-    public function getDatas(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function getData(): array
     {
-        return $this->datas;
+        return $this->data;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getAssets(): array
     {
         return $this->assets;
     }
 
-    public function setBlock(AbstractBlock $block): void
+    public function setBlock(BlockTypeInterface $block): void
     {
         $this->block = $block;
     }
 
-    public function setDatas(array $datas): void
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function setData(array $data): void
     {
-        $this->datas = $datas;
+        $this->data = $data;
     }
 
     public function setAssets(array $assets): void

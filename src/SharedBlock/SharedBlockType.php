@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
-use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockInterface;
+use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class SharedBlockType extends AbstractBlock implements BlockInterface
+class SharedBlockType extends AbstractBlock implements BlockTypeInterface
 {
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {

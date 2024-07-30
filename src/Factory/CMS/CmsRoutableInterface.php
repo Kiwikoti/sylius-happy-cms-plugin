@@ -34,14 +34,29 @@ interface CmsRoutableInterface extends RouteReferrersInterface
 
     public function getRouteUnikName(): string;
 
+    /**
+     * @return string[]
+     */
     public function getRouteMethods(): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRouteOptions(TranslationInterface $translation): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRouteRequirements(TranslationInterface $translation): array;
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getRouteDefaults(TranslationInterface $translation): array;
 
+    /**
+     * @return string[]
+     */
     public function getRouteSchemes(TranslationInterface $translation): array;
 
     public function getRouteHost(TranslationInterface $translation): ?string;
