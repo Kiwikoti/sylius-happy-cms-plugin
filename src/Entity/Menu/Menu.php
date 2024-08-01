@@ -27,18 +27,16 @@ class Menu implements MenuInterface
 
     public $menuItems;
 
-    /** @var ArrayCollection<MenuItem>|null */
-    protected $items;
+    /** @var array<MenuItemInterface> */
+    protected array $items;
 
-    /** @var string * */
     #[ORM\Column(name: 'code', type: \Doctrine\DBAL\Types\Types::STRING, length: 30)]
     protected ?string $code = null;
 
     #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     protected ?string $name = null;
 
-    /** @var MenuItem|null */
-    protected $rootItem;
+    protected ?MenuItemInterface $rootItem = null;
 
     /**
      * Constructor.
@@ -78,14 +76,14 @@ class Menu implements MenuInterface
     }
 
     /**
-     * @return MenuItem[]|ArrayCollection
+     * @return MenuItemInterface[]|ArrayCollection
      */
     public function getItems()
     {
         return $this->items;
     }
 
-    public function addItem(MenuItem $item): void
+    public function addItem(MenuItemInterface $item): void
     {
         $this->items->add($item);
         if ($item->getMenu() !== $this) {
@@ -93,7 +91,7 @@ class Menu implements MenuInterface
         }
     }
 
-    public function removeItem(MenuItem $item): void
+    public function removeItem(MenuItemInterface $item): void
     {
         $this->items->removeElement($item);
         $item->setMenu(null);
@@ -115,12 +113,12 @@ class Menu implements MenuInterface
         $this->code = $code;
     }
 
-    public function getRootItem(): ?MenuItem
+    public function getRootItem(): ?MenuItemInterface
     {
         return $this->rootItem;
     }
 
-    public function setRootItem(?MenuItem $rootItem): void
+    public function setRootItem(?MenuItemInterface $rootItem): void
     {
         $this->rootItem = $rootItem;
     }

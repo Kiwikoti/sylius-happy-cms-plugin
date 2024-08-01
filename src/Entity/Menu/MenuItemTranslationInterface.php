@@ -9,4 +9,5 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 
 interface MenuItemTranslationInterface extends TranslationInterface, ResourceInterface, \Stringable
 {
+    public function setName(?string $name): void;
 }

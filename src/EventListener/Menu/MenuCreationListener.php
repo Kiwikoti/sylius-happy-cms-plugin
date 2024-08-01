@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Menu;
 
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemTranslationInterface;
 use Sylius\Component\Locale\Provider\LocaleProviderInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,26 +23,30 @@ class MenuCreationListener
 
     // the entity listener methods receive two arguments:
     // the entity instance and the lifecycle event
-    public function prePersist(Menu $menu): void
+    public function prePersist(MenuInterface $menu): void
     {
         /**
-         * @var MenuItem $rootItem
+         * @var MenuItemInterface $rootItem
          */
         $rootItem = new $this->menuItemClass();
         $rootItem->setMenu($menu);
-        $rootItem->setPublishState(ThreeStateStatusEnum::PUBLISHED());
+        $rootItem->setPublishState(ThreeStateStatusEnum::PUBLISHED()->getValue());
         $rootItem->setPosition(0);
 
         $menu->addItem($rootItem);
 
         foreach ($this->localeProvider->getAvailableLocalesCodes() as $locale) {
-            $menuItemTranslationClass = $this->menuItemClass::getTranslationClass();
-            $translation = new $menuItemTranslationClass();
-            $translation->setLocale($locale);
-            $translation->setName(
-                $this->translator->trans('sylius_happy_cms.menu_item.admin.data.menu_item_root', locale: $locale),
-            );
-            $rootItem->addTranslation($translation);
+            if (class_exists($this->menuItemClass) && method_exists($this->menuItemClass, 'getTranslationClass')) {
+                $menuItemTranslationClass = $this->menuItemClass::getTranslationClass();
+                $translation = new $menuItemTranslationClass();
+                if ($translation instanceof MenuItemTranslationInterface) {
+                    $translation->setLocale($locale);
+                    $translation->setName(
+                        $this->translator->trans('sylius_happy_cms.menu_item.admin.data.menu_item_root', locale: $locale),
+                    );
+                    $rootItem->addTranslation($translation);
+                }
+            }
         }
     }
 }

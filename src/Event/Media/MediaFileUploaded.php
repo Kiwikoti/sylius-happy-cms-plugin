@@ -13,17 +13,14 @@ class MediaFileUploaded extends Event
      */
     public const NAME = 'em.file.uploaded';
 
-    private string $filePath;
-
-    private string $mimeType;
-
-    private array $options = [];
-
-    public function __construct(string $filePath, string $mimeType, array $options = [])
-    {
-        $this->filePath = $filePath;
-        $this->mimeType = $mimeType;
-        $this->options = $options;
+    /**
+     * @param  array<string, mixed> $options
+     */
+    public function __construct(
+        private string $filePath,
+        private string $mimeType,
+        private array $options = [],
+    ) {
     }
 
     public function getFilePath(): string
@@ -37,7 +34,7 @@ class MediaFileUploaded extends Event
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string, mixed>
      */
     public function getOptions(): array
     {

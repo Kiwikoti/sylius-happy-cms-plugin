@@ -4,31 +4,20 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Media;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class MediaBeforeSetMetas extends Event
 {
-    /**
-     * @var string
-     */
     public const NAME = 'em.before.set.metas';
 
-    public Media $entity;
-
-    public null | string | File $source;
-
-    /** @var array<mixed> */
-    private array $metas;
-
-    /** @param array<mixed> $metas */
-    public function __construct(MediaInterface $entity, null | string | File $source, array $metas)
-    {
-        $this->entity = $entity;
-        $this->source = $source;
-        $this->metas = $metas;
+    /** @param array<string, mixed> $metas */
+    public function __construct(
+        public MediaInterface $entity,
+        public null | string | File $source,
+        private array $metas,
+    ) {
     }
 
     public function getEntity(): MediaInterface
@@ -41,13 +30,13 @@ class MediaBeforeSetMetas extends Event
         return $this->source;
     }
 
-    /** @return array<mixed> */
+    /** @return array<string, mixed> */
     public function getMetas(): array
     {
         return $this->metas;
     }
 
-    /** @param array<mixed> $metas */
+    /** @param array<string, mixed> $metas */
     public function setMetas(array $metas): void
     {
         $this->metas = $metas;

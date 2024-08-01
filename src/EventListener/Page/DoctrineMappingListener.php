@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Page;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -15,21 +18,15 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class DoctrineMappingListener
 {
     public function __construct(
-        /**
-         * @readonly
-         */
-        private string $pageClass,
-        /**
-         * @readonly
-         */
-        private string $menuClass,
-        /**
-         * @readonly
-         */
-        private string $menuItemClass,
+        private readonly string $pageClass,
+        private readonly string $menuClass,
+        private readonly string $menuItemClass,
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     public function getSubscribedEvents(): array
     {
         return [Events::loadClassMetadata];
@@ -37,28 +34,30 @@ class DoctrineMappingListener
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
+        /**
+         * @var ClassMetadata<PageInterface|MenuInterface|MenuItemInterface> $classMetadata
+         */
         $classMetadata = $eventArgs->getClassMetadata();
+        $reflexionClass = $classMetadata->getReflectionClass();
 
-        $isPage = is_a($classMetadata->getName(), $this->pageClass, true);
-        $isMenuItem = is_a($classMetadata->getName(), $this->menuItemClass, true);
-        $isMenu = is_a($classMetadata->getName(), $this->menuClass, true);
-
-        if ($isPage) {
+        if (in_array(PageInterface::class, $reflexionClass->getInterfaces())) {
             $this->processParent($classMetadata, $this->pageClass);
             $this->processChildren($classMetadata, $this->pageClass);
         }
 
-        if ($isMenuItem) {
+        if (in_array(MenuItemInterface::class, $reflexionClass->getInterfaces())) {
             $this->processMenuItemMetadata($classMetadata);
         }
 
-        if ($isMenu) {
+        if (in_array(MenuInterface::class, $reflexionClass->getInterfaces())) {
             $this->processMenuMetadata($classMetadata);
         }
     }
 
     /**
      * Declare self-bidirectionnal mapping for parent.
+     *
+     * @param ClassMetadata<PageInterface|MenuInterface|MenuItemInterface> $classMetadata
      */
     private function processParent(ClassMetadata $classMetadata, string $class): void
     {
@@ -82,6 +81,8 @@ class DoctrineMappingListener
 
     /**
      * Declare self-bidirectionnal mapping for children.
+     *
+     * @param ClassMetadata<PageInterface|MenuInterface|MenuItemInterface> $classMetadata
      */
     private function processChildren(ClassMetadata $classMetadata, string $class): void
     {
@@ -96,6 +97,8 @@ class DoctrineMappingListener
 
     /**
      * Declare self-bidirectionnal mapping for parent.
+     *
+     * @param ClassMetadata<PageInterface|MenuInterface|MenuItemInterface> $classMetadata
      */
     private function processMenuItemMetadata(ClassMetadata $classMetadata): void
     {
@@ -141,6 +144,8 @@ class DoctrineMappingListener
 
     /**
      * Declare self-bidirectionnal mapping for children.
+     *
+     * @param ClassMetadata<PageInterface|MenuInterface|MenuItemInterface> $classMetadata
      */
     private function processMenuMetadata(ClassMetadata $classMetadata): void
     {

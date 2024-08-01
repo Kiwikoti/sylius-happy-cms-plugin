@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\CMS;
 
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\TranslationInterface;
+use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Cmf\Component\Routing\RouteReferrersInterface;
 
@@ -74,4 +75,9 @@ interface CmsRoutableInterface extends RouteReferrersInterface
     public function getPreviewRoute(): ?RouteObjectInterface;
 
     public function getTranslation(?string $locale = null): TranslationInterface;
+
+    /**
+     * @return Collection<int, OrmRoute>
+     */
+    public function getRoutes(): Collection;
 }

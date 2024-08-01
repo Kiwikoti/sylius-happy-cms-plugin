@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Media;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class MediaGenerateAlt extends Event
@@ -14,20 +14,11 @@ class MediaGenerateAlt extends Event
      */
     public const NAME = 'em.file.alt.generate';
 
-    public Media $entity;
-
-    public string $filePath;
-
-    public string $alt;
-
-    public function __construct($entity, $filePath, $alt = null)
+    public function __construct(public MediaInterface $entity, public string $filePath, public ?string $alt = null)
     {
-        $this->entity = $entity;
-        $this->filePath = $filePath;
-        $this->alt = $alt;
     }
 
-    public function getEntity(): Media
+    public function getEntity(): MediaInterface
     {
         return $this->entity;
     }

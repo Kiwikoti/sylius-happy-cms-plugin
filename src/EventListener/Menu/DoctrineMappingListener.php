@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Menu;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
@@ -14,28 +16,31 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 class DoctrineMappingListener
 {
     public function __construct(
-        private string $menuClass,
-        private string $menuItemClass,
+        private readonly string $menuClass,
+        private readonly string $menuItemClass,
     ) {
     }
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
-        /** @var ClassMetadata $classMetadata */
+        /**
+         * @var ClassMetadata<MenuInterface|MenuItemInterface> $classMetadata
+         */
         $classMetadata = $eventArgs->getClassMetadata();
+        $reflexionClass = $classMetadata->getReflectionClass();
 
-        $isMenuItem = is_a($classMetadata->getName(), $this->menuItemClass, true);
-        $isMenu = is_a($classMetadata->getName(), $this->menuClass, true);
-
-        if ($isMenuItem) {
+        if (in_array(MenuItemInterface::class, $reflexionClass->getInterfaces())) {
             $this->processMenuItemMetadata($classMetadata);
         }
 
-        if ($isMenu) {
+        if (in_array(MenuInterface::class, $reflexionClass->getInterfaces())) {
             $this->processMenuMetadata($classMetadata);
         }
     }
 
+    /**
+     * @param ClassMetadata<MenuInterface|MenuItemInterface> $classMetadata
+     */
     private function processMenuItemMetadata(ClassMetadata $classMetadata): void
     {
         if (!$classMetadata->hasAssociation('menu')) {
@@ -78,6 +83,9 @@ class DoctrineMappingListener
         }
     }
 
+    /**
+     * @param ClassMetadata<MenuInterface|MenuItemInterface> $classMetadata
+     */
     private function processMenuMetadata(ClassMetadata $classMetadata): void
     {
         if (!$classMetadata->hasAssociation('items')) {

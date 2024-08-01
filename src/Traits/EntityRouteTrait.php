@@ -24,6 +24,9 @@ trait EntityRouteTrait
         $this->routes = new ArrayCollection();
     }
 
+    /**
+     * @return Collection<int, OrmRoute>
+     */
     public function getRoutes(): Collection
     {
         return $this->routes;

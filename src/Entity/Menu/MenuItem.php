@@ -10,6 +10,7 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityPublishableTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Resource\Model\TranslatableTrait;
@@ -66,9 +67,9 @@ class MenuItem implements MenuItemInterface
     #[Gedmo\TreeParent]
     protected ?MenuItem $parent = null;
 
-    /** @var \Doctrine\Common\Collections\Collection<MenuItem> */
+    /** @var Collection<MenuItem> */
     #[ORM\OrderBy(['lft' => 'ASC'])]
-    protected \Doctrine\Common\Collections\Collection $children;
+    protected Collection $children;
 
     public function __construct()
     {
@@ -179,12 +180,12 @@ class MenuItem implements MenuItemInterface
         $this->target = $target;
     }
 
-    public function getMenu(): ?Menu
+    public function getMenu(): ?MenuInterface
     {
         return $this->menu;
     }
 
-    public function setMenu(?Menu $menu): void
+    public function setMenu(?MenuInterface $menu): void
     {
         $this->menu = $menu;
     }
@@ -230,7 +231,7 @@ class MenuItem implements MenuItemInterface
     /**
      * Get children.
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getChildren()
     {
@@ -239,24 +240,22 @@ class MenuItem implements MenuItemInterface
 
     /**
      * Get only published children.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPublishedChildren()
+    public function getPublishedChildren(): Collection
     {
-        return $this->children->filter(static fn (MenuItem $child) => $child->getPublishState() == ThreeStateStatusEnum::PUBLISHED());
+        return $this->children->filter(static fn (MenuItem $child) => $child->getPublishState() == ThreeStateStatusEnum::PUBLISHED()->getValue());
     }
 
     #[ORM\PreRemove]
     public function onRemove(): void
     {
-        $this->setPublishState(ThreeStateStatusEnum::UNPUBLISHED());
+        $this->setPublishState(ThreeStateStatusEnum::UNPUBLISHED()->getValue());
     }
 
     /**
      * Has child.
      */
-    public function hasChild()
+    public function hasChild(): bool
     {
         return count($this->children) > 0;
     }

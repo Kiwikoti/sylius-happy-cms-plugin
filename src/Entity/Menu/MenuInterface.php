@@ -8,4 +8,5 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface MenuInterface extends ResourceInterface, \Stringable
 {
+    public function addItem(MenuItemInterface $item): void;
 }

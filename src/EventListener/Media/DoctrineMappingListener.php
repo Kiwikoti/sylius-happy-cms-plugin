@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Media;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
@@ -13,29 +15,35 @@ use Doctrine\ORM\Mapping\ClassMetadata;
  */
 class DoctrineMappingListener
 {
-    public function __construct(private string $mediaClass, private string $folderClass)
-    {
+    public function __construct(
+        private readonly string $mediaClass,
+        private readonly string $folderClass,
+    ) {
     }
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
+        /**
+         * @var ClassMetadata<FolderInterface|MediaInterface> $classMetadata
+         */
         $classMetadata = $eventArgs->getClassMetadata();
+        $reflexionClass = $classMetadata->getReflectionClass();
 
-        $isFolder = is_a($classMetadata->getName(), $this->folderClass, true);
-        $isMedia = is_a($classMetadata->getName(), $this->mediaClass, true);
-        if ($isFolder) {
+        if (in_array(FolderInterface::class, $reflexionClass->getInterfaces())) {
             $this->processParent($classMetadata, $this->folderClass);
             $this->processChildren($classMetadata, $this->folderClass);
             $this->processMedias($classMetadata, $this->mediaClass);
         }
 
-        if ($isMedia) {
+        if (in_array(MediaInterface::class, $reflexionClass->getInterfaces())) {
             $this->processFolder($classMetadata, $this->folderClass);
         }
     }
 
     /**
      * Declare self-bidirectionnal mapping for parent.
+     *
+     * @param ClassMetadata<FolderInterface|MediaInterface> $classMetadata
      */
     private function processParent(ClassMetadata $classMetadata, string $class): void
     {
@@ -59,6 +67,8 @@ class DoctrineMappingListener
 
     /**
      * Declare self-bidirectionnal mapping for children.
+     *
+     * @param ClassMetadata<FolderInterface|MediaInterface> $classMetadata
      */
     private function processChildren(ClassMetadata $classMetadata, string $class): void
     {
@@ -72,6 +82,9 @@ class DoctrineMappingListener
         }
     }
 
+    /**
+     * @param ClassMetadata<FolderInterface|MediaInterface> $classMetadata
+     */
     private function processMedias(ClassMetadata $classMetadata, string $class): void
     {
         if (!$classMetadata->hasAssociation('medias')) {
@@ -84,6 +97,9 @@ class DoctrineMappingListener
         }
     }
 
+    /**
+     * @param ClassMetadata<FolderInterface|MediaInterface> $classMetadata
+     */
     private function processFolder(ClassMetadata $classMetadata, string $class): void
     {
         if (!$classMetadata->hasAssociation('folder')) {

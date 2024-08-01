@@ -8,19 +8,15 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class MediaGenerateAltGroup extends Event
 {
-    /**
-     * @var string
-     */
     public const NAME = 'em.file.alt.generate_alt_group';
 
-    /** @var array<int> */
-    private array $files;
-
-    public function __construct(array $files)
+    /** @param array<int, mixed> $files */
+    public function __construct(protected array $files)
     {
         $this->files = $files;
     }
 
+    /** @return  array<int, mixed> $files */
     public function getFiles(): array
     {
         return $this->files;
