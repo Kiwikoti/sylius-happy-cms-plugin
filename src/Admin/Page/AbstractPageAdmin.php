@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Page;
 
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
-use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ColumnField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\EnumField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ResourceAutocompleteChoiceField;
@@ -20,9 +19,8 @@ use Adeliom\SyliusEasyCrudPlugin\Enum\ColumnSizeEnum;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\FlexibleContentField;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\SEOField;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractPageAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
+abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInterface
 {
     public static function getSubscribedServices(): array
     {

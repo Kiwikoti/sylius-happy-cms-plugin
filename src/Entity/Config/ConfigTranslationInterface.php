@@ -9,4 +9,5 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 
 interface ConfigTranslationInterface extends TranslationInterface, ResourceInterface
 {
+    public function setDate(?\DateTime $date): void;
 }

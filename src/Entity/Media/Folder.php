@@ -25,12 +25,12 @@ class Folder implements FolderInterface
     #[ORM\Column(length: 100)]
     protected ?string $slug = null;
 
-    protected ?Folder $parent = null;
+    protected ?FolderInterface $parent = null;
 
-    /** @var Collection<Folder> */
+    /** @var Collection<int, FolderInterface> */
     protected Collection $children;
 
-    /** @var Collection<Media> */
+    /** @var Collection<int, MediaInterface> */
     protected Collection $medias;
 
     public function __construct()
@@ -44,7 +44,7 @@ class Folder implements FolderInterface
         return $this->id;
     }
 
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -58,7 +58,7 @@ class Folder implements FolderInterface
         }
     }
 
-    public function getSlug()
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -68,39 +68,41 @@ class Folder implements FolderInterface
         $this->slug = $slug;
     }
 
-    public function getParent()
+    public function getParent(): ?FolderInterface
     {
         return $this->parent;
     }
 
-    public function getChildren()
+    /** @return  Collection<int, FolderInterface> */
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    public function addChild(self $child): void
+    public function addChild(FolderInterface $child): void
     {
         $this->children[] = $child;
         $child->setParent($this);
     }
 
-    public function getMedias()
+    /** @return  Collection<int, MediaInterface> */
+    public function getMedias(): Collection
     {
         return $this->medias;
     }
 
-    public function addMedia(Media $media): void
+    public function addMedia(MediaInterface $media): void
     {
         $this->medias[] = $media;
         $media->setFolder($this);
     }
 
-    public function setParent(?self $parent = null): void
+    public function setParent(?FolderInterface $parent = null): void
     {
         $this->parent = $parent;
     }
 
-    public function getPath($separator = '/'): string
+    public function getPath(string $separator = '/'): string
     {
         $tree = '';
         $current = $this;

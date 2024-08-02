@@ -8,8 +8,9 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface MediaInterface extends ResourceInterface
 {
-    public function getPath(): string;
+    public function getPath(string $separator = '/'): string;
 
+    /** @param array<string, mixed> $metas */
     public function setMetas(array $metas): void;
 
     public function setSize(?int $size): void;
@@ -30,6 +31,7 @@ interface MediaInterface extends ResourceInterface
 
     public function getName(): ?string;
 
+    /** @return  array<string, mixed> */
     public function getMetas(): array;
 
     public function getMeta(string $key, mixed $default = null): mixed;
@@ -39,4 +41,6 @@ interface MediaInterface extends ResourceInterface
     public function getId(): ?int;
 
     public function getSize(): ?int;
+
+    public function getSlug(): ?string;
 }

@@ -27,35 +27,35 @@ use Adeliom\SyliusEasyCrudPlugin\Helper\Enum;
  * @method static ConfigTypeEnum TIME()
  * @method static ConfigTypeEnum DATETIME()
  */
-class ConfigTypeEnum extends Enum
+final class ConfigTypeEnum extends Enum
 {
-    private const CODE = 'code';
+    public const CODE = 'code';
 
-    private const EMAIL = 'email';
+    public const EMAIL = 'email';
 
-    private const NUMBER = 'number';
+    public const NUMBER = 'number';
 
-    private const JSON = 'json';
+    public const JSON = 'json';
 
-    private const TEXT = 'text';
+    public const TEXT = 'text';
 
-    private const TEXTAREA = 'textarea';
+    public const TEXTAREA = 'textarea';
 
-    private const WYSIWYG = 'wysiwyg';
+    public const WYSIWYG = 'wysiwyg';
 
-    private const BOOLEAN = 'boolean';
+    public const BOOLEAN = 'boolean';
 
-    private const IMAGE = 'image';
+    public const IMAGE = 'image';
 
-    private const FILE = 'file';
+    public const FILE = 'file';
 
-    private const COLOR = 'color';
+    public const COLOR = 'color';
 
-    private const DATE = 'date';
+    public const DATE = 'date';
 
-    private const TIME = 'time';
+    public const TIME = 'time';
 
-    private const DATETIME = 'datetime';
+    public const DATETIME = 'datetime';
 
     public static function getAdminField(string $typeKey): FieldInterface
     {

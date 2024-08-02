@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
-use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[UniqueEntity('key')]
@@ -24,16 +24,16 @@ class Config implements ConfigInterface, TranslatableInterface
         getTranslation as private doGetTranslation;
     }
 
-    #[ORM\Column(name: 'config', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, unique: true)]
+    #[ORM\Column(name: 'config', type: Types::STRING, length: 255, unique: true)]
     private ?string $key = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $type = null;
 
     public function __construct()
@@ -41,14 +41,14 @@ class Config implements ConfigInterface, TranslatableInterface
         $this->initializeTranslationsCollection();
     }
 
-    protected function createTranslation(): TranslationInterface
+    protected function createTranslation(): ConfigTranslationInterface
     {
         return new ConfigTranslation();
     }
 
-    public function getTranslation(?string $locale = null): ConfigTranslation
+    public function getTranslation(?string $locale = null): ConfigTranslationInterface
     {
-        /** @var ConfigTranslation $translation */
+        /** @var ConfigTranslationInterface $translation */
         $translation = $this->doGetTranslation($locale);
 
         return $translation;
@@ -59,74 +59,43 @@ class Config implements ConfigInterface, TranslatableInterface
         return ConfigTranslation::class;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getKey()
+    public function getKey(): ?string
     {
         return $this->key;
     }
 
-    /**
-     * @return Config
-     */
-    public function setKey(mixed $key)
+    public function setKey(?string $key): void
     {
         $this->key = $key;
-
-        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * @return Config
-     */
-    public function setName(mixed $name)
+    public function setName(?string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param null $description
-     *
-     * @return Config
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getType()
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    /**
-     * @return Config
-     */
-    public function setType(mixed $type)
+    public function setType(mixed $type): void
     {
         $this->type = $type;
-
-        return $this;
     }
 }

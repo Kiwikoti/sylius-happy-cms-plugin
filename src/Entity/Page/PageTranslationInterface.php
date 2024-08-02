@@ -11,4 +11,6 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 interface PageTranslationInterface extends TranslationInterface, ResourceInterface, SeoInterface, \Stringable
 {
     public function getSlug(): ?string;
+
+    public function getName(): ?string;
 }

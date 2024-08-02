@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Page;
 
-use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
-use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class PageAdmin extends AbstractPageAdmin implements ServiceSubscriberInterface, AdminInterface
+class PageAdmin extends AbstractPageAdmin
 {
     public static function getName(): string
     {

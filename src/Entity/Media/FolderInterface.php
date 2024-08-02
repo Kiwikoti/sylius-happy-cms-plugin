@@ -8,9 +8,9 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface FolderInterface extends ResourceInterface
 {
-    public function setParent(self|bool|Folder|null $param): void;
+    public function setParent(?self $parent = null): void;
 
-    public function getPath(): string;
+    public function getPath(string $separator = '/'): string;
 
     public function setName(string $name): void;
 }

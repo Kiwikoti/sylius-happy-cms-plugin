@@ -11,6 +11,7 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Resource\Model\TranslatableTrait;
@@ -35,39 +36,38 @@ class MenuItem implements MenuItemInterface
         getTranslation as private doGetTranslation;
     }
 
-    #[ORM\Column(name: 'lft', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(name: 'lft', type: Types::INTEGER)]
     #[Gedmo\TreeLeft]
     protected ?int $lft = null;
 
-    #[ORM\Column(name: 'lvl', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(name: 'lvl', type: Types::INTEGER)]
     #[Gedmo\TreeLevel]
     protected ?int $lvl = null;
 
-    #[ORM\Column(name: 'rgt', type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(name: 'rgt', type: Types::INTEGER)]
     #[Gedmo\TreeRight]
     protected ?int $rgt = null;
 
-    #[ORM\Column(name: 'root', type: \Doctrine\DBAL\Types\Types::INTEGER, nullable: true)]
+    #[ORM\Column(name: 'root', type: Types::INTEGER, nullable: true)]
     #[Gedmo\TreeRoot]
     protected ?int $root = null;
 
-    /** @var Menu|null */
-    protected $menu;
+    protected ?MenuInterface $menu;
 
-    #[ORM\Column(name: 'class_attribute', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(name: 'class_attribute', type: Types::STRING, length: 255, nullable: true)]
     protected ?string $classAttribute = null;
 
-    #[ORM\Column(name: 'position', type: \Doctrine\DBAL\Types\Types::SMALLINT, options: ['unsigned' => true], nullable: true)]
+    #[ORM\Column(name: 'position', type: Types::SMALLINT, nullable: true, options: ['unsigned' => true])]
     protected ?int $position = null;
 
-    #[ORM\Column(name: 'target', type: \Doctrine\DBAL\Types\Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[ORM\Column(name: 'target', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
     protected ?bool $target = null;
 
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
-    protected ?MenuItem $parent = null;
+    protected ?MenuItemInterface $parent = null;
 
-    /** @var Collection<MenuItem> */
+    /** @var Collection<int, MenuItemInterface> */
     #[ORM\OrderBy(['lft' => 'ASC'])]
     protected Collection $children;
 
@@ -117,9 +117,6 @@ class MenuItem implements MenuItemInterface
         $this->lvl = $lvl;
     }
 
-    /**
-     * @return mixed
-     */
     public function getRgt(): ?int
     {
         return $this->rgt;
@@ -138,11 +135,6 @@ class MenuItem implements MenuItemInterface
     public function setRoot(?int $root): void
     {
         $this->root = $root;
-    }
-
-    public function getSortableData($name)
-    {
-        return $this->{$name};
     }
 
     public function getName(): ?string
@@ -190,12 +182,12 @@ class MenuItem implements MenuItemInterface
         $this->menu = $menu;
     }
 
-    public function getParent(): ?self
+    public function getParent(): ?MenuItemInterface
     {
         return $this->parent;
     }
 
-    public function setParent(?self $parent)
+    public function setParent(?MenuItemInterface $parent): void
     {
         $this->parent = $parent;
 
@@ -207,7 +199,7 @@ class MenuItem implements MenuItemInterface
     /**
      * Add child.
      */
-    public function addChild(self $child)
+    public function addChild(MenuItemInterface $child): void
     {
         $this->children[] = $child;
     }
@@ -215,15 +207,15 @@ class MenuItem implements MenuItemInterface
     /**
      * Remove child.
      */
-    public function removeChild(self $child)
+    public function removeChild(MenuItemInterface $child): void
     {
         $this->children->removeElement($child);
     }
 
     /**
-     * Set children.
+     * @param Collection<int, MenuItemInterface> $children
      */
-    public function setChildren(ArrayCollection $children)
+    public function setChildren(Collection $children): void
     {
         $this->children = $children;
     }
@@ -231,19 +223,23 @@ class MenuItem implements MenuItemInterface
     /**
      * Get children.
      *
-     * @return Collection
+     * @return Collection<int, MenuItemInterface>
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
     /**
      * Get only published children.
+     *
+     * @return Collection<int, MenuItemInterface>
      */
     public function getPublishedChildren(): Collection
     {
-        return $this->children->filter(static fn (MenuItem $child) => $child->getPublishState() == ThreeStateStatusEnum::PUBLISHED()->getValue());
+        return $this->children->filter(
+            static fn (MenuItemInterface $child) => $child->getPublishState() == ThreeStateStatusEnum::PUBLISHED()->getValue(),
+        );
     }
 
     #[ORM\PreRemove]
@@ -268,7 +264,12 @@ class MenuItem implements MenuItemInterface
         return null !== $this->parent;
     }
 
-    public function getParents($parents = [], $parent = null)
+    /**
+     * @param array<string>|null $parents
+     *
+     * @return array<string>
+     */
+    public function getParents(?array $parents = [], ?MenuItemInterface $parent = null): array
     {
         if (empty($parent)) {
             $parents[] = (string) $this;

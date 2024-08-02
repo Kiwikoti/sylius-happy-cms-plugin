@@ -26,4 +26,19 @@ interface MenuItemInterface extends ResourceInterface, TranslatableInterface, \S
     public function setPublishState(?string $state): void;
 
     public function setPosition(int $position): void;
+
+    public function addChild(self $child): void;
+
+    public function getPublishState(): ?string;
+
+    /**
+     * @param array<string>|null $parents
+     *
+     * @return array<string>
+     */
+    public function getParents(?array $parents = [], ?self $parent = null): array;
+
+    public function getParent(): ?self;
+
+    public function getMenu(): ?MenuInterface;
 }

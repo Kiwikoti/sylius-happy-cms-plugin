@@ -9,6 +9,10 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class BlockRender extends Event
 {
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $assets
+     */
     public function __construct(
         private BlockTypeInterface $block,
         private array $data,
@@ -50,6 +54,9 @@ class BlockRender extends Event
         $this->data = $data;
     }
 
+    /**
+     * @param array<string, mixed> $assets
+     */
     public function setAssets(array $assets): void
     {
         $this->assets = $assets;

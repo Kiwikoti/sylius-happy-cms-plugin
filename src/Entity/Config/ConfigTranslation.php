@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusHappyCMSPlugin\Enum\Config\ConfigTypeEnum;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -19,7 +20,7 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
 {
     use EntityIdTrait;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::TEXT, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $value = null;
 
     public function getValue(): ?string
@@ -34,7 +35,7 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
 
     private function getType(): ?string
     {
-        /** @var \Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config $translatable */
+        /** @var ConfigInterface $translatable */
         $translatable = $this->getTranslatable();
         if ($translatable->getType()) {
             return $translatable->getType();
@@ -43,9 +44,9 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
         return null;
     }
 
-    public function __get($name)
+    public function __get(string $name): mixed
     {
-        if ($this->getType() == $name) {
+        if ($this->getType() === $name) {
             switch ($name) {
                 case ConfigTypeEnum::DATE():
                     return $this->getDate();
@@ -63,17 +64,14 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
         return null;
     }
 
-    /**
-     * @param null $value
-     */
-    public function __set($name, $value): void
+    public function __set(?string $name, mixed $value): void
     {
-        if ($name == $this->getType()) {
+        if ($name === $this->getType()) {
             $this->value = $value;
         }
     }
 
-    public function getBoolean()
+    public function getBoolean(): ?bool
     {
         if (ConfigTypeEnum::BOOLEAN() == $this->getType()) {
             return (bool) $this->value;
@@ -82,16 +80,14 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
         return null;
     }
 
-    public function setDate(?\DateTime $date)
+    public function setDate(?\DateTime $date): void
     {
         if (ConfigTypeEnum::DATE() == $this->getType() && $date) {
             $this->value = $date->format('Y-m-d');
         }
-
-        return null;
     }
 
-    public function getDate()
+    public function getDate(): ?\DateTime
     {
         if (ConfigTypeEnum::DATE() == $this->getType()) {
             try {
@@ -104,16 +100,14 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
         return null;
     }
 
-    public function setTime(?\DateTime $date)
+    public function setTime(?\DateTime $date): void
     {
         if (ConfigTypeEnum::TIME() == $this->getType()) {
             $this->value = $date->format('H:i:s');
         }
-
-        return null;
     }
 
-    public function getTime()
+    public function getTime(): ?\DateTime
     {
         if (ConfigTypeEnum::TIME() == $this->getType()) {
             try {
@@ -126,16 +120,14 @@ class ConfigTranslation extends AbstractTranslation implements ConfigTranslation
         return null;
     }
 
-    public function setDatetime(?\DateTime $date)
+    public function setDatetime(?\DateTime $date): void
     {
         if (ConfigTypeEnum::DATETIME() == $this->getType() && $date) {
             $this->value = $date->format('Y-m-d H:i:s');
         }
-
-        return null;
     }
 
-    public function getDatetime()
+    public function getDatetime(): ?\DateTime
     {
         if (ConfigTypeEnum::DATETIME() == $this->getType()) {
             try {

@@ -44,17 +44,16 @@ class Page implements PageInterface
         EntityRouteTrait::__construct as private entityRouteConstruct;
     }
 
+    /** @var Collection<int, OrmRoute> */
     #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinTable('happy_cms_page__page_route')]
     protected Collection $routes;
 
-    public const HOMEPAGE = 'homepage';
-
-    #[Assert\Type(self::class)]
+    #[Assert\Type(PageInterface::class)]
     #[ORM\JoinColumn(name: 'parent_id', onDelete: 'SET NULL')]
-    protected ?Page $parent = null;
+    protected ?PageInterface $parent = null;
 
-    /** @var Page[]|Collection */
+    /** @var Collection<int, PageInterface> */
     protected Collection $children;
 
     #[ORM\Column(name: 'action', type: Types::STRING, nullable: true)]
@@ -91,6 +90,9 @@ class Page implements PageInterface
     public function getTranslation(?string $locale = null): PageTranslationInterface
     {
         $translation = $this->doGetTranslation($locale);
+        if (!$translation instanceof PageTranslationInterface) {
+            throw new \RuntimeException('PageInterface must return a PageTranslationInterface translation');
+        }
 
         return $translation;
     }
@@ -100,7 +102,7 @@ class Page implements PageInterface
         return PageTranslation::class;
     }
 
-    public function setParent(?self $parent = null): void
+    public function setParent(?PageInterface $parent = null): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
@@ -117,20 +119,20 @@ class Page implements PageInterface
         }
     }
 
-    public function getParent()
+    public function getParent(): ?PageInterface
     {
         return $this->parent;
     }
 
     /**
-     * @return Page[]|Collection
+     * @return Collection<int, PageInterface>
      */
-    public function getChildren(): array|Collection
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    public function addChildren(self $page): void
+    public function addChildren(PageInterface $page): void
     {
         $this->children->add($page);
 
@@ -139,14 +141,14 @@ class Page implements PageInterface
         }
     }
 
-    public function removeChildren(self $page): void
+    public function removeChildren(PageInterface $page): void
     {
         $this->children->removeElement($page);
     }
 
     public function isHomepage(): bool
     {
-        return self::HOMEPAGE == $this->template;
+        return PageInterface::HOMEPAGE == $this->template;
     }
 
     public function getAction(): ?string
@@ -193,22 +195,28 @@ class Page implements PageInterface
     public function onRemove(PreRemoveEventArgs $event): void
     {
         $em = $event->getObjectManager();
-        if (null !== $this->children && count($this->children)) {
+        if (count($this->children)) {
             foreach ($this->children as $child) {
-                $child->setParent(null);
+                $child->setParent();
                 $em->persist($child);
             }
         }
 
-        $this->setPublishState(ThreeStateStatusEnum::UNPUBLISHED());
+        $this->setPublishState(ThreeStateStatusEnum::UNPUBLISHED()->getValue());
         $this->parent = null;
     }
 
+    /**
+     * @return Collection<int, PageTranslationInterface>
+     */
     public function getSeoTranslations(): Collection
     {
         return $this->translations;
     }
 
+    /**
+     * @return Collection<int, PageTranslationInterface>
+     */
     public function getSlugTranslations(): Collection
     {
         return $this->translations;

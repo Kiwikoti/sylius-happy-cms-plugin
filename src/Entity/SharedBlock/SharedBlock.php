@@ -8,6 +8,7 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
@@ -31,17 +32,18 @@ class SharedBlock implements SharedBlockInterface, ResourceInterface, Translatab
     }
     use EntityStatusTrait;
 
-    #[ORM\Column(name: 'block_key', type: \Doctrine\DBAL\Types\Types::STRING, unique: true)]
+    #[ORM\Column(name: 'block_key', type: Types::STRING, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     protected ?string $key = null;
 
-    #[ORM\Column(name: 'type', type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(name: 'type', type: Types::STRING)]
     #[Assert\NotBlank]
     #[Assert\Type('string')]
     protected ?string $type = null;
 
-    #[ORM\Column(name: 'settings', type: \Doctrine\DBAL\Types\Types::JSON)]
+    /** @var array<string, mixed>|null $settings */
+    #[ORM\Column(name: 'settings', type: Types::JSON)]
     #[Assert\Type('array')]
     protected ?array $settings = [];
 
@@ -79,7 +81,7 @@ class SharedBlock implements SharedBlockInterface, ResourceInterface, Translatab
         return $this->key;
     }
 
-    public function setKey(?string $key)
+    public function setKey(?string $key): void
     {
         $this->key = $key;
     }

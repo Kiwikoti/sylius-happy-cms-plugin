@@ -32,8 +32,9 @@ class Media implements MediaInterface, \Stringable
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER, nullable: true)]
     protected ?int $lastModified = null;
 
+    /** @var array<string, mixed> */
     #[ORM\Column(type: \Doctrine\DBAL\Types\Types::JSON)]
-    protected $metas = [];
+    protected array $metas = [];
 
     protected ?FolderInterface $folder = null;
 
@@ -56,7 +57,7 @@ class Media implements MediaInterface, \Stringable
         }
     }
 
-    public function getSlug()
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
@@ -124,7 +125,7 @@ class Media implements MediaInterface, \Stringable
         $this->folder = $folder;
     }
 
-    public function getPath($separator = '/'): string
+    public function getPath(string $separator = '/'): string
     {
         $tree = $this->getSlug();
         $current = $this->getFolder();

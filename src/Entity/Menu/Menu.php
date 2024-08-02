@@ -9,6 +9,7 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -25,10 +26,8 @@ class Menu implements MenuInterface
     }
     use EntityStatusTrait;
 
-    public $menuItems;
-
-    /** @var array<MenuItemInterface> */
-    protected array $items;
+    /** @var Collection<int, MenuItemInterface> */
+    protected Collection $items;
 
     #[ORM\Column(name: 'code', type: \Doctrine\DBAL\Types\Types::STRING, length: 30)]
     protected ?string $code = null;
@@ -47,38 +46,18 @@ class Menu implements MenuInterface
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * Set name.
-     */
-    public function setName(?string $name)
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string|null
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Get menuItems.
-     *
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getMenuItems()
-    {
-        return $this->menuItems;
-    }
-
-    /**
-     * @return MenuItemInterface[]|ArrayCollection
-     */
-    public function getItems()
+    /** @return Collection<int, MenuItemInterface> */
+    public function getItems(): Collection
     {
         return $this->items;
     }
@@ -100,7 +79,7 @@ class Menu implements MenuInterface
     #[ORM\PreRemove]
     public function onRemove(): void
     {
-        $this->setStatus(false);
+        $this->setStatus();
     }
 
     public function getCode(): string

@@ -39,22 +39,28 @@ class PageTranslation extends AbstractTranslation implements PageTranslationInte
     #[ORM\Column]
     protected ?int $id = null;
 
-    /** @var array|null */
+    /** @var array<int, mixed>|null $content */
     #[Groups('main')]
     #[Column(name: 'content', type: Types::JSON, nullable: true)]
     #[Assert\Type('array')]
-    protected $content = [];
+    protected ?array $content = [];
 
     public function __construct()
     {
         $this->SEOConstruct();
     }
 
+    /**
+     * @return array<int, mixed>|null
+     */
     public function getContent(): ?array
     {
         return $this->content;
     }
 
+    /**
+     * @param array<int, mixed>|null $content
+     */
     public function setContent(?array $content): void
     {
         $this->content = $content;
@@ -66,7 +72,7 @@ class PageTranslation extends AbstractTranslation implements PageTranslationInte
 
         $current = $this;
         do {
-            $slug = method_exists($current, 'getPageSlug') ? $current->getPageSlug() : $current->getSlug();
+            $slug = (is_object($current) && method_exists($current, 'getPageSlug')) ? $current->getPageSlug() : $current->getSlug();
             $tree = $name ? $current->getName() . $separator . $tree : $slug . $separator . $tree;
             if (null !== $current->getTranslatable()) {
                 $current = $current->getTranslatable()->getParent() ?? null;
