@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
+use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface ConfigInterface extends ResourceInterface
@@ -23,4 +24,9 @@ interface ConfigInterface extends ResourceInterface
     public function setDescription(string $description): void;
 
     public function setType(mixed $type): void;
+
+    /**
+     * @return Collection<int, ConfigTranslationInterface>
+     */
+    public function getTranslations(): Collection;
 }

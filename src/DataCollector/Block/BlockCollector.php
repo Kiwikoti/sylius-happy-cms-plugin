@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\DataCollector\Block;
 
+use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,9 +22,9 @@ final class BlockCollector extends AbstractDataCollector
     }
 
     /**
-     * @return array
+     * @return BlockTypeInterface[]
      */
-    public function getBlocks()
+    public function getBlocks(): array
     {
         return $this->data['blocks'] ?: [];
     }

@@ -31,7 +31,7 @@ class SharedBlockCollection
     }
 
     /**
-     * @return array<SharedBlockTypeInterface>
+     * @return SharedBlockTypeInterface[]
      */
     public function getBlocks(): array
     {

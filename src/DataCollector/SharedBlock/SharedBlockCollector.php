@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\DataCollector\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +22,9 @@ final class SharedBlockCollector extends AbstractDataCollector
     }
 
     /**
-     * @return array
+     * @return array<string, SharedBlockTypeInterface>
      */
-    public function getBlocks()
+    public function getBlocks(): array
     {
         return $this->data['blocks'] ?: [];
     }

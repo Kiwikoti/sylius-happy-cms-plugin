@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\DataMapperInterface;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigInterface;
 use Adeliom\SyliusHappyCMSPlugin\Enum\Config\ConfigTypeEnum;
-use App\Entity\HappyCMS\Config\Config;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Form\DataMapperInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
@@ -19,7 +19,7 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
 
     public function mapDataToForms(mixed $viewData, \Traversable $forms): void
     {
-        if (!$viewData instanceof Config) {
+        if (!$viewData instanceof ConfigInterface) {
             return;
         }
 
@@ -41,7 +41,7 @@ class ConfigTranslatableDataMapper implements DataMapperInterface
 
     public function mapFormsToData(\Traversable $forms, mixed &$viewData): void
     {
-        if (!$viewData instanceof Config) {
+        if (!$viewData instanceof ConfigInterface) {
             return;
         }
 

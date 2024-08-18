@@ -10,6 +10,9 @@ use Adeliom\SyliusHappyCMSPlugin\SharedBlock\SharedBlockType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class SharedBlockController implements ServiceSubscriberInterface
 {
@@ -19,11 +22,24 @@ class SharedBlockController implements ServiceSubscriberInterface
     ) {
     }
 
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
     public function select(): Response
     {
-        return new Response($this->twig->render('@SyliusHappyCMSPlugin/shared_block/select.html.twig', [
-            'blocks' => $this->sharedBlockCollection->getBlocks()->filter(static fn (SharedBlockTypeInterface $block) => $block::class !== SharedBlockType::class),
-        ]));
+        return new Response(
+            $this->twig->render(
+                '@SyliusHappyCMSPlugin/shared_block/select.html.twig',
+                [
+                    'blocks' => array_filter(
+                        $this->sharedBlockCollection->getBlocks(),
+                        static fn (SharedBlockTypeInterface $block) => $block::class !== SharedBlockType::class,
+                    ),
+                ],
+            ),
+        );
     }
 
     public static function getSubscribedServices(): array

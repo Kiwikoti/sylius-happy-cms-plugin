@@ -7,6 +7,9 @@ namespace Adeliom\SyliusHappyCMSPlugin\Controller\Routing;
 use Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer;
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Adeliom\SyliusHappyCMSPlugin\Security\ContentDocumentVoter;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory;
 use Sylius\Component\Resource\Metadata\Metadata;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -76,12 +79,18 @@ class RenderController extends AbstractController
         ]);
     }
 
+    /**
+     * @return array<Metadata|RequestConfiguration|null>
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     private function contentDocumentAsResource(
         string $model,
         Request $request,
     ): array {
         try {
-            /** @var array $resources */
+            /** @var array<string, array<mixed, mixed>> $resources */
             $resources = $this->container->get('parameter_bag')->get('sylius.resources');
         } catch (InvalidArgumentException $exception) {
             return [];

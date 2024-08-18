@@ -49,8 +49,16 @@ final class SeoCollector extends AbstractDataCollector
      */
     private const METRIC_CLASS_OK = 'status-sucess';
 
-    public function __construct(protected BreadcrumbCollection $breadcrumb, protected ?array $config, protected bool $enabled = false, protected array $ignore = [])
-    {
+    /**
+     * @param array<string, mixed>|null $config
+     * @param string[] $ignore
+     */
+    public function __construct(
+        protected BreadcrumbCollection $breadcrumb,
+        protected ?array $config,
+        protected bool $enabled = false,
+        protected array $ignore = [],
+    ) {
     }
 
     public function collect(Request $request, Response $response, \Throwable $exception = null): void
@@ -64,9 +72,12 @@ final class SeoCollector extends AbstractDataCollector
         }
 
         $uri = $request->getPathInfo();
-        $match = array_filter($this->ignore, static function ($ignore) use ($uri) {
-            return preg_match('{' . $ignore . '}', rawurldecode($uri));
-        });
+        $match = array_filter(
+            $this->ignore,
+            function (string $ignore) use ($uri) {
+                return (bool) (@preg_match('{' . $ignore . '}', rawurldecode($uri)));
+            },
+        );
 
         if (!empty($match) || in_array($request->attributes->get('_route'), $this->ignore)) {
             $this->data['ignored'] = true;
@@ -194,12 +205,12 @@ final class SeoCollector extends AbstractDataCollector
         return $this->data['description'] ?? [];
     }
 
-    public function __get($name)
+    public function __get(string $name): mixed
     {
         return $this->data[$name] ?? [];
     }
 
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         return isset($this->data[$name]);
     }
