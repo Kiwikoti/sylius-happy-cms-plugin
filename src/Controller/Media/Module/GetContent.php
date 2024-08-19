@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Controller\Media\Module;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use League\Flysystem\FilesystemException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,25 +16,31 @@ trait GetContent
 {
     /**
      * get files in path.
-     *
-     * @param Request $request [description]
      */
-    public function getFiles(Request $request)
+    public function getFiles(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $folder = null;
         $path = '/';
         if (!empty($data['folder'])) {
             $folder = $this->manager->getFolder($data['folder']);
-            if ($folder) {
+            if ($folder instanceof FolderInterface) {
                 $path = $folder->getPath();
+            } else {
+                return new JsonResponse([
+                    'error' => $this->translator->trans('MediaManager::messages.error.doesnt_exist', ['attr' => $path]),
+                ]);
             }
         }
         if (empty($data['folder']) && !empty($data['path'])) {
             try {
                 $folder = $this->manager->folderByPath($data['path']);
-                if ($folder) {
+                if ($folder instanceof FolderInterface) {
                     $path = $folder->getPath();
+                } else {
+                    return new JsonResponse([
+                        'error' => $this->translator->trans('MediaManager::messages.error.doesnt_exist', ['attr' => $path]),
+                    ]);
                 }
             } catch (FilesystemException $e) {
                 return new JsonResponse([
@@ -41,51 +48,49 @@ trait GetContent
                 ]);
             }
         }
-        if (!empty($data['folder']) && !$folder) {
-            return new JsonResponse([
-                'error' => $this->translator->trans('MediaManager::messages.error.doesnt_exist', ['attr' => $path]),
-            ]);
-        }
+
+        $items = $this->paginate($this->getData($folder, $data['search'] ?? null), $this->paginationAmount);
 
         return new JsonResponse([
             'files' => [
                 'path' => $path,
-                'items' => $this->paginate($this->getData($folder, $data['search'] ?? null), $this->paginationAmount),
+                'items' => $items,
             ],
         ]);
     }
 
     /**
      * rename item.
-     *
-     * @param Request $request [description]
      */
-    public function getItemInfos(Request $request)
+    public function getItemInfos(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
-        $mediaId = $data['item'];
+        $mediaId = null;
+        if (is_string($request->getContent())) {
+            $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+            $mediaId = $data['item'];
 
-        /** @var Media|null $media */
-        $media = $this->helper->getMediaRepository()->findOneBy(['id' => $mediaId]);
-        if ($media) {
-            $path = $media->getPath();
-            $time = $media->getLastModified() ?? null;
-            $metas = $media->getMetas();
+            /** @var Media|null $media */
+            $media = $this->helper->getMediaRepository()->findOneBy(['id' => $mediaId]);
+            if ($media) {
+                $path = $media->getPath();
+                $time = $media->getLastModified() ?? null;
+                $metas = $media->getMetas();
 
-            $item = [
-                'id' => $media->getId(),
-                'name' => $media->getName(),
-                'type' => $media->getMime(),
-                'size' => $media->getSize(),
-                'path' => $this->manager->publicUrl($media),
-                'download_url' => $this->manager->downloadUrl($media),
-                'storage_path' => $path,
-                'last_modified' => $time,
-                'last_modified_formated' => $this->helper->getItemTime($time),
-                'metas' => $metas,
-            ];
+                $item = [
+                    'id' => $media->getId(),
+                    'name' => $media->getName(),
+                    'type' => $media->getMime(),
+                    'size' => $media->getSize(),
+                    'path' => $this->manager->publicUrl($media),
+                    'download_url' => $this->manager->downloadUrl($media),
+                    'storage_path' => $path,
+                    'last_modified' => $time,
+                    'last_modified_formated' => $this->helper->getItemTime($time),
+                    'metas' => $metas,
+                ];
 
-            return new JsonResponse($item);
+                return new JsonResponse($item);
+            }
         }
 
         return new JsonResponse([
@@ -95,8 +100,10 @@ trait GetContent
 
     /**
      * get files list.
+     *
+     * @return array<int, array<string, mixed>>
      */
-    protected function getData(?Folder $dir, ?string $search = null)
+    protected function getData(FolderInterface|null $dir, ?string $search = null): array
     {
         $list = [];
         $dirList = $this->getFolderContent($dir, false, $search);
@@ -104,7 +111,7 @@ trait GetContent
         $storageFiles = array_filter($this->getFolderListByType($dirList, 'file'), [$this, 'ignoreFiles']);
 
         // folders
-        /** @var Folder $folder */
+        /** @var FolderInterface $folder */
         foreach ($storageFolders as $folder) {
             $path = $folder->getPath();
             $list[] = [
@@ -117,7 +124,7 @@ trait GetContent
         }
 
         // files
-        /** @var Media $file */
+        /** @var MediaInterface $file */
         foreach ($storageFiles as $file) {
             $path = $file->getPath();
             $time = $file->getLastModified() ?? null;
@@ -142,11 +149,13 @@ trait GetContent
 
     /**
      * get directory data.
+     *
+     * @return array<MediaInterface|FolderInterface>
      */
-    protected function getFolderContent($folder = null, bool $rec = false, ?string $search = null)
+    protected function getFolderContent(int|string|FolderInterface $folder = null, bool $rec = false, ?string $search
+    = null): array
     {
-        if (!empty($folder)) {
-            /** @var Folder $folder */
+        if (is_int($folder)) {
             $folder = $this->manager->getFolder($folder);
         }
 
@@ -180,14 +189,14 @@ trait GetContent
 
         if ($rec) {
             $results = array_filter($results, static function ($item) {
-                return $item instanceof Media;
+                return $item instanceof MediaInterface;
             });
         }
 
         return $results;
     }
 
-    protected function ignoreFiles($item)
+    protected function ignoreFiles(MediaInterface $item): bool
     {
         return !preg_grep($this->ignoreFiles, [$item->getPath()]);
     }
@@ -195,41 +204,24 @@ trait GetContent
     /**
      * filter directory data by type.
      *
-     * @param string $type
+     * @param array<MediaInterface|FolderInterface> $list
      *
-     * @return mixed[]
+     * @return array<MediaInterface|FolderInterface>
      */
-    protected function getFolderListByType(array $list, $type)
+    protected function getFolderListByType(array $list, string $type): array
     {
-        $list = (new ArrayCollection($list))->filter(static function ($item) use ($type) {
+        $list = (new ArrayCollection($list))->filter(static function (MediaInterface|FolderInterface $item) use ($type) {
             if ('dir' === $type) {
-                return $item instanceof Folder;
+                return $item instanceof FolderInterface;
             }
 
             if ('file' === $type) {
-                return $item instanceof Media;
+                return $item instanceof MediaInterface;
             }
 
             return false;
         });
 
         return $list->toArray();
-    }
-
-    /**
-     * get folder size.
-     *
-     * @param array<mixed> $list
-     *
-     * @return array<string, int>|array<string, float>
-     */
-    protected function getFolderInfoFromList($list)
-    {
-        $list = (new ArrayCollection($list))->filter(static fn ($item) => $item->isFile());
-
-        return [
-            'count' => $list->count(),
-            'size' => array_sum($list->map(static fn ($item) => $item->fileSize())->toArray()),
-        ];
     }
 }

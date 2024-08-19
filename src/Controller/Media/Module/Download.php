@@ -9,14 +9,13 @@ use League\Flysystem\StorageAttributes;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
 
 trait Download
 {
     /**
      * zip folder.
-     *
-     *
      *
      * @throws \League\Flysystem\FilesystemException
      */
@@ -31,7 +30,7 @@ trait Download
             ->map(static fn (StorageAttributes $attributes) => $attributes->path())
             ->toArray();
 
-        if ([] !== $allPaths) {
+        if ([] !== $allPaths && is_string($name)) {
             return $this->zipAndDownloadDir(
                 $name,
                 $allPaths,
@@ -46,62 +45,59 @@ trait Download
      */
     public function downloadFiles(Request $request): StreamedResponse
     {
-        $list = json_decode($request->request->get('list', []), true, 512, \JSON_THROW_ON_ERROR);
+        $data = $request->request->get('list', '[]');
+        if (is_string($data)) {
+            $list = json_decode($data, true, 512, \JSON_THROW_ON_ERROR);
+        }
         $name = $request->request->get('name');
 
         return $this->zipAndDownload(
             $name . '-files',
-            $list,
+            $list ?? [],
         );
     }
 
     /**
      * zip ops.
+     *
+     * @param array<string, mixed> $list
      */
-    protected function zipAndDownload(mixed $name, mixed $list): StreamedResponse
+    protected function zipAndDownload(string $name, array $list): StreamedResponse
     {
         return new StreamedResponse(function () use ($name, $list): void {
-            // track changes
-            $counter = 100 / count($list);
-            $progress = 0;
-
+            $zipOption = new Archive();
+            $zipOption->setDeflateLevel(9);
+            $zipOption->setSendHttpHeaders(true);
+            $zipOption->setContentType('application/octet-stream');
             $zip = new ZipStream(
-                defaultDeflateLevel: 9,
-                sendHttpHeaders: true,
-                outputName: sprintf('%s.zip', $name),
-                contentType: 'application/octet-stream',
+                sprintf('%s.zip', $name),
+                $zipOption,
             );
 
             foreach ($list as $file) {
                 $name = $file['name'];
                 $path = $file['storage_path'];
                 $streamRead = $this->filesystem->readStream($path);
-
-                // add to zip
-                /** @phpstan-ignore-next-line */
-                if ($streamRead) {
-                    $progress += $counter;
-
-                    $zip->addFileFromStream($name, $streamRead);
-                }
+                $zip->addFileFromStream($name, $streamRead);
             }
 
             $zip->finish();
         });
     }
 
-    protected function zipAndDownloadDir($name, $list): StreamedResponse
+    /**
+     * @param array<string, mixed> $list
+     */
+    protected function zipAndDownloadDir(string $name, array $list): StreamedResponse
     {
         return new StreamedResponse(function () use ($name, $list): void {
-            // track changes
-            $counter = 100 / count($list);
-            $progress = 0;
-
+            $zipOption = new Archive();
+            $zipOption->setDeflateLevel(9);
+            $zipOption->setSendHttpHeaders(true);
+            $zipOption->setContentType('application/octet-stream');
             $zip = new ZipStream(
-                defaultDeflateLevel: 9,
-                sendHttpHeaders: true,
-                outputName: sprintf('%s.zip', $name),
-                contentType: 'application/octet-stream',
+                sprintf('%s.zip', $name),
+                $zipOption,
             );
 
             foreach ($list as $file) {
@@ -109,14 +105,7 @@ trait Download
                 $file_name = pathinfo($file, \PATHINFO_BASENAME);
                 $full_name = sprintf('%s/%s', $dir_name, $file_name);
                 $streamRead = $this->filesystem->readStream($file);
-
-                // add to zip
-                /** @phpstan-ignore-next-line */
-                if ($streamRead) {
-                    $progress += $counter;
-
-                    $zip->addFileFromStream($full_name, $streamRead);
-                }
+                $zip->addFileFromStream($full_name, $streamRead);
             }
 
             $zip->finish();

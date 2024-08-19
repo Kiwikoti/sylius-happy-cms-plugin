@@ -5,24 +5,17 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Menu;
 
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
-use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Doctrine\ORM\QueryBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
  * @extends NestedTreeRepository<MenuItemInterface>
- *
- * @implements RepositoryInterface<MenuItemInterface>
  */
-class MenuItemRepository extends NestedTreeRepository implements
-    MenuItemRepositoryInterface,
-    RepositoryInterface,
-    TranslationRepositoryInterface
+class MenuItemRepository extends NestedTreeRepository implements MenuItemRepositoryInterface
 {
     use ResourceRepositoryTrait;
     use TranslationRepositoryTrait;
@@ -106,7 +99,7 @@ class MenuItemRepository extends NestedTreeRepository implements
             ->setParameter('menu', $menuId);
     }
 
-    public function findPreviousMenuItem(MenuItemInterface $menuItem): MenuItemInterface|null
+    public function findPreviousMenuItem(MenuItemInterface $menuItem): ?MenuItemInterface
     {
         return $this->createQueryBuilder('mi')
             ->andWhere('mi.id != :id')
@@ -122,7 +115,7 @@ class MenuItemRepository extends NestedTreeRepository implements
             ->getSingleResult();
     }
 
-    public function findNextMenuItem(MenuItemInterface $menuItem): MenuItemInterface|null
+    public function findNextMenuItem(MenuItemInterface $menuItem): ?MenuItemInterface
     {
         return $this->createQueryBuilder('mi')
             ->andWhere('mi.id != :id')

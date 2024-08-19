@@ -11,9 +11,11 @@ trait Utils
     /**
      * helper to paginate array.
      *
-     * @param array<mixed> $items
+     * @param array<int, array<string, mixed>> $items
+     *
+     * @return array<string, mixed>
      */
-    public function paginate($items, int $perPage = 10): array
+    public function paginate(array $items, int $perPage = 10): array
     {
         $request = Request::createFromGlobals();
         $currentPage = (int) $request->query->get('page', 1);

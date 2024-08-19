@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Menu;
 
+use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 
@@ -41,4 +42,9 @@ interface MenuItemInterface extends ResourceInterface, TranslatableInterface, \S
     public function getParent(): ?self;
 
     public function getMenu(): ?MenuInterface;
+
+    /**
+     * @return Collection<int, MenuItemInterface>
+     */
+    public function getChildren(): Collection;
 }

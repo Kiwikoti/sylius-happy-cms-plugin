@@ -12,26 +12,28 @@ trait Rename
 {
     /**
      * rename item.
-     *
-     * @param Request $request [description]
      */
-    public function renameItem(Request $request)
+    public function renameItem(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
-        $file = $data['file'];
-
-        $type = $file['type'];
-        $new_filename = $this->helper->cleanName($data['new_filename'], 'folder' === $type);
         $message = '';
+        $new_filename = '';
+        $content = $request->getContent();
+        if (is_string($content)) {
+            $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+            $file = $data['file'];
 
-        try {
-            $object = 'folder' === $type ? $this->manager->getFolder($file['id']) : $this->manager->getMedia($file['id']);
-            $old_filename = $object->getName();
-            $object->setName($new_filename);
-            $this->manager->save($object);
-            $this->eventDispatcher->dispatch(new MediaFileRenamed($old_filename, $new_filename), MediaFileRenamed::NAME);
-        } catch (\Exception $exception) {
-            $message = $exception->getMessage();
+            $type = $file['type'];
+            $new_filename = $this->helper->cleanName($data['new_filename'], 'folder' === $type);
+
+            try {
+                $object = 'folder' === $type ? $this->manager->getFolder($file['id']) : $this->manager->getMedia($file['id']);
+                $old_filename = $object->getName();
+                $object->setName($new_filename);
+                $this->manager->save($object);
+                $this->eventDispatcher->dispatch(new MediaFileRenamed($old_filename, $new_filename), MediaFileRenamed::NAME);
+            } catch (\Exception $exception) {
+                $message = $exception->getMessage();
+            }
         }
 
         return new JsonResponse(['message' => $message, 'new_filename' => $new_filename]);

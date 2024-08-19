@@ -8,6 +8,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Dto\FieldDto;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldConfiguratorInterface;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\FlexibleContentField;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockCollection;
+use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
 use Doctrine\ORM\PersistentCollection;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -69,15 +70,15 @@ final class FlexibleContentConfigurator implements FieldConfiguratorInterface
         );
 
         foreach ($blocks as $blockType => $block) {
-            if (method_exists($blockType, 'configureAdminAssets')) {
-                $field->addAssets($block->configureAdminAssets() ?? []);
+            if ($block instanceof BlockTypeInterface && method_exists($blockType, 'configureAdminAssets')) {
+                $field->addAssets($block->configureAdminAssets());
             }
-            if (method_exists($blockType, 'configureAdminFormThemes')) {
-                $field->addFormThemes($block->configureAdminFormThemes() ?? []);
+            if ($block instanceof BlockTypeInterface && method_exists($blockType, 'configureAdminFormThemes')) {
+                $field->addFormThemes($block->configureAdminFormThemes());
             }
         }
 
-        $field->setFormTypeOption('blocks', $blocks->toArray());
+        $field->setFormTypeOption('blocks', $blocks);
 
         // (generated values are always the same for all elements)
         $field->setFormTypeOptionIfNotSet(
@@ -100,7 +101,7 @@ final class FlexibleContentConfigurator implements FieldConfiguratorInterface
             $field->setCustomOption(FlexibleContentField::OPTION_ENTRY_IS_COMPLEX, $isComplexEntry);
         }
 
-        $field->setFormattedValue($this->formatCollection($field));
+        $field->setValue($this->formatCollection($field));
     }
 
     private function formatCollection(FieldDto $field): int|string
@@ -124,7 +125,7 @@ final class FlexibleContentConfigurator implements FieldConfiguratorInterface
         return u(', ')->join($collectionItemsAsText)->truncate(512, '…')->toString();
     }
 
-    private function countNumElements($collection): int
+    private function countNumElements(mixed $collection): int
     {
         if (is_countable($collection)) {
             return \count($collection);
@@ -135,5 +136,10 @@ final class FlexibleContentConfigurator implements FieldConfiguratorInterface
         }
 
         return 0;
+    }
+
+    public function formatValue(FieldDto $field, mixed $value): mixed
+    {
+        return $value;
     }
 }

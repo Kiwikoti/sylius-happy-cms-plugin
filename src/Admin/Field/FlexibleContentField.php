@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Admin\Field;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldInterface;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldTrait;
+use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
 use Adeliom\SyliusHappyCMSPlugin\Form\Block\BlockCollectionType;
 
 /**
@@ -120,6 +121,9 @@ class FlexibleContentField implements FieldInterface
         return $this;
     }
 
+    /**
+     * @param array<int, BlockTypeInterface> $blocks
+     */
     public function allowedBlocks(array $blocks): self
     {
         $this->setCustomOption(self::OPTION_BLOCKS, $blocks);

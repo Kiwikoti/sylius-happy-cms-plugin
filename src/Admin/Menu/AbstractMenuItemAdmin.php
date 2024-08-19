@@ -15,6 +15,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Crud;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\GridBundle\Builder\GridBuilderInterface;
@@ -62,11 +63,11 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
         parent::buildForm($builder, $options);
         // Si le menu n'est pas défini, récupérer le menu du menuItem parent
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (PostSubmitEvent $event) {
-            /** @var \Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem $menuItem */
+            /** @var MenuItemInterface $menuItem */
             $menuItem = $event->getData();
             $menuItemPositions = $menuItem->getParent()->getChildren()
-                ->filter(fn (MenuItem $mi): bool => $mi !== $menuItem)
-                ->map(fn (MenuItem $menuItem): ?int => $menuItem->getPosition())
+                ->filter(fn (MenuItemInterface $mi): bool => $mi !== $menuItem)
+                ->map(fn (MenuItemInterface $menuItem): ?int => $menuItem->getPosition())
                 ->toArray();
             $newPosition = [] !== $menuItemPositions ? max($menuItemPositions) + 1 : 0;
             $menuItem->setPosition($newPosition);
@@ -80,8 +81,13 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
+        $menuId = null;
+        if ($this->getMenuId()) {
+            $menuId = $this->getMenuId();
+        } elseif ($this->getResource() instanceof MenuItemInterface) {
+            $menuId = $this->getResource()->getMenu()?->getId();
+        }
 
-        $menuId = $this->getMenuId() ?? $this->getResource()?->getMenu()?->getId();
         if ($menuId) {
             $actions->remove(Crud::PAGE_INDEX, Action::NEW);
             $newMenuItem = Action::new('menu_items.new', 'sylius_happy_cms.menu_item.admin.action.create', 'plus')
@@ -120,14 +126,16 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
             ->setFormTypeOption('choice_label', fn (MenuItem $choice): string => $choice->getFlattenParents())
             ->setGridTemplatePath('@SyliusHappyCMSPlugin/field/menu/grid_menu_item_parent.html.twig');
 
-        if ($menuId && null !== $this->getResource()?->getId()) {
+        $resource = $this->getResource();
+
+        if ($menuId && ($resource instanceof MenuItemInterface && null !== $resource->getId())) {
             $parentField
                 ->setFormTypeOption(
                     'query_builder',
                     fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('mi')
                     ->andWhere('mi.id != :id')
                     ->andWhere('mi.menu = :menuId')
-                    ->setParameter('id', $this->getResource()->getId())
+                    ->setParameter('id', $resource->getId())
                     ->setParameter('menuId', $menuId),
                 );
         }
@@ -163,8 +171,10 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSub
 
     private function getMenuId(): ?int
     {
-        if (null !== $this->getResource()?->getMenu()) {
-            return $this->getResource()->getMenu()->getId();
+        $resource = $this->getResource();
+
+        if ($resource instanceof MenuItemInterface && null !== $resource->getMenu()) {
+            return $resource->getMenu()->getId();
         }
 
         $menuId = (int) $this->getResourceFieldValueInRequest(formName: 'menu_item_admin', fieldName: 'menu');

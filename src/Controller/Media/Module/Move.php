@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Controller\Media\Module;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Media\MediaFileMoved;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,10 +14,8 @@ trait Move
 {
     /**
      * move files/folders.
-     *
-     * @param Request $request [description]
      */
-    public function moveItem(Request $request)
+    public function moveItem(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $destinationId = $data['destination'];
@@ -56,9 +56,9 @@ trait Move
                 if ($entity) {
                     // Move
                     try {
-                        if ('folder' === $file_type) {
+                        if ('folder' === $file_type && $entity instanceof FolderInterface) {
                             $entity->setParent($destination);
-                        } else {
+                        } elseif ($entity instanceof MediaInterface) {
                             $entity->setFolder($destination);
                         }
 

@@ -13,10 +13,8 @@ trait NewFolder
 {
     /**
      * create new folder.
-     *
-     * @param Request $request [description]
      */
-    public function createNewFolder(Request $request)
+    public function createNewFolder(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
 

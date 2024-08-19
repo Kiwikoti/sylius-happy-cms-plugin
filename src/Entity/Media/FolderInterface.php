@@ -13,4 +13,6 @@ interface FolderInterface extends ResourceInterface
     public function getPath(string $separator = '/'): string;
 
     public function setName(string $name): void;
+
+    public function getName(): ?string;
 }

@@ -43,9 +43,9 @@ class BlockCollection
     }
 
     /**
-     * @param array<BlockTypeInterface> $blockTypes
+     * @param BlockTypeInterface[] $blockTypes
      *
-     * @return array<BlockTypeInterface>
+     * @return BlockTypeInterface[]
      */
     public function getAllowedBlocks(?array $blockTypes): array
     {

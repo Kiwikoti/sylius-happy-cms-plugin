@@ -10,7 +10,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 trait GlobalSearch
 {
-    public function globalSearch()
+    /**
+     * Actually not used
+     */
+    /*public function globalSearch(): JsonResponse
     {
         $results = (new ArrayCollection($this->getFolderContent('/', true)))
             ->filter(fn ($item) => !preg_grep($this->ignoreFiles, [$item->path()]) && !$item->isDir())->map(function (FileAttributes $file) {
@@ -31,5 +34,5 @@ trait GlobalSearch
             })->toArray();
 
         return new JsonResponse($results);
-    }
+    }*/
 }

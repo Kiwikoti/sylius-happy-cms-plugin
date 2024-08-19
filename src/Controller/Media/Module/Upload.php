@@ -21,16 +21,19 @@ trait Upload
      *
      * @param Request $request [description]
      */
-    public function upload(Request $request)
+    public function upload(Request $request): JsonResponse
     {
         $upload_folder_id = $request->request->get('upload_folder');
         $folder = null;
-        if (!empty($upload_folder_id)) {
+        $custom_attr = [];
+        if (is_int($upload_folder_id)) {
             $folder = $this->manager->getFolder($upload_folder_id);
         }
 
         $random_name = filter_var($request->request->get('random_names'), \FILTER_VALIDATE_BOOLEAN);
-        $custom_attr = json_decode($request->request->get('custom_attrs', '[]'), true, 512, \JSON_THROW_ON_ERROR);
+        if (is_string($request->request->get('custom_attrs', '[]'))) {
+            $custom_attr = json_decode($request->request->get('custom_attrs', '[]'), true, 512, \JSON_THROW_ON_ERROR);
+        }
         $result = [];
 
         if (($one = $request->files->get('file')) && $this->allowUpload($one)) {
@@ -93,7 +96,7 @@ trait Upload
      *
      * @param Request $request [description]
      */
-    public function uploadEditedImage(Request $request)
+    public function uploadEditedImage(Request $request): JsonResponse
     {
         if ($this->allowUpload()) {
             $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
@@ -140,7 +143,7 @@ trait Upload
      *
      * @param Request $request [description]
      */
-    public function uploadLink(Request $request)
+    public function uploadLink(Request $request): JsonResponse
     {
         if ($this->allowUpload()) {
             $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
@@ -189,7 +192,7 @@ trait Upload
      *
      * @return bool [boolean]
      */
-    protected function allowUpload($file = null): bool
+    protected function allowUpload(?string $file = null): bool
     {
         return true;
     }
@@ -204,7 +207,10 @@ trait Upload
         return $file;
     }
 
-    private static function resumableUpload(Request $request, string $tmpFilePath, string $filename, string $chunksDir)
+    /**
+     * @return array<string, mixed>
+     */
+    private static function resumableUpload(Request $request, string $tmpFilePath, string $filename, string $chunksDir): array
     {
         $successes = [];
         $errors = [];
@@ -239,14 +245,21 @@ trait Upload
         return ['final' => false, 'successes' => $successes, 'errors' => $errors, 'warnings' => $warnings];
     }
 
-    private static function checkAllParts(string $fileChunksFolder, string $filename, string $extension, int $totalSize, int $totalChunks, string $chunksDir, array &$successes, array &$errors, array &$warnings)
+    /**
+     * @param string[] $successes
+     * @param string[] $errors
+     * @param string[] $warnings
+     */
+    private static function checkAllParts(string $fileChunksFolder, string $filename, string $extension, int $totalSize, int $totalChunks, string $chunksDir, array &$successes, array &$errors, array &$warnings): string|bool
     {
         $parts = glob(Path::normalize(sprintf('%s/*', $fileChunksFolder)));
-        $successes[] = count($parts) . sprintf(' of %d parts done so far in %s', $totalChunks, $fileChunksFolder);
+        if (is_array($parts)) {
+            $successes[] = count($parts) . sprintf(' of %d parts done so far in %s', $totalChunks, $fileChunksFolder);
+        }
         $filesystem = new Filesystem();
 
         // check if all the parts present, and create the final destination file
-        if (count($parts) === (int) $totalChunks) {
+        if (is_array($parts) && count($parts) === (int) $totalChunks) {
             $loaded_size = 0;
             foreach ($parts as $file) {
                 $loaded_size += filesize($file);
@@ -274,7 +287,12 @@ trait Upload
         return false;
     }
 
-    private static function createFileFromChunks(string $fileChunksFolder, string $fileName, string $extension, int $totalSize, int $totalChunks, string $chunksDir, array &$successes, array &$errors, array &$warnings)
+    /**
+     * @param string[] $successes
+     * @param string[] $errors
+     * @param string[] $warnings
+     */
+    private static function createFileFromChunks(string $fileChunksFolder, string $fileName, string $extension, int $totalSize, int $totalChunks, string $chunksDir, array &$successes, array &$errors, array &$warnings): bool|string
     {
         $relPath = Path::normalize($chunksDir . '/assembled');
         $filesystem = new Filesystem();
@@ -294,7 +312,10 @@ trait Upload
         }
 
         for ($i = 0; $i < $totalChunks; ++$i) {
-            fwrite($fp, file_get_contents(Path::normalize($fileChunksFolder . '/' . $fileName . '.part' . $i)));
+            $content = file_get_contents(Path::normalize($fileChunksFolder . '/' . $fileName . '.part' . $i));
+            if (is_string($content)) {
+                fwrite($fp, $content);
+            }
         }
 
         fclose($fp);
@@ -302,7 +323,10 @@ trait Upload
         return Path::normalize(sprintf('%s/%s%s', $relPath, $saveName, $extension));
     }
 
-    private static function getNextAvailableFilename(string $relPath, string $origFileName, string $extension, array &$errors)
+    /**
+     * @param string[] $errors
+     */
+    private static function getNextAvailableFilename(string $relPath, string $origFileName, string $extension, array &$errors): bool|string
     {
         if (file_exists(Path::normalize(sprintf('%s/%s%s', $relPath, $origFileName, $extension)))) {
             $i = 0;

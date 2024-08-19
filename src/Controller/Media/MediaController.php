@@ -43,11 +43,11 @@ class MediaController extends AbstractController
 
     protected EventDispatcherInterface $eventDispatcher;
 
-    protected string $ignoreFiles;
+    protected string $ignoreFiles = '';
 
-    protected string $chunksDir;
+    protected string $chunksDir = '';
 
-    protected $paginationAmount;
+    protected int $paginationAmount = 50;
 
     protected FilesystemOperator $filesystem;
 
@@ -65,12 +65,17 @@ class MediaController extends AbstractController
         $this->managerRegistry = $managerRegistry;
         $this->em = $this->managerRegistry->getManager();
 
-        $this->ignoreFiles = $bag->get('sylius_happy_cms.media.ignore_files');
-        $this->paginationAmount = $bag->get('sylius_happy_cms.media.pagination_amount');
-        $this->chunksDir = $bag->get('kernel.project_dir') . '/var/chunks_upload';
+        if (is_string($bag->get('sylius_happy_cms.media.ignore_files'))) {
+            $this->ignoreFiles = $bag->get('sylius_happy_cms.media.ignore_files');
+        }
+        if (is_int($bag->get('sylius_happy_cms.media.pagination_amount'))) {
+            $this->paginationAmount = $bag->get('sylius_happy_cms.media.pagination_amount');
+        }
+        if (is_string($bag->get('kernel.project_dir'))) {
+            $this->chunksDir = $bag->get('kernel.project_dir') . '/var/chunks_upload';
+        }
         $this->helper = $manager->getHelper();
         $this->filesystem = $manager->getFilesystem();
-
         $this->eventDispatcher = $dispatcher;
         $this->translator = $translator;
     }

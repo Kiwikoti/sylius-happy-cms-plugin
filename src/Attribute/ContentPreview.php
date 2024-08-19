@@ -9,6 +9,7 @@ use Attribute;
 #[Attribute(Attribute::TARGET_CLASS)]
 class ContentPreview
 {
+    /** @param array<string> $roles */
     public function __construct(
         private array $roles,
     ) {

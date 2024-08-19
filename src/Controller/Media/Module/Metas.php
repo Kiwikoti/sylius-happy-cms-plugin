@@ -15,10 +15,8 @@ trait Metas
 {
     /**
      * rename item.
-     *
-     * @param Request $request [description]
      */
-    public function editMetasItem(Request $request)
+    public function editMetasItem(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true, 512, \JSON_THROW_ON_ERROR);
         $file = $data['file'];
