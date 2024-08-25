@@ -17,11 +17,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
+#[Gedmo\Tree(type: 'nested')]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__menu_item')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuItemRepository::class)]
-#[Gedmo\Tree(type: 'nested')]
 class MenuItem implements MenuItemInterface
 {
     use EntityIdTrait;
@@ -63,11 +63,13 @@ class MenuItem implements MenuItemInterface
     #[ORM\Column(name: 'target', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
     protected ?bool $target = null;
 
-    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     #[Gedmo\TreeParent]
+    #[ORM\ManyToOne(targetEntity: MenuItemInterface::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     protected ?MenuItemInterface $parent = null;
 
     /** @var Collection<int, MenuItemInterface> */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: MenuItemInterface::class)]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     protected Collection $children;
 

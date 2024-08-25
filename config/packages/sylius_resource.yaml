@@ -58,3 +58,6 @@ sylius_resource:
     sylius_happy_cms.media:
       classes:
         model: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media
+    sylius_happy_cms.media_folder:
+      classes:
+        model: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder

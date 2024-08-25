@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Types;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
@@ -39,6 +39,7 @@ class MediaType extends Type
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         try {
+            //$platform->registerDoctrineTypeMapping('happy_cms_media_type', MediaInterface::class);
             $class = $this->parameterBag->get('sylius_happy_cms.media.media_entity');
             if ($value && is_string($class) && class_exists($class)) {
                 return $this->manager->getRepository($class)->find($value);
@@ -53,7 +54,7 @@ class MediaType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if ($value) {
-            if ($value instanceof Media) {
+            if ($value instanceof MediaInterface) {
                 return $value->getId();
             }
 

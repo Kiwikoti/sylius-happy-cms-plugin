@@ -6,20 +6,25 @@ namespace Adeliom\SyliusHappyCMSPlugin\DependencyInjection;
 
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdminInterface;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
-use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepositoryInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepositoryInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepositoryInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepositoryInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
+use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepositoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -46,7 +51,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifString()
                                 ->then(function ($value) {
                                     if (!class_exists($value) || !is_a($value, PageInterface::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Page class must be a valid class extending %s. "%s" given.', Page::class, $value));
+                                        throw new InvalidConfigurationException(sprintf('Page class must be a valid class extending %s. "%s" given.', PageInterface::class, $value));
                                     }
 
                                     return $value;
@@ -60,7 +65,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifString()
                                 ->then(function ($value) {
                                     if (!class_exists($value) || !is_a($value, PageRepositoryInterface::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Page repository must be a valid class extending %s. "%s" given.', PageRepository::class, $value));
+                                        throw new InvalidConfigurationException(sprintf('Page repository must be a valid class extending %s. "%s" given.', PageRepositoryInterface::class, $value));
                                     }
 
                                     return $value;
@@ -74,7 +79,7 @@ class Configuration implements ConfigurationInterface
                                 ->ifString()
                                 ->then(function ($value) {
                                     if (!class_exists($value) || !is_a($value, PageAdminInterface::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Page repository must be a valid class extending %s. "%s" given.', PageRepository::class, $value));
+                                        throw new InvalidConfigurationException(sprintf('Page repository must be a valid class extending %s. "%s" given.', PageAdminInterface::class, $value));
                                     }
 
                                     return $value;
@@ -127,8 +132,8 @@ class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->ifString()
                                 ->then(static function ($value) {
-                                    if (!class_exists($value) || !is_a($value, Config::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Config class must be a valid class extending %s. "%s" given.', Config::class, $value));
+                                    if (!class_exists($value) || !is_a($value, ConfigInterface::class, true)) {
+                                        throw new InvalidConfigurationException(sprintf('Config class must be a valid class extending %s. "%s" given.', ConfigInterface::class, $value));
                                     }
 
                                     return $value;
@@ -140,8 +145,8 @@ class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->ifString()
                                 ->then(static function ($value) {
-                                    if (!class_exists($value) || !is_a($value, ConfigRepository::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Config repository must be a valid class extending %s. "%s" given.', ConfigRepository::class, $value));
+                                    if (!class_exists($value) || !is_a($value, ConfigRepositoryInterface::class, true)) {
+                                        throw new InvalidConfigurationException(sprintf('Config repository must be a valid class extending %s. "%s" given.', ConfigRepositoryInterface::class, $value));
                                     }
 
                                     return $value;
@@ -162,8 +167,8 @@ class Configuration implements ConfigurationInterface
                                     ->validate()
                                         ->ifString()
                                         ->then(function ($value) {
-                                            if (!class_exists($value) || !is_a($value, Menu::class, true)) {
-                                                throw new InvalidConfigurationException(sprintf('Entry class must be a valid class extending %s. "%s" given.', Menu::class, $value));
+                                            if (!class_exists($value) || !is_a($value, MenuInterface::class, true)) {
+                                                throw new InvalidConfigurationException(sprintf('Entry class must be a valid class extending %s. "%s" given.', MenuInterface::class, $value));
                                             }
 
                                             return $value;
@@ -175,8 +180,8 @@ class Configuration implements ConfigurationInterface
                                     ->validate()
                                         ->ifString()
                                         ->then(function ($value) {
-                                            if (!class_exists($value) || !is_a($value, MenuRepository::class, true)) {
-                                                throw new InvalidConfigurationException(sprintf('Entry repository must be a valid class extending %s. "%s" given.', MenuRepository::class, $value));
+                                            if (!class_exists($value) || !is_a($value, MenuRepositoryInterface::class, true)) {
+                                                throw new InvalidConfigurationException(sprintf('Entry repository must be a valid class extending %s. "%s" given.', MenuRepositoryInterface::class, $value));
                                             }
 
                                             return $value;
@@ -193,8 +198,8 @@ class Configuration implements ConfigurationInterface
                                     ->validate()
                                         ->ifString()
                                         ->then(function ($value) {
-                                            if (!class_exists($value) || !is_a($value, MenuItem::class, true)) {
-                                                throw new InvalidConfigurationException(sprintf('Category class must be a valid class extending %s. "%s" given.', MenuItem::class, $value));
+                                            if (!class_exists($value) || !is_a($value, MenuItemInterface::class, true)) {
+                                                throw new InvalidConfigurationException(sprintf('Category class must be a valid class extending %s. "%s" given.', MenuItemInterface::class, $value));
                                             }
 
                                             return $value;
@@ -206,8 +211,8 @@ class Configuration implements ConfigurationInterface
                                     ->validate()
                                         ->ifString()
                                         ->then(function ($value) {
-                                            if (!class_exists($value) || !is_a($value, MenuItemRepository::class, true)) {
-                                                throw new InvalidConfigurationException(sprintf('Category repository must be a valid class extending %s. "%s" given.', MenuItemRepository::class, $value));
+                                            if (!class_exists($value) || !is_a($value, MenuItemRepositoryInterface::class, true)) {
+                                                throw new InvalidConfigurationException(sprintf('Category repository must be a valid class extending %s. "%s" given.', MenuItemRepositoryInterface::class, $value));
                                             }
 
                                             return $value;
@@ -236,12 +241,13 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue('/')
                         ->end()
                         ->scalarNode('media_entity')
+                            ->defaultValue(Media::class)
                             ->isRequired()
                             ->validate()
                             ->ifString()
                             ->then(static function ($value) {
-                                if (!class_exists($value) || !is_a($value, Media::class, true)) {
-                                    throw new InvalidConfigurationException(sprintf('Media class must be a valid class extending %s. "%s" given.', Media::class, $value));
+                                if (!class_exists($value) || !is_a($value, MediaInterface::class, true)) {
+                                    throw new InvalidConfigurationException(sprintf('Media class must be a valid class extending %s. "%s" given.', MediaInterface::class, $value));
                                 }
 
                                 return $value;
@@ -249,12 +255,13 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->scalarNode('folder_entity')
+                            ->defaultValue(Folder::class)
                             ->isRequired()
                             ->validate()
                             ->ifString()
                             ->then(static function ($value) {
-                                if (!class_exists($value) || !is_a($value, Folder::class, true)) {
-                                    throw new InvalidConfigurationException(sprintf('Media Folder class must be a valid class extending %s. "%s" given.', Folder::class, $value));
+                                if (!class_exists($value) || !is_a($value, FolderInterface::class, true)) {
+                                    throw new InvalidConfigurationException(sprintf('Media Folder class must be a valid class extending %s. "%s" given.', FolderInterface::class, $value));
                                 }
 
                                 return $value;
@@ -338,8 +345,8 @@ class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->ifString()
                                 ->then(static function ($value) {
-                                    if (!class_exists($value) || !is_a($value, SharedBlock::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Block class must be a valid class extending %s. "%s" given.', SharedBlock::class, $value));
+                                    if (!class_exists($value) || !is_a($value, SharedBlockInterface::class, true)) {
+                                        throw new InvalidConfigurationException(sprintf('Block class must be a valid class extending %s. "%s" given.', SharedBlockInterface::class, $value));
                                     }
 
                                     return $value;
@@ -351,8 +358,8 @@ class Configuration implements ConfigurationInterface
                             ->validate()
                                 ->ifString()
                                 ->then(static function ($value) {
-                                    if (!class_exists($value) || !is_a($value, SharedBlockRepository::class, true)) {
-                                        throw new InvalidConfigurationException(sprintf('Block repository must be a valid class extending %s. "%s" given.', SharedBlockRepository::class, $value));
+                                    if (!class_exists($value) || !is_a($value, SharedBlockRepositoryInterface::class, true)) {
+                                        throw new InvalidConfigurationException(sprintf('Block repository must be a valid class extending %s. "%s" given.', SharedBlockRepositoryInterface::class, $value));
                                     }
 
                                     return $value;

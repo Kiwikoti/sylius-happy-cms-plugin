@@ -57,8 +57,9 @@ services:
     tags:
       - { name: doctrine.dbal.type, type: entity_id }
     calls:
-      - [ setManager, [ '@doctrine' ] ]
-      - [ setParameterBag, [ '@parameter_bag' ] ]
+      - setManager: [ '@doctrine' ]
+      - setParameterBag: [ '@parameter_bag' ]
+    public: true
 
   # pages
   # ===============================

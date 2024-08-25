@@ -1,5 +1,3 @@
-// import Sortable from 'sortablejs';
-
 const flexibleContentModule = function () {
   const self = this;
 
@@ -61,7 +59,7 @@ const flexibleContentModule = function () {
     const blockPositionInputs = collection
       .querySelectorAll('.bloc-wrapper [data-layer="content"] input[type="hidden"]');
     let count = self.wFlexibleContent.querySelectorAll('.bloc-wrapper').length;
-    blockPositionInputs.forEach((field, key) => {
+    blockPositionInputs.forEach((field) => {
       if (field.id.includes("_position")) {
         field.value = count;
         count ++;
@@ -105,6 +103,7 @@ const flexibleContentModule = function () {
               self.evalScript(oldScript.innerHTML);
             }
           });
+        /* global $ */
         $('.ui.checkbox').checkbox();
         self.wFlexibleContent.style.opacity = 1;
       });
@@ -178,7 +177,7 @@ const flexibleContentModule = function () {
   // action when remove a content
   self.handleRemoveContent = function (block) {
     block.querySelector('[data-action="delete"]')
-      .addEventListener('click', function (event) {
+      .addEventListener('click', function () {
         if (confirm(self.wFlexibleBlock.querySelector('#confirm_sentence').textContent)) {
           const collection = block.closest('[data-sylius-flexible-content-field]');
           block.remove();
@@ -223,7 +222,7 @@ const flexibleContentModule = function () {
     return [blockElement, moveHereWrapper];
   };
 
-  self.appendNewBlock = function (content, moveHereContent) {
+  self.appendNewBlock = function (content) {
 
     const remote = [];
 
@@ -245,7 +244,7 @@ const flexibleContentModule = function () {
 
     return new Promise((resolve) => {
       Promise.all(remote)
-        .then((values) => {
+        .then(() => {
           setTimeout(() => {
             Array.from(self.wFlexibleContent.lastElementChild.previousElementSibling.querySelectorAll('script'))
               .forEach((oldScript) => {
@@ -265,7 +264,7 @@ const flexibleContentModule = function () {
   };
 
   self.evalScript = function(content) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       eval(content);
       resolve();
     });

@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Entity\Media;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
@@ -16,21 +17,25 @@ class Folder implements FolderInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER)]
+    #[ORM\Column(type: Types::INTEGER)]
     protected ?int $id = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected ?string $name = null;
 
     #[ORM\Column(length: 100)]
     protected ?string $slug = null;
 
+    #[ORM\ManyToOne(targetEntity: FolderInterface::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
     protected ?FolderInterface $parent = null;
 
     /** @var Collection<int, FolderInterface> */
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: FolderInterface::class)]
     protected Collection $children;
 
     /** @var Collection<int, MediaInterface> */
+    #[ORM\OneToMany(mappedBy: 'folder', targetEntity: MediaInterface::class)]
     protected Collection $medias;
 
     public function __construct()

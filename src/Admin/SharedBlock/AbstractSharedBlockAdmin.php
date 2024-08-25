@@ -33,7 +33,7 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
 
     public static function getDefaultSortColumn(): string
     {
-        return 'name';
+        return 'key';
     }
 
     public function configureFields(string $pageName, ?string $context = null): iterable
