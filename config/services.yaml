@@ -53,13 +53,6 @@ services:
   Adeliom\SyliusHappyCMSPlugin\Routing\MediaLoader:
     tags: [ routing.loader ]
 
-  Adeliom\SyliusHappyCMSPlugin\Types\MediaType:
-    tags:
-      - { name: doctrine.dbal.type, type: entity_id }
-    calls:
-      - setManager: [ '@doctrine' ]
-      - setParameterBag: [ '@parameter_bag' ]
-    public: true
 
   # pages
   # ===============================

@@ -7,7 +7,7 @@ services:
         calls:
             - [ 'setConfig', [ '%sylius_happy_cms.menu.cache%' ] ]
         tags: [ doctrine.repository_service ]
-    
+
     happy_cms_menu.menu_item.repository:
         class: '%sylius_happy_cms.menu.menu_item.repository%'
         arguments:
@@ -16,14 +16,7 @@ services:
         calls:
             - [ 'setConfig', [ '%sylius_happy_cms.menu.cache%' ] ]
         tags: [ doctrine.repository_service ]
-    
-    Adeliom\SyliusHappyCMSPlugin\EventListener\Menu\DoctrineMappingListener:
-        arguments:
-            - '%sylius_happy_cms.menu.menu.class%'
-            - '%sylius_happy_cms.menu.menu_item.class%'
-        tags:
-            - { name: doctrine.event_listener, event: loadClassMetadata, priority: 1024 }
-    
+
     Adeliom\SyliusHappyCMSPlugin\EventListener\Menu\MenuCreationListener:
         arguments:
             - '%sylius_happy_cms.menu.menu.class%'
@@ -36,7 +29,7 @@ services:
                 event: 'prePersist'
                 entity: '%sylius_happy_cms.menu.menu.class%'
                 lazy: true
-    
+
     Adeliom\SyliusHappyCMSPlugin\Twig\Menu\MenuExtension:
         public: true
         arguments:
@@ -46,7 +39,7 @@ services:
             - '%sylius_happy_cms.menu.menu_item.class%'
         tags:
             - { name: twig.extension }
-    
+
     Adeliom\SyliusHappyCMSPlugin\Controller\MenuItem\MenuItemController:
         public: true
         arguments:

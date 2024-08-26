@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait EntitySeoTrait
 {
-    #[ORM\Embedded(class: \Adeliom\SyliusHappyCMSPlugin\Entity\Seo\Seo::class)]
+    #[ORM\Embedded(class: Seo::class)]
     protected Seo $seo;
 
     public function __construct()

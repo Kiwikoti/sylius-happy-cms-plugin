@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Media;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaManager;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use League\Flysystem\FilesystemException;
@@ -20,9 +20,9 @@ class MediaSubscriber
      */
     public function preUpdate(PreUpdateEventArgs $args): void
     {
-        /** @var Media $media */
+        /** @var MediaInterface $media */
         $media = $args->getObject();
-        if (!$media instanceof Media) {
+        if (!$media instanceof MediaInterface) {
             return;
         }
 

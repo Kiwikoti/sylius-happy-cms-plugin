@@ -10,6 +10,7 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -27,14 +28,17 @@ class Menu implements MenuInterface
     use EntityStatusTrait;
 
     /** @var Collection<int, MenuItemInterface> */
+    #[ORM\OneToMany(mappedBy: 'menu', targetEntity: MenuItemInterface::class, cascade: ['all'])]
     protected Collection $items;
 
-    #[ORM\Column(name: 'code', type: \Doctrine\DBAL\Types\Types::STRING, length: 30)]
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 30)]
     protected ?string $code = null;
 
-    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: true)]
     protected ?string $name = null;
 
+    #[ORM\ManyToOne(targetEntity: MenuItemInterface::class, cascade: ['persist', 'detach'])]
+    #[ORM\JoinColumn(name: 'root_item_id', nullable: true, onDelete: 'CASCADE')]
     protected ?MenuItemInterface $rootItem = null;
 
     /**

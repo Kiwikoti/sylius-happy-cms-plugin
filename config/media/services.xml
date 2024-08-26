@@ -32,17 +32,6 @@
             <argument key="$manager" type="service" id="happy.cms.media.manager"/>
         </service>
 
-        <service id="happy.cms.media.event_listener.container_listener" class="Adeliom\SyliusHappyCMSPlugin\EventListener\Media\ContainerListener" public="true" autowire="true">
-            <argument key="$container" type="service" id="service_container"/>
-            <tag name="doctrine.event_listener" event="getContainer"/>
-        </service>
-
-        <service id="happy.cms.media.event_listener.doctrine_mapping_listener" class="Adeliom\SyliusHappyCMSPlugin\EventListener\Media\DoctrineMappingListener" public="true" autowire="true">
-            <argument type="string">%sylius_happy_cms.media.media_entity%</argument>
-            <argument type="string">%sylius_happy_cms.media.folder_entity%</argument>
-            <tag name="doctrine.event_listener" event="loadClassMetadata" />
-        </service>
-
         <service id="happy.cms.media.twig.happy.cms.media_extension" class="Adeliom\SyliusHappyCMSPlugin\Twig\Media\MediaExtension" public="true" autowire="true">
             <argument key="$manager" type="service" id="happy.cms.media.manager"/>
             <tag name="twig.extension" />

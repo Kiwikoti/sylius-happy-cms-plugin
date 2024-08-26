@@ -52,6 +52,7 @@ class MenuItem implements MenuItemInterface
     #[Gedmo\TreeRoot]
     protected ?int $root = null;
 
+    #[ORM\ManyToOne(targetEntity: MenuInterface::class, inversedBy: 'items')]
     protected ?MenuInterface $menu;
 
     #[ORM\Column(name: 'class_attribute', type: Types::STRING, length: 255, nullable: true)]
@@ -64,12 +65,12 @@ class MenuItem implements MenuItemInterface
     protected ?bool $target = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: MenuItemInterface::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: MenuItemInterface::class, cascade: ['persist', 'detach'], inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', nullable: true, onDelete: 'CASCADE')]
     protected ?MenuItemInterface $parent = null;
 
     /** @var Collection<int, MenuItemInterface> */
-    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: MenuItemInterface::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: MenuItemInterface::class, cascade: ['all'])]
     #[ORM\OrderBy(['lft' => 'ASC'])]
     protected Collection $children;
 

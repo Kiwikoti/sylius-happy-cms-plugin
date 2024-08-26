@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Media;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaManager;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use League\Flysystem\FilesystemException;
@@ -20,9 +20,9 @@ class FolderSubscriber
      */
     public function preUpdate(PreUpdateEventArgs $args): void
     {
-        /** @var Folder $folder */
+        /** @var FolderInterface $folder */
         $folder = $args->getObject();
-        if (!$folder instanceof Folder) {
+        if (!$folder instanceof FolderInterface) {
             return;
         }
 
