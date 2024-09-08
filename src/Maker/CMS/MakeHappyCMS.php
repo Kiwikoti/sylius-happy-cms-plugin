@@ -43,7 +43,7 @@ final class MakeHappyCMS extends AbstractMaker
 
     public static function getCommandName(): string
     {
-        return 'make:happy-cms';
+        return 'make:happy-cms:generate';
     }
 
     public static function getCommandDescription(): string

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
-use Adeliom\SyliusEasyCrudPlugin\Admin\AdminInterface;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ChoiceMaskField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
@@ -14,8 +13,13 @@ use Adeliom\SyliusHappyCMSPlugin\DataMapperInterface\ConfigTranslatableDataMappe
 use Adeliom\SyliusHappyCMSPlugin\Enum\Config\ConfigTypeEnum;
 use Symfony\Component\Form\FormBuilderInterface;
 
-abstract class AbstractConfigAdmin extends AbstractAdmin implements AdminInterface
+abstract class AbstractConfigAdmin extends AbstractAdmin implements ConfigAdminInterface
 {
+    public static function getSubscribedServices(): array
+    {
+        return [];
+    }
+
     public static function getDefaultSortColumn(): string
     {
         return 'name';

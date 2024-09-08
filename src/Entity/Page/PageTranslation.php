@@ -13,7 +13,6 @@ use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\PreRemove;
@@ -22,7 +21,6 @@ use Sylius\Component\Resource\Model\AbstractTranslation;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[HasLifecycleCallbacks]
 #[MappedSuperclass]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__page_translation')]

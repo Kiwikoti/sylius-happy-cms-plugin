@@ -11,6 +11,7 @@ sylius_happy_cms:
   config:
     config_class: Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config
     config_repository: Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository
+    config_admin: Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdmin
 
   menu:
     menu:

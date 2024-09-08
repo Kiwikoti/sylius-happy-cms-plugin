@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\DependencyInjection;
 
+use Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdmin;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdminInterface;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdminInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigInterface;
@@ -153,6 +155,20 @@ class Configuration implements ConfigurationInterface
                                 })
                             ->end()
                         ->end()
+                        ->scalarNode('config_admin')
+                            ->defaultValue(ConfigAdmin::class)
+                            ->validate()
+                                ->ifString()
+                                ->then(static function ($value) {
+                                    if (!class_exists($value) || !is_a($value, ConfigAdminInterface::class, true)) {
+                                        throw new InvalidConfigurationException(sprintf('Config admin must be a valid class extending %s. "%s" given.', ConfigAdminInterface::class, $value));
+                                    }
+
+                                    return $value;
+                                })
+                            ->end()
+                        ->end()
+
                     ->end()
                 ->end()
 

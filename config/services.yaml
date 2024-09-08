@@ -3,6 +3,7 @@ imports:
   - { resource: services/seo.yaml }
   - { resource: services/menu.yaml }
   - { resource: services/block.yaml }
+  - { resource: services/maker.yaml }
 
 services:
   _defaults:

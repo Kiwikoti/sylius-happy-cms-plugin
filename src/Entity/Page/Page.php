@@ -22,7 +22,6 @@ use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: PageRepository::class)]
 #[Serializer\ExclusionPolicy('ALL')]
 #[ORM\Entity]

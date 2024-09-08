@@ -41,22 +41,6 @@ services:
   adeliom.sylius.cms.block_helper:
     alias: Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper
 
-  adeliom.sylius.cms.maker.make_block:
-    class: Adeliom\SyliusHappyCMSPlugin\Maker\Block\MakeBlock
-    public: false
-    arguments:
-      - '@maker.file_manager'
-    tags:
-      - { name: maker.command }
-
-  adeliom.sylius.cms.maker.make_happy_cms:
-    class: Adeliom\SyliusHappyCMSPlugin\Maker\CMS\MakeHappyCMS
-    public: false
-    arguments:
-      - '@maker.file_manager'
-    tags:
-      - { name: maker.command }
-
   Adeliom\SyliusHappyCMSPlugin\DataCollector\Block\BlockCollector:
     arguments:
       - "@adeliom.sylius.cms.block_helper"
@@ -93,14 +77,6 @@ services:
       - '@translator'
       - '@form.factory'
     tags: [ 'adeliom.sylius.cms.block', 'form.type' ]
-
-  adeliom.sylius.cms.shared_block.maker.make_shared_block:
-    class: Adeliom\SyliusHappyCMSPlugin\Maker\SharedBlock\MakeSharedBlock
-    public: false
-    arguments:
-      - '@maker.file_manager'
-    tags:
-      - { name: maker.command }
 
   Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper:
     public: true
