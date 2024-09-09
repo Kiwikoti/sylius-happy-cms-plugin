@@ -48,6 +48,9 @@ final class InstallDefaultFiles extends AbstractMaker
         ];
         $this->generatePage($happyCMSDefaultPackageParameters, $io, $generator);
         $this->generateConfig($happyCMSDefaultPackageParameters, $io, $generator);
+        $this->generateMedia($happyCMSDefaultPackageParameters, $io, $generator);
+        $this->generateMenu($happyCMSDefaultPackageParameters, $io, $generator);
+        $this->generateBlock($happyCMSDefaultPackageParameters, $io, $generator);
 
         $io->newLine();
         $io->success('Success!');
@@ -67,7 +70,7 @@ final class InstallDefaultFiles extends AbstractMaker
     {
         $scope = 'page';
         $files = [
-            ['prefix' => 'Entity', 'suffix' => ''],
+            ['prefix' => 'Entity', 'suffix' => '', 'addRepo' => true],
             ['prefix' => 'Entity', 'suffix' => 'Translation'],
             ['prefix' => 'Repository', 'suffix' => 'Repository'],
             ['prefix' => 'Admin', 'suffix' => 'Admin'],
@@ -83,10 +86,61 @@ final class InstallDefaultFiles extends AbstractMaker
     {
         $scope = 'config';
         $files = [
-            ['prefix' => 'Entity', 'suffix' => ''],
+            ['prefix' => 'Entity', 'suffix' => '', 'addRepo' => true],
             ['prefix' => 'Entity', 'suffix' => 'Translation'],
             ['prefix' => 'Repository', 'suffix' => 'Repository'],
             ['prefix' => 'Admin', 'suffix' => 'Admin'],
+        ];
+        $this->generateScope($scope, $files, $io, $generator);
+        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+    }
+
+    /**
+     * @param string[] $happyCMSDefaultPackageParameters
+     */
+    private function generateMedia(array &$happyCMSDefaultPackageParameters, ConsoleStyle $io, Generator $generator): void
+    {
+        $scope = 'media';
+        $files = [
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'media'],
+            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'media'],
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'folder'],
+            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'folder'],
+        ];
+        $this->generateScope($scope, $files, $io, $generator);
+        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+    }
+
+    /**
+     * @param string[] $happyCMSDefaultPackageParameters
+     */
+    private function generateMenu(array &$happyCMSDefaultPackageParameters, ConsoleStyle $io, Generator $generator): void
+    {
+        $scope = 'menu';
+        $files = [
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'menu', 'addRepo' => true],
+            ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => 'menu'],
+            ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'menu'],
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'menuItem', 'addRepo' => true],
+            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'menuItem'],
+            ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => 'menuItem'],
+            ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'menuItem'],
+        ];
+        $this->generateScope($scope, $files, $io, $generator);
+        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+    }
+
+    /**
+     * @param string[] $happyCMSDefaultPackageParameters
+     */
+    private function generateBlock(array &$happyCMSDefaultPackageParameters, ConsoleStyle $io, Generator $generator): void
+    {
+        $scope = 'sharedBlock';
+        $files = [
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'sharedBlock', 'addRepo' => true],
+            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'sharedBlock'],
+            ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => 'sharedBlock'],
+            ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'sharedBlock'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
         $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
@@ -99,7 +153,11 @@ final class InstallDefaultFiles extends AbstractMaker
     {
         foreach ($files as $data) {
             $namespacePrefix = $data['prefix'] . '\HappyCMS\\' . ucfirst($scope);
-            $classNameDetail = $generator->createClassNameDetails($scope, $namespacePrefix, $data['suffix']);
+            $classNameDetail = $generator->createClassNameDetails(
+                ucfirst($data['entityName'] ?? $scope),
+                $namespacePrefix,
+                $data['suffix'],
+            );
 
             try {
                 if (class_exists($classNameDetail->getFullName())) {
@@ -114,6 +172,8 @@ final class InstallDefaultFiles extends AbstractMaker
                         __DIR__ . '/../Resources/skeleton/default/' . strtolower($data['prefix']) . '.tpl.php',
                         [
                             'classNameDetail' => $classNameDetail,
+                            'scope' => ucfirst($scope),
+                            'addRepo' => $data['addRepo'] ?? false,
                         ],
                     );
                     $generator->writeChanges();

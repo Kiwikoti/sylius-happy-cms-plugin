@@ -6,7 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Admin\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 
-final class SharedBlockAdmin extends AbstractSharedBlockAdmin
+class SharedBlockAdmin extends AbstractSharedBlockAdmin
 {
     public static function getName(): string
     {

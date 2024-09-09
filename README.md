@@ -6,7 +6,9 @@ Keep in mind : Happy People make Happy Internet.
 
 ## Installation
 
-1. Add into `config/packages/sylius_resource.yaml' :
+Actually we don't have Symfony flex configured, so you have to do some installation step manually :
+
+1. Add into `config/packages/sylius_resource.yaml` :
 
 ```
 imports:
@@ -14,7 +16,7 @@ imports:
 ```
 
 
-2. Add into `config/packages/doctrine.yaml' :
+2. Add into `config/packages/doctrine.yaml` :
 
 ```
 imports:
@@ -24,7 +26,8 @@ imports:
 Then, into `config/bundles.php` add :
 
 ```php
-`Adeliom\SyliusHappyCMSPlugin\SyliusHappyCMSPlugin::class => ['all' => true],
+Adeliom\SyliusHappyCMSPlugin\SyliusHappyCMSPlugin::class => ['all' => true],
+Adeliom\SyliusEasyCrudPlugin\SyliusEasyCrudPlugin::class => ['all' => true],
 ```
 
 Then, into `config/packages/_sylius.yaml` add :
@@ -40,6 +43,24 @@ Then, into `config/routes.yaml` add :
 sylius_easy_crud:
   resource: "@SyliusHappyCMSPlugin/config/routes.yaml"
 ```
+
+3. Generate default file in your project (entities, repositories and admin classes) :
+
+Actualy we don't have Symfony recipes, so we created a command to generate files automatically.
+
+```bash
+php bin/console make:happy-cms:install
+```
+
+This command also provide all variables you need to override. Don't forget to do that!
+
+4. Update database :
+
+```bash
+php bin/console doc:mig:diff
+php bin/console doc:mig:mig
+```
+
 
 ## Documentation
 

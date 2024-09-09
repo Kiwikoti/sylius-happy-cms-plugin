@@ -4,7 +4,8 @@ use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 if (
-    isset($classNameDetail) && $classNameDetail instanceof ClassNameDetails
+    isset($classNameDetail) && $classNameDetail instanceof ClassNameDetails &&
+    isset($scope, $addRepo)
 ) {
     ?>
 <?= "<?php\n" ?>
@@ -13,17 +14,17 @@ declare(strict_types=1);
 
 namespace <?= Str::getNamespace($classNameDetail->getFullName()) ?>;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\<?= $classNameDetail->getRelativeNameWithoutSuffix() ?>\<?= $classNameDetail->getShortName() ?> as
-    Base<?= $classNameDetail->getShortName() ?>;<?php if ($classNameDetail->getRelativeNameWithoutSuffix() ===
-            $classNameDetail->getRelativeName()) { ?>
+use Adeliom\SyliusHappyCMSPlugin\Entity\<?= $scope ?>\<?=
+    $classNameDetail->getShortName() ?> as Base<?= $classNameDetail->getShortName() ?>;<?php if ($addRepo === true) { ?>
+
 use <?= str_replace('Entity', 'Repository', Str::getNamespace($classNameDetail->getFullName())) ?>\<?= $classNameDetail->getShortName() ?>Repository;
 <?php } ?>
+
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
 #[Serializer\ExclusionPolicy('ALL')]
-<?php if ($classNameDetail->getRelativeNameWithoutSuffix() ===
-        $classNameDetail->getRelativeName()) { ?>
+<?php if ($addRepo === true) { ?>
 #[ORM\Entity(repositoryClass: <?= $classNameDetail->getShortName() ?>Repository::class)]
 <?php } else { ?>
 #[ORM\Entity]
