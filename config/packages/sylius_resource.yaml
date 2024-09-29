@@ -3,15 +3,15 @@ sylius_resource:
     sylius_happy_cms.page:
       driver: doctrine/orm
       classes:
-        model: Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page
-        controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-        repository: Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository
-        form: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
+        model: "%sylius_happy_cms.page.model%"
+        controller: "%sylius_happy_cms.page.controller%"
+        repository: "%sylius_happy_cms.page.repository%"
+        form: "%sylius_happy_cms.page.page_admin%"
       translation:
         classes:
-          model: Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageTranslation
-          controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
-          form: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
+          model: "%sylius_happy_cms.page.model%"
+          controller: "%sylius_happy_cms.page.controller_translation%"
+          form: "%sylius_happy_cms.page.page_admin%"
     sylius_happy_cms.config:
       driver: doctrine/orm
       classes:

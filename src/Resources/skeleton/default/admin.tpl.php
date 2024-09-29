@@ -4,7 +4,8 @@ use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 
 if (
-    isset($classNameDetail) && $classNameDetail instanceof ClassNameDetails
+    isset($classNameDetail) && $classNameDetail instanceof ClassNameDetails &&
+    isset($scope, $addRepo)
 ) {
     ?>
 <?= "<?php\n" ?>
@@ -13,7 +14,7 @@ declare(strict_types=1);
 
 namespace <?= Str::getNamespace($classNameDetail->getFullName()) ?>;
 
-use Adeliom\SyliusHappyCMSPlugin\Admin\<?= $classNameDetail->getRelativeNameWithoutSuffix() ?>\<?= $classNameDetail->getShortName() ?> as Base<?=
+use Adeliom\SyliusHappyCMSPlugin\Admin\<?= $scope ?>\<?= $classNameDetail->getShortName() ?> as Base<?=
     $classNameDetail->getShortName() ?>;
 
 class <?= $classNameDetail->getShortName() ?> extends Base<?= $classNameDetail->getShortName() ?>

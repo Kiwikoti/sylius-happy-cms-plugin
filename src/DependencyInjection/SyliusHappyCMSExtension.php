@@ -34,7 +34,7 @@ final class SyliusHappyCMSExtension extends AbstractResourceExtension implements
         $this->processSeoConfiguration($config['seo'], $container);
         $this->processConfigConfiguration($config['config'], $container);
         $this->processMenuConfiguration($config['menu'], $container);
-        $this->processBlockConfiguration($config['block'], $container);
+        $this->processBlockConfiguration($config['shared_block'], $container);
         $this->processMediaConfiguration($config['media'], $container);
 
         $container->registerForAutoconfiguration(BlockTypeInterface::class)
@@ -109,10 +109,10 @@ final class SyliusHappyCMSExtension extends AbstractResourceExtension implements
         foreach ($config as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $type => $class) {
-                    $container->setParameter(sprintf('sylius_happy_cms.block.%s.%s', $key, $type), $class);
+                    $container->setParameter(sprintf('sylius_happy_cms.shared_block.%s.%s', $key, $type), $class);
                 }
             }
-            $container->setParameter(sprintf('sylius_happy_cms.block.%s', $key), $value);
+            $container->setParameter(sprintf('sylius_happy_cms.shared_block.%s', $key), $value);
         }
     }
 

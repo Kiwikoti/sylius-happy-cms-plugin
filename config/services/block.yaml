@@ -85,7 +85,7 @@ services:
       - '@event_dispatcher'
       - '@adeliom.sylius.cms.shared_block.block_collection'
       - '@doctrine.orm.entity_manager'
-      - '%sylius_happy_cms.block.block_class%'
+      - '%sylius_happy_cms.shared_block.shared_block_class%'
       - '@form.factory'
     tags:
       - { name: twig.runtime }

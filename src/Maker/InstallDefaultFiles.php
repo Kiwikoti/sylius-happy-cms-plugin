@@ -44,7 +44,7 @@ final class InstallDefaultFiles extends AbstractMaker
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
         $happyCMSDefaultPackageParameters = [
-            'sylius_happy_cms:',
+            'parameters:',
         ];
         $this->generatePage($happyCMSDefaultPackageParameters, $io, $generator);
         $this->generateConfig($happyCMSDefaultPackageParameters, $io, $generator);
@@ -76,7 +76,14 @@ final class InstallDefaultFiles extends AbstractMaker
             ['prefix' => 'Admin', 'suffix' => 'Admin'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
-        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '   sylius_happy_cms.page.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '   sylius_happy_cms.page.model_translation: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst
+            ($scope) . 'Translation',
+            '   sylius_happy_cms.page.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '   sylius_happy_cms.page.page_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
+        ]);
     }
 
     /**
@@ -92,7 +99,13 @@ final class InstallDefaultFiles extends AbstractMaker
             ['prefix' => 'Admin', 'suffix' => 'Admin'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
-        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '   ' . $scope . ':',
+            '       config_class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '       config_repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '       config_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
+        ]);
     }
 
     /**
@@ -103,12 +116,15 @@ final class InstallDefaultFiles extends AbstractMaker
         $scope = 'media';
         $files = [
             ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'media'],
-            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'media'],
             ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'folder'],
-            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'folder'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
-        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '   ' . $scope . ':',
+            '       media_entity: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '       folder_entity: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\Folder',
+        ]);
     }
 
     /**
@@ -127,7 +143,16 @@ final class InstallDefaultFiles extends AbstractMaker
             ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'menuItem'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
-        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '   ' . $scope . ':',
+            '       menu:',
+            '           class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '           repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '       menu_item:',
+            '           class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Item',
+            '           repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'ItemRepository',
+        ]);
     }
 
     /**
@@ -143,7 +168,12 @@ final class InstallDefaultFiles extends AbstractMaker
             ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'sharedBlock'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
-        $this->getHappyCMSDefaultPackageParameters($happyCMSDefaultPackageParameters, $scope);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '   shared_block:',
+            '       shared_block_class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '       shared_block_repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+        ]);
     }
 
     /**

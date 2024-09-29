@@ -1,8 +1,8 @@
 sylius_happy_cms:
   page:
-    page_class: Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page
-    page_repository: Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository
-    page_admin: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
+    page_class: "%sylius_happy_cms.page.model%"
+    page_repository: "%sylius_happy_cms.page.repository%"
+    page_admin: "%sylius_happy_cms.page.page_admin%"
 
   seo:
     title:
@@ -27,6 +27,6 @@ sylius_happy_cms:
     media_entity: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media
     folder_entity: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder
 
-  block:
-    block_class: Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock
-    block_repository: Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository
+  shared_block:
+    shared_block_class: Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock
+    shared_block_repository: Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository

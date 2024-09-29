@@ -5,3 +5,11 @@ imports:
   - { resource: "./packages/sylius_happy_cms.yaml" }
   - { resource: "./packages/sylius_resource.yaml" }
   - { resource: "./packages/flysystem.yaml" }
+
+parameters:
+  sylius_happy_cms.page.model: Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page
+  sylius_happy_cms.page.model_translation: Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageTranslation
+  sylius_happy_cms.page.repository: Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepository
+  sylius_happy_cms.page.controller: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
+  sylius_happy_cms.page.controller_translation: Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController
+  sylius_happy_cms.page.page_admin: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
