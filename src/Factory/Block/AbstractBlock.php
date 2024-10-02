@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-abstract class AbstractBlock extends AbstractType implements BlockInterface
+abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
 {
     protected ?FormBuilderInterface $tempBuilder = null;
 

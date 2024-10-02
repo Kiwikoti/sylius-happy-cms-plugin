@@ -12,7 +12,7 @@ Actually we don't have Symfony flex configured, so you have to do some installat
 
 ```
 imports:
-    - { resource: "@SyliusHappyCMSPlugin/Resources/config/sylius_resource.yaml" }
+    - { resource: "@SyliusHappyCMSPlugin/config/packages/sylius_resource.yaml" }
 ```
 
 
@@ -20,7 +20,7 @@ imports:
 
 ```
 imports:
-    - { resource: "@SyliusHappyCMSPlugin/Resources/config/doctrine.yaml" }
+    - { resource: "@SyliusHappyCMSPlugin/config/packages/doctrine.yaml" }
 ```
 
 Then, into `config/bundles.php` add :

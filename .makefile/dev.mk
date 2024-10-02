@@ -123,6 +123,7 @@ platform:
 
 platform_assets:
 	rm -rf ${APP_DIR}/node_modules
+	mkdir ${APP_DIR}/node_modules
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm run build")
 
