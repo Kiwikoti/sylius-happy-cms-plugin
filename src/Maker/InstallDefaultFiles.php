@@ -48,6 +48,7 @@ final class InstallDefaultFiles extends AbstractMaker
         ];
         $this->generatePage($happyCMSDefaultPackageParameters, $io, $generator);
         $this->generateConfig($happyCMSDefaultPackageParameters, $io, $generator);
+        $this->generateFolder($happyCMSDefaultPackageParameters, $io, $generator);
         $this->generateMedia($happyCMSDefaultPackageParameters, $io, $generator);
         $this->generateMenu($happyCMSDefaultPackageParameters, $io, $generator);
         $this->generateBlock($happyCMSDefaultPackageParameters, $io, $generator);
@@ -55,7 +56,7 @@ final class InstallDefaultFiles extends AbstractMaker
         $io->newLine();
         $io->success('Success!');
         $io->newLine();
-        $choice = $io->confirm('Do you want to get to configuration lines to add into config/packages/sylius_happy_cms.yaml file ?');
+        $choice = $io->confirm('Do you want to get to configuration lines to add into config/parameters.yaml file ?');
 
         // Add
         if ($choice) {
@@ -79,8 +80,7 @@ final class InstallDefaultFiles extends AbstractMaker
 
         $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
             '   sylius_happy_cms.page.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
-            '   sylius_happy_cms.page.model_translation: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst
-            ($scope) . 'Translation',
+            '   sylius_happy_cms.page.model_translation: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Translation',
             '   sylius_happy_cms.page.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
             '   sylius_happy_cms.page.page_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
         ]);
@@ -101,10 +101,31 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateScope($scope, $files, $io, $generator);
 
         $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
-            '   ' . $scope . ':',
-            '       config_class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
-            '       config_repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
-            '       config_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
+            '',
+            '   sylius_happy_cms.config.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '   sylius_happy_cms.config.model_translation: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Translation',
+            '   sylius_happy_cms.config.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '   sylius_happy_cms.config.config_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
+        ]);
+    }
+
+    /**
+     * @param string[] $happyCMSDefaultPackageParameters
+     */
+    private function generateFolder(array &$happyCMSDefaultPackageParameters, ConsoleStyle $io, Generator $generator): void
+    {
+        $scope = 'media';
+        $entityName = 'folder';
+        $files = [
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => $entityName],
+            ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => $entityName],
+        ];
+        $this->generateScope($scope, $files, $io, $generator);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '',
+            '   sylius_happy_cms.folder.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($entityName),
+            '   sylius_happy_cms.folder.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($entityName) . 'Repository',
         ]);
     }
 
@@ -115,15 +136,14 @@ final class InstallDefaultFiles extends AbstractMaker
     {
         $scope = 'media';
         $files = [
-            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'media'],
-            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'folder'],
+            ['prefix' => 'Entity', 'suffix' => ''],
+            ['prefix' => 'Repository', 'suffix' => 'Repository'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
 
         $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
-            '   ' . $scope . ':',
-            '       media_entity: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
-            '       folder_entity: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\Folder',
+            '   sylius_happy_cms.media.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '   sylius_happy_cms.media.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
         ]);
     }
 
@@ -137,21 +157,31 @@ final class InstallDefaultFiles extends AbstractMaker
             ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'menu', 'addRepo' => true],
             ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => 'menu'],
             ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'menu'],
-            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => 'menuItem', 'addRepo' => true],
-            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => 'menuItem'],
-            ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => 'menuItem'],
-            ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => 'menuItem'],
         ];
         $this->generateScope($scope, $files, $io, $generator);
 
         $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
-            '   ' . $scope . ':',
-            '       menu:',
-            '           class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
-            '           repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
-            '       menu_item:',
-            '           class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Item',
-            '           repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'ItemRepository',
+            '',
+            '   sylius_happy_cms.menu.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '   sylius_happy_cms.menu.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '   sylius_happy_cms.menu.menu_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
+        ]);
+
+        $entityName = 'menuItem';
+        $files = [
+            ['prefix' => 'Entity', 'suffix' => '', 'entityName' => $entityName, 'addRepo' => true],
+            ['prefix' => 'Entity', 'suffix' => 'Translation', 'entityName' => $entityName],
+            ['prefix' => 'Repository', 'suffix' => 'Repository', 'entityName' => $entityName],
+            ['prefix' => 'Admin', 'suffix' => 'Admin', 'entityName' => $entityName],
+        ];
+        $this->generateScope($scope, $files, $io, $generator);
+
+        $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
+            '',
+            '   sylius_happy_cms.menu_item.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($entityName),
+            '   sylius_happy_cms.menu_item.model_translation: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($entityName) . 'Translation',
+            '   sylius_happy_cms.menu_item.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($entityName) . 'Repository',
+            '   sylius_happy_cms.menu_item.menu_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($entityName) . 'Admin',
         ]);
     }
 
@@ -170,9 +200,11 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateScope($scope, $files, $io, $generator);
 
         $happyCMSDefaultPackageParameters = array_merge($happyCMSDefaultPackageParameters, [
-            '   shared_block:',
-            '       shared_block_class: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
-            '       shared_block_repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '',
+            '   sylius_happy_cms.shared_block.model: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope),
+            '   sylius_happy_cms.shared_block.model_translation: App\Entity\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Translation',
+            '   sylius_happy_cms.shared_block.repository: App\Repository\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Repository',
+            '   sylius_happy_cms.shared_block.menu_admin: App\Admin\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst($scope) . 'Admin',
         ]);
     }
 

@@ -17,6 +17,6 @@ namespace <?= Str::getNamespace($classNameDetail->getFullName()) ?>;
 use Adeliom\SyliusHappyCMSPlugin\Admin\<?= $scope ?>\<?= $classNameDetail->getShortName() ?> as Base<?=
     $classNameDetail->getShortName() ?>;
 
-class <?= $classNameDetail->getShortName() ?> extends Base<?= $classNameDetail->getShortName() ?>
-{}
+class <?= $classNameDetail->getShortName() ?> extends Base<?= $classNameDetail->getShortName() ?> {
+}
 <?php } ?>

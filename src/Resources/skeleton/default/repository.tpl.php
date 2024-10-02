@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace <?= Str::getNamespace($classNameDetail->getFullName()) ?>;
 
-use Adeliom\SyliusHappyCMSPlugin\Repository\<?= $scope ?>\<?= $classNameDetail->getShortName() ?> as
-    Base<?= $classNameDetail->getShortName() ?>;
+use Adeliom\SyliusHappyCMSPlugin\Repository\<?= $scope ?>\<?= $classNameDetail->getShortName() ?> as Base<?= $classNameDetail->getShortName() ?>;
 
 class <?= $classNameDetail->getShortName() ?> extends Base<?= $classNameDetail->getShortName() ?> {
 }

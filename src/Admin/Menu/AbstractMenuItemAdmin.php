@@ -25,7 +25,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractMenuItemAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
+abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAdminInterface
 {
     public static function getSubscribedServices(): array
     {

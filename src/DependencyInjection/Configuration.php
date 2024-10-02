@@ -6,6 +6,10 @@ namespace Adeliom\SyliusHappyCMSPlugin\DependencyInjection;
 
 use Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdmin;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdminInterface;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuAdmin;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuAdminInterface;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuItemAdmin;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuItemAdminInterface;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdminInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigInterface;
@@ -47,7 +51,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('page')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('page_class')
+                        ->scalarNode('page_model')
                             ->isRequired()
                             ->validate()
                                 ->ifString()
@@ -129,7 +133,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('config')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('config_class')
+                        ->scalarNode('config_model')
                             ->isRequired()
                             ->validate()
                                 ->ifString()
@@ -178,7 +182,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('menu')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('class')
+                                ->scalarNode('menu_model')
                                     ->isRequired()
                                     ->validate()
                                         ->ifString()
@@ -191,7 +195,7 @@ class Configuration implements ConfigurationInterface
                                         })
                                     ->end()
                                 ->end()
-                                ->scalarNode('repository')
+                                ->scalarNode('menu_repository')
                                     ->defaultValue(MenuRepository::class)
                                     ->validate()
                                         ->ifString()
@@ -204,12 +208,25 @@ class Configuration implements ConfigurationInterface
                                         })
                                     ->end()
                                 ->end()
+                                ->scalarNode('menu_admin')
+                                    ->defaultValue(MenuAdmin::class)
+                                    ->validate()
+                                        ->ifString()
+                                        ->then(static function ($value) {
+                                        if (!class_exists($value) || !is_a($value, MenuAdminInterface::class, true)) {
+                                            throw new InvalidConfigurationException(sprintf('Menu admin must be a valid class extending %s. "%s" given.', MenuAdminInterface::class, $value));
+                                        }
+
+                                        return $value;
+                                    })
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                         ->arrayNode('menu_item')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('class')
+                                ->scalarNode('menu_item_model')
                                     ->isRequired()
                                     ->validate()
                                         ->ifString()
@@ -222,13 +239,26 @@ class Configuration implements ConfigurationInterface
                                         })
                                     ->end()
                                 ->end()
-                                ->scalarNode('repository')
+                                ->scalarNode('menu_item_repository')
                                     ->defaultValue(MenuItemRepository::class)
                                     ->validate()
                                         ->ifString()
                                         ->then(function ($value) {
                                             if (!class_exists($value) || !is_a($value, MenuItemRepositoryInterface::class, true)) {
                                                 throw new InvalidConfigurationException(sprintf('Category repository must be a valid class extending %s. "%s" given.', MenuItemRepositoryInterface::class, $value));
+                                            }
+
+                                            return $value;
+                                        })
+                                    ->end()
+                                ->end()
+                                ->scalarNode('menu_item_admin')
+                                ->defaultValue(MenuItemAdmin::class)
+                                    ->validate()
+                                        ->ifString()
+                                        ->then(static function ($value) {
+                                            if (!class_exists($value) || !is_a($value, MenuItemAdminInterface::class, true)) {
+                                                throw new InvalidConfigurationException(sprintf('Menu admin must be a valid class extending %s. "%s" given.', MenuItemAdminInterface::class, $value));
                                             }
 
                                             return $value;
@@ -356,7 +386,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('shared_block')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('shared_block_class')
+                        ->scalarNode('shared_block_model')
                             ->isRequired()
                             ->validate()
                                 ->ifString()

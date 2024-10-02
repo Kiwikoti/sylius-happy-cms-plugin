@@ -1,6 +1,6 @@
 sylius_happy_cms:
   page:
-    page_class: "%sylius_happy_cms.page.model%"
+    page_model: "%sylius_happy_cms.page.model%"
     page_repository: "%sylius_happy_cms.page.repository%"
     page_admin: "%sylius_happy_cms.page.page_admin%"
 
@@ -9,24 +9,26 @@ sylius_happy_cms:
       suffix: ACME
 
   config:
-    config_class: Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config
-    config_repository: Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository
-    config_admin: Adeliom\SyliusHappyCMSPlugin\Admin\Config\ConfigAdmin
+    config_model: "%sylius_happy_cms.config.model%"
+    config_repository: "%sylius_happy_cms.config.repository%"
+    config_admin: "%sylius_happy_cms.config.config_admin%"
 
   menu:
     menu:
-      class: Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu
-      repository: Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepository
+      menu_model: "%sylius_happy_cms.menu.model%"
+      menu_repository: "%sylius_happy_cms.menu.repository%"
+      menu_admin: "%sylius_happy_cms.menu.menu_admin%"
     menu_item:
-      class: Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem
-      repository: Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepository
+      menu_item_model: "%sylius_happy_cms.menu_item.model%"
+      menu_item_repository: "%sylius_happy_cms.menu_item.repository%"
+      menu_item_admin: "%sylius_happy_cms.menu_item.menu_item_admin%"
 
   media:
     storage_name: uploads.storage
     base_url: '/media/download'
-    media_entity: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media
-    folder_entity: Adeliom\SyliusHappyCMSPlugin\Entity\Media\Folder
+    media_entity: "%sylius_happy_cms.media.model%"
+    folder_entity: "%sylius_happy_cms.folder.model%"
 
   shared_block:
-    shared_block_class: Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock
-    shared_block_repository: Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository
+    shared_block_model: "%sylius_happy_cms.shared_block.model%"
+    shared_block_repository: "%sylius_happy_cms.shared_block.repository%"

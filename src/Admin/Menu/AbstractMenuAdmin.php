@@ -13,7 +13,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Crud;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-abstract class AbstractMenuAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
+abstract class AbstractMenuAdmin extends AbstractAdmin implements MenuAdminInterface
 {
     public static function getSubscribedServices(): array
     {
