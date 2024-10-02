@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'sylius_happy_cms__shared_block')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: SharedBlockRepository::class)]
-class SharedBlock implements SharedBlockInterface, ResourceInterface, TranslatableInterface
+class SharedBlock implements SharedBlockInterface
 {
     use EntityIdTrait;
     use TranslatableTrait {

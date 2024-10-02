@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock;
 
-interface SharedBlockInterface
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\TranslatableInterface;
+
+interface SharedBlockInterface extends ResourceInterface, TranslatableInterface
 {
     public function getType(): ?string;
 

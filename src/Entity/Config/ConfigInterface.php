@@ -6,8 +6,9 @@ namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Component\Resource\Model\TranslatableInterface;
 
-interface ConfigInterface extends ResourceInterface
+interface ConfigInterface extends ResourceInterface, TranslatableInterface
 {
     public function getType(): ?string;
 

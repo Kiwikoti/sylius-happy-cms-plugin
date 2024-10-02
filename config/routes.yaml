@@ -6,7 +6,7 @@ sylius_happy_cms_page_admin:
     redirect: update
     grid: sylius_happy_cms_page_admin
     form: 
-        type: Adeliom\SyliusHappyCMSPlugin\Admin\Page\PageAdmin
+        type: "%sylius_happy_cms.page.page_admin%"
         options:
             context: $context
     vars:
@@ -42,7 +42,7 @@ sylius_happy_cms_config_admin:
     redirect: update
     grid: sylius_happy_cms_config_admin
     form: 
-        type: App\Admin\Config\ConfigAdmin
+        type: "%sylius_happy_cms.config.config_admin%"
         options:
             context: $context
     vars:
@@ -78,7 +78,7 @@ sylius_happy_cms_menu_admin:
     redirect: update
     grid: sylius_happy_cms_menu_admin
     form: 
-        type: App\Admin\Menu\MenuAdmin
+        type: "%sylius_happy_cms.menu.menu_admin%"
         options:
             context: $context
     vars:
@@ -115,7 +115,7 @@ sylius_happy_cms_menu_item_admin:
     redirect: update
     grid: sylius_happy_cms_menu_item_admin
     form: 
-        type: App\Admin\Menu\MenuItemAdmin
+        type: "%sylius_happy_cms.menu_item.menu_item_admin%"
         options:
             context: $context
     vars:
@@ -144,11 +144,6 @@ sylius_happy_cms_menu_item_admin:
   type: sylius.resource
   prefix: admin
 
-sylius_happy_cms_admin_shared_block_select:
-  controller: Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock\SharedBlockController::select
-  path: /admin/shared-blocks/select
-  methods: ['GET']
-
 sylius_happy_cms_shared_block_admin:
   resource: |
     alias: sylius_happy_cms.shared_block
@@ -157,7 +152,7 @@ sylius_happy_cms_shared_block_admin:
     redirect: update
     grid: sylius_happy_cms_shared_block_admin
     form: 
-        type: App\Admin\SharedBlock\SharedBlockAdmin
+        type: "%sylius_happy_cms.shared_block.shared_block_admin%"
         options:
             context: $context
     vars:
@@ -184,6 +179,11 @@ sylius_happy_cms_shared_block_admin:
                     id: $id
   type: sylius.resource
   prefix: admin
+
+sylius_happy_cms_admin_shared_block_select:
+  controller: Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock\SharedBlockController::select
+  path: /admin/shared-blocks/select
+  methods: ['GET']
 
 sylius_happy_cms_admin_menu_item_index:
   path: /admin/menu-items/

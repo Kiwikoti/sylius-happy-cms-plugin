@@ -16,7 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\MappedSuperclass(repositoryClass: \Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository::class)]
 #[ORM\Entity]
 #[ORM\Table(name: 'sylius_happy_cms__config')]
-class Config implements ConfigInterface, TranslatableInterface
+class Config implements ConfigInterface
 {
     use EntityIdTrait;
     use TranslatableTrait {

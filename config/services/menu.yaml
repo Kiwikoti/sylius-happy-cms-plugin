@@ -8,16 +8,6 @@ services:
             - [ 'setConfig', [ '%sylius_happy_cms.menu.cache%' ] ]
         tags: [ doctrine.repository_service ]
 
-    Adeliom\SyliusHappyCMSPlugin\Admin\Menu\MenuAdmin:
-        arguments:
-            - '%sylius_happy_cms.menu.model%'
-            - []
-            - Adeliom\SyliusEasyCrudPlugin\CrudFactory\CrudAdminFactory
-            - Sylius\Component\Locale\Provider\LocaleProviderInterface
-            - Doctrine\ORM\EntityManagerInterface
-            - Psr\Container\ContainerInterface
-            - Symfony\Bundle\SecurityBundle\Security
-
     happy_cms_menu.menu_item.repository:
         class: '%sylius_happy_cms.menu_item.repository%'
         arguments:
