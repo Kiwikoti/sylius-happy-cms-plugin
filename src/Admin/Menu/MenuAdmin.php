@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Menu;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
 
 class MenuAdmin extends AbstractMenuAdmin
 {
@@ -15,6 +15,6 @@ class MenuAdmin extends AbstractMenuAdmin
 
     public static function getEntityFqcn(): string
     {
-        return MenuInterface::class;
+        return Menu::class;
     }
 }

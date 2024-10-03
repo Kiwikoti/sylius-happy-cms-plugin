@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Config;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Config\Config;
 
 class ConfigAdmin extends AbstractConfigAdmin
 {
@@ -15,6 +15,6 @@ class ConfigAdmin extends AbstractConfigAdmin
 
     public static function getEntityFqcn(): string
     {
-        return ConfigInterface::class;
+        return Config::class;
     }
 }

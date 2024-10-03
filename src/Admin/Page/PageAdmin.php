@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Page;
 
-use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Page\Page;
 
 class PageAdmin extends AbstractPageAdmin
 {
@@ -15,6 +15,6 @@ class PageAdmin extends AbstractPageAdmin
 
     public static function getEntityFqcn(): string
     {
-        return PageInterface::class;
+        return Page::class;
     }
 }
