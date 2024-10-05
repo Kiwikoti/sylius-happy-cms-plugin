@@ -46,8 +46,8 @@ sylius_resource:
     sylius_happy_cms.shared_block:
       driver: doctrine/orm
       classes:
-        model: "%sylius_happy_cms.shared_block.model_translation%"
-        controller: "%sylius_happy_cms.shared_block.controller_translation%"
+        model: "%sylius_happy_cms.shared_block.model%"
+        controller: "%sylius_happy_cms.shared_block.controller%"
         repository: "%sylius_happy_cms.shared_block.repository%"
         form: "%sylius_happy_cms.shared_block.shared_block_admin%"
       translation:
