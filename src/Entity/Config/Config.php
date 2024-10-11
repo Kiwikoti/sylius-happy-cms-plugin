@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[UniqueEntity('key')]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\MappedSuperclass(repositoryClass: \Adeliom\SyliusHappyCMSPlugin\Repository\Config\ConfigRepository::class)]
-#[ORM\Entity]
-#[ORM\Table(name: 'sylius_happy_cms__config')]
+#[ORM\MappedSuperclass(repositoryClass: ConfigRepository::class)]
 class Config implements ConfigInterface
 {
     use EntityIdTrait;

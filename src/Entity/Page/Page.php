@@ -17,15 +17,12 @@ use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Sylius\Component\Resource\Model\TranslatableTrait;
-use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\MappedSuperclass(repositoryClass: PageRepository::class)]
 #[Serializer\ExclusionPolicy('ALL')]
-#[ORM\Entity]
-#[ORM\Table(name: 'sylius_happy_cms__page')]
 class Page implements PageInterface
 {
     use EntityIdTrait;
@@ -45,7 +42,7 @@ class Page implements PageInterface
 
     /** @var Collection<int, OrmRoute> */
     #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinTable('happy_cms_page__page_route')]
+    #[ORM\JoinTable('sylius_happy_cms__page_route')]
     protected Collection $routes;
 
     #[Assert\Type(PageInterface::class)]
@@ -81,7 +78,7 @@ class Page implements PageInterface
         $this->children = new ArrayCollection();
     }
 
-    protected function createTranslation(): TranslationInterface
+    protected function createTranslation(): PageTranslationInterface
     {
         return new PageTranslation();
     }

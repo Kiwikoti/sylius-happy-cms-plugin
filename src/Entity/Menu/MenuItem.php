@@ -18,8 +18,6 @@ use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
 #[Gedmo\Tree(type: 'nested')]
-#[ORM\Entity]
-#[ORM\Table(name: 'sylius_happy_cms__menu_item')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuItemRepository::class)]
 class MenuItem implements MenuItemInterface
@@ -53,7 +51,7 @@ class MenuItem implements MenuItemInterface
     protected ?int $root = null;
 
     #[ORM\ManyToOne(targetEntity: MenuInterface::class, inversedBy: 'items')]
-    protected ?MenuInterface $menu;
+    protected ?MenuInterface $menu = null;
 
     #[ORM\Column(name: 'class_attribute', type: Types::STRING, length: 255, nullable: true)]
     protected ?string $classAttribute = null;

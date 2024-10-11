@@ -9,15 +9,15 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemTranslationInterface;
 use Sylius\Component\Locale\Provider\LocaleProviderInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MenuCreationListener
 {
     public function __construct(
-        protected string $menuClass,
-        protected string $menuItemClass,
         protected LocaleProviderInterface $localeProvider,
         protected TranslatorInterface $translator,
+        protected ParameterBagInterface $parameterBag,
     ) {
     }
 
@@ -25,10 +25,15 @@ class MenuCreationListener
     // the entity instance and the lifecycle event
     public function prePersist(MenuInterface $menu): void
     {
-        /**
-         * @var MenuItemInterface $rootItem
-         */
-        $rootItem = new $this->menuItemClass();
+        $modelClass = $this->parameterBag->get('sylius.resources')['sylius_happy_cms.menu_item']['classes']['model']
+            ?? null;
+
+        if (!class_exists($modelClass)) {
+            return;
+        }
+
+        /** @var MenuItemInterface $rootItem */
+        $rootItem = new $modelClass();
         $rootItem->setMenu($menu);
         $rootItem->setPublishState(ThreeStateStatusEnum::PUBLISHED()->getValue());
         $rootItem->setPosition(0);
@@ -36,8 +41,8 @@ class MenuCreationListener
         $menu->addItem($rootItem);
 
         foreach ($this->localeProvider->getAvailableLocalesCodes() as $locale) {
-            if (class_exists($this->menuItemClass) && method_exists($this->menuItemClass, 'getTranslationClass')) {
-                $menuItemTranslationClass = $this->menuItemClass::getTranslationClass();
+            if (class_exists($modelClass) && method_exists($modelClass, 'getTranslationClass')) {
+                $menuItemTranslationClass = $modelClass::getTranslationClass();
                 $translation = new $menuItemTranslationClass();
                 if ($translation instanceof MenuItemTranslationInterface) {
                     $translation->setLocale($locale);
