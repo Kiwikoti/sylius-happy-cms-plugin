@@ -203,6 +203,7 @@ services:
 ```bash
 php bin/console doc:mig:diff
 php bin/console doc:mig:mig
+php bin/console assets:install --symlink
 php bin/console cache:clear
 ```
 
