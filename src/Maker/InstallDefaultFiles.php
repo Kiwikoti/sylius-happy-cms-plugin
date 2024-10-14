@@ -213,7 +213,7 @@ final class InstallDefaultFiles extends AbstractMaker
         foreach ($files as $data) {
             $namespacePrefix = $data['prefix'] . '\HappyCMS\\' . ucfirst($scope);
             $classNameDetail = $generator->createClassNameDetails(
-                ucfirst(is_string($data['entityName']) ? $data['entityName'] : $scope),
+                ucfirst((isset($data['entityName']) && is_string($data['entityName'])) ? $data['entityName'] : $scope),
                 $namespacePrefix,
                 is_string($data['suffix']) ? $data['suffix'] : '',
             );

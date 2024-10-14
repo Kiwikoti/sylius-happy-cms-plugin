@@ -188,11 +188,9 @@ trait Upload
     /**
      * allow/disallow user upload.
      *
-     * @param null $file
-     *
      * @return bool [boolean]
      */
-    protected function allowUpload(?string $file = null): bool
+    protected function allowUpload(string|UploadedFile|null $file = null): bool
     {
         return true;
     }
