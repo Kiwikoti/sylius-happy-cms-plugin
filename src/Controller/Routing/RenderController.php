@@ -11,7 +11,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory;
-use Sylius\Component\Resource\Metadata\Metadata;
+use Sylius\Resource\Metadata\Metadata;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -80,7 +80,7 @@ class RenderController extends AbstractController
     }
 
     /**
-     * @return array<Metadata|RequestConfiguration|null>
+     * @return array<int, Metadata|RequestConfiguration|null>
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface

@@ -7,13 +7,12 @@ namespace Adeliom\SyliusHappyCMSPlugin\Admin\Field;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldInterface;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldTrait;
 use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
-use Symfony\Contracts\Translation\TranslatableInterface;
 
 class MediaField implements FieldInterface
 {
     use FieldTrait;
 
-    public static function new(string $propertyName, TranslatableInterface|false|null $label = null): self
+    public static function new(string $propertyName, ?string $label = null): self
     {
         $field = (new self());
         $field

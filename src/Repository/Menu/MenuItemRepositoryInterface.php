@@ -8,12 +8,17 @@ use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\Menu;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Doctrine\ORM\QueryBuilder;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Gedmo\Tree\RepositoryInterface as GedmoRepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
+ * @extends GedmoRepositoryInterface<MenuItemInterface>
  * @extends RepositoryInterface<MenuItemInterface>
  */
-interface MenuItemRepositoryInterface extends RepositoryInterface, TranslationRepositoryInterface
+interface MenuItemRepositoryInterface extends
+    RepositoryInterface,
+    TranslationRepositoryInterface,
+    GedmoRepositoryInterface
 {
     /**
      * @return array<MenuItemInterface>|QueryBuilder ($returnQueryBuilder ? QueryBuilder : MenuItem[])

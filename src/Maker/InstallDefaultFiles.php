@@ -59,30 +59,28 @@ final class InstallDefaultFiles extends AbstractMaker
      */
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        $happyCMSDefaultRoutes = '';
-        $happyCMSDefaultResources = [];
         $io->text('====');
-        $this->generatePage($happyCMSDefaultRoutes, $happyCMSDefaultResources, $io, $generator);
+        $this->generatePage($io, $generator);
 
         $io->newLine();
         $io->text('====');
-        $this->generateConfig($happyCMSDefaultRoutes, $happyCMSDefaultResources, $io, $generator);
+        $this->generateConfig($io, $generator);
 
         $io->newLine();
         $io->text('====');
-        $this->generateFolder($happyCMSDefaultRoutes, $happyCMSDefaultResources, $io, $generator);
+        $this->generateFolder($io, $generator);
 
         $io->newLine();
         $io->text('====');
-        $this->generateMedia($happyCMSDefaultRoutes, $happyCMSDefaultResources, $io, $generator);
+        $this->generateMedia($io, $generator);
 
         $io->newLine();
         $io->text('====');
-        $this->generateMenu($happyCMSDefaultRoutes, $happyCMSDefaultResources, $io, $generator);
+        $this->generateMenu($io, $generator);
 
         $io->newLine();
         $io->text('====');
-        $this->generateBlock($happyCMSDefaultRoutes, $happyCMSDefaultResources, $io, $generator);
+        $this->generateBlock($io, $generator);
 
         $io->newLine();
         $io->text('====');
@@ -100,7 +98,7 @@ final class InstallDefaultFiles extends AbstractMaker
         //}
     }
 
-    private function generatePage(string &$happyCMSDefaultRoutes, array &$happyCMSDefaultResources, ConsoleStyle $io, Generator $generator): void
+    private function generatePage(ConsoleStyle $io, Generator $generator): void
     {
         $scope = 'page';
         $files = [
@@ -118,7 +116,7 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateHappyCMSConfig($scope, $io);
     }
 
-    private function generateConfig(string &$happyCMSDefaultRoutes, array &$happyCMSDefaultResources, ConsoleStyle $io, Generator $generator): void
+    private function generateConfig(ConsoleStyle $io, Generator $generator): void
     {
         $scope = 'config';
         $files = [
@@ -136,7 +134,7 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateHappyCMSConfig($scope, $io);
     }
 
-    private function generateFolder(string &$happyCMSDefaultRoutes, array &$happyCMSDefaultResources, ConsoleStyle $io, Generator $generator): void
+    private function generateFolder(ConsoleStyle $io, Generator $generator): void
     {
         $scope = 'media';
         $entityName = 'folder';
@@ -147,7 +145,7 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateScope($scope, $files, $io, $generator);
     }
 
-    private function generateMedia(string &$happyCMSDefaultRoutes, array &$happyCMSDefaultResources, ConsoleStyle $io, Generator $generator): void
+    private function generateMedia(ConsoleStyle $io, Generator $generator): void
     {
         $scope = 'media';
         $files = [
@@ -161,7 +159,7 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateHappyCMSConfig($scope, $io);
     }
 
-    private function generateMenu(string &$happyCMSDefaultRoutes, array &$happyCMSDefaultResources, ConsoleStyle $io, Generator $generator): void
+    private function generateMenu(ConsoleStyle $io, Generator $generator): void
     {
         $scope = 'menu';
         $files = [
@@ -189,7 +187,7 @@ final class InstallDefaultFiles extends AbstractMaker
         $this->generateRoute($scope . '_item', $io);
     }
 
-    private function generateBlock(string &$happyCMSDefaultRoutes, array &$happyCMSDefaultResources, ConsoleStyle $io, Generator $generator): void
+    private function generateBlock(ConsoleStyle $io, Generator $generator): void
     {
         $scope = 'sharedBlock';
         $files = [
@@ -208,16 +206,16 @@ final class InstallDefaultFiles extends AbstractMaker
     }
 
     /**
-     * @param array<int, array<string, string>> $files
+     * @param array<int, array<string, bool|string>> $files
      */
     private function generateScope(string $scope, array $files, ConsoleStyle $io, Generator $generator): void
     {
         foreach ($files as $data) {
             $namespacePrefix = $data['prefix'] . '\HappyCMS\\' . ucfirst($scope);
             $classNameDetail = $generator->createClassNameDetails(
-                ucfirst($data['entityName'] ?? $scope),
+                ucfirst(is_string($data['entityName']) ? $data['entityName'] : $scope),
                 $namespacePrefix,
-                $data['suffix'],
+                is_string($data['suffix']) ? $data['suffix'] : '',
             );
 
             try {
@@ -230,7 +228,7 @@ final class InstallDefaultFiles extends AbstractMaker
                 } else {
                     $generator->generateClass(
                         $classNameDetail->getFullName(),
-                        __DIR__ . '/../Resources/skeleton/default/' . strtolower($data['prefix']) . '.tpl.php',
+                        __DIR__ . '/../Resources/skeleton/default/' . strtolower(is_string($data['prefix']) ? $data['prefix'] : '') . '.tpl.php',
                         [
                             'classNameDetail' => $classNameDetail,
                             'scope' => ucfirst($scope),
@@ -291,7 +289,7 @@ final class InstallDefaultFiles extends AbstractMaker
             if (file_exists(self::YAML_ROUTES_FILE)) {
                 $route = 'sylius_happy_cms_' . $scope . '_admin';
                 $existingContent = file_get_contents(self::YAML_ROUTES_FILE);
-                if (str_contains($existingContent, $route)) {
+                if (is_string($existingContent) && str_contains($existingContent, $route)) {
                     $io->comment(sprintf(
                         '%s: %s',
                         '<fg=yellow>warning</>',
@@ -329,7 +327,7 @@ final class InstallDefaultFiles extends AbstractMaker
 
             if (file_exists(self::YAML_RESOURCE_FILE)) {
                 $existingContent = file_get_contents(self::YAML_RESOURCE_FILE);
-                if (str_contains($existingContent, 'sylius_happy_cms.' . $scope)) {
+                if (is_string($existingContent) && str_contains($existingContent, 'sylius_happy_cms.' . $scope)) {
                     $io->comment(sprintf(
                         '%s: %s',
                         '<fg=yellow>warning</>',
@@ -342,7 +340,7 @@ final class InstallDefaultFiles extends AbstractMaker
 
             file_put_contents(
                 self::YAML_RESOURCE_FILE,
-                "\n" . str_replace("\n", "\n    ", $content),
+                "\n" . str_replace("\n", "\n    ", $content ?: ''),
                 \FILE_APPEND,
             );
 
@@ -369,10 +367,10 @@ final class InstallDefaultFiles extends AbstractMaker
                 $content = 'sylius_happy_cms:' . $content;
             } else {
                 $existingContent = file_get_contents(self::YAML_HAPPY_CMS_FILE);
-                if (!str_contains($existingContent, 'sylius_happy_cms:')) {
+                if (is_string($existingContent) && !str_contains($existingContent, 'sylius_happy_cms:')) {
                     $content = 'sylius_happy_cms:' . $content;
                 }
-                if (str_contains($existingContent, $scope . ':')) {
+                if (is_string($existingContent) && str_contains($existingContent, $scope . ':')) {
                     $io->comment(sprintf(
                         '%s: %s',
                         '<fg=yellow>warning</>',
@@ -385,7 +383,7 @@ final class InstallDefaultFiles extends AbstractMaker
 
             file_put_contents(
                 self::YAML_HAPPY_CMS_FILE,
-                "\n" . str_replace("\n", "\n  ", $content),
+                "\n" . str_replace("\n", "\n  ", $content ?: ''),
                 \FILE_APPEND,
             );
 
@@ -410,7 +408,10 @@ final class InstallDefaultFiles extends AbstractMaker
 
             if (file_exists(self::YAML_SERVICES_FILE)) {
                 $existingContent = file_get_contents(self::YAML_SERVICES_FILE);
-                if (preg_match('#' . trim(substr($content, 0, 50)) . '#uis', $existingContent)) {
+                if (is_string($existingContent) && preg_match(
+                    '#' . trim(substr($content ?: '', 0, 50)) . '#uis',
+                    $existingContent,
+                )) {
                     $io->comment(sprintf(
                         '%s: %s',
                         '<fg=yellow>warning</>',
@@ -423,7 +424,7 @@ final class InstallDefaultFiles extends AbstractMaker
 
             file_put_contents(
                 self::YAML_SERVICES_FILE,
-                "\n" . str_replace("\n", "\n    ", $content),
+                "\n" . str_replace("\n", "\n    ", $content ?: ''),
                 \FILE_APPEND,
             );
 
@@ -441,8 +442,7 @@ final class InstallDefaultFiles extends AbstractMaker
         }
     }
 
-    public function configureDependencies(DependencyBuilder $dependencies)
+    public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        // TODO: Implement configureDependencies() method.
     }
 }

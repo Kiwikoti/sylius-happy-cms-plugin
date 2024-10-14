@@ -23,7 +23,7 @@ trait EntitySeoTrait
         $this->seo = $seo;
     }
 
-    public function getSeo(): Seo
+    public function getSeo(): SeoInterface
     {
         return $this->seo;
     }

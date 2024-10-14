@@ -6,7 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Repository\Config;
 
 use Adeliom\SyliusEasyCrudPlugin\Repository\TranslationRepositoryInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Config\ConfigInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
  * @extends RepositoryInterface<ConfigInterface>

@@ -113,8 +113,8 @@ class PageTranslation extends AbstractTranslation implements PageTranslationInte
         if (empty($this->getName())) {
             // $this->setName('No name');
         }
-        if (empty($this->getSEO()->title)) {
-            $this->getSEO()->title = $this->getName();
+        if (empty($this->getSEO()->getTitle())) {
+            $this->getSEO()->setTitle($this->getName());
         }
     }
 

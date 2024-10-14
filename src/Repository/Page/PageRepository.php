@@ -11,7 +11,7 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
  * @implements RepositoryInterface<PageInterface>

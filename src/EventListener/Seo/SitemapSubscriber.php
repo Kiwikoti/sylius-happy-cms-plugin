@@ -6,14 +6,13 @@ namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Seo;
 
 use Adeliom\SyliusHappyCMSPlugin\Event\Seo\AfterSitemapEntities;
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\SeoInterface;
+use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsSeoInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SitemapDumperInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;
 use Presta\SitemapBundle\Sitemap\Url\GoogleMultilangUrlDecorator;
 use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Sylius\Component\Resource\Model\AbstractTranslation;
-use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -53,16 +52,16 @@ class SitemapSubscriber implements EventSubscriberInterface
                 $replaceUrl = \Closure::fromCallable([$sitemapDumpable, 'replaceUrl']);
                 if ($entities) {
                     foreach ($entities as $entity) {
-                        /** @var SeoInterface&AbstractTranslation $canonicalTranslation */
+                        /** @var CmsSeoInterface&AbstractTranslation $canonicalTranslation */
                         $canonicalTranslation = $entity->getTranslation();
-                        if ($canonicalTranslation->getSEO()->sitemap) {
+                        if ($canonicalTranslation->getSEO()->getSitemap()) {
                             $url = $this->getUrl($urlGenerator, $sitemapDumpable, $entity, $canonicalTranslation, $replaceUrl);
                             $concreteUrl = new UrlConcrete($url, $sitemapDumpable->getLastModifiedDate($entity));
                             $decoratedUrl = new GoogleMultilangUrlDecorator($concreteUrl);
 
                             foreach ($entity->getTranslations() as $translation) {
-                                /** @var SeoInterface&AbstractTranslation $translation */
-                                if ($canonicalTranslation !== $translation && $translation->getSEO()->sitemap) {
+                                /** @var CmsSeoInterface&AbstractTranslation $translation */
+                                if ($canonicalTranslation !== $translation && $translation->getSEO()->getSitemap()) {
                                     $url = $this->getUrl($urlGenerator, $sitemapDumpable, $entity, $translation, $replaceUrl);
                                     $decoratedUrl->addLink($url, $translation->getLocale());
                                 }
@@ -79,7 +78,7 @@ class SitemapSubscriber implements EventSubscriberInterface
         UrlGeneratorInterface $urlGenerator,
         SitemapDumperInterface $sitemapDumpable,
         CmsRoutableInterface $entity,
-        SeoInterface&TranslationInterface $translation,
+        CmsSeoInterface&AbstractTranslation $translation,
         ?callable $replaceUrl = null,
         ?int $page = null,
     ): string {
