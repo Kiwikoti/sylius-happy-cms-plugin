@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\CMS;
 
 use Doctrine\Common\Collections\Collection;
+use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
@@ -34,6 +35,8 @@ interface CmsRoutableInterface extends RouteReferrersInterface
     public function isDatePublished(): bool;
 
     public function getRouteUnikName(): string;
+
+    public function getChannel(): ?ChannelInterface;
 
     /**
      * @return string[]

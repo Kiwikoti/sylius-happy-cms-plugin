@@ -36,7 +36,7 @@ class MenuItemRepository extends NestedTreeRepository implements MenuItemReposit
     public function getPublishedQuery(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('menuitem')
-            ->where('menuitem.state = :state')
+            ->where('menuitem.publishState = :state')
             ->andWhere('menuitem.publishDate < :publishDate');
 
         $orModule = $qb->expr()->orx();

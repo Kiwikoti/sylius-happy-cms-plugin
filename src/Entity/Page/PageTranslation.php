@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\Page;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
-use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameSlugTrait;
+use Adeliom\SyliusHappyCMSPlugin\Traits\EntityNameSlugTrait;
 use Adeliom\SyliusHappyCMSPlugin\Traits\Seo\EntitySeoTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\PrePersistEventArgs;
@@ -32,7 +32,7 @@ class PageTranslation extends AbstractTranslation implements PageTranslationInte
 
     #[Groups('Default')]
     #[ORM\Id]
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::INTEGER, options: ['unsigned' => true])]
+    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true])]
     #[ORM\GeneratedValue]
     #[Serializer\Expose]
     #[Serializer\Type('integer')]

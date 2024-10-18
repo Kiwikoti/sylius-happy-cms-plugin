@@ -11,6 +11,7 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
@@ -36,12 +37,17 @@ class PageRepository extends EntityRepository implements PageRepositoryInterface
     public function getPublishedQuery(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('page')
-            ->where('page.state = :state')
-            ->andWhere('page.publishDate < :publishDate')
+            ->where('page.publishState = :state')
         ;
 
         $orModule = $qb->expr()->orx();
-        $orModule->add($qb->expr()->gt('page.unpublishDate', ':unpublishDate'));
+        $orModule->add($qb->expr()->lte('page.publishDate', ':publishDate'));
+        $orModule->add($qb->expr()->isNull('page.publishDate'));
+
+        $qb->andWhere($orModule);
+
+        $orModule = $qb->expr()->orx();
+        $orModule->add($qb->expr()->gte('page.unpublishDate', ':unpublishDate'));
         $orModule->add($qb->expr()->isNull('page.unpublishDate'));
 
         $qb->andWhere($orModule);
@@ -51,6 +57,27 @@ class PageRepository extends EntityRepository implements PageRepositoryInterface
         $qb->setParameter('unpublishDate', new \DateTime());
 
         return $qb;
+    }
+
+    public function getHomePage(string $locale, ?ChannelInterface $channel = null): ?PageInterface
+    {
+        $qb = $this->getPublishedQuery();
+
+        $qb->addSelect('translation');
+
+        $qb->innerJoin('page.translations', 'translation', 'WITH', 'translation.locale = :locale');
+        $qb->setParameter('locale', $locale);
+
+        $qb->andWhere('page.template = :template');
+        $qb->setParameter('template', PageInterface::HOMEPAGE);
+
+        if (!is_null($channel)) {
+            $qb->andWhere('page.channel = :channel');
+            $qb->setParameter('channel', $channel);
+        }
+
+        $query = $qb->getQuery();
+        return $query->getOneOrNullResult();
     }
 
     /**

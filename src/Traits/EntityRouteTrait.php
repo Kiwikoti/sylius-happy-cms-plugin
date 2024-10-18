@@ -8,6 +8,7 @@ use Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
@@ -18,6 +19,19 @@ trait EntityRouteTrait
 {
     #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ['persist', 'remove'])]
     protected Collection $routes;
+
+    #[ORM\JoinColumn(name: 'channel_id', onDelete: 'SET NULL', nullable: true)]
+    protected ?ChannelInterface $channel = null;
+
+    public function getChannel(): ?ChannelInterface
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(?ChannelInterface $channel): void
+    {
+        $this->channel = $channel;
+    }
 
     public function __construct()
     {
@@ -127,6 +141,9 @@ trait EntityRouteTrait
 
     public function getRouteHost(TranslationInterface $translation): ?string
     {
+        if (!is_null($this->getChannel())) {
+            return $this->getChannel()->getHostname();
+        }
         return null;
     }
 

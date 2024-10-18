@@ -236,7 +236,36 @@ php bin/console make:happy-cms:generate-routable-model
 
 ## Documentation
 
-- TODO
+- Override sylius home page with a page
+
+```yaml
+services:
+  sylius.controller.shop.homepage:
+    class: App\Controller\HomepageController
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@sylius.happy_cms.plugin.services.render"
+    tags:
+      - "controller.service_arguments"
+
+```
+
+in App\Controller\HomepageController :
+
+```php
+public function indexAction(Request $request): Response
+{
+    $page = $this->manager
+        ->getRepository(Page::class)
+        ->getHomePage($request->getLocale());
+    if (!is_null($page) && !is_null($page->getOnlineRoute())) {
+        return $this->routeRenderService->renderAction($page, $request, $page->getOnlineRoute());
+    } else {
+        return new Response('', Response::HTTP_NOT_FOUND);
+    }
+}
+```
+
 - You want to [help and contribute](./docs/contribution.md)
 
 ## License

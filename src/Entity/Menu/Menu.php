@@ -14,9 +14,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-#[UniqueEntity('code')]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\MappedSuperclass(repositoryClass: MenuRepository::class)]
+#[ORM\UniqueConstraint(name: 'sylius_happy_cms__menu_code_unik', columns: ['code'])]
 class Menu implements MenuInterface
 {
     use EntityIdTrait;

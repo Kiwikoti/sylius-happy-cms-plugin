@@ -30,12 +30,21 @@ services:
           priority: 500
           connection: 'default'
 
-  sylius.happy_cms.plugin.controller.render:
-    class: Adeliom\SyliusHappyCMSPlugin\Controller\Routing\RenderController
+  Adeliom\SyliusHappyCMSPlugin\Services\RouteRenderService:
+    alias: sylius.happy_cms.plugin.services.render
+
+  sylius.happy_cms.plugin.services.render:
+    class: Adeliom\SyliusHappyCMSPlugin\Services\RouteRenderService
     arguments:
       - "@router"
       - "@sylius.resource_controller.request_configuration_factory"
       - "@twig"
+    public: true
+
+  sylius.happy_cms.plugin.controller.render:
+    class: Adeliom\SyliusHappyCMSPlugin\Controller\Routing\RenderController
+    arguments:
+      - "@sylius.happy_cms.plugin.services.render"
     public: true
 
   Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage:
