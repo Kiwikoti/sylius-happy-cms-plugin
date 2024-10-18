@@ -20,18 +20,9 @@ trait EntityRouteTrait
     #[ORM\ManyToMany(targetEntity: OrmRoute::class, cascade: ['persist', 'remove'])]
     protected Collection $routes;
 
-    #[ORM\JoinColumn(name: 'channel_id', onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'channel_id', nullable: true, onDelete: 'SET NULL')]
     protected ?ChannelInterface $channel = null;
-
-    public function getChannel(): ?ChannelInterface
-    {
-        return $this->channel;
-    }
-
-    public function setChannel(?ChannelInterface $channel): void
-    {
-        $this->channel = $channel;
-    }
 
     public function __construct()
     {
@@ -155,16 +146,23 @@ trait EntityRouteTrait
     public function getRouteStaticPrefix(TranslationInterface $translation, bool $isPreview): string
     {
         $entity = $translation->getTranslatable();
+        $parentSlug = '';
         $accessor = new PropertyAccessor();
-        if ($accessor->isReadable($entity, 'parent')) {
-            if ($parent = $accessor->getValue($entity, 'parent')) {
-                if ($accessor->isReadable($parent, 'translation')) {
-                    // access parent->translation->slug if parent is Translatable
-                    $parentTranslation = $parent->getTranslation($translation->getLocale());
-                    $parentSlug = $accessor->getValue($parentTranslation, 'slug');
-                } elseif ($accessor->isReadable($parent, 'slug')) {
-                    // access parent->slug if parent is not Translatable
-                    $parentSlug = $accessor->getValue($parent, 'slug');
+        $isHomepage = false;
+        if ($accessor->isReadable($entity, 'isHomePage')) {
+            $isHomepage = $accessor->getValue($entity, 'isHomePage');
+        }
+        if (!$isHomepage) {
+            if ($accessor->isReadable($entity, 'parent')) {
+                if ($parent = $accessor->getValue($entity, 'parent')) {
+                    if ($accessor->isReadable($parent, 'translation')) {
+                        // access parent->translation->slug if parent is Translatable
+                        $parentTranslation = $parent->getTranslation($translation->getLocale());
+                        $parentSlug = $accessor->getValue($parentTranslation, 'slug');
+                    } elseif ($accessor->isReadable($parent, 'slug')) {
+                        // access parent->slug if parent is not Translatable
+                        $parentSlug = $accessor->getValue($parent, 'slug');
+                    }
                 }
             }
         }
@@ -173,7 +171,9 @@ trait EntityRouteTrait
         if ($parentSlug ?? false) {
             $url .= '/' . $parentSlug;
         }
-        $url .= '/' . $translation->getSlug();
+        if (!$isHomepage) {
+            $url .= '/' . $translation->getSlug();
+        }
         if ($isPreview) {
             $url .= '-preview';
         }
@@ -199,5 +199,15 @@ trait EntityRouteTrait
         // Feel free to change template path
         // return 'App/front/document/fancy.html.twig'
         return null;
+    }
+
+    public function getChannel(): ?ChannelInterface
+    {
+        return $this->channel;
+    }
+
+    public function setChannel(?ChannelInterface $channel): void
+    {
+        $this->channel = $channel;
     }
 }
