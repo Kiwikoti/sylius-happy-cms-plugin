@@ -7,6 +7,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Services\Media;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\FolderInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Media\MediaRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Psr\Container\ContainerExceptionInterface;
@@ -46,14 +47,12 @@ class MediaHelper
         return $this->parameters->get('sylius_happy_cms.media.media_entity');
     }
 
-    /**
-     * @phpstan-ignore missingType.generics
-     */
-    public function getMediaRepository(): ?EntityRepository
+    public function getMediaRepository(): ?MediaRepositoryInterface
     {
         $class = $this->getMediaClassName();
         if (class_exists($class) && in_array(MediaInterface::class, class_implements($class))) {
-            return $this->em->getRepository($class);
+            $repo = $this->em->getRepository($class);
+            return $repo instanceof MediaRepositoryInterface ? $repo : null;
         }
 
         return null;

@@ -8,4 +8,5 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 interface MenuRepositoryInterface extends RepositoryInterface
 {
+    public function findOneByCode(string $code);
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Menu;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
@@ -51,5 +52,25 @@ class MenuRepository extends EntityRepository implements MenuRepositoryInterface
         }
 
         return $qb->getResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findOneByCode(string $code): ?MenuInterface
+    {
+        $qb = $this->getPublishedQuery();
+
+        $qb->andWhere('menu.code = :code');
+        $qb->setParameter('code', $code);
+        $qb->setMaxResults(1);
+
+        if ($this->cacheEnabled) {
+            $qb = $qb->getQuery()->enableResultCache($this->cacheTtl);
+        } else {
+            $qb = $qb->getQuery()->disableResultCache();
+        }
+
+        return $qb->getOneOrNullResult();
     }
 }
