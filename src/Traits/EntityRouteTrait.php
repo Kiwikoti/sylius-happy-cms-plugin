@@ -85,7 +85,7 @@ trait EntityRouteTrait
     }
 
     /**
-     * @returnstring[]
+     * @return string[]
      */
     public function getRouteMethods(): array
     {
