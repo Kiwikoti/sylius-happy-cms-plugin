@@ -196,7 +196,7 @@ trait GetContent
         return $results;
     }
 
-    protected function ignoreFiles(MediaInterface $item): bool
+    protected function ignoreFiles(MediaInterface|FolderInterface $item): bool
     {
         return !preg_grep($this->ignoreFiles, [$item->getPath()]);
     }

@@ -221,14 +221,14 @@
         <div class="modal-card mm-animated fadeInDown">
             <header class="modal-card-head is-warning">
                 <p class="modal-card-title">
-                    <span>{{ 'rename.file_folder'|trans }}</span>
+                    <span>{{ 'sylius_happy_cms.media.rename.file_folder'|trans }}</span>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
 
             <div action="{{ path('media.rename_file') }}" >
                 <section class="modal-card-body">
-                    <label class="input-label">{{ 'new.file_folder'|trans }}</label>
+                    <label class="input-label">{{ 'sylius_happy_cms.media.new.file_folder'|trans }}</label>
                     <input class="input" type="text"
                            v-if="selectedFile"
                            v-model="newFilename"
@@ -237,14 +237,14 @@
                 </section>
                 <footer class="modal-card-foot">
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             class="button is-warning"
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}"
                             @click.prevent="RenameFileForm($event)">
-                        {{ 'rename.main'|trans }}
+                        {{ 'sylius_happy_cms.media.rename.main'|trans }}
                     </button>
                 </footer>
             </div>
@@ -268,7 +268,7 @@
                     </transition>
 
                     <transition name="mm-list" mode="out-in">
-                        <span key="2">{{ 'move.file_folder'|trans }}</span>
+                        <span key="2">{{ 'sylius_happy_cms.media.move.file_folder'|trans }}</span>
                     </transition>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
@@ -277,7 +277,7 @@
             <section class="modal-card-body">
                 {# destination #}
                 <h5 class="subtitle m-b-20">
-                    {{ 'destination_folder'|trans }} :
+                    {{ 'sylius_happy_cms.media.destination_folder'|trans }} :
                     <span class="tag is-black is-medium">{% verbatim %}{{ files.path || '/' }}{% endverbatim %}</span>
                 </h5>
 
@@ -292,14 +292,14 @@
                             <button type="reset"
                                     class="button"
                                     @click.stop="toggleModal()">
-                                {{ 'cancel'|trans }}
+                                {{ 'sylius_happy_cms.media.cancel'|trans }}
                             </button>
                         </div>
                         <div class="level-item">
                             <button type="reset"
                                     class="button is-danger"
                                     @click.stop="clearMovableList()">
-                                {{ 'crop.reset'|trans }}
+                                {{ 'sylius_happy_cms.media.crop.reset'|trans }}
                             </button>
                         </div>
                         <div class="level-item">
@@ -309,7 +309,7 @@
                                     :disabled="isLoading"
                                     :class="{'is-loading': isLoading}"
                                     @click.prevent="MoveFileForm($event)">
-                                <span>{{ 'paste'|trans }}</span>
+                                <span>{{ 'sylius_happy_cms.media.paste'|trans }}</span>
                             </button>
                         </div>
                     </div>
@@ -325,7 +325,7 @@
         <div class="modal-card mm-animated fadeInDown">
             <header class="modal-card-head is-danger">
                 <p class="modal-card-title">
-                    <span>{{ 'are_you_sure_delete'|trans }}</span>
+                    <span>{{ 'sylius_happy_cms.media.are_you_sure_delete'|trans }}</span>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
@@ -337,13 +337,13 @@
                     {# deleting folder warning #}
                     <h5 v-show="folderDeleteWarning" class="__modal-folder-warning">
                         <span class="icon is-medium"><icon name="exclamation-triangle" scale="1.2"></icon></span>
-                        <span>{{ 'delete.folder'|trans }}</span>
+                        <span>{{ 'sylius_happy_cms.media.delete.folder'|trans }}</span>
                     </h5>
                 </section>
 
                 <footer class="modal-card-foot">
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             ref="confirm_delete_modal_submit"
@@ -351,7 +351,7 @@
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}"
                             @click.prevent="DeleteFileForm($event)">
-                        {{ 'delete.confirm'|trans }}
+                        {{ 'sylius_happy_cms.media.delete.confirm'|trans }}
                     </button>
                 </footer>
             </div>
@@ -378,7 +378,7 @@
 
                 <footer class="modal-card-foot">
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             ref="generate_alt_group__submit"
@@ -413,7 +413,7 @@
                 </section>
                 <footer class="modal-card-foot">
                     <button type="reset" class="button" @click.stop="toggleModal()">
-                        {{ 'cancel'|trans }}
+                        {{ 'sylius_happy_cms.media.cancel'|trans }}
                     </button>
                     <button type="submit"
                             class="button is-warning"

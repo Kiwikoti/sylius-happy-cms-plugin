@@ -23,10 +23,10 @@ trait Upload
      */
     public function upload(Request $request): JsonResponse
     {
-        $upload_folder_id = $request->request->get('upload_folder');
+        $upload_folder_id = (int) $request->request->get('upload_folder');
         $folder = null;
         $custom_attr = [];
-        if (is_int($upload_folder_id)) {
+        if ($upload_folder_id > 0) {
             $folder = $this->manager->getFolder($upload_folder_id);
         }
 
