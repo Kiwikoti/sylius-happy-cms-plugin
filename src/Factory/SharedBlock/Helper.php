@@ -29,7 +29,7 @@ class Helper
         'webpack' => [],
     ];
 
-    /** @var array<int, array<string, mixed>> */
+    /** @var array<int|string, array<string, mixed>> */
     private array $traces = [];
 
     public function __construct(
@@ -75,7 +75,7 @@ class Helper
     /**
      * Returns the rendering traces.
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int|string, array<string, mixed>>
      */
     public function getTraces(): array
     {

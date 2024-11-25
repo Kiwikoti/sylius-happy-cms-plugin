@@ -13,8 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 class RenderController extends AbstractController
 {
     public function __construct(
-        protected readonly RouteRenderService $routeRenderService
-    ) {}
+        protected readonly RouteRenderService $routeRenderService,
+    ) {
+    }
 
     public function renderAction(
         CmsRoutableInterface $contentDocument,

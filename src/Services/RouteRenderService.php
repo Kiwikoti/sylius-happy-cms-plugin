@@ -13,7 +13,7 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory;
 use Sylius\Resource\Metadata\Metadata;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,6 @@ use Twig\Environment;
 
 class RouteRenderService extends AbstractController
 {
-
     public function __construct(
         protected RouterInterface $router,
         protected RequestConfigurationFactory $requestConfigurationFactory,
@@ -33,17 +32,16 @@ class RouteRenderService extends AbstractController
     public function renderAction(
         CmsRoutableInterface $contentDocument,
         Request $request,
-        ?RouteObjectInterface $route = null,
+        ?OrmRoute $route = null,
     ): Response {
-
-        if (is_null($route)) {
+        if (null === $route) {
             /**
-             * @var ?RouteObjectInterface $route
+             * @var ?OrmRoute $route
              */
             $route = $request->attributes->get('routeDocument');
         }
 
-        if (is_null($route)) {
+        if (null === $route) {
             throw new \Exception('missing route with entity');
         }
 

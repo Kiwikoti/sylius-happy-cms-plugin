@@ -71,12 +71,13 @@ class PageRepository extends EntityRepository implements PageRepositoryInterface
         $qb->andWhere('page.template = :template');
         $qb->setParameter('template', PageInterface::HOMEPAGE);
 
-        if (!is_null($channel)) {
+        if (null !== $channel) {
             $qb->andWhere('page.channel = :channel');
             $qb->setParameter('channel', $channel);
         }
 
         $query = $qb->getQuery();
+
         return $query->getOneOrNullResult();
     }
 

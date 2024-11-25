@@ -9,9 +9,8 @@ use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Symfony\Cmf\Component\Routing\RouteReferrersInterface;
 
-interface CmsRoutableInterface extends RouteReferrersInterface
+interface CmsRoutableInterface
 {
     /**
      * @return Collection|TranslationInterface[]
@@ -83,4 +82,14 @@ interface CmsRoutableInterface extends RouteReferrersInterface
      * @return Collection<int, OrmRoute>
      */
     public function getRoutes(): Collection;
+
+    /**
+     * Add a route to the collection.
+     */
+    public function addRoute(OrmRoute $route): void;
+
+    /**
+     * Remove a route from the collection.
+     */
+    public function removeRoute(OrmRoute $route): void;
 }

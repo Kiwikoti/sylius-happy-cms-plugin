@@ -52,6 +52,7 @@ class MediaHelper
         $class = $this->getMediaClassName();
         if (class_exists($class) && in_array(MediaInterface::class, class_implements($class))) {
             $repo = $this->em->getRepository($class);
+
             return $repo instanceof MediaRepositoryInterface ? $repo : null;
         }
 

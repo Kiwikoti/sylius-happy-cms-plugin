@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Embeddable]
 class Seo implements SeoInterface, \Stringable
 {
-    #[ORM\Column]
-    public string $title;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    public ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $description = null;
@@ -37,12 +37,12 @@ class Seo implements SeoInterface, \Stringable
     #[ORM\Column(type: Types::JSON)]
     public array $robots = [];
 
-    public function getTitle(): string
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): void
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }

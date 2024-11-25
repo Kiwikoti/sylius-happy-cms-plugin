@@ -158,6 +158,12 @@ trait GetContent
         if (is_int($folder)) {
             $folder = $this->manager->getFolder($folder);
         }
+        if (!method_exists($this->helper->getFolderRepository(), 'createQueryBuilder')) {
+            return [];
+        }
+        if (!method_exists($this->helper->getMediaRepository(), 'createQueryBuilder')) {
+            return [];
+        }
 
         $folderQuery = $this->helper->getFolderRepository()->createQueryBuilder('f');
         $mediaQuery = $this->helper->getMediaRepository()->createQueryBuilder('m');

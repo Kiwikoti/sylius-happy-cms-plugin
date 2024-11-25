@@ -8,11 +8,11 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusEasyCrudPlugin\Form\AbstractType;
 use Adeliom\SyliusEasyCrudPlugin\Form\AdminFormTypeInterface;
 use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Media\MediaManager;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Exception\TransformationFailedException;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -64,7 +64,7 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
         $builder->addModelTransformer(new CallbackTransformer(
             function ($media) {
                 if (empty($media)) {
-                    return '';
+                    return null;
                 }
 
                 $class = $this->manager->getHelper()->getMediaClassName();
@@ -72,8 +72,8 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
                     $media = $this->manager->getMedia($media);
                 }
 
-                if (!$media instanceof \Adeliom\SyliusHappyCMSPlugin\Entity\Media\Media) {
-                    return '';
+                if (!$media instanceof MediaInterface) {
+                    return null;
                 }
 
                 return $media->getId();
@@ -85,7 +85,7 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
 
                 $media = $this->manager->getMedia($mediaId);
 
-                if (!$media instanceof Media) {
+                if (!$media instanceof MediaInterface) {
                     throw new TransformationFailedException(sprintf('An media with id "%s" does not exist!', $mediaId));
                 }
 
@@ -115,7 +115,7 @@ class MediaType extends AbstractType implements AdminFormTypeInterface
 
     public function getParent(): ?string
     {
-        return TextType::class;
+        return IntegerType::class;
     }
 
     public function getBlockPrefix(): string

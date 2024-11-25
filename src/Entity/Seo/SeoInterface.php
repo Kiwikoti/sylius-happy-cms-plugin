@@ -8,9 +8,9 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Media\MediaInterface;
 
 interface SeoInterface
 {
-    public function getTitle(): string;
+    public function getTitle(): ?string;
 
-    public function setTitle(string $title): void;
+    public function setTitle(?string $title): void;
 
     public function getDescription(): ?string;
 

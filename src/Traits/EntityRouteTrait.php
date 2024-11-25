@@ -13,7 +13,6 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
-use Symfony\Component\Routing\Route;
 
 trait EntityRouteTrait
 {
@@ -65,19 +64,22 @@ trait EntityRouteTrait
         return null;
     }
 
+    /**
+     * @param Collection<int, OrmRoute> $routes
+     */
     public function setRoutes(Collection $routes): void
     {
         $this->routes = $routes;
     }
 
-    public function addRoute(Route $route): void
+    public function addRoute(OrmRoute $route): void
     {
         if (!$this->routes->contains($route)) {
             $this->routes->add($route);
         }
     }
 
-    public function removeRoute(Route $route): void
+    public function removeRoute(OrmRoute $route): void
     {
         if ($this->routes->contains($route)) {
             $this->routes->removeElement($route);
@@ -132,9 +134,10 @@ trait EntityRouteTrait
 
     public function getRouteHost(TranslationInterface $translation): ?string
     {
-        if (!is_null($this->getChannel())) {
+        if (null !== $this->getChannel()) {
             return $this->getChannel()->getHostname();
         }
+
         return null;
     }
 
@@ -171,7 +174,7 @@ trait EntityRouteTrait
         if ($parentSlug ?? false) {
             $url .= '/' . $parentSlug;
         }
-        if (!$isHomepage) {
+        if (!$isHomepage && method_exists($translation, 'getSlug')) {
             $url .= '/' . $translation->getSlug();
         }
         if ($isPreview) {
