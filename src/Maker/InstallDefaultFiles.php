@@ -340,7 +340,7 @@ final class InstallDefaultFiles extends AbstractMaker
 
             file_put_contents(
                 self::YAML_RESOURCE_FILE,
-                "\n" . str_replace("\n", "\n    ", $content ?: ''),
+                "\n" . str_replace("\n", "\n        ", $content ?: ''),
                 \FILE_APPEND,
             );
 

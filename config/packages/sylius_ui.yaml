@@ -1,14 +1,24 @@
-sylius_ui:
-  events:
-    sylius.shop.layout.head:
-      blocks:
-        seo_metas:
-          template: "@SyliusHappyCMSPlugin/front/template_block/seo_metas.html.twig"
-    sylius.cms.shared_block.choose:
-      blocks:
-        content:
-          template: "@SyliusHappyCMSPlugin/shared_block/select.html.twig"
-    sylius.cms.shared_block.create:
-      blocks:
-        content:
-          template: "@SyliusAdmin/Crud/Create/_content.html.twig"
+sylius_twig_hooks:
+  hooks:
+    'sylius.shop.layout.head':
+      seo_metas:
+        template: "@SyliusHappyCMSPlugin/front/template_block/seo_metas.html.twig"
+
+    'sylius.cms.shared_block.choose':
+      content:
+        template: "@SyliusHappyCMSPlugin/shared_block/select.html.twig"
+
+    'sylius.cms.shared_block.create':
+      content:
+        template: "@SyliusAdmin/Crud/Create/_content.html.twig"
+
+    'sylius_admin.happy_cms.medias':
+      sidebar:
+        template: '@SyliusAdmin/shared/crud/common/sidebar.html.twig'
+        priority: 200
+      navbar:
+        template: '@SyliusAdmin/shared/crud/common/navbar.html.twig'
+        priority: 100
+      manager:
+        template: '@SyliusHappyCMSPlugin/media/manager.html.twig'
+        priority: 0

@@ -19,7 +19,7 @@ services:
 
     Adeliom\SyliusHappyCMSPlugin\EventListener\Menu\MenuCreationListener:
         arguments:
-            - '@sylius.locale_provider'
+            - '@sylius.provider.locale'
             - '@translator'
             - '@parameter_bag'
         tags:

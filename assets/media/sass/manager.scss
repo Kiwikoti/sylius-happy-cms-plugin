@@ -60,7 +60,7 @@
   }
 
   &__toolbar {
-    @apply flex-wrap p-4 sm:py-2 bg-dark m-0;
+    @apply flex-wrap p-4 sm:py-2 bg-[#d9dbe1] m-0;
     @apply border-solid border-0 border-b border-theme-5;
   }
 
@@ -109,7 +109,7 @@
 
 
 #media-holder.fullscreen,
-.admin-layout #media-holder,
+.page-wrapper #media-holder,
 .happy-cms-media-widget{
   .media-manager{
     @apply h-full;

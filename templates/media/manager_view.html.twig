@@ -1,12 +1,11 @@
-{% extends '@SyliusAdmin/layout.html.twig' %}
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
 {% trans_default_domain 'SyliusHappyCMSPlugin' %}
 
 {% block page_title %}{{ 'sylius_happy_cms.media.title'|trans|striptags|raw }}{% endblock %}
 
-{% block content %}
-    <div id="media-holder" style="display:none">
-        {{ include('@SyliusHappyCMSPlugin/media/manager.html.twig') }}
-    </div>
+{% block body %}
+        {% hook 'sylius_admin.happy_cms.medias' %}
 {% endblock %}
 
 {% block stylesheets %}

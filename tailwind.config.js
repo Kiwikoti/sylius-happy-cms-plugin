@@ -27,7 +27,7 @@ module.exports = {
                 'danger': 'var(--color-danger)',
                 'link': 'var(--color-info)',
                 'success': 'var(--color-success)',
-                'dark': '#404040',
+                'dark': '#1E2433',
                 'theme-10': '#d0d7dc',
                 'theme-15': '#c2ccd2',
                 'theme-25': '#a7b5be',
