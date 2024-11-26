@@ -33,9 +33,8 @@
     "maennchen/zipstream-php": "^2.1.0",
     "illuminate/support": "^9.2",
     "stof/doctrine-extensions-bundle": "^1.6",
-    "symfony/psr-http-message-bridge": "^6.4 || ^7.0",
     "nyholm/psr7": "^1.4",
-    "presta/sitemap-bundle": "^3.0",
+    "presta/sitemap-bundle": "^v4.1.1",
     "james-heinrich/getid3": "^1.9"
   },
   "conflict": {
