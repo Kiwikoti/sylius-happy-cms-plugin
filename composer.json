@@ -17,8 +17,8 @@
     }
   ],
   "require": {
-    "php": "~8.1|~8.2|~8.3",
-    "agence-adeliom/sylius-easy-crud-plugin": "^v1.13.0",
+    "php": "~8.1|~8.2|~8.3|~8.4",
+    "agence-adeliom/sylius-easy-crud-plugin": "2.x-dev",
     "symfony/webpack-encore-bundle": "^1.12 || ^2.0",
     "ext-json": "*",
     "ext-intl": "*",
@@ -33,7 +33,7 @@
     "maennchen/zipstream-php": "^2.1.0",
     "illuminate/support": "^9.2",
     "stof/doctrine-extensions-bundle": "^1.6",
-    "symfony/psr-http-message-bridge": "^2.0",
+    "symfony/psr-http-message-bridge": "^6.4 || ^7.0",
     "nyholm/psr7": "^1.4",
     "presta/sitemap-bundle": "^3.0",
     "james-heinrich/getid3": "^1.9"
@@ -73,7 +73,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "0.x-dev"
+      "dev-master": "2.x-dev"
     }
   },
   "scripts": {

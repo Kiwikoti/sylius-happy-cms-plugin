@@ -8,8 +8,8 @@ SHELL=/bin/bash
 ### VERSIONS
 ### ¯¯¯
 
-SYLIUS_VERSION=1.13.0
-SYMFONY_VERSION=6.4
+SYLIUS_VERSION=2.0.0
+SYMFONY_VERSION=7.1
 COMPOSE_PROJECT_NAME=sylius-happy-cms-plugin
 
 PLUGIN_NAME=agence-adeliom/sylius-happy-cms-plugin
