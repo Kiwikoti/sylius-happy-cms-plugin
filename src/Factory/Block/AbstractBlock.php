@@ -149,6 +149,11 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
         return [];
     }
 
+    public function getTab(): string
+    {
+        return $this->translator->trans('sylius_happy_cms.editor.blocks');
+    }
+
     public function getPosition(): int
     {
         return 100;
