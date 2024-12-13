@@ -45,4 +45,11 @@ interface SeoInterface
      * @param string[] $robots
      */
     public function setRobots(array $robots): void;
+
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public static function normalizeFormData(array $data): array;
+
 }

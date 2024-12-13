@@ -127,4 +127,18 @@ class Seo implements SeoInterface, \Stringable
     {
         return $this->title;
     }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public static function normalizeFormData(array $data): array
+    {
+        foreach ($data as $field => $value) {
+            if (is_string($value) && empty($value)) {
+                $data[$field] = null;
+            }
+        }
+        return $data;
+    }
 }
