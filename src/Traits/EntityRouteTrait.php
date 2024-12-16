@@ -143,7 +143,11 @@ trait EntityRouteTrait
 
     public function getRouteUnikName(): string
     {
-        return 'document_' . $this->getId();
+        return \sprintf(
+            '%s_%s',
+            str_replace('\\', '_', self::class),
+            $this->getId()
+        );
     }
 
     public function getRouteStaticPrefix(TranslationInterface $translation, bool $isPreview): string
