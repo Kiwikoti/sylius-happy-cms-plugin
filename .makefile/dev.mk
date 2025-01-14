@@ -127,7 +127,9 @@ platform:
 platform_assets:
 	rm -rf ${APP_DIR}/node_modules
 	mkdir ${APP_DIR}/node_modules
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs)
+	rm -rf ${APP_DIR}/package-lock.json
+	#cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm cache clean")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm install --no-audit")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm run build")
 
 platform_debug:
