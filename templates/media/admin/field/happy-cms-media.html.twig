@@ -1,7 +1,6 @@
 {# @var ea \Adeliom\SyliusEasyCrudPlugin\CrudFactory\Context\AdminContext #}
 {# @var field \Adeliom\SyliusEasyCrudPlugin\CrudFactory\Dto\FieldDto #}
 {# @var entity \Adeliom\SyliusEasyCrudPlugin\CrudFactory\Dto\EntityDto #}
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
 
 {% if data is defined and data is not null %}
     {% set html_id = 'happy-cms-media-field-' ~ data.id %}

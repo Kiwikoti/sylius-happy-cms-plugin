@@ -1,5 +1,3 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 <transition name="mm-list" mode="out-in">
     <!-- This example requires Tailwind CSS v2.0+ -->
     <nav class="media-manager__toolbar" v-show="toolBar">
@@ -16,7 +14,7 @@
                                         :disabled="isLoading"
                                         @click.stop="toggleUploadPanel()"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.upload.main'|trans }} (u)">
+                                        title="{{ 'sylius_happy_cms.media.upload.main'|trans({}, 'SyliusHappyCMSPlugin') }} (u)">
                                     <span class="icon"><icon name="upload"></icon></span>
                                 </button>
                             </div>
@@ -28,7 +26,7 @@
                                         :disabled="isLoading"
                                         @click.stop="createNewFolder()"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.add.folder'|trans }} (n)">
+                                        title="{{ 'sylius_happy_cms.media.add.folder'|trans({}, 'SyliusHappyCMSPlugin') }} (n)">
                                     <span class="icon"><icon name="folder-plus"></icon></span>
                                 </button>
                             </div>
@@ -40,7 +38,7 @@
                                         :disabled="isLoading"
                                         @click.stop="generateAllAlt()"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.alt.generate_all_alt'|trans }}">
+                                        title="{{ 'sylius_happy_cms.media.alt.generate_all_alt'|trans({}, 'SyliusHappyCMSPlugin') }}">
                                     <span class="icon"><icon name="tags"></icon></span>
                                 </button>
                             </div>
@@ -56,7 +54,7 @@
                                         ref="addToMoveList"
                                         :disabled="isLoading"
                                         v-tippy="{arrow: true}"
-                                        :title="'{{ 'sylius_happy_cms.media.add.list'|trans }} (c / x)'"
+                                        :title="'{{ 'sylius_happy_cms.media.add.list'|trans({}, 'SyliusHappyCMSPlugin') }} (c / x)'"
                                         @click.stop="addToMovableList()">
                                     <span class="icon"><icon name="plus" scale="0.8"></icon></span>
                                 </button>
@@ -68,7 +66,7 @@
                                         ref="move"
                                         :disabled="isLoading || !movableItemsCount"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.move.main'|trans }} (m / p)"
+                                        title="{{ 'sylius_happy_cms.media.move.main'|trans({}, 'SyliusHappyCMSPlugin') }} (m / p)"
                                         @click.stop="moveItem()">
                                     <span class="icon"><icon name="share" scale="0.8"></icon></span>
                                 </button>
@@ -80,7 +78,7 @@
                                         ref="rename"
                                         :disabled="ops_btn_disable"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.rename.main'|trans }}"
+                                        title="{{ 'sylius_happy_cms.media.rename.main'|trans({}, 'SyliusHappyCMSPlugin') }}"
                                         @click.stop="renameItem()">
                                     <span class="icon"><icon name="i-cursor"></icon></span>
                                 </button>
@@ -92,7 +90,7 @@
                                         ref="editMetas"
                                         :disabled="ops_btn_disable || !fileTypeIs(selectedFile, 'image')"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.edit_metas.main'|trans }}"
+                                        title="{{ 'sylius_happy_cms.media.edit_metas.main'|trans({}, 'SyliusHappyCMSPlugin') }}"
                                         @click.stop="editMetasItem()">
                                     <span class="icon"><icon name="hashtag"></icon></span>
                                 </button>
@@ -104,7 +102,7 @@
                                         ref="editor"
                                         :disabled="editor_btn_disable"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.editor.main'|trans }} (e)"
+                                        title="{{ 'sylius_happy_cms.media.editor.main'|trans({}, 'SyliusHappyCMSPlugin') }} (e)"
                                         @click.stop="imageEditor()">
                                     <span class="icon"><icon name="regular/object-ungroup" scale="1.2"></icon></span>
                                 </button>
@@ -116,7 +114,7 @@
                                         ref="delete"
                                         :disabled="ops_btn_disable"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.delete.main'|trans }} (d / del)"
+                                        title="{{ 'sylius_happy_cms.media.delete.main'|trans({}, 'SyliusHappyCMSPlugin') }} (d / del)"
                                         @click.stop="deleteItem()">
                                     <span class="icon"><icon name="regular/trash-alt"></icon></span>
                                 </button>
@@ -128,7 +126,7 @@
                                         ref="generate_alt_group"
                                         :disabled="ops_btn_disable"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.alt.generate_alt_group'|trans }}"
+                                        title="{{ 'sylius_happy_cms.media.alt.generate_alt_group'|trans({}, 'SyliusHappyCMSPlugin') }}"
                                         @click.stop="generateAltGroup()">
                                     <span class="icon"><icon name="tags"></icon></span>
                                 </button>
@@ -147,7 +145,7 @@
                                          :disabled="isLoading"
                                          tag="button"
                                          v-tippy="{arrow: true}"
-                                         title="{{ 'sylius_happy_cms.media.action.refresh'|trans }} (r)"
+                                         title="{{ 'sylius_happy_cms.media.action.refresh'|trans({}, 'SyliusHappyCMSPlugin') }} (r)"
                                          @tap="refresh()"
                                          @hold="clearAll()">
                                     <span class="icon">
@@ -172,11 +170,11 @@
                                         title="a">
                                     <template v-if="bulkSelectAll">
                                         <span class="icon"><icon name="minus" scale="0.8"></icon></span>
-                                        <span>{{ 'sylius_happy_cms.media.select.non'|trans }}</span>
+                                        <span>{{ 'sylius_happy_cms.media.select.non'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
                                     </template>
                                     <template v-else>
                                         <span class="icon"><icon name="plus" scale="0.8"></icon></span>
-                                        <span>{{ 'sylius_happy_cms.media.select.all'|trans }}</span>
+                                        <span>{{ 'sylius_happy_cms.media.select.all'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
                                     </template>
                                 </button>
                             </div>
@@ -189,7 +187,7 @@
                                         :class="{'is-danger' : bulkSelect}"
                                         :disabled="searchItemsCount == 0 || !allItemsCount || isLoading"
                                         v-tippy="{arrow: true}"
-                                        title="{{ 'sylius_happy_cms.media.select.bulk'|trans }} (b)">
+                                        title="{{ 'sylius_happy_cms.media.select.bulk'|trans({}, 'SyliusHappyCMSPlugin') }} (b)">
                                     <span class="icon"><icon name="layer-group"></icon></span>
                                 </button>
                             </div>
@@ -218,7 +216,7 @@
                                     <p class="control">
                                         <button type="button" class="button is-black" :disabled="!searchFor"
                                                 v-tippy="{arrow: true}"
-                                                title="{{ 'sylius_happy_cms.media.clear'|trans({attr: 'sylius_happy_cms.media.search.main'|trans|lower}) }}"
+                                                title="{{ 'sylius_happy_cms.media.clear'|trans({attr: 'sylius_happy_cms.media.search.main'|trans({}, 'SyliusHappyCMSPlugin')|lower}, 'SyliusHappyCMSPlugin') }}"
                                                 @click.stop="resetInput('searchFor')">
                                             <span class="icon"><icon name="times"></icon></span>
                                         </button>
@@ -237,7 +235,7 @@
                                                 :have-a-file-of-type="haveAFileOfType"
                                                 :trans="trans"
                                                 v-tippy="{arrow: true}"
-                                                title="{{ 'sylius_happy_cms.media.filter.filtration'|trans }}">
+                                                title="{{ 'sylius_happy_cms.media.filter.filtration'|trans({}, 'SyliusHappyCMSPlugin') }}">
                                 >
                             </filter-and-sorting>
                         </div>

@@ -1,11 +1,9 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 <div id="uploadPreview">
     {# ops #}
     <div class="dz-preview-ops btn-animate extra-func-btns">
         {# add more files #}
         <button type="button" v-tippy="{arrow: true, placement: 'left'}"
-                title="{{ 'sylius_happy_cms.media.add.more'|trans({attr: null}) }} (u)"
+                title="{{ 'sylius_happy_cms.media.add.more'|trans({attr: null}, 'SyliusHappyCMSPlugin') }} (u)"
                 @click.stop="toggleUploadPanel()"
                 class="btn-plain">
                             <span class="icon is-large">
@@ -17,7 +15,7 @@
         </button>
         {# upload #}
         <button type="button" v-tippy="{arrow: true, placement: 'left'}"
-                title="{{ 'sylius_happy_cms.media.upload.main'|trans }} (Enter)"
+                title="{{ 'sylius_happy_cms.media.upload.main'|trans({}, 'SyliusHappyCMSPlugin') }} (Enter)"
                 ref="process-dropzone"
                 class="btn-plain">
                             <span class="icon is-large">
@@ -29,7 +27,7 @@
         </button>
         {# reset #}
         <button type="button" v-tippy="{arrow: true, placement: 'left'}"
-                title="{{ 'sylius_happy_cms.media.clear'|trans({attr: null}) }} (Esc)"
+                title="{{ 'sylius_happy_cms.media.clear'|trans({attr: null}, 'SyliusHappyCMSPlugin') }} (Esc)"
                 ref="clear-dropzone"
                 class="btn-plain">
                             <span class="icon is-large">

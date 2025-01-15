@@ -1,5 +1,3 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 {# multi #}
 <template v-if="bulkItemsFilter.length && enableDelete">
     {# less than 8 items #}
@@ -13,7 +11,7 @@
             <div class="media-content">
                 <p class="title is-4">
                     <strong class="has-text-link">{% verbatim %}{{ one.name }}{% endverbatim %}</strong>
-                    <small v-if="one.items" class="has-text-link">"{% verbatim %}{{ one.items }}{% endverbatim %} {{ 'sylius_happy_cms.media.items'|trans }}"</small>
+                    <small v-if="one.items" class="has-text-link">"{% verbatim %}{{ one.items }}{% endverbatim %} {{ 'sylius_happy_cms.media.items'|trans({}, 'SyliusHappyCMSPlugin') }}"</small>
                 </p>
                 <p class="subtitle is-5 has-text-danger" v-if="one.size">{% verbatim %}{{ getFileSize(one.size) }}{% endverbatim %}</p>
             </div>
@@ -31,7 +29,7 @@
             <div class="media-content">
                 <p class="title is-4">
                     <strong>"{% verbatim %}{{ bulkItemsFilter.length }}{% endverbatim %}"</strong>
-                    <small class="has-text-link">{{ 'sylius_happy_cms.media.too_many_files'|trans }}</small>
+                    <small class="has-text-link">{{ 'sylius_happy_cms.media.too_many_files'|trans({}, 'SyliusHappyCMSPlugin') }}</small>
                 </p>
             </div>
         </div>
@@ -51,7 +49,7 @@
                 <p class="title is-4">
                     <strong class="has-text-link">{% verbatim %}{{ selectedFile.name }}{% endverbatim %}</strong>
                     <small v-if="selectedFile.items" class="has-text-link">
-                        "{% verbatim %}{{ selectedFile.items }}{% endverbatim %} {{ 'sylius_happy_cms.media.items'|trans }}"
+                        "{% verbatim %}{{ selectedFile.items }}{% endverbatim %} {{ 'sylius_happy_cms.media.items'|trans({}, 'SyliusHappyCMSPlugin') }}"
                     </small>
                 </p>
                 <p class="subtitle is-5 has-text-danger"  v-if="selectedFile.size">{% verbatim %}{{ getFileSize(selectedFile.size) }}{% endverbatim %}</p>
