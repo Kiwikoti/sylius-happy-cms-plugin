@@ -146,7 +146,7 @@ trait EntityRouteTrait
         return \sprintf(
             '%s_%s',
             str_replace('\\', '_', self::class),
-            $this->getId()
+            $this->getId(),
         );
     }
 

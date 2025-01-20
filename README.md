@@ -224,14 +224,15 @@ Entity, Repository, Admin CRUD, Front-end routes and controllers, CMS features
 
 Example : 
 - Generate a Blog
-- Generate a Faq
-- Generate a Brand model
+- Generate Faq pages
+- Generate Brand page
+- Page based on custom Symfony entities
 
 In a second.
 
 TODO :
 ```bash
-php bin/console make:happy-cms:generate-routable-model
+php bin/console make:happy-cms:generate-cms-model
 ```
 
 ## Documentation

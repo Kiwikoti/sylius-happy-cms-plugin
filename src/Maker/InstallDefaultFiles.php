@@ -30,13 +30,6 @@ final class InstallDefaultFiles extends AbstractMaker
     ) {
     }
 
-    public const TPL_FILES = [
-        'entity' => __DIR__ . '/../../Resources/skeleton/default/entity.tpl.php',
-        'translation' => __DIR__ . '/../../Resources/skeleton/cms/translation.tpl.php',
-        'repository' => __DIR__ . '/../../Resources/skeleton/cms/repository.tpl.php',
-        'admin' => __DIR__ . '/../../Resources/skeleton/cms/admin.tpl.php',
-    ];
-
     public static function getCommandName(): string
     {
         return 'make:happy-cms:install';

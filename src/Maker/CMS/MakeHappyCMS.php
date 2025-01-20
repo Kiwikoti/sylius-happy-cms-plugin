@@ -19,20 +19,12 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 final class MakeHappyCMS extends AbstractMaker
 {
-    public const BLOG_SCOPE = 'Blog';
-
-    public const FAQ_SCOPE = 'Faq';
-
-    public const SCOPES = [
-        self::BLOG_SCOPE,
-        self::FAQ_SCOPE,
-    ];
-
     public const TPL_FILES = [
         'entity' => __DIR__ . '/../../Resources/skeleton/cms/entity.tpl.php',
         'translation' => __DIR__ . '/../../Resources/skeleton/cms/translation.tpl.php',
         'repository' => __DIR__ . '/../../Resources/skeleton/cms/repository.tpl.php',
         'admin' => __DIR__ . '/../../Resources/skeleton/cms/admin.tpl.php',
+        'controller' => __DIR__ . '/../../Resources/skeleton/cms/controller.tpl.php',
     ];
 
     public function __construct(
@@ -43,30 +35,36 @@ final class MakeHappyCMS extends AbstractMaker
 
     public static function getCommandName(): string
     {
-        return 'make:happy-cms:generate';
+        return 'make:happy-cms:generate-cms-model';
     }
 
     public static function getCommandDescription(): string
     {
-        return 'Creates FAQ/Blog Entities, Translations, Repositories and Admin classes';
+        return 'Generate Entities with Translations, Repositories and Admin classes for your CMS such as FAQ, Blog, Brand pages etc..';
     }
 
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
         $command
             ->setDescription(self::getCommandDescription())
-            ->addArgument('scope', InputArgument::OPTIONAL, 'Scope of classes to create')
+            ->addArgument('scope', InputArgument::REQUIRED, 'Scope of classes to create (ex: Faq, Blog)')
+            ->addArgument(
+                'entryNamespace',
+                InputArgument::OPTIONAL,
+                'Namespace for %s scope',
+                '%s',
+            )
             ->addArgument(
                 'entryClassName',
                 InputArgument::OPTIONAL,
-                'Entity name for %s entries',
+                'Entity filename name for %s',
                 'Entry',
             )
             ->addArgument(
-                'categoryClassName',
+                'taxonomyClassName',
                 InputArgument::OPTIONAL,
-                'Entity name for %s categories',
-                'Category',
+                'Taxonomy entity filename name for %s scope',
+                'Taxonomy',
             )
         ;
         $inputConfig->setArgumentAsNonInteractive('scope');
@@ -75,14 +73,14 @@ final class MakeHappyCMS extends AbstractMaker
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
         $argument = $command->getDefinition()->getArgument('scope');
-        $scope = $io->choice($argument->getDescription(), self::SCOPES);
+        $scope = $io->ask($argument->getDescription(), 'Faq');
 
         $input->setArgument('scope', $scope);
 
-        foreach (['entryClassName', 'categoryClassName'] as $argName) {
+        foreach (['entryNamespace', 'entryClassName', 'taxonomyClassName'] as $argName) {
             $arg = $command->getDefinition()->getArgument($argName);
             $question = sprintf($arg->getDescription(), $scope);
-            $default = $arg->getDefault();
+            $default = sprintf($arg->getDefault(), $scope);
             if (is_string($default) || null === $default) {
                 $input->setArgument(
                     $arg->getName(),
@@ -97,19 +95,40 @@ final class MakeHappyCMS extends AbstractMaker
      */
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
-        $entryClassName = Str::asClassName($input->getArgument('entryClassName'));
+        $namespace = Str::asCamelCase($input->getArgument('entryNamespace'));
         $scope = $input->getArgument('scope');
+        $hasFlexibleContent = true;
+        $hasRouting = true;
+        $hasTaxonomy = true;
 
-        if (!\class_exists($entryClassName)) {
-            $entryClassName = $generator->createClassNameDetails($entryClassName, 'Entity\\HappyCMS\\')->getFullName();
+        $entryClassName = Str::asClassName($input->getArgument('entryClassName'));
+        $entryClassNameDetail = $generator->createClassNameDetails(
+            $entryClassName,
+            'Entity\\HappyCMS\\' . $namespace . '\\',
+        );
+        $entryClassNameTranslationDetail = $generator->createClassNameDetails(
+            $entryClassName,
+            'Entity\\HappyCMS\\' . $namespace . '\\',
+            'Translation',
+        );
+
+        $taxonomyClassNameDetail = false;
+        $taxonomyClassNameTranslationDetail = false;
+        if ($hasTaxonomy) {
+            $taxonomyClassName = Str::asClassName($input->getArgument('taxonomyClassName'));
+            $taxonomyClassNameDetail = $generator->createClassNameDetails(
+                $taxonomyClassName,
+                'Entity\\HappyCMS\\' . $namespace . '\\',
+            );
+            $taxonomyClassNameTranslationDetail = $generator->createClassNameDetails(
+                $taxonomyClassName,
+                'Entity\\HappyCMS\\' . $namespace . '\\',
+                'Translation',
+            );
         }
 
-        $namespace = \trim($generator->getRootNamespace(), '\\');
-
-        $categoryClassName = Str::asClassName($input->getArgument('categoryClassName'));
-
         [$entity, $entityTranslation, $repository] = CrudMakerService::getEntity(
-            $entryClassName,
+            $entryClassNameDetail->getFullName(),
             $generator,
             $this->managerRegistry,
         );
@@ -126,188 +145,154 @@ final class MakeHappyCMS extends AbstractMaker
                 $entityTranslation,
             );
 
-            // TODO : get template and commented vars below
-            $resourceConfigGenerator->generateEntity($entryClassName, self::TPL_FILES['entity'], [
-                        'scope' => $scope,
-                        //'entityClassName' => $entryClassName,
-                        //'relationClassName' => $categoryClassName,
-                        //'repository' => [
-                        //    'name' => $entryClassName . 'Repository',
-                        //    'FQCN' => $namespaces['repository'] . $entryClassName . 'Repository',
-                        //],
-                        //'options' => [
-                        //    'isOwningSide' => true,
-                        //    'hasRouting' => false,
-                        //],
-                    ]);
-            // TODO : get template and commented vars below
-            $resourceConfigGenerator->generateEntityTranslation($entryClassName);
+            $resourceConfigGenerator->generateEntity(
+                $entryClassNameDetail->getFullName(),
+                self::TPL_FILES['entity'],
+                [
+                    'classNameDetail' => $entryClassNameDetail,
+                    'scope' => ucfirst($scope),
+                    'addRepo' => true,
+                    'addTrans' => true,
+                    'hasRouting' => $hasRouting,
+                    'isOwningSide' => true,
+                    'relationClassNameDetail' => $taxonomyClassNameDetail,
+                ],
+            );
 
-            // TODO : get template and commented vars below
-            $resourceConfigGenerator->generateRepository($entryClassName);
+            $resourceConfigGenerator->generateEntity(
+                $taxonomyClassNameDetail->getFullName(),
+                self::TPL_FILES['entity'],
+                [
+                    'classNameDetail' => $taxonomyClassNameDetail,
+                    'scope' => ucfirst($scope),
+                    'addRepo' => true,
+                    'addTrans' => true,
+                    'hasRouting' => false,
+                    'isOwningSide' => false,
+                    'relationClassNameDetail' => $entryClassNameDetail,
+                ],
+            );
 
-            // TODO : get template and commented vars below
-            $resourceConfigGenerator->generateMenuListener($entryClassName);
+            $resourceConfigGenerator->generateEntity(
+                $entryClassNameTranslationDetail->getFullName(),
+                self::TPL_FILES['translation'],
+                [
+                    'classNameDetail' => $entryClassNameTranslationDetail,
+                    'scope' => ucfirst($scope),
+                    'hasFlexibleContent' => $hasFlexibleContent,
+                    'extraFields' => [
+                    ],
+                ],
+            );
 
-            // TODO : get template and commented vars below
-            $resourceConfigGenerator->generateAdmin();
+            $resourceConfigGenerator->generateEntity(
+                $taxonomyClassNameTranslationDetail->getFullName(),
+                self::TPL_FILES['translation'],
+                [
+                    'classNameDetail' => $taxonomyClassNameTranslationDetail,
+                    'scope' => ucfirst($scope),
+                    'hasFlexibleContent' => $hasFlexibleContent,
+                    'extraFields' => [],
+                ],
+            );
 
-            // TODO : get template and commented vars below
-            $resourceConfigGenerator->generateController();
+            $resourceConfigGenerator->generateRepository(
+                $entryClassNameDetail->getFullName(),
+                self::TPL_FILES['repository'],
+                [
+                    'classNameDetail' => $entryClassNameDetail,
+                    'relationClassNameDetail' => $taxonomyClassNameDetail,
+                    'scope' => ucfirst($scope),
+                ],
+            );
 
-            $route = $resourceConfigGenerator->generateRoute();
+            $resourceConfigGenerator->generateRepository(
+                $taxonomyClassNameDetail->getFullName(),
+                self::TPL_FILES['repository'],
+                [
+                    'classNameDetail' => $taxonomyClassNameDetail,
+                    'relationClassNameDetail' => $entryClassNameDetail,
+                    'scope' => ucfirst($scope),
+                ],
+            );
 
-            $io->comment(sprintf(
-                '%s: %s',
-                '<fg=yellow>updated</>',
-                $route,
-            ));
+            $resourceConfigGenerator->generateAdmin(
+                className: $entryClassNameDetail->getFullName(),
+                templatePath: self::TPL_FILES['admin'],
+                variables: [
+                    'classNameDetail' => $entryClassNameDetail,
+                    'relationClassNameDetail' => $taxonomyClassNameDetail,
+                    'scope' => ucfirst($scope),
+                    'hasFlexibleContent' => $hasFlexibleContent,
+                    'hasRouting' => $hasRouting,
+                ],
+            );
 
-            $resource = $resourceConfigGenerator->generateResource();
+            $resourceConfigGenerator->generateAdmin(
+                className: $taxonomyClassNameDetail->getFullName(),
+                templatePath: self::TPL_FILES['admin'],
+                variables: [
+                    'classNameDetail' => $taxonomyClassNameDetail,
+                    'relationClassNameDetail' => $entryClassNameDetail,
+                    'scope' => ucfirst($scope),
+                    'hasFlexibleContent' => $hasFlexibleContent,
+                    'hasRouting' => $hasRouting,
+                ],
+            );
 
-            $io->comment(sprintf(
-                '%s: %s',
-                '<fg=yellow>updated</>',
-                $resource,
-            ));
+            $resourceConfigGenerator->generateController(
+                className: $entryClassNameDetail->getFullName(),
+                templatePath: self::TPL_FILES['controller'],
+                variables: [
+                    'classNameDetail' => $entryClassNameDetail,
+                    'scope' => ucfirst($scope),
+                ],
+            );
 
-            $this->writeSuccessMessage($io);
+            $resourceConfigGenerator->generateMenuListener($entryClassNameDetail->getFullName());
+
+            $io->confirm(
+                'Press any key to continue and see the configuration to copy into the \'routes.yaml\' file',
+                true,
+            );
+            $config = $resourceConfigGenerator->generateRoute(true, $entryClassNameDetail->getFullName());
+            $io->text($config);
+            if ($hasTaxonomy) {
+                $configTaxonomy = $resourceConfigGenerator->generateRoute(true, $taxonomyClassNameDetail->getFullName());
+                $io->newLine();
+                $io->text($configTaxonomy);
+            }
+            $io->note('Please copy the above configuration into the \'config/routes.yaml\' file');
+            $io->note("Don't forget to add the new route _index into the Sylius administration menu");
+
+            $io->confirm(
+                'Press any key to continue and see the configuration to copy into the \'packages/sylius_resources.yaml\' file',
+                true,
+            );
+            $config = $resourceConfigGenerator->generateResource(
+                true,
+                $entryClassNameDetail->getFullName(),
+                $entryClassNameTranslationDetail->getFullName(),
+            );
+            $io->text($config);
+
+            if ($hasTaxonomy) {
+                $configTaxonomy = $resourceConfigGenerator->generateResource(
+                    true,
+                    $taxonomyClassNameDetail->getFullName(),
+                    $taxonomyClassNameTranslationDetail->getFullName(),
+                );
+                $io->newLine();
+                $io->text(str_replace(['sylius_resource:', 'resources:'], ['', ''], $configTaxonomy));
+            }
+
+            $io->note('Please copy the above configuration into the \'config/packages/sylius_resources.yaml\' file');
         } catch (\Exception $exception) {
             $io->error($exception->getMessage());
         }
 
-        //$scope = $input->getArgument('scope');
-        //$namespaces = [
-        //    'entity' => 'App\\Entity\\HappyCMS\\' . $scope . '\\',
-        //    'repository' => 'App\\Repository\\HappyCMS\\' . $scope . '\\',
-        //    'admin' => 'App\\Admin\\HappyCMS\\' . $scope . '\\',
-        //];
-        //
-        //// ENTITY
-        //$generator->generateClass(
-        //    $namespaces['entity'] . $entryClassName,
-        //    self::TPL_FILES['entity'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['entity'],
-        //        'entityClassName' => $entryClassName,
-        //        'relationClassName' => $categoryClassName,
-        //        'repository' => [
-        //            'name' => $entryClassName . 'Repository',
-        //            'FQCN' => $namespaces['repository'] . $entryClassName . 'Repository',
-        //        ],
-        //        'options' => [
-        //            'isOwningSide' => true,
-        //            'hasRouting' => false,
-        //        ],
-        //    ],
-        //);
-        //// TRANSLATION
-        //$generator->generateClass(
-        //    $namespaces['entity'] . $entryClassName . 'Translation',
-        //    self::TPL_FILES['translation'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['entity'],
-        //        'entityClassName' => $entryClassName,
-        //        'withFlexibleContent' => self::BLOG_SCOPE === $scope,
-        //        'extraFields' => self::FAQ_SCOPE === $scope ?
-        //            [
-        //                ['name' => 'answer', 'columnType' => \Doctrine\DBAL\Types\Types::TEXT, 'phpType' => 'string'],
-        //            ] :
-        //            null,
-        //    ],
-        //);
-        ////REPOSITORY
-        //$generator->generateClass(
-        //    $namespaces['repository'] . $entryClassName . 'Repository',
-        //    self::TPL_FILES['repository'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['repository'],
-        //        'entityClassName' => $entryClassName,
-        //        'relationClassName' => $categoryClassName,
-        //    ],
-        //);
-        ////ADMIN
-        //$generator->generateClass(
-        //    $namespaces['admin'] . $entryClassName . 'Admin',
-        //    self::TPL_FILES['admin'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['admin'],
-        //        'entityClassName' => $entryClassName,
-        //        'relationClassName' => $categoryClassName,
-        //        'withFlexibleContent' => self::BLOG_SCOPE === $scope,
-        //        'extraFields' => self::FAQ_SCOPE === $scope ?
-        //            [
-        //                ['name' => 'answer'],
-        //            ] :
-        //            null,
-        //    ],
-        //);
-        //
-        ////ENTITY
-        //$generator->generateClass(
-        //    $namespaces['entity'] . $categoryClassName,
-        //    self::TPL_FILES['entity'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['entity'],
-        //        'entityClassName' => $categoryClassName,
-        //        'relationClassName' => $entryClassName,
-        //        'repository' => [
-        //            'name' => $categoryClassName . 'Repository',
-        //            'FQCN' => $namespaces['repository'] . $categoryClassName . 'Repository',
-        //        ],
-        //        'options' => [
-        //            'isOwningSide' => false,
-        //            'hasRouting' => true,
-        //        ],
-        //    ],
-        //);
-        ////TRANSLATION
-        //$generator->generateClass(
-        //    $namespaces['entity'] . $categoryClassName . 'Translation',
-        //    self::TPL_FILES['translation'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['entity'],
-        //        'entityClassName' => $categoryClassName,
-        //    ],
-        //);
-        ////REPOSITORY
-        //$generator->generateClass(
-        //    $namespaces['repository'] . $categoryClassName . 'Repository',
-        //    self::TPL_FILES['repository'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['repository'],
-        //        'entityClassName' => $categoryClassName,
-        //        'relationClassName' => $entryClassName,
-        //    ],
-        //);
-        ////ADMIN
-        //$generator->generateClass(
-        //    $namespaces['admin'] . $categoryClassName . 'Admin',
-        //    self::TPL_FILES['admin'],
-        //    [
-        //        'scope' => $scope,
-        //        'namespace' => $namespaces['admin'],
-        //        'entityClassName' => $categoryClassName,
-        //    ],
-        //);
-        //
-        //$generator->writeChanges();
-        //
-        //$resourceConfigGenerator = new ResourceConfigGeneratorService($scope, $namespaces);
-        //$updatedFiles = $resourceConfigGenerator->generateConfig(
-        //    $entryClassName,
-        //    $categoryClassName,
-        //);
-        //$io->writeln('Updated : ' . implode(', ', $updatedFiles));
-
-        $this->writeSuccessMessage($io);
+        $io->comment('Thank you for using HappyCMS Plugin');
+        //$this->writeSuccessMessage($io);
     }
 
     public function configureDependencies(DependencyBuilder $dependencies): void
