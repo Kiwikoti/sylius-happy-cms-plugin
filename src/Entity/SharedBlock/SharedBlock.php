@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityIdTrait;
+use Adeliom\SyliusEasyCrudPlugin\Traits\EntityNameTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityStatusTrait;
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
 use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepository;
@@ -18,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class SharedBlock implements SharedBlockInterface
 {
     use EntityIdTrait;
+    use EntityNameTrait;
     use TranslatableTrait {
         TranslatableTrait::__construct as private initializeTranslationsCollection;
         getTranslation as private doGetTranslation;
@@ -55,20 +57,19 @@ class SharedBlock implements SharedBlockInterface
 
     public function getTranslation(?string $locale = null): SharedBlockTranslation
     {
-        /** @var SharedBlockTranslation $translation */
-        $translation = $this->doGetTranslation($locale);
+        if ($locale) {
+            /** @var SharedBlockTranslation $translation */
+            $translation = $this->doGetTranslation($locale);
 
-        return $translation;
+            return $translation;
+        }
+
+        return new SharedBlockTranslation();
     }
 
     public static function getTranslationClass(): string
     {
         return SharedBlockTranslation::class;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->getTranslation()->getName();
     }
 
     public function getKey(): ?string

@@ -1,0 +1,25 @@
+{% set title = settings.title|default(false) %}
+{% set wysiwyg = settings.wysiwyg|default(false) %}
+{% set images = settings.images|default([]) %}
+<section class="container">
+    <div class="my-10 lg:my-20 wrapper-12">
+        <div class="col-span-full md:col-span-8 md:col-start-3 text-center">
+            {% if title %}<h2 class="heading-5">{{ title }}</h2>{% endif %}
+            {% if wysiwyg %}
+                <div class="wysiwyg">
+                    {{ wysiwyg|raw }}
+                </div>
+            {% endif %}
+        </div>
+        {% if images is not empty %}
+            <div class="col-span-full grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for img in images %}
+                    {{ happy_cms_media(img, 'reference', {
+                        'class': 'aspect-[4/3] col-span-1 object-cover w-full h-full',
+                        'alt': 'sylius.homepage.banner_content'|trans
+                    }) }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</section>

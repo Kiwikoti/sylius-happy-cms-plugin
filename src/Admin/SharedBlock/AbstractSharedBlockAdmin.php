@@ -15,16 +15,13 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements ServiceSubscriberInterface, AdminInterface
 {
     public static function getSubscribedServices(): array
     {
-        return [
-            'request_stack' => RequestStack::class,
-        ];
+        return [];
     }
 
     public static function getName(): string
@@ -49,7 +46,8 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
         yield Field::new('key', 'sylius_happy_cms.shared_block.admin.field.key')
             ->setRequired(true);
 
-        $blockType = $block?->getType() ?? $this->getResourceFieldValueInRequest(formName: 'shared_block_admin', fieldName: 'type', queryKey: 'block_type');
+        $blockType = $block?->getType() ?: $this->getResourceFieldValueInRequest(formName: 'shared_block_admin', fieldName: 'type', queryKey: 'block_type');
+
         yield Field::new('type', 'sylius_happy_cms.shared_block.admin.field.type')
             ->setFormType(null === $blockType ? TextType::class : HiddenType::class)
             ->setFormTypeOption('data', $blockType)

@@ -108,3 +108,8 @@ services:
     tags:
       - controller.service_arguments
       - container.service_subscriber
+
+  Adeliom\SyliusHappyCMSPlugin\SharedBlock\ExampleType:
+    public: true
+    autoconfigure: true
+    tags: [ 'sylius.happy_cms.shared_block' ]

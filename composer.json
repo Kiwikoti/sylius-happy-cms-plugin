@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": "~8.1|~8.2|~8.3",
-    "agence-adeliom/sylius-easy-crud-plugin": "^v1.13.0",
+    "agence-adeliom/sylius-easy-crud-plugin": "^v1.13.8",
     "symfony/webpack-encore-bundle": "^1.12 || ^2.0",
     "ext-json": "*",
     "ext-intl": "*",
@@ -39,7 +39,8 @@
     "james-heinrich/getid3": "^1.9"
   },
   "conflict": {
-    "symfony/framework-bundle": "6.2.8"
+    "symfony/framework-bundle": "6.2.8",
+    "agence-adeliom/sylius-easy-crud-plugin": "< v1.13.8"
   },
   "require-dev": {
     "friendsoftwig/twigcs": "^6.4 || ^v7.0",

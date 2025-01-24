@@ -6,7 +6,7 @@ use Symfony\Bundle\MakerBundle\Util\ClassNameDetails;
 if (
     isset($classNameDetail) && $classNameDetail instanceof ClassNameDetails &&
     isset($relationClassNameDetail, $scope, $hasFlexibleContent)
-    ) {
+) {
     $mainClassData = [
         'singular' => mb_strtolower(Str::asSnakeCase($classNameDetail->getShortName())),
         'plural' => mb_strtolower(Str::asSnakeCase(Str::singularCamelCaseToPluralCamelCase($classNameDetail->getShortName()))),

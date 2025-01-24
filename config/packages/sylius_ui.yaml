@@ -7,7 +7,7 @@ sylius_ui:
     sylius.cms.shared_block.choose:
       blocks:
         content:
-          template: "@SyliusHappyCMSPlugin/shared_block/select.html.twig"
+          template: "@SyliusHappyCMSPlugin/shared_block/crud/select.html.twig"
     sylius.cms.shared_block.create:
       blocks:
         content:

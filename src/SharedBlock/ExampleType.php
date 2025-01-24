@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\SharedBlock;
 
-use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
-use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\AbstractSharedBlockType;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class SharedBlockType extends AbstractBlock implements BlockTypeInterface
+class ExampleType extends AbstractSharedBlockType implements SharedBlockTypeInterface
 {
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('test', TextType::class, [])
+            ->add('title', TextType::class, [])
         ;
     }
 
     public function getName(): string
     {
-        return 'Shared block';
+        return 'Example block';
     }
 
     public function getDescription(): string
@@ -35,6 +35,6 @@ class SharedBlockType extends AbstractBlock implements BlockTypeInterface
 
     public function getFrontEndTemplatePath(): string
     {
-        return '@EasyBlock/editor/shared_block.html.twig';
+        return '@SyliusHappyCMSPlugin/front/shared_blocks/example.html.twig';
     }
 }

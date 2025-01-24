@@ -177,7 +177,13 @@ final class InstallDefaultFiles extends AbstractMaker
         ];
         $this->generateScope($scope, $files, $io, $generator);
 
-        $this->generateRoute($scope . '_item', $io);
+        $this->generateRoute($scope . '_item', $io, [
+            'default' => '@SyliusHappyCMSPlugin\\\\menu_item\\\\crud',
+            'update' => [
+                'form' => '@SyliusEasyCrudPlugin\\\\crud\\\\form\\\\_form.html.twig',
+                'breadcrumb' => '@SyliusHappyCMSPlugin\\\\menu_item\\\\crud\\\\_breadcrumb.html.twig',
+            ],
+        ], $scope, "except: ['index']\n");
     }
 
     private function generateBlock(ConsoleStyle $io, Generator $generator): void
@@ -237,19 +243,45 @@ final class InstallDefaultFiles extends AbstractMaker
         }
     }
 
-    public function generateRoute(string $scope, ConsoleStyle $io): string
-    {
+    public function generateRoute(
+        string $scope,
+        ConsoleStyle $io,
+        ?array $templates = [
+        'default' => '@SyliusEasyCrudPlugin\\\\crud',
+        'update' => [],
+        'create' => [],
+    ],
+        ?string $baseScope = null,
+        ?string $customConfigurations = null,
+    ): string {
+        if (null === $baseScope) {
+            $baseScope = $scope;
+        }
+        $updateTemplate = '';
+        if (isset($templates['update']) && is_array($templates['update'])) {
+            foreach ($templates['update'] as $templateName => $template) {
+                $updateTemplate .= '            ' . $templateName . ': "' . $template . "\"\n";
+            }
+        }
+        $createTemplate = '';
+        if (isset($templates['create']) && is_array($templates['create'])) {
+            foreach ($templates['create'] as $templateName => $template) {
+                $createTemplate .= '            ' . $templateName . ': "' . $template . "\"\n";
+            }
+        }
+
         try {
             $yaml = [
                 'sylius_happy_cms_' . $scope . '_admin' => [
                     'resource' => 'alias: sylius_happy_cms.' . $scope . "\n"
                         . "section: admin\n"
-                        . "templates: \"@SyliusEasyCrudPlugin\\\\crud\"\n"
+                        . 'templates: "' . $templates['default'] . "\"\n"
+                        . $customConfigurations
                         . "redirect: update\n"
                         . 'grid: sylius_happy_cms_' . $scope . "_admin\n"
                         . "form:\n"
-                        . '    type: App\\Admin\\HappyCMS\\' . ucfirst($scope) . '\\' . ucfirst(u($scope)->camel()
-                                                                                                                                      ->toString()) . "Admin\n"
+                        . '    type: App\\Admin\\HappyCMS\\' . ucfirst($baseScope) . '\\' . ucfirst(u($scope)->camel()
+                                                                                                                                         ->toString()) . "Admin\n"
                         . "    options:\n"
                         . "        context: \$context\n"
                         . "vars:\n"
@@ -263,8 +295,14 @@ final class InstallDefaultFiles extends AbstractMaker
                         . '        header: sylius_happy_cms.' . $scope . ".admin.ui.index\n"
                         . "    create:\n"
                         . '        header: sylius_happy_cms.' . $scope . ".admin.ui.create\n"
+                        . (strlen($createTemplate) ? (
+                            "        templates:\n" . $createTemplate
+                        ) : '')
                         . "    update:\n"
                         . '        header: sylius_happy_cms.' . $scope . ".admin.ui.update\n"
+                        . (strlen($updateTemplate) ? (
+                            "        templates:\n" . $updateTemplate
+                        ) : '')
                         . "        redirect:\n"
                         . "            route: update\n"
                         . "            parameters:\n"

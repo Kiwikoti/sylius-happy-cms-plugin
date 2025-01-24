@@ -31,7 +31,7 @@ class SharedBlockController implements ServiceSubscriberInterface
     {
         return new Response(
             $this->twig->render(
-                '@SyliusHappyCMSPlugin/shared_block/select.html.twig',
+                '@SyliusHappyCMSPlugin/shared_block/crud/select.html.twig',
                 [
                     'blocks' => array_filter(
                         $this->sharedBlockCollection->getBlocks(),
