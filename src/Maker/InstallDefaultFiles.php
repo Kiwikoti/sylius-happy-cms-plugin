@@ -9,6 +9,7 @@ use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
+use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -280,7 +281,7 @@ final class InstallDefaultFiles extends AbstractMaker
                         . "redirect: update\n"
                         . 'grid: sylius_happy_cms_' . $scope . "_admin\n"
                         . "form:\n"
-                        . '    type: App\\Admin\\HappyCMS\\' . ucfirst($baseScope) . '\\' . ucfirst(u($scope)->camel()
+                        . '    type: App\\Admin\\HappyCMS\\' . Str::asCamelCase($baseScope) . '\\' . ucfirst(u($scope)->camel()
                                                                                                                                          ->toString()) . "Admin\n"
                         . "    options:\n"
                         . "        context: \$context\n"
