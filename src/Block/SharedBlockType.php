@@ -4,17 +4,28 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
+use Adeliom\SyliusEasyCrudPlugin\Form\ResourceChoiceType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
-class SharedBlockType extends AbstractBlock implements BlockTypeInterface
+class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterface, BlockTypeInterface
 {
+    public static function getSubscribedServices(): array
+    {
+        return [
+            ParameterBagInterface::class,
+        ];
+    }
+
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('test', TextType::class, [])
+            ->add('block', ResourceChoiceType::class, [
+                'resource' => 'sylius_happy_cms.shared_block',
+            ])
         ;
     }
 
