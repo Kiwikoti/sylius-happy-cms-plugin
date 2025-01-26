@@ -6,7 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
-use Adeliom\SyliusHappyCMSPlugin\SharedBlock\SharedBlockType;
+use Adeliom\SyliusHappyCMSPlugin\Block\SharedBlockType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;

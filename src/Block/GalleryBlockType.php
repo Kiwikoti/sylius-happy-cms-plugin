@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Blocks;
+namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\SortableCollectionType;
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;

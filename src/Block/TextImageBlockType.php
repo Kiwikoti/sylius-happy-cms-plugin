@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Blocks;
+namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;

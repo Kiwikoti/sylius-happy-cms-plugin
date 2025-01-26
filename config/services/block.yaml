@@ -70,7 +70,7 @@ services:
     alias: Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock\SharedBlockExtension
 
   sylius.happy_cms.shared_block.shared_block_type:
-    class: Adeliom\SyliusHappyCMSPlugin\SharedBlock\SharedBlockType
+    class: Adeliom\SyliusHappyCMSPlugin\Block\SharedBlockType
     public: true
     arguments:
       - '@doctrine.orm.entity_manager'

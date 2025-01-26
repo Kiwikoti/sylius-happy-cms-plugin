@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Blocks\SubType;
+namespace Adeliom\SyliusHappyCMSPlugin\Block\SubType;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Symfony\Component\Form\AbstractType;

@@ -25,6 +25,11 @@ use Symfony\Component\Form\FormEvents;
 
 abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAdminInterface
 {
+    public static function getSubscribedServices(): array
+    {
+        return [];
+    }
+
     public static function getName(): string
     {
         return 'sylius_happy_cms_menu_item_admin';

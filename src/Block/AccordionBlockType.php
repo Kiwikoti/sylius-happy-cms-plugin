@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Blocks;
+namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\SortableCollectionType;
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
-use Adeliom\SyliusHappyCMSPlugin\Blocks\SubType\AccordionItemEmbeddableType;
+use Adeliom\SyliusHappyCMSPlugin\Block\SubType\AccordionItemEmbeddableType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Form\Type\ButtonEmbeddableType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
