@@ -13,15 +13,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
 {
-    public function __construct(
-        private readonly TranslatorInterface $translator,
-    ) {
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         parent::buildForm($builder, $options);
@@ -56,7 +50,7 @@ class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
     {
         if (\in_array('label', $options['fields'], true)) {
             $attrs = [
-                'label' => $this->translator->trans('sylius_happy_cms.button_embeddable.label', [], ''),
+                'label' => 'sylius_happy_cms.button_embeddable.label',
                 'constraints' => [],
             ];
 
@@ -76,7 +70,7 @@ class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
     {
         if (\in_array('link', $options['fields'], true)) {
             $attrs = [
-                'label' => $this->translator->trans('sylius_happy_cms.button_embeddable.link', [], ''),
+                'label' => 'sylius_happy_cms.button_embeddable.link',
                 'constraints' => [],
             ];
 
@@ -96,12 +90,12 @@ class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
     {
         if (\in_array('action', $options['fields'], true)) {
             $attrs = [
-                'label' => $this->translator->trans('sylius_happy_cms.button_embeddable.action', [], ''),
+                'label' => 'sylius_happy_cms.button_embeddable.action',
                 'required' => false,
                 'choices' => [
-                    $this->translator->trans('sylius_happy_cms.button_embeddable.action_default', [], '') => 'default',
-                    $this->translator->trans('sylius_happy_cms.button_embeddable.action_blank', [], '') => 'blank',
-                    $this->translator->trans('sylius_happy_cms.button_embeddable.action_none', [], '') => 'none',
+                    'sylius_happy_cms.button_embeddable.action_default' => 'default',
+                    'sylius_happy_cms.button_embeddable.action_blank' => 'blank',
+                    'sylius_happy_cms.button_embeddable.action_none' => 'none',
                 ],
             ];
 
@@ -121,7 +115,7 @@ class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
     {
         if (\in_array('icon', $options['fields'], true)) {
             $attrs = [
-                'label' => $this->translator->trans('sylius_happy_cms.button_embeddable.icon', [], ''),
+                'label' => 'sylius_happy_cms.button_embeddable.icon',
                 'required' => false,
                 'select_button' => 'Choisir une icône',
                 'search_placeholder' => 'Rechercher une icône',

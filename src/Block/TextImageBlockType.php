@@ -19,45 +19,44 @@ class TextImageBlockType extends AbstractBlock
         $builder
             ->add('image', MediaType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.image', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.image',
             ])
             ->add('img_right', CheckboxType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.img_right', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.img_right',
             ])
             ->add('headline', TextType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.headline', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.headline',
             ])
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.title', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.title',
             ])
             ->add('wysiwyg', TextEditorType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.wysiwyg', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.wysiwyg',
             ])
             ->add('cta_one', ButtonEmbeddableType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.cta_one', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.cta_one',
                 'fields' => ['label', 'link'],
             ])
             ->add('cta_two', ButtonEmbeddableType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.text_image.fields.cta_two', [], ''),
+                'label' => 'sylius_happy_cms.blocks.text_image.fields.cta_two',
                 'fields' => ['label', 'link'],
-            ])
-        ;
+            ]);
     }
 
     public function getName(): string
     {
-        return $this->translator->trans('sylius_happy_cms.blocks.text_image.name', [], '');
+        return 'sylius_happy_cms.blocks.text_image.name';
     }
 
     public function getTab(): string
     {
-        return $this->translator->trans('admin.tabs.flex_blocks', [], '');
+        return 'sylius_happy_cms.blocks.tabs.media_blocks';
     }
 
     public function getIcon(): string

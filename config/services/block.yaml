@@ -113,3 +113,59 @@ services:
     public: true
     autoconfigure: true
     tags: [ 'sylius.happy_cms.shared_block' ]
+
+
+  # all flex boxes
+  sylius.happy_cms.blocks.accordion_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\AccordionBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.cta_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\CtaBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.gallery_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\GalleryBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.key_feature_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\KeyFeaturesBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.text_image_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\TextImageBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.wysiwyg_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\WysiwygBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]

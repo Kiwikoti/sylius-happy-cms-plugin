@@ -19,15 +19,15 @@ class AccordionBlockType extends AbstractBlock
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.accordion.fields.title', [], ''),
+                'label' => 'sylius_happy_cms.blocks.accordion.fields.title',
             ])
             ->add('wysiwyg', TextEditorType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.accordion.fields.wysiwyg', [], ''),
+                'label' => 'sylius_happy_cms.blocks.accordion.fields.wysiwyg',
             ])
             ->add('items', SortableCollectionType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.accordion.fields.items', [], ''),
+                'label' => 'sylius_happy_cms.blocks.accordion.fields.items',
                 'entry_type' => AccordionItemEmbeddableType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -35,20 +35,19 @@ class AccordionBlockType extends AbstractBlock
             ])
             ->add('cta', ButtonEmbeddableType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.accordion.fields.cta', [], ''),
+                'label' => 'sylius_happy_cms.blocks.accordion.fields.cta',
                 'fields' => ['label', 'link'],
-            ])
-        ;
+            ]);
     }
 
     public function getName(): string
     {
-        return $this->translator->trans('sylius_happy_cms.blocks.accordion.name', [], '');
+        return 'sylius_happy_cms.blocks.accordion.name';
     }
 
     public function getTab(): string
     {
-        return $this->translator->trans('admin.tabs.flex_blocks', [], '');
+        return 'sylius_happy_cms.blocks.tabs.media_blocks';
     }
 
     public function getIcon(): string

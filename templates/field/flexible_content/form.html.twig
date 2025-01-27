@@ -38,7 +38,7 @@
         </div>
         <div class="ui top attached label" style="line-height: 20px;">
             <span data-layer="title" >
-                {{ title }}
+                {{ title|trans }}
             </span>
             <i data-action="delete" style="float: right; margin-left: 8px;" class="trash red link icon"></i>
             <i data-action="view" style="float: right; margin-left: 8px;" class="external alternate link icon"></i>
@@ -125,7 +125,7 @@
                                 {% if block.icon is not iterable and (block.icon starts with '<span' or block.icon starts with '<i ' or block.icon starts with '<svg') %}
                                     {{ block.icon|raw }}
                                 {% endif %}
-                                {{ block.name }}
+                                {{ block.name|trans }}
                             </div>
                         </div>
                         {% if block.icon is iterable %}

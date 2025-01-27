@@ -17,33 +17,32 @@ class CtaBlockType extends AbstractBlock
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.cta.fields.title', [], ''),
+                'label' => 'sylius_happy_cms.blocks.cta.fields.title',
             ])
             ->add('wysiwyg', TextEditorType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.cta.fields.wysiwyg', [], ''),
+                'label' => 'sylius_happy_cms.blocks.cta.fields.wysiwyg',
             ])
             ->add('cta_one', ButtonEmbeddableType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.cta.fields.cta_one', [], ''),
+                'label' => 'sylius_happy_cms.blocks.cta.fields.cta_one',
                 'fields' => ['label', 'link'],
             ])
             ->add('cta_two', ButtonEmbeddableType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.cta.fields.cta_two', [], ''),
+                'label' => 'sylius_happy_cms.blocks.cta.fields.cta_two',
                 'fields' => ['label', 'link'],
-            ])
-        ;
+            ]);
     }
 
     public function getName(): string
     {
-        return $this->translator->trans('sylius_happy_cms.blocks.cta.name', [], '');
+        return 'sylius_happy_cms.blocks.cta.name';
     }
 
     public function getTab(): string
     {
-        return $this->translator->trans('admin.tabs.flex_blocks', [], '');
+        return 'sylius_happy_cms.blocks.tabs.text_blocks';
     }
 
     public function getIcon(): string

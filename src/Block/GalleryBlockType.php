@@ -31,8 +31,7 @@ class GalleryBlockType extends AbstractBlock
                 'allow_add' => true,
                 'allow_delete' => true,
                 'allow_drag' => true,
-            ])
-        ;
+            ]);
     }
 
     public function getName(): string
@@ -42,7 +41,7 @@ class GalleryBlockType extends AbstractBlock
 
     public function getTab(): string
     {
-        return $this->translator->trans('admin.tabs.flex_blocks', [], '');
+        return 'sylius_happy_cms.blocks.tabs.media_blocks';
     }
 
     public function getIcon(): string

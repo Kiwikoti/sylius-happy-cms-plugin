@@ -1,168 +1,231 @@
 sylius_happy_cms:
-    home: Page d'accueil
-    page:
-        admin:
-            action:
-                manage_content: Gérer le contenu
-            crud:
-                title:
-                    page:
-                        edit: Editer la page
-                        index: Liste des pages
-                        new: Nouvelle page
-                        detail: Détail de la page
-                label:
-                    page:
-                        singular: une page
-                        plural: des pages
-                        new: Nouvelle page
-                        edit: Editer la page
-                        delete: Supprimer la page
-                        saveAndReturn: Enregistrer la page et retourner à la liste
-                        saveAndContinue: Enregistrer la page et revenir ici
-                        saveAndAddAnother: Enregistrer la page puis en créer une autre
-            menu:
-                pages: Pages
-                contents: Contenus
-            panel:
-                information: Informations
-                metadatas: Métadonnées
-                seo: SEO
-                publication: Publication
-            field:
-                action: Action
-                action_help: "Vous devez vider le cache Symfony pour appliquer les modifications"
-                parent: Page parente
-                home_page: Page d'accueil
-                name: Nom
-                state: Status
-                publishDate: Date de publication
-                unpublishDate: Date de dépublication
-                slug: Permalien
-                slug_edit: "Etes-vous sur de vouloir modifier le permalien ?"
-                category: Catégorie
-                seo: SEO
-            tab:
-                page: Page
-                seo: SEO
-            ui:
-                index: Pages
-                create: Créer une page
-                update: Modifier la page
-                subheader: Gérer vos pages
-        front:
-            categories: Catégories
-            category: Catégorie
-            entries: Questions
-            readmore: Lire plus
-    seo:
-        admin:
-            field:
-                title: Titre
-                cover: Couverture
-                canonical: URL canonique
-                description: Description
-                keywords: Mots-clés
-                key: Clé de la page
-                robots: Robots
-                sitemap: Inclure dans le sitemap
-    config:
-        admin:
-            field:
-                key: Clé
-                name: Nom
-                description: Description
-                type: Type
-                enabled: Activé
-                value: Valeur
-                value_bool: Actif
-            type:
-                code: Code
-                email: Email
-                image: Image
-                file: Fichier
-                color: Couleur
-                date: Date
-                time: Heure
-                datetime: Date et Heure
-                number: Nombre
-                json: JSON
-                text: Texte
-                textarea: Zone de texte
-                wysiwyg: WYSIWYG
-                boolean: Booléen
-            tab:
-                configuration: Configuration
-            ui:
-                index: Configurations
-                create: Créer une configuration
-                update: Modifier la configuration
-                subheader: Gérer vos configurations
-    editor:
-        add: Ajouter
-        next: Suivant
-        previous: Précédent
-        blocks: Blocs
-        empty_block_collection: Collection de bloc vide
-        please_saves_changes: Pour accéder à la configuration de ce bloc veuillez cliquer sur le bouton "Enregistrer les modifications" ci-dessous
-        published: Contenu publié
-    shared_block:
-        admin:
-            field:
-                name: Nom
-                key: Clé
-                type: Type
-                status: Statut
-                translations: Traductions
-                content: Contenu
-            tab:
-                configuration: Configuration
-                content: Contenu
-            action:
-                create: Créer un bloc partagé
-                choose: Choisir ce bloc
-            ui:
-                index: Blocs partagés
-                create: Créer un bloc partagé
-                update: Modifier le bloc partagé
-                subheader: Gérer vos blocs partagés
-                choose: Sélectionnez un type de bloc partagé
-    menu:
-        admin:
-            field:
-                name: Nom
-                code: Code
-                status: Actif
-            tab:
-                menu: Menu
-            action:
-                manage: Gérer les élements de menu
-            ui:
-                index: Menus
-                create: Créer un menu
-                update: Modifier le menu
-                subheader: Gérer vos menus
-    menu_item:
-        admin:
-            field:
-                menu: Menu
-                parent: Élement de menu parent
-                name: Name
-                url: URL
-                classAttr: Attribut class
-                target: Ouvrir dans un nouvel onglet
-                position: Position
-                state: Actif
-            tab:
-                menu_item: Élement de menu
-                link: Lien
-            action:
-                create: Créer un élément de menu
-                list: Lister les éléments de menu
-            ui:
-                index: "Éléments de menu"
-                create: Créer un élément de menu
-                update: Modifier l'élément de menu
-                subheader: Gérer vos éléments de menu
-            data:
-                menu_item_root: "Élément racine"
+  home: Page d'accueil
+  page:
+    admin:
+      action:
+        manage_content: Gérer le contenu
+      crud:
+        title:
+          page:
+            edit: Editer la page
+            index: Liste des pages
+            new: Nouvelle page
+            detail: Détail de la page
+        label:
+          page:
+            singular: une page
+            plural: des pages
+            new: Nouvelle page
+            edit: Editer la page
+            delete: Supprimer la page
+            saveAndReturn: Enregistrer la page et retourner à la liste
+            saveAndContinue: Enregistrer la page et revenir ici
+            saveAndAddAnother: Enregistrer la page puis en créer une autre
+      menu:
+        pages: Pages
+        contents: Contenus
+      panel:
+        information: Informations
+        metadatas: Métadonnées
+        seo: SEO
+        publication: Publication
+      field:
+        action: Action
+        action_help: "Vous devez vider le cache Symfony pour appliquer les modifications"
+        parent: Page parente
+        home_page: Page d'accueil
+        name: Nom
+        state: Status
+        publishDate: Date de publication
+        unpublishDate: Date de dépublication
+        slug: Permalien
+        slug_edit: "Etes-vous sur de vouloir modifier le permalien ?"
+        category: Catégorie
+        seo: SEO
+      tab:
+        page: Page
+        seo: SEO
+      ui:
+        index: Pages
+        create: Créer une page
+        update: Modifier la page
+        subheader: Gérer vos pages
+    front:
+      categories: Catégories
+      category: Catégorie
+      entries: Questions
+      readmore: Lire plus
+  seo:
+    admin:
+      field:
+        title: Titre
+        cover: Couverture
+        canonical: URL canonique
+        description: Description
+        keywords: Mots-clés
+        key: Clé de la page
+        robots: Robots
+        sitemap: Inclure dans le sitemap
+  config:
+    admin:
+      field:
+        key: Clé
+        name: Nom
+        description: Description
+        type: Type
+        enabled: Activé
+        value: Valeur
+        value_bool: Actif
+      type:
+        code: Code
+        email: Email
+        image: Image
+        file: Fichier
+        color: Couleur
+        date: Date
+        time: Heure
+        datetime: Date et Heure
+        number: Nombre
+        json: JSON
+        text: Texte
+        textarea: Zone de texte
+        wysiwyg: WYSIWYG
+        boolean: Booléen
+      tab:
+        configuration: Configuration
+      ui:
+        index: Configurations
+        create: Créer une configuration
+        update: Modifier la configuration
+        subheader: Gérer vos configurations
+  editor:
+    add: Ajouter
+    next: Suivant
+    previous: Précédent
+    blocks: Blocs
+    empty_block_collection: Collection de bloc vide
+    please_saves_changes: Pour accéder à la configuration de ce bloc veuillez cliquer sur le bouton "Enregistrer les modifications" ci-dessous
+    published: Contenu publié
+  shared_block:
+    admin:
+      field:
+        name: Nom
+        key: Clé
+        type: Type
+        status: Statut
+        translations: Traductions
+        content: Contenu
+      tab:
+        configuration: Configuration
+        content: Contenu
+      action:
+        create: Créer un bloc partagé
+        choose: Choisir ce bloc
+      ui:
+        index: Blocs partagés
+        create: Créer un bloc partagé
+        update: Modifier le bloc partagé
+        subheader: Gérer vos blocs partagés
+        choose: Sélectionnez un type de bloc partagé
+  menu:
+    admin:
+      field:
+        name: Nom
+        code: Code
+        status: Actif
+      tab:
+        menu: Menu
+      action:
+        manage: 'Gérer les élements de menu'
+      ui:
+        index: Menus
+        create: Créer un menu
+        update: Modifier le menu
+        subheader: Gérer vos menus
+  menu_item:
+    admin:
+      field:
+        menu: Menu
+        parent: Élement de menu parent
+        name: Name
+        url: URL
+        classAttr: Attribut class
+        target: Ouvrir dans un nouvel onglet
+        position: Position
+        state: Actif
+      tab:
+        menu_item: Élement de menu
+        link: Lien
+      action:
+        create: Créer un élément de menu
+        list: Lister les éléments de menu
+      ui:
+        index: "Éléments de menu"
+        create: Créer un élément de menu
+        update: Modifier l'élément de menu
+        subheader: Gérer vos éléments de menu
+      data:
+        menu_item_root: "Élément racine"
+  button_embeddable:
+    label: Libellé
+    link: Lien
+    icon: Icône
+    action: Action
+  blocks:
+    tabs:
+      flex_blocks: Blocks
+      shared_blocks: Blocs partagés
+      media_blocks: Blocs médias
+      text_blocks: Blocs de texte
+    accordion:
+      name: Accordéon
+      fields:
+        title: Titre
+        wysiwyg: Texte enrichi
+        cta: Bouton
+        items: Éléments
+        item:
+          title: Titre
+          content: Contenu
+    cta:
+      name: Call to Action
+      fields:
+        title: Titre
+        wysiwyg: Texte enrichi
+        cta_one: Bouton principal
+        cta_two: Bouton secondaire
+    gallery:
+      name: Galerie d'images
+      fields:
+        title: Titre
+        wysiwyg: Texte enrichi
+        images: Images
+    key_features:
+      name: Points clés
+      fields:
+        headline: Sur-titre
+        title: Titre
+        wysiwyg: Texte enrichi
+        features: Points clés
+        feature:
+          icon: Pictogramme
+          key: Valeur clé
+          text: Texte associé
+    wysiwyg:
+      name: Texte enrichi + boutons
+      fields:
+        headline: Sur-titre
+        title: Titre
+        wysiwyg: Texte enrichi
+        cta_one: Bouton principal
+        cta_two: Bouton secondaire
+    text_image:
+      name: Image + Texte enrichi + boutons
+      fields:
+        image: Image
+        img_right: Image à droite ?
+        headline: Sur-titre
+        title: Titre
+        wysiwyg: Texte enrichi
+        cta_one: Bouton principal
+        cta_two: Bouton secondaire

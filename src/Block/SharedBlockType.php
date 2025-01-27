@@ -25,8 +25,12 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
         $builder
             ->add('block', ResourceChoiceType::class, [
                 'resource' => 'sylius_happy_cms.shared_block',
-            ])
-        ;
+            ]);
+    }
+
+    public function getTab(): string
+    {
+        return 'sylius_happy_cms.blocks.tabs.shared_blocks';
     }
 
     public function getName(): string
@@ -39,7 +43,7 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
         return '';
     }
 
-    public function getIcon(): string | array
+    public function getIcon(): string|array
     {
         return '';
     }

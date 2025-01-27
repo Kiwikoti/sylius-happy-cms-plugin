@@ -32,7 +32,11 @@ abstract class AbstractMenuAdmin extends AbstractAdmin implements MenuAdminInter
     {
         $actions = parent::configureActions($pageName);
 
-        $manageMenuItems = Action::new('manage.menu_items', 'sylius_happy_cms.menu.admin.action.manage', 'bars')
+        $manageMenuItems = Action::new(
+            'manage.menu_items',
+            'sylius_happy_cms.menu.admin.action.manage',
+            'bars',
+        )
             ->linkToRoute('sylius_happy_cms_admin_menu_item_create');
 
         $actions->addItemAction(Crud::PAGE_INDEX, $manageMenuItems);
