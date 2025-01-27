@@ -50,6 +50,6 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
 
     public function getFrontEndTemplatePath(): string
     {
-        return '@EasyBlock/editor/shared_block.html.twig';
+        return '@SyliusHappyCMSPlugin/front/blocks/shared_block.html.twig';
     }
 }
