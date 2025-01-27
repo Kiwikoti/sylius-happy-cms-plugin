@@ -27,13 +27,12 @@
 
     <h4 class="ui dividing header">Robots & Sitemap</h4>
 
-    <div class="fields">
-        <div class="twelve wide field">
-            {{ form_row(form.sitemap) }}
-        </div>
-        <div class="twelve wide field">
-            {{ form_row(form.robots) }}
-        </div>
+    <div class="field">
+        {{ form_row(form.sitemap) }}
+    </div>
+    
+    <div class="field">
+        {{ form_row(form.robots) }}
     </div>
     {{ form_rest(form) }}
 

@@ -165,7 +165,7 @@ bundle_dependencies_install:
 
 HELP += $(call help,symfony_assets_install,			Install bundles assets npm dependencies)
 symfony_assets_install:
-	cd ${APP_DIR}/${PLUGIN_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console assets:install --symlink)
+	cd ${APP_DIR}/${PLUGIN_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console assets:install)
 
 HELP += $(call help,bundle_assets_watch,			Build bundles assets in watch mode)
 bundle_assets_watch:

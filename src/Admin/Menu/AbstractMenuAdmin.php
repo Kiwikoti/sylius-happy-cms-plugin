@@ -37,6 +37,8 @@ abstract class AbstractMenuAdmin extends AbstractAdmin implements MenuAdminInter
 
         $actions->addItemAction(Crud::PAGE_INDEX, $manageMenuItems);
 
+        $actions->addItemAction(Crud::PAGE_EDIT, $manageMenuItems);
+
         $actions->addItemAction(Crud::PAGE_DETAIL, $manageMenuItems);
 
         return $actions;
