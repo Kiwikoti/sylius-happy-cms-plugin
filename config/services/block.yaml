@@ -152,8 +152,17 @@ services:
       - '@form.factory'
     tags: [ 'sylius.happy_cms.block', 'form.type' ]
 
-  sylius.happy_cms.blocks.text_image_block_type:
-    class: Adeliom\SyliusHappyCMSPlugin\Block\TextImageBlockType
+  sylius.happy_cms.blocks.text_image_cta_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\TextImageCtaBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.text_cta_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\TextCtaBlockType
     public: true
     arguments:
       - '@doctrine.orm.entity_manager'
@@ -163,6 +172,15 @@ services:
 
   sylius.happy_cms.blocks.wysiwyg_block_type:
     class: Adeliom\SyliusHappyCMSPlugin\Block\WysiwygBlockType
+    public: true
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@translator'
+      - '@form.factory'
+    tags: [ 'sylius.happy_cms.block', 'form.type' ]
+
+  sylius.happy_cms.blocks.seo_block_type:
+    class: Adeliom\SyliusHappyCMSPlugin\Block\SeoBlockType
     public: true
     arguments:
       - '@doctrine.orm.entity_manager'

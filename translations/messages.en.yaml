@@ -212,7 +212,11 @@ sylius_happy_cms:
           key: Key value
           text: Associated text
     wysiwyg:
-      name: Rich text + buttons
+      name: Rich text
+      fields:
+        wysiwyg: Rich text
+    text_cta:
+      name: Rich text + CTA
       fields:
         headline: Headline
         title: Title
@@ -220,7 +224,7 @@ sylius_happy_cms:
         cta_one: Main button
         cta_two: Secondary button
     text_image:
-      name: Image + Rich text + buttons
+      name: Rich text + Image + CTA
       fields:
         image: Image
         img_right: Image on the right?

@@ -18,15 +18,15 @@ class GalleryBlockType extends AbstractBlock
         $builder
             ->add('title', TextType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.gallery.fields.title', [], ''),
+                'label' => 'sylius_happy_cms.blocks.gallery.fields.title',
             ])
             ->add('wysiwyg', TextEditorType::class, [
                 'required' => true,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.gallery.fields.wysiwyg', [], ''),
+                'label' => 'sylius_happy_cms.blocks.gallery.fields.wysiwyg',
             ])
             ->add('images', SortableCollectionType::class, [
                 'required' => false,
-                'label' => $this->translator->trans('sylius_happy_cms.blocks.gallery.fields.images', [], ''),
+                'label' => 'sylius_happy_cms.blocks.gallery.fields.images',
                 'entry_type' => MediaType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
@@ -36,7 +36,7 @@ class GalleryBlockType extends AbstractBlock
 
     public function getName(): string
     {
-        return $this->translator->trans('sylius_happy_cms.blocks.gallery.name', [], '');
+        return 'sylius_happy_cms.blocks.gallery.name';
     }
 
     public function getTab(): string

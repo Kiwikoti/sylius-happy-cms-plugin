@@ -212,7 +212,15 @@ sylius_happy_cms:
           key: Valeur clé
           text: Texte associé
     wysiwyg:
-      name: Texte enrichi + boutons
+      name: Texte enrichi
+      fields:
+        wysiwyg: Texte enrichi
+    seo:
+      name: Texte dépliant SEO
+      fields:
+        wysiwyg: Texte enrichi
+    text_cta:
+      name: Texte enrichi + CTA
       fields:
         headline: Sur-titre
         title: Titre
@@ -220,7 +228,7 @@ sylius_happy_cms:
         cta_one: Bouton principal
         cta_two: Bouton secondaire
     text_image:
-      name: Image + Texte enrichi + boutons
+      name: Texte enrichi + Image + CTA
       fields:
         image: Image
         img_right: Image à droite ?
