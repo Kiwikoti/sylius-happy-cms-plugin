@@ -231,6 +231,30 @@ class Helper
         array $block,
         array $defaultSetting,
     ): array {
+
+        // TODO : essayer de passer par le form buider pour utiliser les transformers
+        //$formBuilder = $this->formFactory->createBuilder($block->getType(), null, ['csrf_protection' => false]);
+        //
+        //// init blockType form builder
+        //$blockType->buildBlock($formBuilder, []);
+        //
+        //// Submit to use optionnal form transformers
+        //$form = $formBuilder->getForm();
+        //$form->setData(array_merge($defaultSetting, $block->getSettings()));
+        //
+        //// Put norm data into block settings
+        //// norm data are transformed data
+        //$blockSettings = $form->getNormData();
+        //if (!empty($form->getNormData())) {
+        //    foreach ($form->getNormData() as $field => $value) {
+        //        /** @phpstan-ignore-next-line */
+        //        if (!empty($form->get($field))) {
+        //            $blockSettings[$field] = $form->get($field)->getNormData();
+        //        }
+        //    }
+        //}
+        //return $blockSettings;
+
         return array_merge($defaultSetting, $block);
     }
 }
