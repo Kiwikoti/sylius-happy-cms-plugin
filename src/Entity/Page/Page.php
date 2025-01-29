@@ -71,11 +71,11 @@ class Page implements PageInterface
 
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->initializeTranslationsCollection();
         $this->timestampableConstruct();
         $this->publishableConstruct();
         $this->entityRouteConstruct();
-        $this->children = new ArrayCollection();
     }
 
     protected function createTranslation(): PageTranslationInterface
@@ -125,11 +125,14 @@ class Page implements PageInterface
      */
     public function getChildren(): Collection
     {
-        return $this->children;
+        return !isset($this->children) ? new ArrayCollection() : $this->children;
     }
 
     public function addChildren(PageInterface $page): void
     {
+        if (!isset($this->children)) {
+            $this->children = new ArrayCollection();
+        }
         $this->children->add($page);
 
         if ($page->getParent() !== $this) {
