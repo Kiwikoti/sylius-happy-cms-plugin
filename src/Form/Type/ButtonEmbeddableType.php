@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Form\Type;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\IconType;
-use App\Entity\Embeddable\ButtonEmbeddable;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Embeddable\ButtonEmbeddable;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Embeddable\ButtonEmbeddableInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,13 +27,15 @@ class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
         $this->addActionField($options, $builder);
         $this->addIconField($options, $builder);
 
-        //if (!$options['removeTransformer']) {
-        //    if (!$options['toJson']) {
-        //        $builder->addModelTransformer(new ArrayToObjectTransformer(ButtonEmbeddable::class));
-        //    } else {
-        //        $builder->addModelTransformer(new ButtonEmbeddableToJsonTransformer());
-        //    }
-        //}
+        $builder->addModelTransformer(new CallbackTransformer(
+              function (?array $data) {
+                  return ButtonEmbeddable::new($data ?? []);
+              },
+              function (?ButtonEmbeddableInterface $buttonEmbeddable) {
+                  return $buttonEmbeddable ? $buttonEmbeddable->toArray() : [];
+              },
+          )
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

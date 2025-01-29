@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\AbstractSharedBlockType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -16,6 +17,10 @@ class ExampleType extends AbstractSharedBlockType implements SharedBlockTypeInte
         $builder
             ->add('title', TextType::class, [])
         ;
+
+        $builder->add('image', MediaType::class, [
+            'label' => false,
+        ]);
     }
 
     public function getName(): string

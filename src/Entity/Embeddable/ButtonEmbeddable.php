@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Embeddable]
-class ButtonEmbeddable implements \Stringable
+class ButtonEmbeddable implements ButtonEmbeddableInterface
 {
     #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $label = null;
@@ -21,6 +21,16 @@ class ButtonEmbeddable implements \Stringable
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     private ?string $action = null;
+
+    public static function new(array $data): self
+    {
+        $button = new self();
+        $button->setLabel($data['label'] ?? null);
+        $button->setIcon($data['icon'] ?? null);
+        $button->setLink($data['link'] ?? null);
+        $button->setAction($data['action'] ?? null);
+        return $button;
+    }
 
     public function __toString(): string
     {
