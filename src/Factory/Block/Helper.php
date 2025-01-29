@@ -153,7 +153,7 @@ class Helper
         $blockType = $data['block_type'];
         $defaultAssets = $block->configureAssets();
 
-        $event = $this->eventDispatcher->dispatch(new BlockRender($block, $data, $defaultAssets));
+        $event = $this->eventDispatcher->dispatch(new BlockRender($block, $data, $defaultAssets), 'happy_cms_block.render_block');
 
         $block = $event->getBlock();
         $blockData = $event->getData();

@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
+use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -169,19 +170,7 @@ class Helper
             $blockSettings['attr_id'] = 'block-' . $blockLoopIndex;
         }
 
-        // Tranform settings way 2 : with dispatch / event listeners
-        $event = new GenericEvent(null, [
-            'data' => $data,
-            'block' => $block,
-            'blockType' => $blockType,
-            'settings' => $blockSettings,
-            'assets' => $defaultAssets,
-        ]);
-
-        /**
-         * @var GenericEvent $result ;
-         */
-        $result = $this->eventDispatcher->dispatch($event, 'happy_cms_block.render_block');
+        $result = $this->eventDispatcher->dispatch(new BlockRender($blockType, $blockSettings, $defaultAssets), 'happy_cms_block.render_block');
 
         $block = $result->getArgument('block');
         $blockType = $result->getArgument('blockType');
