@@ -147,14 +147,17 @@ class Helper
                 $translation = $firstTranslation;
             }
             if ($firstTranslation instanceof SharedBlockTranslationInterface && $translation instanceof SharedBlockTranslationInterface) {
-                return $this->renderBlock(array_merge(
-                  array_merge_recursive(
-                      $firstTranslation->getContent() ?? [],
-                      $translation->getContent() ?? []
-                  ),
-                  [
-                      'block_type' => $sharedBlock->getType(),
-                  ]), $preview, $extra);
+                return $this->renderBlock(
+                      array_merge(
+                          array_merge(
+                              $firstTranslation->getContent() ?? [],
+                              $translation->getContent() ?? []
+                          ),
+                          [
+                              'block_type' => $sharedBlock->getType(),
+                              'block_published' => 1,
+                          ])
+                    , $preview, $extra);
             }
         }
 
@@ -176,6 +179,7 @@ class Helper
         }
 
         $block = $this->collection->getBlocks()[$data['block_type']];
+
         $stats = $this->startTracing($block);
         $blockType = $data['block_type'];
         $defaultAssets = $block->configureAssets();
@@ -213,10 +217,10 @@ class Helper
         $this->stopTracing($stats['id'], $stats);
 
         return new Markup($this->twig->render($block->getFrontEndTemplatePath(), array_merge([
-            'block' => $data,
-            'preview' => $preview,
-            'blockType' => $blockType,
-            'settings' => $blockData,
-        ], $extra)), 'UTF-8');
+                                                                                                 'block' => $data,
+                                                                                                 'preview' => $preview,
+                                                                                                 'blockType' => $blockType,
+                                                                                                 'settings' => $blockData,
+                                                                                             ], $extra)), 'UTF-8');
     }
 }
