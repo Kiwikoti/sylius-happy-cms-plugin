@@ -51,8 +51,7 @@ class Helper
         private BlockCollection $collection,
         private FormFactoryInterface $formFactory,
         private EntityManagerInterface $entityManager,
-        private RequestStack $requestStack,
-        private SharedBlockCollection $sharedBlockCollection,
+        private RequestStack $requestStack
     ) {
     }
 
@@ -105,7 +104,7 @@ class Helper
     /**
      * @return array<string, mixed>
      */
-    private function startTracing(BlockTypeInterface $block): array
+    private function startTracing(BlockTypeInterface|Bl $block): array
     {
         return [
             'id' => uniqid(),
@@ -137,43 +136,6 @@ class Helper
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function renderSharedBlock(array $data, bool $preview = false, array $extra = []): ?Markup
-    {
-        $sharedBlock = $this->entityManager->getRepository(SharedBlockInterface::class)->find($data['block']);
-        if ($sharedBlock instanceof SharedBlockInterface) {
-            /** @var ?SharedBlockTranslationInterface $translation */
-            $translation = $sharedBlock->getTranslation($this->requestStack->getCurrentRequest()->getLocale());
-            /** @var ?SharedBlockTranslationInterface $translation */
-            $firstTranslation = $sharedBlock->getTranslations()->first();
-            if (is_null($translation) && !is_null($firstTranslation)) {
-                $translation = $firstTranslation;
-            }
-            if ($firstTranslation instanceof SharedBlockTranslationInterface && $translation instanceof SharedBlockTranslationInterface) {
-                return $this->renderBlock(
-                      array_merge(
-                          array_merge(
-                              $firstTranslation->getContent() ?? [],
-                              $translation->getContent() ?? []
-                          ),
-                          [
-                              'block_type' => $sharedBlock->getType(),
-                              'block_published' => 1,
-                          ])
-                    , $preview, $extra);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string, mixed> $extra
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
     public function renderBlock(array $data, bool $preview = false, array $extra = []): ?Markup
     {
         if ((int) ($data['block_published'] ?? null) === 0 && $preview === false) {
@@ -184,7 +146,7 @@ class Helper
         if (isset($blocks[$data['block_type']])) {
             $block = $blocks[$data['block_type']];
         } else {
-            $block = $this->sharedBlockCollection->getBlocks()[$data['block_type']];
+            return null;
         }
 
         $stats = $this->startTracing($block);

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -36,9 +38,10 @@ class Helper
         private readonly Environment $twig,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly SharedBlockCollection $collection,
-        private readonly EntityManagerInterface $em,
+        private readonly EntityManagerInterface $entityManager,
         private readonly string $class,
         private readonly FormFactory $formFactory,
+        private RequestStack $requestStack
     ) {
     }
 
@@ -119,20 +122,25 @@ class Helper
      * @throws SyntaxError
      * @throws RuntimeError
      */
-    public function renderBlock(Environment $env, array $context, mixed $data, ?array $extra = []): ?Markup
+    public function renderBlock(array $data, bool $preview = false, array $extra = []): ?Markup
     {
-        $block = null;
-        if (is_array($data)) {
-            if (class_exists($data['class'])) {
-                $block = $this->em->getRepository($data['class'])->find($data['id']);
-            }
-        }
 
-        if (class_exists($this->class)) {
-            if (is_numeric($data)) {
-                $block = $this->em->getRepository($this->class)->findOneBy(['id' => $data]);
-            } elseif (is_string($data)) {
-                $block = $this->em->getRepository($this->class)->findOneBy(['key' => $data]);
+        $block = null;
+
+        $sharedBlock = $this->entityManager->getRepository(SharedBlockInterface::class)->find($data['block']);
+        if ($sharedBlock instanceof SharedBlockInterface) {
+            /** @var ?SharedBlockTranslationInterface $translation */
+            $translation = $sharedBlock->getTranslation($this->requestStack->getCurrentRequest()->getLocale());
+            /** @var ?SharedBlockTranslationInterface $translation */
+            $firstTranslation = $sharedBlock->getTranslations()->first();
+            if (is_null($translation) && !is_null($firstTranslation)) {
+                $translation = $firstTranslation;
+            }
+            if ($firstTranslation instanceof SharedBlockTranslationInterface && $translation instanceof SharedBlockTranslationInterface) {
+                $block = array_merge(
+                    $firstTranslation->getContent() ?? [],
+                    $translation->getContent() ?? []
+                );
             }
         }
 
@@ -140,17 +148,9 @@ class Helper
             return null;
         }
 
-        if (!$block instanceof SharedBlockInterface) {
-            return null;
-        }
+        $blockType = $this->collection->getBlocks()[$sharedBlock->getType()];
 
-        if (!$block->getStatus()) {
-            return null;
-        }
-
-        $blockType = $this->collection->getBlocks()[$block->getType()];
-
-        $stats = $this->startTracing($block);
+        $stats = $this->startTracing($sharedBlock);
         $defaultSetting = call_user_func([$blockType, 'getDefaultSettings']);
         $defaultAssets = call_user_func([$blockType, 'configureAssets']);
 
@@ -207,9 +207,10 @@ class Helper
         $this->stopTracing($stats['id'], $stats);
 
         // Render
-        return new Markup($this->twig->render($blockType->getTemplate(), array_merge($context, [
+        return new Markup($this->twig->render($blockType->getTemplate(), array_merge([
             'block' => $block,
             'blockType' => $blockType,
+            'preview' => $preview,
             'settings' => $blockData,
         ], $extra)), 'UTF-8');
     }
