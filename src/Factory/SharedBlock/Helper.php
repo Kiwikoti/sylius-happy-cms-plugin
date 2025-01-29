@@ -122,7 +122,8 @@ class Helper
      * @throws SyntaxError
      * @throws RuntimeError
      */
-    public function renderBlock(array $data, bool $preview = false, array $extra = []): ?Markup
+    public function renderBlock(Environment $env, array $context, array $data, bool $preview = false, array $extra =
+    []): ?Markup
     {
 
         $block = null;
@@ -207,7 +208,7 @@ class Helper
         $this->stopTracing($stats['id'], $stats);
 
         // Render
-        return new Markup($this->twig->render($blockType->getTemplate(), array_merge([
+        return new Markup($this->twig->render($blockType->getFrontEndTemplatePath(), array_merge([
             'block' => $block,
             'blockType' => $blockType,
             'preview' => $preview,
@@ -217,6 +218,7 @@ class Helper
 
     /**
      * @param array<string, mixed> $defaultSetting
+     * @param array<string, mixed> $block
      *
      * @return array<string, mixed>
      *
@@ -226,30 +228,9 @@ class Helper
      */
     public function transformSettingsWithBlockTypeFormBuild(
         SharedBlockTypeInterface $blockType,
-        SharedBlockInterface $block,
+        array $block,
         array $defaultSetting,
     ): array {
-        $formBuilder = $this->formFactory->createBuilder($block->getType(), null, ['csrf_protection' => false]);
-
-        // init blockType form builder
-        $blockType->buildBlock($formBuilder, []);
-
-        // Submit to use optionnal form transformers
-        $form = $formBuilder->getForm();
-        $form->setData(array_merge($defaultSetting, $block->getSettings()));
-
-        // Put norm data into block settings
-        // norm data are transformed data
-        $blockSettings = $form->getNormData();
-        if (!empty($form->getNormData())) {
-            foreach ($form->getNormData() as $field => $value) {
-                /** @phpstan-ignore-next-line */
-                if (!empty($form->get($field))) {
-                    $blockSettings[$field] = $form->get($field)->getNormData();
-                }
-            }
-        }
-
-        return $blockSettings;
+        return array_merge($defaultSetting, $block);
     }
 }
