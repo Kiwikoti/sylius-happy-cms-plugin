@@ -4,6 +4,7 @@ sylius_happy_cms:
     admin:
       action:
         manage_content: Gérer le contenu
+        index: Retour à la liste
       crud:
         title:
           page:
@@ -49,6 +50,7 @@ sylius_happy_cms:
         index: Pages
         create: Créer une page
         update: Modifier la page
+        show: Détail de la page
         subheader: Gérer vos pages
     front:
       categories: Catégories
@@ -68,6 +70,8 @@ sylius_happy_cms:
         sitemap: Inclure dans le sitemap
   config:
     admin:
+      action:
+        index: Retour à la liste
       field:
         key: Clé
         name: Nom
@@ -97,6 +101,7 @@ sylius_happy_cms:
         index: Configurations
         create: Créer une configuration
         update: Modifier la configuration
+        show: Détail de la configuration
         subheader: Gérer vos configurations
   editor:
     add: Ajouter
@@ -121,10 +126,12 @@ sylius_happy_cms:
       action:
         create: Créer un bloc partagé
         choose: Choisir ce bloc
+        index: Retour à la liste
       ui:
         index: Blocs partagés
         create: Créer un bloc partagé
         update: Modifier le bloc partagé
+        show: Détail du bloc partagé
         subheader: Gérer vos blocs partagés
         choose: Sélectionnez un type de bloc partagé
   menu:
@@ -137,10 +144,12 @@ sylius_happy_cms:
         menu: Menu
       action:
         manage: 'Gérer les élements de menu'
+        index: Retour à la liste
       ui:
         index: Menus
         create: Créer un menu
         update: Modifier le menu
+        show: Détail du menu
         subheader: Gérer vos menus
   menu_item:
     admin:
@@ -159,13 +168,23 @@ sylius_happy_cms:
       action:
         create: Créer un élément de menu
         list: Lister les éléments de menu
+        index: Retour à la liste
       ui:
         index: "Éléments de menu"
         create: Créer un élément de menu
         update: Modifier l'élément de menu
+        show: Détail de l'élément de menu
         subheader: Gérer vos éléments de menu
       data:
         menu_item_root: "Élément racine"
+  admin:
+    menu:
+      cms: CMS
+      pages: Pages
+      medias: Médias
+      menus: Menus
+      shared_blocks: Blocs partagés
+      configurations: Configurations
   button_embeddable:
     label: Libellé
     link: Lien

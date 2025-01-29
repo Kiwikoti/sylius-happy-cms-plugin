@@ -363,14 +363,14 @@
         <div class="modal-card mm-animated fadeInDown">
             <header class="modal-card-head is-warning">
                 <p class="modal-card-title">
-                    <span>{{ 'alt.generate_alt_group_title'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
+                    <span>{{ 'sylius_happy_cms.media.alt.generate_alt_group_title'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
                 </p>
                 <button type="button" class="delete" @click.stop="toggleModal()"></button>
             </header>
 
             <div action="{{ path('media.generate_alt_group') }}" >
                 <section class="modal-card-body">
-                    <label class="input-label">{{ 'alt.generate_alt_group_content'|trans({}, 'SyliusHappyCMSPlugin') }}</label>
+                    <label class="input-label">{{ 'sylius_happy_cms.media.alt.generate_alt_group_content'|trans({}, 'SyliusHappyCMSPlugin') }}</label>
                     {{ include('@SyliusHappyCMSPlugin/media/partials/modal/del-files-info.html.twig') }}
                 </section>
 
@@ -384,7 +384,7 @@
                             :disabled="isLoading"
                             :class="{'is-loading': isLoading}"
                             @click.prevent="GenerateAltGroup($event)">
-                        {{ 'alt.generate_alt_group_submit'|trans({}, 'SyliusHappyCMSPlugin') }}
+                        {{ 'sylius_happy_cms.media.alt.generate_alt_group_submit'|trans({}, 'SyliusHappyCMSPlugin') }}
                     </button>
                 </footer>
             </div>

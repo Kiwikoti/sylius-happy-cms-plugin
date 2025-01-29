@@ -53,11 +53,8 @@
     filter_by: 'sylius_happy_cms.media.filter.by'|trans({attr: 'sylius_happy_cms.media.'}, 'SyliusHappyCMSPlugin'),
     filtration: 'sylius_happy_cms.media.filter.filtration'|trans({}, 'SyliusHappyCMSPlugin'),
     find: 'sylius_happy_cms.media.find'|trans({}, 'SyliusHappyCMSPlugin'),
-    focals: 'sylius_happy_cms.media.focals'|trans({}, 'SyliusHappyCMSPlugin'),
     folder: 'sylius_happy_cms.media.folder'|trans({}, 'SyliusHappyCMSPlugin'),
     found: 'sylius_happy_cms.media.found'|trans({}, 'SyliusHappyCMSPlugin'),
-    glbl_search_avail: 'sylius_happy_cms.media.search.glbl_avail'|trans({}, 'SyliusHappyCMSPlugin'),
-    glbl_search: 'sylius_happy_cms.media.search.glbl'|trans({}, 'SyliusHappyCMSPlugin'),
     go_to_folder: 'sylius_happy_cms.media.go_to_folder'|trans({}, 'SyliusHappyCMSPlugin'),
     image: 'sylius_happy_cms.media.image'|trans({}, 'SyliusHappyCMSPlugin'),
     last_modified: 'sylius_happy_cms.media.last_modified'|trans({}, 'SyliusHappyCMSPlugin'),
@@ -222,7 +219,7 @@
                     <v-touch v-if="allItemsCount && movableItemsCount && !isLoading && !waitingForUpload"
                              class="movable-list mt-4"
                              v-tippy="{arrow: true, hideOnClick: false}"
-                             :title="'{{ 'show.list'|trans({}, 'SyliusHappyCMSPlugin') }}'"
+                             :title="'{{ 'sylius_happy_cms.show.list'|trans({}, 'SyliusHappyCMSPlugin') }}'"
                              @tap="showMovableList()"
                              @hold="clearMovableList()">
                         <span class="icon is-large">
@@ -248,7 +245,7 @@
                     <section>
                         <div id="no_search" v-show="no_search">
                             <div id="no_search_anim" data-json="/bundles/syliushappycmsplugin/dist/lottie/ice_cream.json"></div>
-                            <h3>{{ 'nothing_found'|trans({}, 'SyliusHappyCMSPlugin') }}</h3>
+                            <h3>{{ 'sylius_happy_cms.nothing_found'|trans({}, 'SyliusHappyCMSPlugin') }}</h3>
                         </div>
                     </section>
 

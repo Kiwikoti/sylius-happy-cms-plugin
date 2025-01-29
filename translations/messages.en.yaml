@@ -4,6 +4,7 @@ sylius_happy_cms:
     admin:
       action:
         manage_content: Manage content
+        index: Back to list
       crud:
         title:
           page:
@@ -49,6 +50,7 @@ sylius_happy_cms:
         index: Pages
         create: Create page
         update: Update page
+        show: Page detail
         subheader: Manage your pages
     front:
       categories: Categories
@@ -68,6 +70,8 @@ sylius_happy_cms:
         sitemap: Include in sitemap
   config:
     admin:
+      action:
+        index: Back to list
       field:
         key: Key
         name: Name
@@ -97,6 +101,7 @@ sylius_happy_cms:
         index: Configurations
         create: Create configuration
         update: Update configuration
+        show: Configuration detail
         subheader: Manage your configurations
   editor:
     add: Add
@@ -121,10 +126,12 @@ sylius_happy_cms:
       action:
         create: Create shared block
         choose: Choose this shared block
+        index: Back to list
       ui:
         index: Shared blocks
         create: Create shared block
         update: Update shared block
+        show: Shared block detail
         subheader: Manage your shared blocks
         choose: Choose a shared block type
   menu:
@@ -137,10 +144,12 @@ sylius_happy_cms:
         menu: Menu
       action:
         manage: Manage menu items
+        index: Back to list
       ui:
         index: Menus
         create: Create menu
         update: Update menu
+        show: Menu detail
         subheader: Manage your menus
   menu_item:
     admin:
@@ -159,13 +168,23 @@ sylius_happy_cms:
       action:
         create: Create menu item
         list: List menu items
+        index: Back to list
       ui:
         index: Menu items
         create: Create menu item
         update: Update menu item
+        show: Menu item detail
         subheader: Manage your menu items
       data:
         menu_item_root: Root item
+  admin:
+    menu:
+      cms: CMS
+      pages: Pages
+      medias: Medias
+      menus: Menus
+      shared_blocks: Shared blocks
+      configurations: Configurations
   button_embeddable:
     label: Label
     link: Link
@@ -233,7 +252,3 @@ sylius_happy_cms:
         wysiwyg: Rich text
         cta_one: Main button
         cta_two: Secondary button
-
-
-  ui:
-    pages: Manage your pages
