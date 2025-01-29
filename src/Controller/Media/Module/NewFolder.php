@@ -25,7 +25,7 @@ trait NewFolder
         $message = '';
 
         try {
-            $this->manager->createFolder($new_folder_name, $currentFolder?->getPath());
+            $folder = $this->manager->createFolder($new_folder_name, $currentFolder?->getPath());
         } catch (FolderAlreadyExist $alreadyExist) {
             $message = $alreadyExist->getMessage();
         } catch (\Exception|FilesystemException $exception) {

@@ -39,11 +39,6 @@ class SharedBlock implements SharedBlockInterface
     #[Assert\Type('string')]
     protected ?string $type = null;
 
-    /** @var array<string, mixed>|null $settings */
-    #[ORM\Column(name: 'settings', type: Types::JSON)]
-    #[Assert\Type('array')]
-    protected ?array $settings = [];
-
     public function __construct()
     {
         $this->initializeTranslationsCollection();
@@ -90,21 +85,5 @@ class SharedBlock implements SharedBlockInterface
     public function setType(?string $type): void
     {
         $this->type = $type;
-    }
-
-    /**
-     * @return array<string, mixed>|null
-     */
-    public function getSettings(): ?array
-    {
-        return $this->settings;
-    }
-
-    /**
-     * @param  array<string, mixed> $settings
-     */
-    public function setSettings(?array $settings): void
-    {
-        $this->settings = $settings;
     }
 }
