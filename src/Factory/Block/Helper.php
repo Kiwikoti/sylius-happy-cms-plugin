@@ -8,6 +8,7 @@ use _PHPStan_d06f792a9\React\Http\Message\Request;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -51,6 +52,7 @@ class Helper
         private FormFactoryInterface $formFactory,
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
+        private SharedBlockCollection $sharedBlockCollection,
     ) {
     }
 
@@ -178,7 +180,12 @@ class Helper
             return null;
         }
 
-        $block = $this->collection->getBlocks()[$data['block_type']];
+        $blocks = $this->collection->getBlocks();
+        if (isset($blocks[$data['block_type']])) {
+            $block = $blocks[$data['block_type']];
+        } else {
+            $block = $this->sharedBlockCollection->getBlocks()[$data['block_type']];
+        }
 
         $stats = $this->startTracing($block);
         $blockType = $data['block_type'];

@@ -36,6 +36,7 @@ services:
       - '@form.factory'
       - '@doctrine.orm.entity_manager'
       - '@request_stack'
+      - '@sylius.happy_cms.shared_block.block_collection'
     tags:
       - { name: twig.runtime }
 
