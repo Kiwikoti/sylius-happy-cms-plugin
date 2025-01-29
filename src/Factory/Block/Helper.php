@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
+use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
+use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -42,6 +45,7 @@ class Helper
          * @readonly
          */
         private BlockCollection $collection,
+        private SharedBlockRepositoryInterface $sharedBlockRepositoryInterface,
     ) {
     }
 
@@ -126,6 +130,40 @@ class Helper
      * @throws RuntimeError
      * @throws SyntaxError
      */
+    public function renderSharedBlock(string $locale, array $data, bool $preview = false, array $extra = []): ?Markup
+    {
+        $sharedBlock = $this->sharedBlockRepositoryInterface->find($data['block']);
+        if ($sharedBlock instanceof SharedBlockInterface) {
+            /** @var ?SharedBlockTranslationInterface $translation */
+            $translation = $sharedBlock->getTranslation($locale);
+            /** @var ?SharedBlockTranslationInterface $translation */
+            $firstTranslation = $sharedBlock->getTranslations()->first();
+            if (is_null($translation) && !is_null($firstTranslation)) {
+                $translation = $firstTranslation;
+            }
+            if ($firstTranslation instanceof SharedBlockTranslationInterface && $translation instanceof SharedBlockTranslationInterface) {
+                return $this->renderBlock(array_merge(
+                  array_merge_recursive(
+                      $firstTranslation->getContent() ?? [],
+                      $translation->getContent() ?? []
+                  ),
+                  [
+                      'block_type' => $sharedBlock->getType(),
+                  ]), $preview, $extra);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $extra
+     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function renderBlock(array $data, bool $preview = false, array $extra = []): ?Markup
     {
         if ((int) ($data['block_published'] ?? null) === 0 && $preview === false) {
@@ -171,6 +209,7 @@ class Helper
 
         return new Markup($this->twig->render($block->getFrontEndTemplatePath(), array_merge([
             'block' => $data,
+            'preview' => $preview,
             'blockType' => $blockType,
             'settings' => $blockData,
         ], $extra)), 'UTF-8');

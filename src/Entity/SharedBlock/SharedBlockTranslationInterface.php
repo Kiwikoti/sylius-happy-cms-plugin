@@ -9,4 +9,5 @@ use Sylius\Component\Resource\Model\TranslationInterface;
 
 interface SharedBlockTranslationInterface extends TranslationInterface, ResourceInterface, \Stringable
 {
+    public function getContent(): ?array;
 }
