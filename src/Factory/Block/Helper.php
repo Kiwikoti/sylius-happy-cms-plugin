@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
+use _PHPStan_d06f792a9\React\Http\Message\Request;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -48,6 +50,7 @@ class Helper
         private BlockCollection $collection,
         private FormFactoryInterface $formFactory,
         private EntityManagerInterface $entityManager,
+        private RequestStack $requestStack,
     ) {
     }
 
@@ -132,12 +135,12 @@ class Helper
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function renderSharedBlock(string $locale, array $data, bool $preview = false, array $extra = []): ?Markup
+    public function renderSharedBlock(array $data, bool $preview = false, array $extra = []): ?Markup
     {
         $sharedBlock = $this->entityManager->getRepository(SharedBlockInterface::class)->find($data['block']);
         if ($sharedBlock instanceof SharedBlockInterface) {
             /** @var ?SharedBlockTranslationInterface $translation */
-            $translation = $sharedBlock->getTranslation($locale);
+            $translation = $sharedBlock->getTranslation($this->requestStack->getCurrentRequest()->getLocale());
             /** @var ?SharedBlockTranslationInterface $translation */
             $firstTranslation = $sharedBlock->getTranslations()->first();
             if (is_null($translation) && !is_null($firstTranslation)) {
