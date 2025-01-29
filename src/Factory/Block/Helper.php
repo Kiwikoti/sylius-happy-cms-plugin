@@ -7,8 +7,9 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
-use Adeliom\SyliusHappyCMSPlugin\Repository\SharedBlock\SharedBlockRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -45,7 +46,8 @@ class Helper
          * @readonly
          */
         private BlockCollection $collection,
-        private SharedBlockRepositoryInterface $sharedBlockRepositoryInterface,
+        private FormFactoryInterface $formFactory,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -132,7 +134,7 @@ class Helper
      */
     public function renderSharedBlock(string $locale, array $data, bool $preview = false, array $extra = []): ?Markup
     {
-        $sharedBlock = $this->sharedBlockRepositoryInterface->find($data['block']);
+        $sharedBlock = $this->entityManager->getRepository(SharedBlockInterface::class)->find($data['block']);
         if ($sharedBlock instanceof SharedBlockInterface) {
             /** @var ?SharedBlockTranslationInterface $translation */
             $translation = $sharedBlock->getTranslation($locale);
