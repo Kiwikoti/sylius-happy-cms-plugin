@@ -170,11 +170,11 @@ class Helper
             $blockSettings['attr_id'] = 'block-' . $blockLoopIndex;
         }
 
-        $result = $this->eventDispatcher->dispatch(new BlockRender($blockType, $blockSettings, $defaultAssets), 'happy_cms_block.render_block');
+        $event = $this->eventDispatcher->dispatch(new BlockRender($blockType, $blockSettings, $defaultAssets), 'happy_cms_block.render_block');
 
-        $block = $result->getArgument('block');
-        $blockType = $result->getArgument('blockType');
-        $blockData = $result->getArgument('settings');
+
+        $block = $event->getBlock();
+        $blockData = $event->getData();
 
         // Stats
         if (isset($blockData['block_type'])) {
@@ -190,7 +190,7 @@ class Helper
         $stats['settings'] = $blockData;
         $stats['extra'] = $extra;
         $stats['type'] = $blockType::class;
-        $stats['assets'] = $result->getArgument('assets') ?: [];
+        $stats['assets'] = $event->getAssets() ?: [];
 
         $this->assets = array_merge_recursive($this->assets, $stats['assets']);
 
@@ -198,11 +198,11 @@ class Helper
 
         // Render
         return new Markup($this->twig->render($blockType->getFrontEndTemplatePath(), array_merge([
-            'block' => $block,
-            'blockType' => $blockType,
-            'preview' => $preview,
-            'settings' => $blockData,
-        ], $extra)), 'UTF-8');
+                                                                                                     'block' => $block,
+                                                                                                     'blockType' => $blockType,
+                                                                                                     'preview' => $preview,
+                                                                                                     'settings' => $blockData,
+                                                                                                 ], $extra)), 'UTF-8');
     }
 
     /**
