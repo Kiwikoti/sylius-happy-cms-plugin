@@ -46,10 +46,12 @@ class Page implements PageInterface
     protected Collection $routes;
 
     #[Assert\Type(PageInterface::class)]
-    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(inversedBy: 'children', targetEntity: PageInterface::class)]
+    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'SET NULL', referencedColumnName: 'id')]
     protected ?PageInterface $parent = null;
 
     /** @var Collection<int, PageInterface> */
+    #[ORM\OneToMany(targetEntity: PageInterface::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[ORM\Column(name: 'action', type: Types::STRING, nullable: true)]
