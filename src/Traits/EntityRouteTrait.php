@@ -155,6 +155,9 @@ trait EntityRouteTrait
         $entity = $translation->getTranslatable();
         $parentSlug = '';
         $accessor = new PropertyAccessor();
+        // TODO: rename isHomepage by isRootNode
+        // Nous n'avons pas besoin de slug pour le root node
+        // TODO: while loop until parent is null
         $isHomepage = false;
         if ($accessor->isReadable($entity, 'isHomePage')) {
             $isHomepage = $accessor->getValue($entity, 'isHomePage');
@@ -162,13 +165,19 @@ trait EntityRouteTrait
         if (!$isHomepage) {
             if ($accessor->isReadable($entity, 'parent')) {
                 if ($parent = $accessor->getValue($entity, 'parent')) {
-                    if ($accessor->isReadable($parent, 'translation')) {
-                        // access parent->translation->slug if parent is Translatable
-                        $parentTranslation = $parent->getTranslation($translation->getLocale());
-                        $parentSlug = $accessor->getValue($parentTranslation, 'slug');
-                    } elseif ($accessor->isReadable($parent, 'slug')) {
-                        // access parent->slug if parent is not Translatable
-                        $parentSlug = $accessor->getValue($parent, 'slug');
+                    $isParentHomepage = false;
+                    if ($accessor->isReadable($parent, 'isHomePage')) {
+                        $isParentHomepage = $accessor->getValue($parent, 'isHomePage');
+                    }
+                    if (!$isParentHomepage) {
+                        if ($accessor->isReadable($parent, 'translation')) {
+                            // access parent->translation->slug if parent is Translatable
+                            $parentTranslation = $parent->getTranslation($translation->getLocale());
+                            $parentSlug = $accessor->getValue($parentTranslation, 'slug');
+                        } elseif ($accessor->isReadable($parent, 'slug')) {
+                            // access parent->slug if parent is not Translatable
+                            $parentSlug = $accessor->getValue($parent, 'slug');
+                        }
                     }
                 }
             }
