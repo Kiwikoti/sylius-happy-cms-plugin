@@ -167,9 +167,8 @@ class MediaManager
         }
 
         if (!$folderCreation) {
-            $existFolder = $this->getHelper()->getFolderRepository()->findOneBy(['parent' => $folder ?: null, 'name' =>
-                $name]);
-            if ($existFolder) {
+            $existFolder = $this->getHelper()->getFolderRepository()->findOneBy(['parent' => $folder ?: null, 'name' => $name]);
+            if ($existFolder instanceof FolderInterface) {
                 return $existFolder;
             }
         }

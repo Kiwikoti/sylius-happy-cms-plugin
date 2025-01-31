@@ -27,6 +27,7 @@ services:
   sylius.happy_cms.block.twig_extension:
     alias: Adeliom\SyliusHappyCMSPlugin\Twig\Block\BlockExtension
 
+
   Adeliom\SyliusHappyCMSPlugin\Factory\Block\Helper:
     public: true
     arguments:
@@ -36,6 +37,7 @@ services:
       - '@form.factory'
       - '@doctrine.orm.entity_manager'
       - '@request_stack'
+      - '@adeliom.sylius.asset.renderer'
     tags:
       - { name: twig.runtime }
 
@@ -89,6 +91,7 @@ services:
       - '%sylius_happy_cms.shared_block.shared_block_model%'
       - '@form.factory'
       - '@request_stack'
+      - '@adeliom.sylius.asset.renderer'
     tags:
       - { name: twig.runtime }
 

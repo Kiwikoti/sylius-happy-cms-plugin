@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Symfony\Component\Form\FormBuilderInterface;
 
 interface SharedBlockTypeInterface
@@ -22,14 +23,14 @@ interface SharedBlockTypeInterface
     /**
      * Declare here the assets that make front working as expected
      *
-     * @return array<string, string[]>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function configureAssets(): array;
 
     /**
      * Declare here the assets that make back-office working as expected
      *
-     * @return array<string, string[]>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function configureAdminAssets(): array;
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
+
 interface BlockTypeInterface
 {
     public function getName(): string;
@@ -20,14 +22,14 @@ interface BlockTypeInterface
     /**
      * Declare here the assets that make front working as expected
      *
-     * @return array<string, string[]>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function configureAssets(): array;
 
     /**
      * Declare here the assets that make back-office working as expected
      *
-     * @return array<string, string[]>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function configureAdminAssets(): array;
 

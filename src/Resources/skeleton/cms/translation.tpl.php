@@ -42,7 +42,7 @@ class <?= $classNameDetail->getShortName() ?> extends AbstractTranslation implem
         EntitySeoTrait::__construct as private _SEOConstruct;
     }
 
-<?php if (isset($hasFlexibleContent) && $hasFlexibleContent) { ?>
+<?php if ($hasFlexibleContent) { ?>
     /**
     * @var array|null
     */
@@ -77,7 +77,7 @@ if (is_array($extraFields)) {
 }
     ?>
 
-<?php if (isset($hasFlexibleContent) && $hasFlexibleContent) { ?>
+<?php if ($hasFlexibleContent) { ?>
     public function getContent(): ?array
     {
         return $this->content;

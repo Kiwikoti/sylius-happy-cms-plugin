@@ -67,7 +67,7 @@ final class <?= $classNameDetail->getShortName() ?>Admin extends AbstractAdmin i
         return 'name';
     }
 
-<?php if (isset($hasFlexibleContent) && $hasFlexibleContent) { ?>
+<?php if ($hasFlexibleContent) { ?>
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
@@ -187,7 +187,7 @@ final class <?= $classNameDetail->getShortName() ?>Admin extends AbstractAdmin i
                 )
                 ->hideOnIndex();
         }
-<?php if (isset($hasFlexibleContent) && $hasFlexibleContent) { ?>
+<?php if ($hasFlexibleContent) { ?>
         elseif (str_starts_with($context, 'flexible_content:')) {
             $locale = str_replace( 'flexible_content:', '', $context);
             yield TranslationField::new('translations')

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
@@ -84,7 +85,7 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
     /**
      * Declare here the assets that make front working as expected
      *
-     * @return array<string, string[]>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function configureAssets(): array
     {
@@ -98,11 +99,14 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
     /**
      * Declare here the assets that make back-office working as expected
      *
-     * @return array<string, string[]>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function configureAdminAssets(): array
     {
         $this->tempBuilder();
+        /**
+         * @var array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null} $adminAssets
+         */
         $adminAssets = [
             'js' => [],
             'css' => [],

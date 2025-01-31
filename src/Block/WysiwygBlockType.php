@@ -6,8 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
-use Adeliom\SyliusHappyCMSPlugin\Form\Type\ButtonEmbeddableType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class WysiwygBlockType extends AbstractBlock

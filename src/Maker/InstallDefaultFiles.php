@@ -184,6 +184,7 @@ final class InstallDefaultFiles extends AbstractMaker
                 'form' => '@SyliusEasyCrudPlugin\\\\crud\\\\form\\\\_form.html.twig',
                 'breadcrumb' => '@SyliusHappyCMSPlugin\\\\menu_item\\\\crud\\\\_breadcrumb.html.twig',
             ],
+            'create' => []
         ], $scope, "except: ['index']\n");
     }
 
@@ -244,14 +245,21 @@ final class InstallDefaultFiles extends AbstractMaker
         }
     }
 
+    /**
+     * @param array{
+     *     default: ?string,
+     *     update: string[]|null,
+     *     create: string[]|null,
+     * }|null $templates
+     */
     public function generateRoute(
         string $scope,
         ConsoleStyle $io,
         ?array $templates = [
-        'default' => '@SyliusEasyCrudPlugin\\\\crud',
-        'update' => [],
-        'create' => [],
-    ],
+            'default' => '@SyliusEasyCrudPlugin\\\\crud',
+            'update' => [],
+            'create' => [],
+        ],
         ?string $baseScope = null,
         ?string $customConfigurations = null,
     ): string {
@@ -259,13 +267,13 @@ final class InstallDefaultFiles extends AbstractMaker
             $baseScope = $scope;
         }
         $updateTemplate = '';
-        if (isset($templates['update']) && is_array($templates['update'])) {
+        if (isset($templates['update'])) {
             foreach ($templates['update'] as $templateName => $template) {
                 $updateTemplate .= '            ' . $templateName . ': "' . $template . "\"\n";
             }
         }
         $createTemplate = '';
-        if (isset($templates['create']) && is_array($templates['create'])) {
+        if (isset($templates['create'])) {
             foreach ($templates['create'] as $templateName => $template) {
                 $createTemplate .= '            ' . $templateName . ': "' . $template . "\"\n";
             }

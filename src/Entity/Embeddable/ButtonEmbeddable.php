@@ -29,6 +29,7 @@ class ButtonEmbeddable implements ButtonEmbeddableInterface
         $button->setIcon($data['icon'] ?? null);
         $button->setLink($data['link'] ?? null);
         $button->setAction($data['action'] ?? null);
+
         return $button;
     }
 

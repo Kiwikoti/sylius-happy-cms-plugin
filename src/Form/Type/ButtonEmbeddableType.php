@@ -27,14 +27,15 @@ class ButtonEmbeddableType extends AbstractType implements FormTypeInterface
         $this->addActionField($options, $builder);
         $this->addIconField($options, $builder);
 
-        $builder->addModelTransformer(new CallbackTransformer(
-              function (?array $data) {
-                  return ButtonEmbeddable::new($data ?? []);
-              },
-              function (?ButtonEmbeddableInterface $buttonEmbeddable) {
-                  return $buttonEmbeddable ? $buttonEmbeddable->toArray() : [];
-              },
-          )
+        $builder->addModelTransformer(
+            new CallbackTransformer(
+            function (?array $data) {
+                return ButtonEmbeddable::new($data ?? []);
+            },
+            function (?ButtonEmbeddableInterface $buttonEmbeddable) {
+                return $buttonEmbeddable ? $buttonEmbeddable->toArray() : [];
+            },
+        ),
         );
     }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusEasyCrudPlugin\Form\SortableCollectionType;
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Adeliom\SyliusHappyCMSPlugin\Block\SubType\AccordionItemEmbeddableType;
@@ -60,6 +61,9 @@ class AccordionBlockType extends AbstractBlock
         return '@SyliusHappyCMSPlugin/front/blocks/accordion_block.html.twig';
     }
 
+    /**
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
+     */
     public function configureAssets(): array
     {
         return [

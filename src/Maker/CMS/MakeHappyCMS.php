@@ -80,8 +80,8 @@ final class MakeHappyCMS extends AbstractMaker
         foreach (['entryNamespace', 'entryClassName', 'taxonomyClassName'] as $argName) {
             $arg = $command->getDefinition()->getArgument($argName);
             $question = sprintf($arg->getDescription(), $scope);
-            $default = sprintf($arg->getDefault(), $scope);
-            if (is_string($default) || null === $default) {
+            if (is_string($arg->getDefault())) {
+                $default = sprintf($arg->getDefault(), $scope);
                 $input->setArgument(
                     $arg->getName(),
                     $io->ask($question, $default),
@@ -97,9 +97,9 @@ final class MakeHappyCMS extends AbstractMaker
     {
         $namespace = Str::asCamelCase($input->getArgument('entryNamespace'));
         $scope = $input->getArgument('scope');
-        $hasFlexibleContent = true;
-        $hasRouting = true;
-        $hasTaxonomy = true;
+        $hasFlexibleContent = $input->getArgument('hasFlexibleContent') ?? true;
+        $hasRouting = $input->getArgument('hasRouting') ?? true;
+        $hasTaxonomy = $input->getArgument('hasTaxonomy') ?? true;
 
         $entryClassName = Str::asClassName($input->getArgument('entryClassName'));
         $entryClassNameDetail = $generator->createClassNameDetails(
@@ -114,6 +114,7 @@ final class MakeHappyCMS extends AbstractMaker
 
         $taxonomyClassNameDetail = false;
         $taxonomyClassNameTranslationDetail = false;
+
         if ($hasTaxonomy) {
             $taxonomyClassName = Str::asClassName($input->getArgument('taxonomyClassName'));
             $taxonomyClassNameDetail = $generator->createClassNameDetails(

@@ -7,9 +7,9 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
+use Adeliom\SyliusEasyCrudPlugin\Services\AssetRenderer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Environment;
@@ -42,38 +42,14 @@ class Helper
         private readonly EntityManagerInterface $entityManager,
         private readonly string $class,
         private readonly FormFactory $formFactory,
-        private RequestStack $requestStack
+        private RequestStack $requestStack,
+        private AssetRenderer $assetRenderer,
     ) {
     }
 
     public function includeAssets(): string
     {
-        $html = '';
-
-        if (!empty($this->assets['css'])) {
-            $html .= "<style media='all'>";
-
-            foreach ($this->assets['css'] as $stylesheet) {
-                $html .= "\n" . sprintf('@import url(%s);', $stylesheet);
-            }
-
-            $html .= "\n</style>";
-        }
-
-        foreach ($this->assets['js'] as $javascript) {
-            $html .= "\n" . sprintf('<script src="%s" type="text/javascript"></script>', $javascript);
-        }
-
-        foreach ($this->assets['webpack'] as $webpack) {
-            try {
-                $html .= "\n" . $this->twig->createTemplate(sprintf("{{ encore_entry_link_tags('%s') }}", $webpack))->render();
-                $html .= "\n" . $this->twig->createTemplate(sprintf("{{ encore_entry_script_tags('%s') }}", $webpack))->render();
-            } catch (LoaderError|SyntaxError) {
-                $html .= '';
-            }
-        }
-
-        return $html;
+        return $this->assetRenderer->renderAssets($this->assets);
     }
 
     /**
@@ -126,7 +102,6 @@ class Helper
     public function renderBlock(Environment $env, array $context, array $data, bool $preview = false, array $extra =
     []): ?Markup
     {
-
         $block = null;
 
         $sharedBlock = $this->entityManager->getRepository(SharedBlockInterface::class)->find($data['block']);
@@ -135,13 +110,13 @@ class Helper
             $translation = $sharedBlock->getTranslation($this->requestStack->getCurrentRequest()->getLocale());
             /** @var ?SharedBlockTranslationInterface $translation */
             $firstTranslation = $sharedBlock->getTranslations()->first();
-            if (is_null($translation) && !is_null($firstTranslation)) {
+            if (null === $translation && null !== $firstTranslation) {
                 $translation = $firstTranslation;
             }
             if ($firstTranslation instanceof SharedBlockTranslationInterface && $translation instanceof SharedBlockTranslationInterface) {
                 $block = array_merge(
                     $firstTranslation->getContent() ?? [],
-                    $translation->getContent() ?? []
+                    $translation->getContent() ?? [],
                 );
             }
         }
@@ -171,7 +146,6 @@ class Helper
         }
 
         $event = $this->eventDispatcher->dispatch(new BlockRender($blockType, $blockSettings, $defaultAssets), 'happy_cms_block.render_block');
-
 
         $block = $event->getBlock();
         $blockData = $event->getData();
@@ -220,7 +194,6 @@ class Helper
         array $block,
         array $defaultSetting,
     ): array {
-
         // TODO : essayer de passer par le form buider pour utiliser les transformers
         //$formBuilder = $this->formFactory->createBuilder($block->getType(), null, ['csrf_protection' => false]);
         //
