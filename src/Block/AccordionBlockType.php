@@ -70,7 +70,7 @@ class AccordionBlockType extends AbstractBlock
     {
         return [
             'js' => [
-                (Asset::new('accordion-block-type'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
+                (Asset::new('accordion-block-type.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
             ],
         ];
     }
