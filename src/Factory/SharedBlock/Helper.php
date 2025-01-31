@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
@@ -24,7 +25,7 @@ class Helper
      * This property is a state variable holdings all assets used by the block for the current PHP request
      * It is used to correctly render the javascripts and stylesheets tags on the main layout.
      *
-     * @var array<string, string[]>
+     * @var array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     private array $assets = [
         'js' => [],

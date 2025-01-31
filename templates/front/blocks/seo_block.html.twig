@@ -1,17 +1,8 @@
-<div class="container relative py-10" js-pre-footer-content>
+<div class="container relative py-10" js-seo-block-content>
     <div class="max-h-[151px] is-open:max-h-[100%] overflow-hidden">
         <p class="font-bold text-xl">{{ 'app.footer.pre_footer.title'|trans }}</p>
         <div>{{ 'app.footer.pre_footer.content'|trans }}</div>
     </div>
     <div class="is-open:opacity-0 transition-all left-0 w-full pointer-events-none bottom-16 bg-gradient-to-b absolute h-[74px] z-2 from-white/0 via-white/80 to-white/100"></div>
-    <div class="flex items-center justify-center h-6"><i js-pre-footer-opener class="fa-sharp fa-solid fa-chevron-down is-open:rotate-180 transition-all cursor-pointer"></i></div>
+    <div class="flex items-center justify-center h-6"><i js-seo-block-opener class="fa-sharp fa-solid fa-chevron-down is-open:rotate-180 transition-all cursor-pointer"></i></div>
 </div>
-
-<script nonce="{{ csp_nonce('script') }}">
-    let content = document.querySelector('[js-pre-footer-content]');
-    let btn = document.querySelector('[js-pre-footer-opener]');
-
-    btn.addEventListener('click', () => {
-        content.classList.toggle('is-open');
-    })
-</script>

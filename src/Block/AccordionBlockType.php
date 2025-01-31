@@ -7,6 +7,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Block;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusEasyCrudPlugin\Form\SortableCollectionType;
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
+use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
 use Adeliom\SyliusHappyCMSPlugin\Block\SubType\AccordionItemEmbeddableType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Form\Type\ButtonEmbeddableType;
@@ -64,12 +65,13 @@ class AccordionBlockType extends AbstractBlock
     /**
      * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
+
     public function configureAssets(): array
     {
         return [
-            'js' => [],
-            'css' => [],
-            'webpack' => [],
+            'webpack' => [
+                (Asset::new('accordion-block-type'))->webpackPackageName(AssetHappyCMSPackage::PACKAGE_NAME),
+            ],
         ];
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
+use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -37,5 +39,17 @@ class SeoBlockType extends AbstractBlock
     public function getFrontEndTemplatePath(): string
     {
         return '@SyliusHappyCMSPlugin/front/blocks/seo_block.html.twig';
+    }
+
+    /**
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
+     */
+    public function configureAssets(): array
+    {
+        return [
+            'webpack' => [
+                (Asset::new('seo-block-type'))->webpackPackageName(AssetHappyCMSPackage::PACKAGE_NAME),
+            ],
+        ];
     }
 }

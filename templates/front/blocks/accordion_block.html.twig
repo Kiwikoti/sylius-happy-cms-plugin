@@ -22,13 +22,13 @@
                 {% for item in items %}
                     {% set item_title = item.title|default(false) %}
                     {% set item_content = item.content|default(false) %}
-                    <div js-accordion class="{{ border_class }}">
-                        <div class="{{ card_class }} cursor-pointer p-4 is-active:text-primary " js-accordion-title>
+                    <div js-accordion-block-type class="{{ border_class }}">
+                        <div class="{{ card_class }} cursor-pointer p-4 is-active:text-primary " js-accordion-block-type-title>
                             <p class="select-none font-semibold">{{ item_title }}</p>
                             <i class="fa-regular fa-chevron-down is-active:rotate-180 text-sm trans-default fa-sharp"></i>
                         </div>
-                        <div class="max-h-0 overflow-hidden trans-default" js-accordion-content>
-                            <div js-accordion-transition class="p-4 pb-8 wysiwyg">
+                        <div class="max-h-0 overflow-hidden trans-default" js-accordion-block-type-content>
+                            <div js-accordion-block-type-transition class="p-4 pb-8 wysiwyg">
                                 {{ item_content|raw }}
                             </div>
                         </div>
