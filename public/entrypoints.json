@@ -12,6 +12,16 @@
       "js": [
         "/bundles/syliushappycmsplugin/media-form.914c71eb.js"
       ]
+    },
+    "seo-block-type": {
+      "js": [
+        "/bundles/syliushappycmsplugin/seo-block-type.33f33775.js"
+      ]
+    },
+    "accordion-block-type": {
+      "js": [
+        "/bundles/syliushappycmsplugin/accordion-block-type.fc5eeaf8.js"
+      ]
     }
   }
 }
