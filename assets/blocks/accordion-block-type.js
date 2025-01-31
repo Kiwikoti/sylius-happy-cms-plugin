@@ -1,4 +1,4 @@
-const accordions = document.querySelectorAll('[js-accordion-block-type-block-type]');
+const accordions = document.querySelectorAll('[js-accordion-block-type]');
 
 const resetAccordions = () => {
     accordions.forEach((accordion) => {
