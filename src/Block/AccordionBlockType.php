@@ -69,8 +69,8 @@ class AccordionBlockType extends AbstractBlock
     public function configureAssets(): array
     {
         return [
-            'webpack' => [
-                (Asset::new('accordion-block-type'))->webpackPackageName(AssetHappyCMSPackage::PACKAGE_NAME),
+            'js' => [
+                (Asset::new('accordion-block-type'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
             ],
         ];
     }
