@@ -247,4 +247,9 @@ class Page implements PageInterface
     {
         return $this->id ?? 0;
     }
+
+    public function __toString(): string
+    {
+        return $this->getName() ?? '';
+    }
 }
