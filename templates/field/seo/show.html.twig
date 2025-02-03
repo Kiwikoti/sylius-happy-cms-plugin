@@ -10,7 +10,7 @@
         <td class="five wide"><strong class="gray text">{{ 'sylius_happy_cms.seo.admin.field.cover'|trans }}</strong></td>
         <td>
             {% if data.cover %}
-                {{ include('@SyliusHappyCMSPlugin/media/admin/field/happy-cms-media.html.twig', {field: {value: field.value.cover, uniqueId: field.uniqueId, label: 'sylius_happy_cms.seo.admin.field.cover'|trans}}) }}
+                {{ happy_cms_media(data.cover, 'sylius_small') }}
             {% endif %}
         </td>
     </tr>

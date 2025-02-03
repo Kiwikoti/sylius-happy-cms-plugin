@@ -190,6 +190,9 @@ sylius_happy_cms:
     link: Link
     icon: Icon
     action: Action
+    action_default: Same tab
+    action_blank: New tab
+    action_none: No action
   blocks:
     tabs:
       flex_blocks: Flex blocks
