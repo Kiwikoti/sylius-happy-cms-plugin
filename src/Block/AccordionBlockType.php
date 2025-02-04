@@ -65,7 +65,6 @@ class AccordionBlockType extends AbstractBlock
     /**
      * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
-
     public function configureAssets(): array
     {
         return [

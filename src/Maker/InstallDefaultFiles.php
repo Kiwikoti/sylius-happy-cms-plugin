@@ -184,7 +184,7 @@ final class InstallDefaultFiles extends AbstractMaker
                 'form' => '@SyliusEasyCrudPlugin\\\\crud\\\\form\\\\_form.html.twig',
                 'breadcrumb' => '@SyliusHappyCMSPlugin\\\\menu_item\\\\crud\\\\_breadcrumb.html.twig',
             ],
-            'create' => []
+            'create' => [],
         ], $scope, "except: ['index']\n");
     }
 

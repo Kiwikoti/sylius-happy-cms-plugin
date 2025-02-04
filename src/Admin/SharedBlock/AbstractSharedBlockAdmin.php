@@ -12,6 +12,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Action\Action;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Actions;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Crud;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
+use Adeliom\SyliusHappyCMSPlugin\Admin\Field\SharedBlockField;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -59,8 +60,8 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
             yield TabField::new('tabContent', 'sylius_happy_cms.shared_block.admin.tab.content');
             yield TranslationField::new('translations', 'sylius_happy_cms.shared_block.admin.field.translations')
                 ->addField(
-                    Field::new('content', 'sylius_happy_cms.shared_block.admin.field.content')
-                        ->setFormType($blockType)
+                    SharedBlockField::new('content', 'sylius_happy_cms.shared_block.admin.field.content')
+                        ->setBlockType($blockType)
                         ->setDisabled(false)
                         ->setRequired(true),
                 )

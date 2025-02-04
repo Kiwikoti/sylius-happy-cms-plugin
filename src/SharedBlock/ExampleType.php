@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\SharedBlock;
 
+use Adeliom\SyliusEasyCrudPlugin\Form\IconType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\AbstractSharedBlockType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
 use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
@@ -19,7 +20,11 @@ class ExampleType extends AbstractSharedBlockType implements SharedBlockTypeInte
         ;
 
         $builder->add('image', MediaType::class, [
-            'label' => false,
+            'label' => 'Media',
+        ]);
+
+        $builder->add('icon', IconType::class, [
+            'label' => 'Icon',
         ]);
     }
 
@@ -41,5 +46,21 @@ class ExampleType extends AbstractSharedBlockType implements SharedBlockTypeInte
     public function getFrontEndTemplatePath(): string
     {
         return '@SyliusHappyCMSPlugin/front/shared_blocks/example.html.twig';
+    }
+
+    public function configureAdminAssets(): array
+    {
+        return array_merge_recursive(
+            MediaType::configureAdminAssets(),
+            IconType::configureAdminAssets(),
+        );
+    }
+
+    public function configureAdminFormThemes(): array
+    {
+        return array_merge_recursive(
+            MediaType::configureAdminFormThemes(),
+            IconType::configureAdminFormThemes(),
+        );
     }
 }

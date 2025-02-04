@@ -48,6 +48,11 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
         return '';
     }
 
+    public function configureAdminAssets(): array
+    {
+        return [];
+    }
+
     public function getFrontEndTemplatePath(): string
     {
         return '@SyliusHappyCMSPlugin/front/blocks/shared_block.html.twig';

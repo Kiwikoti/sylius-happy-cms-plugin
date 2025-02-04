@@ -6,8 +6,8 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use _PHPStan_d06f792a9\React\Http\Message\Request;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
-use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
 use Adeliom\SyliusEasyCrudPlugin\Services\AssetRenderer;
+use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;

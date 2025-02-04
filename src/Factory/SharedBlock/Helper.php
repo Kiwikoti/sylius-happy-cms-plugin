@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
+use Adeliom\SyliusEasyCrudPlugin\Services\AssetRenderer;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockTranslationInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Block\BlockRender;
-use Adeliom\SyliusEasyCrudPlugin\Services\AssetRenderer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactory;

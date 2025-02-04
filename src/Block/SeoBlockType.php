@@ -49,7 +49,7 @@ class SeoBlockType extends AbstractBlock
         return [
             'js' => [
                 (Asset::new('seo-block-type.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
-            ]
+            ],
         ];
     }
 }
