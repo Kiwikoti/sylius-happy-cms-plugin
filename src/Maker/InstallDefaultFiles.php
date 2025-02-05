@@ -259,6 +259,7 @@ final class InstallDefaultFiles extends AbstractMaker
             'default' => '@SyliusEasyCrudPlugin\\\\crud',
             'update' => [],
             'create' => [],
+            'show' => [],
         ],
         ?string $baseScope = null,
         ?string $customConfigurations = null,
@@ -276,6 +277,12 @@ final class InstallDefaultFiles extends AbstractMaker
         if (isset($templates['create'])) {
             foreach ($templates['create'] as $templateName => $template) {
                 $createTemplate .= '            ' . $templateName . ': "' . $template . "\"\n";
+            }
+        }
+        $showTemplate = '';
+        if (isset($templates['show'])) {
+            foreach ($templates['show'] as $templateName => $template) {
+                $showTemplate .= '            ' . $templateName . ': "' . $template . "\"\n";
             }
         }
 
@@ -320,6 +327,20 @@ final class InstallDefaultFiles extends AbstractMaker
                         . "        route:\n"
                         . "            parameters:\n"
                         . "                context: \$context\n"
+                        . "                id: \$id\n"
+                        . "    show:\n"
+                        . '        header: sylius_happy_cms.' . $scope . ".admin.ui.show\n"
+                        . (strlen($showTemplate) ? (
+                            "        templates:\n" . $showTemplate
+                        ) : '')
+                        . "        redirect:\n"
+                        . "            route: update # needed to redirect from show to update after updating flex content\n"
+                        . "            parameters:\n"
+                        . "                context: \$context\n"
+                        . "                id: \$id\n"
+                        . "        route:\n"
+                        . "            parameters:\n"
+                        . "                context: \$context\n # needed to keep context in URL after updating flex content\n"
                         . "                id: \$id\n",
                     'type' => 'sylius.resource',
                     'prefix' => 'admin',
