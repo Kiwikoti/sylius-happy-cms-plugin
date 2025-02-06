@@ -1,4 +1,5 @@
 {% set wysiwyg = settings.wysiwyg|default(null) %}
+{% if wysiwyg %}
 <section class="container">
     <div class="my-10 lg:my-20">
         {% if wysiwyg is not null %}
@@ -8,3 +9,4 @@
         {% endif %}
     </div>
 </section>
+{% endif %}

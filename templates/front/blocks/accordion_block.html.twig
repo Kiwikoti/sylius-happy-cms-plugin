@@ -2,6 +2,8 @@
 {% set wysiwyg = settings.wysiwyg|default(false) %}
 {% set cta = settings.cta|default(false) %}
 {% set items = settings.items|default([]) %}
+
+{% if title or wysiwyg or cta or items is not empty %}
 <section class="container">
     <div class="wrapper-12 my-10 lg:my-20">
         <div class="col-span-full md:col-span-5 lg:mr-10">
@@ -38,3 +40,4 @@
         {% endif %}
     </div>
 </section>
+{% endif %}

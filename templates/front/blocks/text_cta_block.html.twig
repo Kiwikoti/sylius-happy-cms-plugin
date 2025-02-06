@@ -3,6 +3,8 @@
 {% set wysiwyg = settings.wysiwyg|default(false) %}
 {% set cta_one = settings.cta_one|default(false) %}
 {% set cta_two = settings.cta_two|default(false) %}
+
+{% if title or wysiwyg or cta_one or cta_two %}
 <section class="container">
     <div class="my-10 lg:my-20">
         {% if headline %}<p class="headline">{{ headline }}</p>{% endif %}
@@ -20,3 +22,4 @@
         {% endif %}
     </div>
 </section>
+{% endif %}

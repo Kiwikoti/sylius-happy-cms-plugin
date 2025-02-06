@@ -1,6 +1,8 @@
 {% set title = settings.title|default(false) %}
 {% set wysiwyg = settings.wysiwyg|default(false) %}
 {% set images = settings.images|default([]) %}
+
+{% if title or wysiwyg or images is not empty %}
 <section class="container">
     <div class="my-10 lg:my-20 wrapper-12">
         <div class="col-span-full md:col-span-8 md:col-start-3 text-center">
@@ -23,3 +25,4 @@
         {% endif %}
     </div>
 </section>
+{% endif %}

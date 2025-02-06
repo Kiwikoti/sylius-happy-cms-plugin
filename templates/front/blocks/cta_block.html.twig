@@ -2,6 +2,8 @@
 {% set wysiwyg = settings.wysiwyg|default(false) %}
 {% set cta_one = settings.cta_one|default(false) %}
 {% set cta_two = settings.cta_two|default(false) %}
+
+{% if title or wysiwyg or cta_one or cta_two %}
 <section class="bg-neutral-100">
     <div class="container my-10 lg:my-20">
         <div class="py-10 flex gap-6 justify-between items-center flex-wrap">
@@ -24,3 +26,4 @@
         </div>
     </div>
 </section>
+{% endif %}
