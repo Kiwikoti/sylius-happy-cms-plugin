@@ -103,6 +103,9 @@
                 <i class="dropdown icon"></i>
                 <div class="default text">Block categories</div>
                 <div class="menu">
+                    <div class="item" data-value="all_blocks">
+                        {{- 'sylius_happy_cms.blocks.tabs.all_blocks'|trans -}}
+                    </div>
                     {% for tab in tabs %}
                         {% set tab_key = tab|replace({' ': '_'})|lower %}
                         <div class="item" data-value="{{ tab_key }}">

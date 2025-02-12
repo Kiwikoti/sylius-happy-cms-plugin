@@ -195,6 +195,7 @@ sylius_happy_cms:
     action_none: Aucune action
   blocks:
     tabs:
+      all_blocks: Tous les blocs
       flex_blocks: Blocks
       shared_blocks: Blocs partagés
       media_blocks: Blocs médias
