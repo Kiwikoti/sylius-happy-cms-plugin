@@ -45,6 +45,7 @@ ${APP_DIR}:
 	(symfony composer create-project --no-interaction --prefer-dist --no-scripts --no-progress --no-install sylius/sylius-standard="${SYLIUS_VERSION}" ${APP_DIR})
 	cd ${APP_DIR} && chmod -R 777 public
 	echo "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}" >> ${APP_DIR}/.env
+	echo "NODE_VERSION=${NODE_VERSION}" >> ${APP_DIR}/.env
 	${MAKE} apply_dist
 
 apply_dist:
@@ -97,8 +98,10 @@ platform:
 		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@${PLUGIN_NAMESPACE}/config/config.yaml" }\n    - { resource: "@${CRUD_PLUGIN_NAMESPACE}/config/config.yaml" }|g' config/packages/_sylius.yaml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|sylius_paypal_webhook:|\nsylius_easy_crud:\n  resource: "@SyliusEasyCrudPlugin/config/routes.yaml"\nsylius_paypal_webhook:|g' config/routes.yaml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|sylius_paypal_webhook:|\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"\nsylius_paypal_webhook:|g' config/routes.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|plugin-proposal-object-rest-spread|plugin-transform-object-rest-spread|g' .babelrc); \
 		(cd ${APP_DIR} && rm -rf config/packages/doctrine.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/packages/_sylius.yaml-e); \
+		(cd ${APP_DIR} && rm -rf .babelrc-e); \
 		(cd ${APP_DIR} && rm -rf config/routes.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/services.yaml-e); \
 		(cd ${APP_DIR} && rm -rf compose.override.yml-e); \
@@ -128,9 +131,7 @@ platform_assets:
 	rm -rf ${APP_DIR}/node_modules
 	mkdir ${APP_DIR}/node_modules
 	rm -rf ${APP_DIR}/package-lock.json
-	#cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm cache clean")
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm install --no-audit")
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm run build")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs)
 
 platform_debug:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose -f compose.yml -f compose.override.yml -f compose.debug.yml up -d)

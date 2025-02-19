@@ -60,7 +60,7 @@
   }
 
   &__toolbar {
-    @apply flex-wrap p-4 sm:py-2 bg-[#d9dbe1] m-0;
+    @apply flex-wrap p-4 sm:py-2 bg-theme m-0;
     @apply border-solid border-0 border-b border-theme-5;
   }
 
