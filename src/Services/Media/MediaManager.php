@@ -122,9 +122,9 @@ class MediaManager
             foreach ($slugs as $i => $slug) {
                 /** @var ?FolderInterface $folder */
                 $folder = $this->getHelper()->getFolderRepository()->findOneBy([
-                   'parent' => $parent,
-                   'slug' => $slug,
-               ]);
+                                                                                   'parent' => $parent,
+                                                                                   'slug' => $slug,
+                                                                               ]);
                 if (
                     ($folder) !== null
                 ) {
@@ -159,14 +159,19 @@ class MediaManager
             $entity->setName($name);
         }
 
+        $folderCreation = false;
         $folder = $this->folderByPath($path);
         if (false === $folder && !empty($path)) {
             $folder = $this->createFolder(basename($path), dirname($path));
+            $folderCreation = true;
         }
 
-        //if (null !== $folder && !empty($this->getHelper()->getFolderRepository()->findBy(['parent' => $folder, 'name' => $name]))) {
-        //    throw new FolderAlreadyExist($this->translator->trans('error.already_exists', [], 'SyliusHappyCMSPlugin'));
-        //}
+        if (!$folderCreation) {
+            $existFolder = $this->getHelper()->getFolderRepository()->findOneBy(['parent' => $folder ?: null, 'name' => $name]);
+            if ($existFolder instanceof FolderInterface) {
+                return $existFolder;
+            }
+        }
 
         $entity->setParent($folder ?: null);
 

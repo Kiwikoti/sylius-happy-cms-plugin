@@ -16,9 +16,4 @@ interface SharedBlockInterface extends ResourceInterface, TranslatableInterface
     public function getKey(): ?string;
 
     public function getName(): ?string;
-
-    /**
-     * @return array<string, mixed>|null
-     */
-    public function getSettings(): ?array;
 }

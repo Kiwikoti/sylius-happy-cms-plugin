@@ -332,7 +332,7 @@ const flexibleContentModule = function () {
     event.target.closest('.w-flexible-blocks')
       .querySelectorAll('.card')
       .forEach((card) => {
-        card.style.display = activeCategory === null ? 'flex' : 'none';
+        card.style.display = activeCategory === null || activeCategory === 'all_blocks' ? 'flex' : 'none';
       });
     if (activeCategory) {
       event.target.closest('.w-flexible-blocks')

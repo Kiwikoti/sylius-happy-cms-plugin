@@ -101,6 +101,14 @@ abstract class AbstractSharedBlockType extends AbstractType implements SharedBlo
         return [];
     }
 
+    /**
+     * @return string[]
+     */
+    public static function getDefaultSettings(): array
+    {
+        return [];
+    }
+
     public function getPosition(): int
     {
         return 100;

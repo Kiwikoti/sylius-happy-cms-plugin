@@ -40,21 +40,20 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
-        $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'flag outline')
-            ->addSubAction(
-                Action::new('fr_FR', 'fr_FR', 'flag outline')
+
+        $locales = $this->getSyliusLocales();
+
+        $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'flag outline');
+        foreach ($locales as $locale) {
+            $contentAction->addSubAction(
+                Action::new($locale->getCode(), $locale->getCode(), 'flag outline')
                     ->linkToRoute('sylius_happy_cms_admin_page_update', [
-                        'context' => 'flexible_content:fr_FR',
-                    ]),
-            )
-            ->addSubAction(
-                Action::new('de_DE', 'de_DE', 'flag outline')
-                    ->linkToRoute('sylius_happy_cms_admin_page_update', [
-                        'context' => 'flexible_content:de_DE',
+                        'context' => 'flexible_content:' . $locale->getCode(),
                     ]),
             );
+        }
 
-        //$actions->addItemAction(Crud::PAGE_INDEX, $contentAction);
+        $actions->addItemAction(Crud::PAGE_INDEX, $contentAction);
         $actions->addItemAction(Crud::PAGE_DETAIL, $contentAction);
         $actions->addItemAction(Crud::PAGE_EDIT, $contentAction);
 
@@ -119,9 +118,6 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
                 ->hideOnIndex();
         } elseif (str_starts_with($context, 'flexible_content:')) {
             $locale = str_replace('flexible_content:', '', $context);
-    //            yield SortableCollectionField::new('content')
-    //                ->setEntryType(DataType::class)
-    //                ->hideOnIndex();
             yield TranslationField::new('translations')
                 ->restrictToLocales([
                     $locale,

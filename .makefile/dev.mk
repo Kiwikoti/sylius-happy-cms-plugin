@@ -127,7 +127,9 @@ platform:
 platform_assets:
 	rm -rf ${APP_DIR}/node_modules
 	mkdir ${APP_DIR}/node_modules
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs)
+	rm -rf ${APP_DIR}/package-lock.json
+	#cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm cache clean")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm install --no-audit")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm nodejs "npm run build")
 
 platform_debug:
@@ -163,7 +165,7 @@ bundle_dependencies_install:
 
 HELP += $(call help,symfony_assets_install,			Install bundles assets npm dependencies)
 symfony_assets_install:
-	cd ${APP_DIR}/${PLUGIN_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console assets:install --symlink)
+	cd ${APP_DIR}/${PLUGIN_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console assets:install)
 
 HELP += $(call help,bundle_assets_watch,			Build bundles assets in watch mode)
 bundle_assets_watch:
@@ -176,7 +178,7 @@ bundle_assets_build:
 HELP += $(call help,bundle_install_test_files,			Build bundles assets in watch mode)
 bundle_install_test_files:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:easy-crud:create-entity Post)
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:easy-crud:generate Post)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:easy-crud:create-crud Post)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console make:happy-cms:install)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)

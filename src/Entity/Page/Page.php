@@ -46,10 +46,12 @@ class Page implements PageInterface
     protected Collection $routes;
 
     #[Assert\Type(PageInterface::class)]
-    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(inversedBy: 'children', targetEntity: PageInterface::class)]
+    #[ORM\JoinColumn(name: 'parent_id', onDelete: 'SET NULL', referencedColumnName: 'id')]
     protected ?PageInterface $parent = null;
 
     /** @var Collection<int, PageInterface> */
+    #[ORM\OneToMany(targetEntity: PageInterface::class, mappedBy: 'parent')]
     protected Collection $children;
 
     #[ORM\Column(name: 'action', type: Types::STRING, nullable: true)]
@@ -71,11 +73,11 @@ class Page implements PageInterface
 
     public function __construct()
     {
+        $this->children = new ArrayCollection();
         $this->initializeTranslationsCollection();
         $this->timestampableConstruct();
         $this->publishableConstruct();
         $this->entityRouteConstruct();
-        $this->children = new ArrayCollection();
     }
 
     protected function createTranslation(): PageTranslationInterface
@@ -125,11 +127,14 @@ class Page implements PageInterface
      */
     public function getChildren(): Collection
     {
-        return $this->children;
+        return !isset($this->children) ? new ArrayCollection() : $this->children;
     }
 
     public function addChildren(PageInterface $page): void
     {
+        if (!isset($this->children)) {
+            $this->children = new ArrayCollection();
+        }
         $this->children->add($page);
 
         if ($page->getParent() !== $this) {
@@ -240,6 +245,11 @@ class Page implements PageInterface
 
     public function getId(): int
     {
-        return $this->id;
+        return $this->id ?? 0;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName() ?? '';
     }
 }

@@ -1,5 +1,3 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 <section class="__stack-breadcrumb level">
     <div class="level-left">
         {# directories breadCrumb #}
@@ -10,14 +8,14 @@
                         <a v-if="pathBarDirsList.length > 0 && !(isBulkSelecting() || isLoading)"
                            class="p-l-0 level"
                            v-tippy="{arrow: true}"
-                           title="{{ 'sylius_happy_cms.media.backspace'|trans }}"
+                           title="{{ 'sylius_happy_cms.media.backspace'|trans({}, 'SyliusHappyCMSPlugin') }}"
                            @click.stop="goToFolder(0)">
                             <span class="icon level-item is-marginless"><icon name="map"></icon></span>
-                            <span class="level-item m-l-5 is-marginless">{{ 'sylius_happy_cms.media.library'|trans }}</span>
+                            <span class="level-item m-l-5 is-marginless">{{ 'sylius_happy_cms.media.library'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
                         </a>
                         <p v-else class="p-l-0 level">
                             <span class="icon level-item is-marginless"><icon name="regular/map"></icon></span>
-                            <span class="level-item m-l-5 is-marginless">{{ 'sylius_happy_cms.media.library'|trans }}</span>
+                            <span class="level-item m-l-5 is-marginless">{{ 'sylius_happy_cms.media.library'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
                         </p>
                     </li>
 
@@ -29,7 +27,7 @@
                         </p>
                         <a v-else
                            v-tippy="{arrow: true}"
-                           title="{{ 'sylius_happy_cms.media.backspace'|trans }}"
+                           title="{{ 'sylius_happy_cms.media.backspace'|trans({}, 'SyliusHappyCMSPlugin') }}"
                            class="level"
                            @click.stop="pathBarDirsList.length > 1 ? goToFolder(index+1) : false">
                             <span class="icon level-item is-marginless"><icon name="folder"></icon></span>

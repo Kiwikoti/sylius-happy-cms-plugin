@@ -38,11 +38,11 @@ final class SyliusHappyCMSExtension extends AbstractResourceExtension implements
         $this->processMediaConfiguration($config['media'], $container);
 
         $container->registerForAutoconfiguration(BlockTypeInterface::class)
-            ->addTag('adeliom.sylius.cms.block')
+            ->addTag('sylius.happy_cms.block')
         ;
 
         $container->registerForAutoconfiguration(SharedBlockTypeInterface::class)
-            ->addTag('adeliom.sylius.cms.shared_block')
+            ->addTag('sylius.happy_cms.shared_block')
         ;
 
         $container->registerForAutoconfiguration(SitemapDumperInterface::class)

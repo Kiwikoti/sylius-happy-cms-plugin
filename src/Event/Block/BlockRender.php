@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Block;
 
+use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class BlockRender extends Event
@@ -14,13 +16,13 @@ class BlockRender extends Event
      * @param array<string, mixed> $assets
      */
     public function __construct(
-        private BlockTypeInterface $block,
+        private BlockTypeInterface|SharedBlockTypeInterface $block,
         private array $data,
         private array $assets,
     ) {
     }
 
-    public function getBlock(): BlockTypeInterface
+    public function getBlock(): BlockTypeInterface|SharedBlockTypeInterface
     {
         return $this->block;
     }
@@ -34,14 +36,14 @@ class BlockRender extends Event
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null}
      */
     public function getAssets(): array
     {
         return $this->assets;
     }
 
-    public function setBlock(BlockTypeInterface $block): void
+    public function setBlock(BlockTypeInterface|SharedBlockTypeInterface $block): void
     {
         $this->block = $block;
     }
@@ -55,7 +57,7 @@ class BlockRender extends Event
     }
 
     /**
-     * @param array<string, mixed> $assets
+     * @param array{js: array<string|Asset>|null, css: array<string|Asset>|null, webpack: array<string|Asset>|null} $assets
      */
     public function setAssets(array $assets): void
     {

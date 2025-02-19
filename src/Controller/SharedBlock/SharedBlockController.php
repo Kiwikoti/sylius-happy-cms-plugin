@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Controller\SharedBlock;
 
+use Adeliom\SyliusHappyCMSPlugin\Block\SharedBlockType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockTypeInterface;
-use Adeliom\SyliusHappyCMSPlugin\SharedBlock\SharedBlockType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
@@ -31,7 +31,7 @@ class SharedBlockController implements ServiceSubscriberInterface
     {
         return new Response(
             $this->twig->render(
-                '@SyliusHappyCMSPlugin/shared_block/select.html.twig',
+                '@SyliusHappyCMSPlugin/shared_block/crud/select.html.twig',
                 [
                     'blocks' => array_filter(
                         $this->sharedBlockCollection->getBlocks(),

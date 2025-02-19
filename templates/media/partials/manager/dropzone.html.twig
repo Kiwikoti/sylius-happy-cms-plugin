@@ -1,5 +1,3 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 <section>
     <div class="media-manager__dz" :class="{'__dz-active': uploadArea}">
         <div id="new-upload" :style="uploadPanelImg">
@@ -7,11 +5,11 @@
             <input type="hidden" name="random_names" :value="useRandomNamesForUpload">
 
             {# text #}
-            <div class="dz-message title is-4">{{ 'sylius_happy_cms.media.upload.text'|trans|raw }}</div>
+            <div class="dz-message title is-4">{{ 'sylius_happy_cms.media.upload.text'|trans({}, 'SyliusHappyCMSPlugin')|raw }}</div>
 
             {# randomNames #}
             <div class="form-switcher"
-                 title="{{ 'sylius_happy_cms.media.upload.use_random_names'|trans }}"
+                 title="{{ 'sylius_happy_cms.media.upload.use_random_names'|trans({}, 'SyliusHappyCMSPlugin') }}"
                  v-tippy="{arrow: true, placement: 'right'}">
                 <input type="checkbox" id="random_names" v-model="useRandomNamesForUpload">
                 <label class="switcher" for="random_names"></label>
@@ -20,7 +18,7 @@
             {# urlToUpload #}
             <div class="save_link" @click.stop="toggleModal('save_link_modal')">
                 <span class="icon is-large"
-                        title="{{ 'sylius_happy_cms.media.save.link'|trans }}"
+                        title="{{ 'sylius_happy_cms.media.save.link'|trans({}, 'SyliusHappyCMSPlugin') }}"
                         v-tippy="{arrow: true, placement: 'left'}">
                     <icon>
                         <icon class="circle" name="circle" scale="2.5"></icon>

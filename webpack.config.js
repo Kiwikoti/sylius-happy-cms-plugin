@@ -20,6 +20,8 @@ Encore
 
     .addEntry('flexible-content', './assets/js/flexible-content.js')
     .addEntry('media-form', './assets/media/js/app.js')
+    .addEntry('seo-block-type', './assets/blocks/seo-block-type.js')
+    .addEntry('accordion-block-type', './assets/blocks/accordion-block-type.js')
 ;
 
 module.exports = Encore.getWebpackConfig();

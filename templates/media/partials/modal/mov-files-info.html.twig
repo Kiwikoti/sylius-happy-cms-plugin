@@ -1,5 +1,3 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 {# multi #}
 <template v-if="movableItemsFilter.length && enableMove">
     <ul>
@@ -7,7 +5,7 @@
             v-for="(one, i) in movableItemsFilter"
             :key="one.path"
             v-tippy="{arrow: true, placement: 'bottom'}"
-            title="{{ 'sylius_happy_cms.media.remove'|trans }}"
+            title="{{ 'sylius_happy_cms.media.remove'|trans({}, 'SyliusHappyCMSPlugin') }}"
             @click.stop="removeFromMovableList(i)">
             <figure class="media-left">
                 <span class="icon has-text-link">
@@ -17,7 +15,7 @@
             <div class="media-content">
                 <p class="title is-4">
                     <strong class="has-text-link">{% verbatim %}{{ one.storage_path }}{% endverbatim %}</strong>
-                    <small v-if="one.items" class="has-text-link">"{% verbatim %}{{ one.items }}{% endverbatim %} {{ 'sylius_happy_cms.media.items'|trans }}"</small>
+                    <small v-if="one.items" class="has-text-link">"{% verbatim %}{{ one.items }}{% endverbatim %} {{ 'sylius_happy_cms.media.items'|trans({}, 'SyliusHappyCMSPlugin') }}"</small>
                 </p>
                 <p class="subtitle is-5 has-text-danger" v-if="one.size">{% verbatim %}{{ getFileSize(one.size) }}{% endverbatim %}</p>
             </div>

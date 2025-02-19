@@ -1,0 +1,25 @@
+{% set headline = settings.headline|default(false) %}
+{% set title = settings.title|default(false) %}
+{% set wysiwyg = settings.wysiwyg|default(false) %}
+{% set cta_one = settings.cta_one|default(false) %}
+{% set cta_two = settings.cta_two|default(false) %}
+
+{% if title or wysiwyg or cta_one or cta_two %}
+<section class="container">
+    <div class="my-10 lg:my-20">
+        {% if headline %}<p class="headline">{{ headline }}</p>{% endif %}
+        {% if title %}<h2 class="heading-5">{{ title|raw }}</h2>{% endif %}
+        {% if wysiwyg %}
+            <div class="wysiwyg mt-4 mb-6">
+                {{ wysiwyg|raw }}
+            </div>
+        {% endif %}
+        {% if cta_one is iterable and cta_one.link and cta_one.label %}
+            <a href="{{ cta_one.link }}" class="btn btn-primary">{{ cta_one.label }}</a>
+        {% endif %}
+        {% if cta_two is iterable and cta_two.link and cta_two.label %}
+            <a href="{{ cta_two.link }}" class="btn btn-secondary">{{ cta_two.label }}</a>
+        {% endif %}
+    </div>
+</section>
+{% endif %}

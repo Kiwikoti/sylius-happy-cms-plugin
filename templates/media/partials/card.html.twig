@@ -1,5 +1,3 @@
-{% trans_default_domain 'SyliusHappyCMSPlugin' %}
-
 {% set light_mode = (light is defined and light) ? true : false %}
 
 <v-touch class="card"
@@ -15,7 +13,7 @@
         <object v-if="selectedFileIs('pdf') || selectedFileIs('text')"
                 :data="selectedFile.path"
                 :type="selectedFile.type">
-            <p v-if="selectedFileIs('pdf')">{{ 'sylius_happy_cms.media.pdf'|trans }}</p>
+            <p v-if="selectedFileIs('pdf')">{{ 'sylius_happy_cms.media.pdf'|trans({}, 'SyliusHappyCMSPlugin') }}</p>
         </object>
 
         {# oembed #}
@@ -31,7 +29,7 @@
                    preload="metadata"
                    data-player
                    :src="selectedFile.path">
-                {{ 'sylius_happy_cms.media.video_support'|trans }}
+                {{ 'sylius_happy_cms.media.video_support'|trans({}, 'SyliusHappyCMSPlugin') }}
             </video>
         </div>
 
@@ -53,7 +51,7 @@
                    preload="metadata"
                    data-player
                    :src="selectedFile.path">
-                {{ 'sylius_happy_cms.media.audio.support'|trans }}
+                {{ 'sylius_happy_cms.media.audio.support'|trans({}, 'SyliusHappyCMSPlugin') }}
             </audio>
         </div>
 
@@ -98,7 +96,7 @@
                            v-if="selectedFileIs('pdf') || selectedFileIs('text')"
                            rel="noreferrer noopener"
                            target="_blank"
-                           title="{{ 'sylius_happy_cms.media.public_url'|trans }}"
+                           title="{{ 'sylius_happy_cms.media.public_url'|trans({}, 'SyliusHappyCMSPlugin') }}"
                            v-tippy="{arrow: true}">
                             <icon name="search" scale="1.1"></icon>
                         </a-->
@@ -110,7 +108,7 @@
                 {# download #}
                 <div class="level-item">
                     <span class="icon is-large link is-black" v-if="!selectedFileIs('oembed')"
-                          title="{{ 'media.download.file'|trans }}"
+                          title="{{ 'sylius_happy_cms.media.download.file'|trans({}, 'SyliusHappyCMSPlugin') }}"
                           v-tippy="{arrow: true}"
                           @click.prevent="saveFile(selectedFile)">
                         <icon name="download" scale="1.1" style="fill: white;"></icon>
@@ -123,84 +121,84 @@
             <table>
                 <tbody>
                     <tr v-if="!selectedFileIs('oembed')">
-                        <td class="t-key">{{ 'media.type'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.type'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ selectedFile.type }}{% endverbatim %}</td>
                     </tr>
                     <tr v-if="selectedFile.size > 0">
-                        <td class="t-key">{{ 'media.size'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.size'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ getFileSize(selectedFile.size) }}{% endverbatim %}</td>
                     </tr>
                     <tr v-if="(selectedFileIs('image') || selectedFileIs('video')) && dimensions.length">
-                        <td class="t-key">{{ 'media.dimension'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.dimension'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ selectedFileDimensions }}{% endverbatim %}</td>
                     </tr>
                     <tr v-if="selectedFile.last_modified_formated">
-                        <td class="t-key">{{ 'media.last_modified'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.last_modified'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ selectedFile.last_modified_formated }}{% endverbatim %}</td>
                     </tr>
                     <tr v-if="(selectedFileIs('image') || selectedFileIs('video')) && selectedFile.metas.title">
-                        <td class="t-key">{{ 'media.seo.title'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.seo.title'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ selectedFile.metas.title }}{% endverbatim %}</td>
                     </tr>
                     <tr v-if="(selectedFileIs('image') || selectedFileIs('video')) && selectedFile.metas.alt">
-                        <td class="t-key">{{ 'media.seo.alt'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.seo.alt'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ selectedFile.metas.alt }}{% endverbatim %}</td>
                     </tr>
                     <tr v-if="selectedFile.metas.description">
-                        <td class="t-key">{{ 'media.seo.description'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.seo.description'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">{% verbatim %}{{ selectedFile.metas.description }}{% endverbatim %}</td>
                     </tr>
 
                     <tr v-if="selectedFileIs('audio') && selectedFile.metas.tags && selectedFile.metas.tags.title">
-                        <td class="t-key">{{ 'media.audio.title'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.audio.title'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.tags.title }}{% endverbatim %}
                         </td>
                     </tr>
 
                     <tr v-if="selectedFileIs('audio') && selectedFile.metas.tags && selectedFile.metas.tags.album">
-                        <td class="t-key">{{ 'media.audio.album'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.audio.album'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.tags.album }}{% endverbatim %}
                         </td>
                     </tr>
 
                     <tr v-if="selectedFileIs('audio') && selectedFile.metas.tags && selectedFile.metas.tags.artist">
-                        <td class="t-key">{{ 'media.audio.artist'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.audio.artist'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.tags.artist }}{% endverbatim %}
                         </td>
                     </tr>
 
                     <tr v-if="selectedFileIs('audio') && selectedFile.metas.tags && selectedFile.metas.tags.genre">
-                        <td class="t-key">{{ 'media.audio.genre'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.audio.genre'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.tags.genre }}{% endverbatim %}
                         </td>
                     </tr>
 
                     <tr v-if="selectedFileIs('audio') && selectedFile.metas.tags && selectedFile.metas.tags.year">
-                        <td class="t-key">{{ 'media.audio.year'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.audio.year'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.tags.year }}{% endverbatim %}
                         </td>
                     </tr>
 
                     <tr v-if="(selectedFileIs('audio') || selectedFileIs('video')) && selectedFile.metas.duration">
-                        <td class="t-key">{{ 'media.duration'|trans }}:</td>
+                        <td class="t-key">{{ 'media.duration'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ new Date(selectedFile.metas.duration * 1000).toISOString().slice(11, 19) }}{% endverbatim %}
                         </td>
                     </tr>
 
                     <tr v-if="selectedFileIs('oembed') && selectedFile.metas.provider && selectedFile.metas.provider.name">
-                        <td class="t-key">{{ 'media.oembed.provider'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.oembed.provider'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.provider.name }}{% endverbatim %}
                         </td>
                     </tr>
                     <tr v-if="selectedFileIs('oembed') && selectedFile.metas.author && selectedFile.metas.author.name">
-                        <td class="t-key">{{ 'media.oembed.author'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.oembed.author'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             <a v-if="selectedFile.metas.author.url" :href="selectedFile.metas.author.url" target="_blank">
                                 {% verbatim %}{{ selectedFile.metas.author.name }}{% endverbatim %}
@@ -209,13 +207,13 @@
                         </td>
                     </tr>
                     <tr v-if="selectedFileIs('oembed') && selectedFile.metas.type">
-                        <td class="t-key">{{ 'media.oembed.type'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.oembed.type'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             {% verbatim %}{{ selectedFile.metas.type }}{% endverbatim %}
                         </td>
                     </tr>
                     <tr v-if="selectedFileIs('oembed') && selectedFile.metas.url">
-                        <td class="t-key">{{ 'media.oembed.url'|trans }}:</td>
+                        <td class="t-key">{{ 'sylius_happy_cms.media.oembed.url'|trans({}, 'SyliusHappyCMSPlugin') }}:</td>
                         <td class="t-val">
                             <a :href="selectedFile.metas.url" target="_blank">
                                 {% verbatim %}{{ selectedFile.metas.url }}{% endverbatim %}

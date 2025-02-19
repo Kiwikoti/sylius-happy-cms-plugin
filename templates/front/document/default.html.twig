@@ -10,13 +10,9 @@
 {% endblock %}
 
 {% block content %}
-    {{ dump() }}
-    {{ dump(path('cmf_routing_object', {_route_object: resource.onlineRoute, _locale: 'en_US'})) }}
-    {{ dump(path('cmf_routing_object', {_route_object: resource.onlineRoute, _locale: 'fr_FR'})) }}
-    {{ dump(path('cmf_routing_object', {_route_object: resource.onlineRoute})) }}
-
     {% for block in (resource.translation(app.request.locale)|default({content: []})).content %}
         {{ happy_cms_block_render(block, preview) }}
     {% endfor %}
     {{ happy_cms_block_assets() }}
+    {{ happy_cms_shared_block_assets() }}
 {% endblock %}

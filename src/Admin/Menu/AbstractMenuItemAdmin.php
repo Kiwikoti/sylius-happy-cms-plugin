@@ -105,11 +105,12 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
 
         yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item');
 
-        if ($menuId && $this->locator->has('parameter_bag')) {
+        $syliusResources = $this->crudAdminFactory->parameterBag->get('sylius.resources');
+        if ($menuId && is_array($syliusResources['sylius_happy_cms.menu']) && is_array($syliusResources['sylius_happy_cms.menu']['classes']) && isset($syliusResources['sylius_happy_cms.menu']['classes']['model'])) {
             yield Field::new('menu', 'sylius_happy_cms.menu_item.admin.field.menu')
                 ->onlyOnForms()
                 ->setFormType(EntityType::class)
-                ->setFormTypeOption('class', $this->locator->get('parameter_bag')->get('happy_cms_menu.menu.class'))
+                ->setFormTypeOption('class', $syliusResources['sylius_happy_cms.menu']['classes']['model'])
                 ->setFormTypeOption('placeholder', false)
                 ->setFormTypeOption(
                     'query_builder',

@@ -1,0 +1,29 @@
+{% set title = settings.title|default(false) %}
+{% set wysiwyg = settings.wysiwyg|default(false) %}
+{% set cta_one = settings.cta_one|default(false) %}
+{% set cta_two = settings.cta_two|default(false) %}
+
+{% if title or wysiwyg or cta_one or cta_two %}
+<section class="bg-neutral-100">
+    <div class="container my-10 lg:my-20">
+        <div class="py-10 flex gap-6 justify-between items-center flex-wrap">
+            <div>
+                {% if title %}<h2 class="heading-4">{{ title }}</h2>{% endif %}
+                {% if wysiwyg %}
+                    <div class="wysiwyg mt-4 pb-0">
+                        {{ wysiwyg|raw }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                {% if cta_one is iterable and cta_one.link and cta_one.label %}
+                    <a href="{{ cta_one.link }}" class="btn btn-primary">{{ cta_one.label }}</a>
+                {% endif %}
+                {% if cta_two is iterable and cta_two.link and cta_two.label %}
+                    <a href="{{ cta_two.link }}" class="btn btn-outline">{{ cta_two.label }}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

@@ -130,6 +130,7 @@ class Seo implements SeoInterface, \Stringable
 
     /**
      * @param array<string, mixed> $data
+     *
      * @return array<string, mixed>
      */
     public static function normalizeFormData(array $data): array
@@ -139,6 +140,7 @@ class Seo implements SeoInterface, \Stringable
                 $data[$field] = null;
             }
         }
+
         return $data;
     }
 }
