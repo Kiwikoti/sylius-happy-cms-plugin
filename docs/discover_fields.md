@@ -18,31 +18,6 @@ yield ResourceChoiceField::new('page')
 ;
 ```
 
-### ResourceAutocompleteChoiceField
-
-Is a field that allow you to choose one or more resources using an dynamic select field
-
-#### Usage
-
-```php
-use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ResourceAutocompleteChoiceField;
-
-
-yield ResourceAutocompleteChoiceField::new('products')
-    ->setMultiple()
-    ->setLabel('sylius.ui.products')
-    ->setChoiceValue('id')
-    ->setChoiceName('name')
-    ->setResource('sylius.product')
-    ->setRepositoryMethod('findByPhrase')
-    ->setRemoteCriteriaName('phrase')
-    ->setRepositoryArguments([
-         'phrase' => '$phrase',
-         'locale' => "expr:service('sylius.context.locale').getLocaleCode()",
-         'limit' => 10
-     ]);
-```
-
 ### EnumField
 
 #### Usage

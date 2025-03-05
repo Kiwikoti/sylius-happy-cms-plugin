@@ -323,6 +323,6 @@ class Page implements PageInterface
 
     public function __toString(): string
     {
-        return $this->getName() ?? '';
+        return $this->currentLocale ? ($this->getName() ?? '') : '';
     }
 }

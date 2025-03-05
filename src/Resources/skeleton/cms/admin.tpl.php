@@ -33,7 +33,7 @@ use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ColumnField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\SlugField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
-use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ResourceAutocompleteChoiceField;
+use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ResourceChoiceField;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\FlexibleContentField;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
@@ -110,7 +110,7 @@ final class <?= $classNameDetail->getShortName() ?>Admin extends AbstractAdmin i
                 ->onlyOnIndex();
 
         <?php if ($relationClassNameDetail instanceof ClassNameDetails && is_array($relationClassData)) { ?>
-            yield ResourceAutocompleteChoiceField::new('<?= $relationClassData['plural'] ?>', '<?= $relationClassData['plural'] ?>')
+            yield ResourceChoiceField::new('<?= $relationClassData['plural'] ?>', '<?= $relationClassData['plural'] ?>')
                 ->setResource('happy_cms.<?= $scope ?>_<?= $relationClassData['singular'] ?>')
                 ->setMultiple()
                 ->setChoiceValue('id')

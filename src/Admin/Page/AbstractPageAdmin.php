@@ -7,7 +7,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Admin\Page;
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ColumnField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\EnumField;
-use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ResourceAutocompleteChoiceField;
+use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ResourceChoiceField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\SlugField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
@@ -19,11 +19,8 @@ use Adeliom\SyliusEasyCrudPlugin\Enum\ColumnSizeEnum;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\FlexibleContentField;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\SEOField;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
+use App\Entity\HappyCMS\Page\Page;
 use Sylius\Bundle\GridBundle\Builder\Filter\StringFilter;
-use Symfony\Component\Form\Event\PostSubmitEvent;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
 
 abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInterface
 {
@@ -76,10 +73,11 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
         if (null === $context) {
             yield TabField::new('Page', 'sylius_happy_cms.page.admin.tab.page');
 
-            yield ResourceAutocompleteChoiceField::new('parent', 'sylius_happy_cms.page.admin.field.parent')
+            yield ResourceChoiceField::new('parent', 'sylius_happy_cms.page.admin.field.parent')
                 ->setMultiple(false)
                 ->setEmptyData('1')
-                ->setResource('sylius_happy_cms.page');
+                ->setEntityClass(Page::class)
+                ->setResourceAlias('sylius_happy_cms.page');
 
             yield Field::new('name', 'sylius_happy_cms.page.admin.field.name')
                 ->setSortablePath('translations.name')
