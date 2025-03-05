@@ -293,6 +293,6 @@ class MenuItem implements MenuItemInterface
 
     public function __toString(): string
     {
-        return (string) $this->getName();
+        return $this->currentLocale ? ($this->getName() ?? '') : '';
     }
 }

@@ -35,7 +35,7 @@ abstract class AbstractMenuAdmin extends AbstractAdmin implements MenuAdminInter
         $manageMenuItems = Action::new(
             'manage.menu_items',
             'sylius_happy_cms.menu.admin.action.manage',
-            'bars',
+            'uil:bars',
         )
             ->linkToRoute('sylius_happy_cms_admin_menu_item_create');
 

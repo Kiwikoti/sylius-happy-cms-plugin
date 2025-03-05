@@ -92,8 +92,6 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
                 ->linkToRoute('sylius_happy_cms_admin_menu_item_create', ['id' => $menuId])
                 ->addCssClass('primary');
             $actions->addGlobalAction(Crud::PAGE_INDEX, $newMenuItem);
-
-            $actions->remove(Crud::PAGE_EDIT, Action::INDEX);
         }
 
         return $actions;

@@ -29,12 +29,12 @@ final class AdminMenuListener
         $newSubmenu
             ->addChild('happy_cms_menu', ['route' => 'sylius_happy_cms_admin_menu_index'])
             ->setLabel('sylius_happy_cms.admin.menu.menus')
-            ->setLabelAttribute('icon', 'bars')
+            ->setLabelAttribute('icon', 'uil:bars')
         ;
         $newSubmenu
             ->addChild('happy_cms_block', ['route' => 'sylius_happy_cms_admin_shared_block_index'])
             ->setLabel('sylius_happy_cms.admin.menu.shared_blocks')
-            ->setLabelAttribute('icon', 'box')
+            ->setLabelAttribute('icon', 'solar:box-bold')
         ;
 
         $children = $menu->getChildren();
