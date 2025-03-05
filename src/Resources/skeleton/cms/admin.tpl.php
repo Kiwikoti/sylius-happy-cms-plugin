@@ -71,15 +71,15 @@ final class <?= $classNameDetail->getShortName() ?>Admin extends AbstractAdmin i
     public function configureActions(string $pageName): Actions
     {
         $actions = parent::configureActions($pageName);
-        $contentAction = Action::new('content', 'happy_cms.page.admin.action.manage_content', 'flag outline')
+        $contentAction = Action::new('content', 'happy_cms.page.admin.action.manage_content', 'bxs:book-content')
             ->addSubAction(
-                Action::new('en_US', 'en_US', 'flag outline')
+                Action::new('en_US', 'en_US', 'bxs:book-content')
                     ->linkToRoute('happy_cms_admin_page_update', [
                         'context' => 'flexible_content:en_US',
                     ])
             )
             //->addSubAction(
-            //    Action::new('fr_FR', 'fr_FR', 'flag outline')
+            //    Action::new('fr_FR', 'fr_FR', 'bxs:book-content')
             //        ->linkToRoute('happy_cms_admin_page_update', [
             //            'context' => 'flexible_content:fr_FR',
             //        ])

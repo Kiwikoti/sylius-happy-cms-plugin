@@ -51,10 +51,10 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
 
         $locales = $this->getSyliusLocales();
 
-        $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'flag outline');
+        $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'bxs:book-content');
         foreach ($locales as $locale) {
             $contentAction->addSubAction(
-                Action::new($locale->getCode(), $locale->getCode(), 'flag outline')
+                Action::new($locale->getCode(), $locale->getCode(), 'bxs:book-content')
                     ->linkToRoute('sylius_happy_cms_admin_page_update', [
                         'context' => 'flexible_content:' . $locale->getCode(),
                     ]),
@@ -75,7 +75,7 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
 
             yield ResourceChoiceField::new('parent', 'sylius_happy_cms.page.admin.field.parent')
                 ->setMultiple(false)
-                ->setEmptyData('1')
+                ->setRequired(false)
                 ->setEntityClass(Page::class)
                 ->setResourceAlias('sylius_happy_cms.page');
 
@@ -111,6 +111,7 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
 
             yield EnumField::new('publishState', 'sylius_happy_cms.page.admin.field.state')
                 ->setEnum(ThreeStateStatusEnum::class)
+                ->setRequired(false)
                 ->hideOnIndex()
                 ->renderExpanded(true);
 
