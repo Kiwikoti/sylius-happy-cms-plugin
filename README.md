@@ -237,18 +237,13 @@ php bin/console make:happy-cms:generate-cms-model
 
 ## Documentation
 
-- Override sylius home page with a page
+- Override sylius home page to get the root cms page
 
 ```yaml
-services:
-  sylius.controller.shop.homepage:
-    class: App\Controller\HomepageController
-    arguments:
-      - "@doctrine.orm.entity_manager"
-      - "@sylius.happy_cms.plugin.services.render"
-    tags:
-      - "controller.service_arguments"
-
+sylius_shop_homepage:
+  path: /{_locale}/
+  methods: [GET]
+  controller: App\Controller\HomepageController::indexAction
 ```
 
 in App\Controller\HomepageController :
