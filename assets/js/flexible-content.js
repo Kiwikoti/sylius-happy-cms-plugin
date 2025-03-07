@@ -14,19 +14,19 @@ const flexibleContentModule = function () {
 
     //    - le dropdown des catégories (au choix) : masquer tous les blocs sauf ceux demandés
     const dropDownBlockCategories = self.wFlexibleBlock.querySelector('.block-categories');
-    dropDownBlockCategories.addEventListener('click', self.listenBlockCategoriesChanges);
+    dropDownBlockCategories.addEventListener('change', self.listenBlockCategoriesChanges);
 
     //    - le bouton ajouter
     self.wFlexibleBlock.querySelectorAll('button.add-flexible-block')
-      .forEach((addButton) => {
-        addButton.addEventListener('click', self.handleAddButton);
-      });
+        .forEach((addButton) => {
+          addButton.addEventListener('click', self.handleAddButton);
+        });
 
     //    - Initialiser les comportements des blocs existants
     self.wFlexibleContent.querySelectorAll('.bloc-wrapper')
-      .forEach((block) => {
-        self.handleBlock(block);
-      });
+        .forEach((block) => {
+          self.handleBlock(block);
+        });
 
     self.wFlexibleContent.querySelectorAll('.move-here').forEach(el => {
       self.handleClickMove(el);
@@ -48,8 +48,8 @@ const flexibleContentModule = function () {
         // disable active move behavior
         const event = new Event("click");
         self.blockToMove
-          .querySelector('[data-action="move"]')
-          .dispatchEvent(event);
+            .querySelector('[data-action="move"]')
+            .dispatchEvent(event);
       }
     });
   };
@@ -57,7 +57,7 @@ const flexibleContentModule = function () {
   self.recalculateBlockPositions = function() {
     const collection = self.wFlexibleContent.closest('[data-sylius-flexible-content-field]');
     const blockPositionInputs = collection
-      .querySelectorAll('.bloc-wrapper [data-layer="content"] input[type="hidden"]');
+        .querySelectorAll('.bloc-wrapper [data-layer="content"] input[type="hidden"]');
     let count = self.wFlexibleContent.querySelectorAll('.bloc-wrapper').length;
     blockPositionInputs.forEach((field) => {
       if (field.id.includes("_position")) {
@@ -86,54 +86,54 @@ const flexibleContentModule = function () {
     const newContents = self.generateNewBlock(blockWrapper, data, index);
     self.wFlexibleContent.style.opacity = 0;
     self.appendNewBlock(newContents[0])
-      .then(() => {
-        const block = document.getElementById('w-wrapper-prototype').previousElementSibling;
-        document.getElementById('w-wrapper-prototype').before(newContents[1]);
-        const { blockName } = data;
-        //    - Remplacer le titre par le nom du bloc
-        block.querySelector('[data-layer="title"]').innerHTML = blockName;
-        //    - Init block events
-        self.handleBlock(block);
-        //    - Recalculer les positions
-        self.recalculateBlockPositions();
-        //    - executer les scripts js
-        Array.from(self.wFlexibleContent.lastElementChild.querySelectorAll('script'))
-          .forEach((oldScript) => {
-            if (!oldScript.src) {
-              self.evalScript(oldScript.innerHTML);
-            }
-          });
-        /* global $ */
-        $('.ui.checkbox').checkbox();
-        self.wFlexibleContent.style.opacity = 1;
-      });
+        .then(() => {
+          const block = document.getElementById('w-wrapper-prototype').previousElementSibling;
+          document.getElementById('w-wrapper-prototype').before(newContents[1]);
+          const { blockName } = data;
+          //    - Remplacer le titre par le nom du bloc
+          block.querySelector('[data-layer="title"]').innerHTML = blockName;
+          //    - Init block events
+          self.handleBlock(block);
+          //    - Recalculer les positions
+          self.recalculateBlockPositions();
+          //    - executer les scripts js
+          Array.from(self.wFlexibleContent.lastElementChild.querySelectorAll('script'))
+              .forEach((oldScript) => {
+                if (!oldScript.src) {
+                  self.evalScript(oldScript.innerHTML);
+                }
+              });
+          /* global $ */
+          $('.ui.checkbox').checkbox();
+          self.wFlexibleContent.style.opacity = 1;
+        });
   };
 
   // action move
   self.handleMoveContent = function (block) {
     block.querySelector('[data-action="move"]')
-      .addEventListener('click', function (event) {
-        self.wFlexibleContent.querySelectorAll('[data-action="move"].green').forEach(el => {
-          if (el != event.target)
-            el.classList.remove('green');
-        });
-        block.querySelector('[data-action="move"]')
-          .classList.toggle('green');
-        setTimeout(() => {
-          self.wFlexibleContent.querySelectorAll('.move-here').forEach(el => {
-            const moveEnabled = block.querySelector('[data-action="move"]')
-              .classList.contains('green');
-            self.blockToMove = moveEnabled ? block : null;
-            el.style.display = moveEnabled ? 'table' : 'none';
-            if (moveEnabled) {
-              self.blockToMove.previousElementSibling.style.display = 'none';
-              if (self.blockToMove.nextElementSibling) {
-                self.blockToMove.nextElementSibling.style.display = 'none';
-              }
-            }
+        .addEventListener('click', function (event) {
+          self.wFlexibleContent.querySelectorAll('[data-action="move"].green').forEach(el => {
+            if (el != event.target)
+              el.classList.remove('green');
           });
-        }, 150);
-      });
+          block.querySelector('[data-action="move"]')
+              .classList.toggle('green');
+          setTimeout(() => {
+            self.wFlexibleContent.querySelectorAll('.move-here').forEach(el => {
+              const moveEnabled = block.querySelector('[data-action="move"]')
+                  .classList.contains('green');
+              self.blockToMove = moveEnabled ? block : null;
+              el.style.display = moveEnabled ? 'table' : 'none';
+              if (moveEnabled) {
+                self.blockToMove.previousElementSibling.style.display = 'none';
+                if (self.blockToMove.nextElementSibling) {
+                  self.blockToMove.nextElementSibling.style.display = 'none';
+                }
+              }
+            });
+          }, 150);
+        });
   };
 
   // action when change published checkbox
@@ -141,7 +141,7 @@ const flexibleContentModule = function () {
 
     // Apply checked state based on published hidden input
     let blockPublishedInputs = block
-      .querySelectorAll('input[type="hidden"]');
+        .querySelectorAll('input[type="hidden"]');
     blockPublishedInputs.forEach(function (field) {
       if (field.id.includes("_block_published")) {
         block.querySelector('.block_published [type="checkbox"]').checked = field.value === '1';
@@ -156,53 +156,49 @@ const flexibleContentModule = function () {
     });
 
     block.querySelector('.block_published [type="checkbox"]')
-      .addEventListener('change', function (event) {
-        blockPublishedInputs = block
-          .querySelectorAll('input[type="hidden"]');
-        blockPublishedInputs.forEach(function (field) {
-          if (field.id.includes("_block_published")) {
-            field.value = event.target.checked ? '1' : '0';
+        .addEventListener('change', function (event) {
+          blockPublishedInputs = block
+              .querySelectorAll('input[type="hidden"]');
+          blockPublishedInputs.forEach(function (field) {
+            if (field.id.includes("_block_published")) {
+              field.value = event.target.checked ? '1' : '0';
+            }
+          });
+          if (event.target.checked) {
+            block.classList.remove('brown');
+            block.classList.add('green');
+          } else {
+            block.classList.add('brown');
+            block.classList.remove('green');
           }
         });
-        if (event.target.checked) {
-          block.classList.remove('brown');
-          block.classList.add('green');
-        } else {
-          block.classList.add('brown');
-          block.classList.remove('green');
-        }
-      });
   };
 
   // action when remove a content
   self.handleRemoveContent = function (block) {
     block.querySelector('[data-action="delete"]')
-      .addEventListener('click', function () {
-        if (confirm(self.wFlexibleBlock.querySelector('#confirm_sentence').textContent)) {
-          const collection = block.closest('[data-sylius-flexible-content-field]');
-          block.remove();
-          collection.dataset.numItems = collection.querySelectorAll('.bloc-wrapper').length - 1;
-        }
-      });
+        .addEventListener('click', function () {
+          if (confirm(self.wFlexibleBlock.querySelector('#confirm_sentence').textContent)) {
+            const collection = block.closest('[data-sylius-flexible-content-field]');
+            block.remove();
+            collection.dataset.numItems = collection.querySelectorAll('.bloc-wrapper').length - 1;
+          }
+        });
   };
 
   // action when click to toggle a block
   self.handleToggleContent = function (block) {
     block.querySelector('[data-action="toggle"]')
-      .addEventListener('click', function (event) {
-        const isDown = event.target.classList.contains('down');
-        block.querySelector('[data-layer="content"]').style.display =
-          isDown ? 'block' : 'none';
-        block.style.padding =
-          isDown ? '3.5em 1em 1em' : '19px';
-        event.target.classList.toggle('down');
-        event.target.classList.toggle('up');
-      });
+        .addEventListener('click', function (event) {
+            const isDown = event.target.classList.contains('down');
+            block.querySelector('[data-layer="content"]').style.display = isDown ? 'none' : 'block';
+            event.target.classList.toggle('down')
+        });
   };
 
   self.getBlockWrapperPrototype = function () {
     return document.getElementById('w-wrapper-prototype')
-      .querySelector('.bloc-wrapper');
+        .querySelector('.bloc-wrapper');
   };
 
   self.generateNewBlock = function (blockWrapper, data, index) {
@@ -211,13 +207,13 @@ const flexibleContentModule = function () {
     const nameRegexp = new RegExp(formTypeNamePlaceholder, 'g');
 
     const newPrototype = prototype
-      .replace(labelRegexp, index)
-      .replace(nameRegexp, index);
+        .replace(labelRegexp, index)
+        .replace(nameRegexp, index);
 
     const blockElement = blockWrapper.cloneNode(true);
     const moveHereWrapper = blockWrapper.nextElementSibling.cloneNode(true);
     blockElement.querySelector('[data-layer="content"]')
-      .insertAdjacentHTML('beforeend', newPrototype);
+        .insertAdjacentHTML('beforeend', newPrototype);
 
     return [blockElement, moveHereWrapper];
   };
@@ -229,37 +225,37 @@ const flexibleContentModule = function () {
     document.getElementById('w-wrapper-prototype').before(content);
 
     Array.from(self.wFlexibleContent.lastElementChild.previousElementSibling.querySelectorAll('script'))
-      .forEach((oldScript) => {
-        if (oldScript.src) {
-          remote.push(self.loadScript(oldScript.src));
-        }
-      });
+        .forEach((oldScript) => {
+          if (oldScript.src) {
+            remote.push(self.loadScript(oldScript.src));
+          }
+        });
 
     Array.from(self.wFlexibleContent.lastElementChild.previousElementSibling.querySelectorAll('link'))
-      .forEach((oldScript) => {
-        if (oldScript.href && oldScript.rel === 'stylesheet') {
-          remote.push(self.loadStylesheet(oldScript.href));
-        }
-      });
+        .forEach((oldScript) => {
+          if (oldScript.href && oldScript.rel === 'stylesheet') {
+            remote.push(self.loadStylesheet(oldScript.href));
+          }
+        });
 
     return new Promise((resolve) => {
       Promise.all(remote)
-        .then(() => {
-          setTimeout(() => {
-            Array.from(self.wFlexibleContent.lastElementChild.previousElementSibling.querySelectorAll('script'))
-              .forEach((oldScript) => {
-                if (!oldScript.src) {
-                  const newScript = document.createElement('script');
-                  Array.from(oldScript.attributes)
-                    .forEach((attr) => newScript.setAttribute(attr.name, attr.value));
-                  newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                  oldScript.parentNode.replaceChild(newScript, oldScript);
-                  self.evalScript(oldScript.innerHTML);
-                }
-              });
-            resolve();
-          }, 1);
-        });
+          .then(() => {
+            setTimeout(() => {
+              Array.from(self.wFlexibleContent.lastElementChild.previousElementSibling.querySelectorAll('script'))
+                  .forEach((oldScript) => {
+                    if (!oldScript.src) {
+                      const newScript = document.createElement('script');
+                      Array.from(oldScript.attributes)
+                          .forEach((attr) => newScript.setAttribute(attr.name, attr.value));
+                      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                      oldScript.parentNode.replaceChild(newScript, oldScript);
+                      self.evalScript(oldScript.innerHTML);
+                    }
+                  });
+              resolve();
+            }, 1);
+          });
     });
   };
 
@@ -323,23 +319,18 @@ const flexibleContentModule = function () {
   };
 
   self.listenBlockCategoriesChanges = function (event) {
-    let activeCategory = null;
-    const activeItem = event.target.closest('.block-categories')
-      .querySelector('.item.active');
-    if (activeItem) {
-      activeCategory = activeItem.dataset.value;
-    }
+    const activeCategory = event.target.value;
     event.target.closest('.w-flexible-blocks')
-      .querySelectorAll('.card')
-      .forEach((card) => {
-        card.style.display = activeCategory === null || activeCategory === 'all_blocks' ? 'flex' : 'none';
-      });
+        .querySelectorAll('.card')
+        .forEach((card) => {
+          card.style.display = activeCategory === null || activeCategory === 'all_blocks' ? 'block' : 'none';
+        });
     if (activeCategory) {
       event.target.closest('.w-flexible-blocks')
-        .querySelectorAll(`.card[data-block-category="${activeCategory}"]`)
-        .forEach((card) => {
-          card.style.display = 'flex';
-        });
+          .querySelectorAll(`.card[data-block-category="${activeCategory}"]`)
+          .forEach((card) => {
+            card.style.display = 'block';
+          });
     }
   };
 
