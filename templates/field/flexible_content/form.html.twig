@@ -40,29 +40,27 @@
 {% endblock flexible_content_collection_row %}
 
 {% macro w_block(title, content, index, display='none') %}
-    <div class="card ui top attached brown segment bloc-wrapper">
-        <div class="card-header ui top attached label">
+    <div class="card ui top attached brown segment bloc-wrapper mb-3">
+        <div class="card-header justify-content-between ui top attached label">
             <span data-layer="title" >{{ title|trans }}</span>
-            <div class="d-flex">
-                <div class="form-check ui checkbox block_published">
+            <div class="d-flex align-items-center">
+                <div class="form-check ui checkbox block_published mb-0" style="cursor: pointer">
                     <input class="form-check-input" type="checkbox" id="block-checkbox-{{ index }}" checked>
                     <label class="form-check-label" for="block-checkbox-{{ index }}">
                         {{- 'sylius_happy_cms.editor.published'|trans -}}
                     </label>
                 </div>
-                {{ ux_icon('tabler:caret-down-filled', {'class': 'icon ' ~ (display == 'none' ? 'down' : 'up'), 'data-action': 'toggle'}) }}
-                {{ ux_icon('tabler:arrows-move-vertical', {'data-action': 'move'}) }}
-                {{ ux_icon('tabler:trash', {'data-action': 'delete'}) }}
+                {{ ux_icon('tabler:caret-down-filled', {'data-action': 'toggle', 'class': 'icon mx-1 ' ~ (display == 'none' ? 'down' : 'up'), 'style': 'cursor: pointer'}) }}
+                {{ ux_icon('tabler:arrows-move-vertical', {'data-action': 'move', 'class': 'icon mx-1', 'style': 'cursor: pointer'}) }}
+                {{ ux_icon('tabler:trash', {'data-action': 'delete', 'class': 'icon mx-1', 'style': 'cursor: pointer'}) }}
             </div>
         </div>
-        <div class="card-body">
-            <div data-layer="content" style="display:{{ display }}">
-                {{ content|raw }}
-            </div>
+        <div class="card-body" data-layer="content" style="display:{{ display }}">
+            {{ content|raw }}
         </div>
     </div>
-    <div style="padding: 1em 0; cursor:pointer; display:none" class="ui horizontal divider move-here">
-        Move here
+    <div style="cursor:pointer; display:none" class="ui horizontal divider move-here pb-3 text-center">
+        <span class="badge bg-secondary" style="color: white;">Move here</span>
     </div>
 {% endmacro %}
 
@@ -74,8 +72,8 @@
         {% if is_empty_collection %}
             {{ block('flexible_content_empty_collection') }}
         {% else %}
-            <div style="padding: 1em 0; cursor:pointer; display:none" class="ui horizontal divider move-here">
-                Move here
+            <div style="cursor:pointer; display:none" class="ui horizontal divider move-here pb-3 text-center">
+                <span class="badge bg-secondary" style="color: white;">Move here</span>
             </div>
             {% for child in form.children %}
                 {% set block_data = null %}

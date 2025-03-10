@@ -124,7 +124,7 @@ const flexibleContentModule = function () {
               const moveEnabled = block.querySelector('[data-action="move"]')
                   .classList.contains('green');
               self.blockToMove = moveEnabled ? block : null;
-              el.style.display = moveEnabled ? 'table' : 'none';
+              el.style.display = moveEnabled ? 'block' : 'none';
               if (moveEnabled) {
                 self.blockToMove.previousElementSibling.style.display = 'none';
                 if (self.blockToMove.nextElementSibling) {
