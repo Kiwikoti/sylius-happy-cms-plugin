@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Event\Seo;
 
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class AfterSitemapEntities extends Event

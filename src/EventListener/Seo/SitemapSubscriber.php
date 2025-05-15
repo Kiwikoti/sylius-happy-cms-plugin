@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener\Seo;
 
 use Adeliom\SyliusHappyCMSPlugin\Event\Seo\AfterSitemapEntities;
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsSeoInterface;
 use Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap\SitemapDumperInterface;
 use Presta\SitemapBundle\Event\SitemapPopulateEvent;

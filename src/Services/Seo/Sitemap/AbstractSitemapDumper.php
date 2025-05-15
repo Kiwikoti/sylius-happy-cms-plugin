@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap;
 
 use Adeliom\SyliusEasyCrudPlugin\Traits\EntityTimestampableTrait;
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 
 abstract class AbstractSitemapDumper implements SitemapDumperInterface
 {

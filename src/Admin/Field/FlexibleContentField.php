@@ -6,7 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin\Admin\Field;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldInterface;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldTrait;
-use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
 use Adeliom\SyliusHappyCMSPlugin\Form\Block\BlockCollectionType;
 
 /**

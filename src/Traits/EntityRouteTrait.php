@@ -237,7 +237,7 @@ trait EntityRouteTrait
             'label' => $this->getName(),
             'route' => $this->getOnlineRoute(),
         ];
-        
+
         $parent = $this->getParent();
         while ($parent !== null) {
             $list[] = [
@@ -246,6 +246,7 @@ trait EntityRouteTrait
             ];
             $parent = $parent->getParent();
         }
+
         return array_reverse($list, true);
     }
 }

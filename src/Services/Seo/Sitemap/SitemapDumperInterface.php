@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Services\Seo\Sitemap;
 
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-
 /**
  * Every class implementing this interface is automatically used in the
  * TaggedIterator of Adeliom\SyliusHappyCMSPlugin\EventListener\Seo\SitemapSubscriber::sitemapDumpables.

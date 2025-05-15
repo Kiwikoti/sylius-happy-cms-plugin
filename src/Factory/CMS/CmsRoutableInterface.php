@@ -6,7 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\CMS;
 
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Channel\Model\ChannelAwareInterface;
-use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
