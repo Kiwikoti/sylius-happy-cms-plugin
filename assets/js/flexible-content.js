@@ -41,7 +41,7 @@ const flexibleContentModule = function () {
       if (self.blockToMove !== null) {
         // change positions
         const nextMoveLayer = self.blockToMove.nextElementSibling;
-        ev.target.after(self.blockToMove);
+        el.after(self.blockToMove);
         self.blockToMove.after(nextMoveLayer);
         // change block position value
         self.recalculateBlockPositions();
@@ -104,7 +104,7 @@ const flexibleContentModule = function () {
                 }
               });
           /* global $ */
-          $('.ui.checkbox').checkbox();
+          //$('.ui.checkbox').checkbox();
           self.wFlexibleContent.style.opacity = 1;
         });
   };
@@ -113,16 +113,16 @@ const flexibleContentModule = function () {
   self.handleMoveContent = function (block) {
     block.querySelector('[data-action="move"]')
         .addEventListener('click', function (event) {
-          self.wFlexibleContent.querySelectorAll('[data-action="move"].green').forEach(el => {
+          self.wFlexibleContent.querySelectorAll('[data-action="move"].border-teal').forEach(el => {
             if (el != event.target)
-              el.classList.remove('green');
+              el.classList.remove('border-teal');
           });
           block.querySelector('[data-action="move"]')
-              .classList.toggle('green');
+              .classList.toggle('border-teal');
           setTimeout(() => {
             self.wFlexibleContent.querySelectorAll('.move-here').forEach(el => {
               const moveEnabled = block.querySelector('[data-action="move"]')
-                  .classList.contains('green');
+                  .classList.contains('border-teal');
               self.blockToMove = moveEnabled ? block : null;
               el.style.display = moveEnabled ? 'block' : 'none';
               if (moveEnabled) {
@@ -146,11 +146,11 @@ const flexibleContentModule = function () {
       if (field.id.includes("_block_published")) {
         block.querySelector('.block_published [type="checkbox"]').checked = field.value === '1';
         if (field.value === '1') {
-          block.classList.remove('brown');
-          block.classList.add('green');
+          block.classList.remove('border-gray');
+          block.classList.add('border-teal');
         } else {
-          block.classList.add('brown');
-          block.classList.remove('green');
+          block.classList.add('border-gray');
+          block.classList.remove('border-teal');
         }
       }
     });
@@ -165,11 +165,11 @@ const flexibleContentModule = function () {
             }
           });
           if (event.target.checked) {
-            block.classList.remove('brown');
-            block.classList.add('green');
+            block.classList.remove('border-gray');
+            block.classList.add('border-teal');
           } else {
-            block.classList.add('brown');
-            block.classList.remove('green');
+            block.classList.add('border-gray');
+            block.classList.remove('border-teal');
           }
         });
   };
@@ -305,6 +305,10 @@ const flexibleContentModule = function () {
     if (document.querySelector('.empty-flexible-content')) {
       document.querySelector('.empty-flexible-content').remove();
     }
+    document.getElementById('alert_add').classList.add('show');
+    setTimeout(() => {
+        document.getElementById('alert_add').classList.remove('show');
+    }, 6000);
     return false;
   };
 
@@ -327,7 +331,7 @@ const flexibleContentModule = function () {
         });
     if (activeCategory) {
       event.target.closest('.w-flexible-blocks')
-          .querySelectorAll(`.card[data-block-category="${activeCategory}"]`)
+          .querySelectorAll(`.col-4[data-block-category="${activeCategory}"]`)
           .forEach((card) => {
             card.style.display = 'block';
           });
