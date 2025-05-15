@@ -20,15 +20,18 @@
         <happy-cms-media-modal inline-template v-cloak :config="{{ options|json_encode }}" :routes="{{ routes|json_encode }}" >
             <div>
                 <div v-if="inputName">{{ include('@SyliusHappyCMSPlugin/media/extras/modal.html.twig') }}</div>
+
                 {{ include('@SyliusHappyCMSPlugin/media/extras/editor.html.twig') }}
 
                 <media-modal item="media" {% if value is not empty %}old="{{ value }}" {% endif %} :name="inputName"></media-modal>
                 <!--media-modal item="links" :name="inputName" :multi="true"></media-modal-->
 
                 <section>
-                    <button type="button" class="ui labeled icon button" @click="toggleModalFor('media')">
-                        <i class="file outline icon"></i>
+                    <button type="button"  class="icon-link" @click="toggleModalFor('media')">
                         {{ 'sylius_happy_cms.media.select.file'|trans({}, 'SyliusHappyCMSPlugin') }}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="bi" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
                     </button>
 
                     <div class="ui placeholder"  v-if="!selectedFile">
@@ -110,6 +113,7 @@
     <script type="text/javascript">
         Array.from(document.querySelectorAll(".happy-cms-media-widget[data-widget]")).forEach(w => {
             if(w && !w.__vue__ && window.Vue){
+                console.log(w);
                 new window.Vue({ el: w });
             }
         });

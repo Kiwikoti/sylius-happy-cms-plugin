@@ -1,12 +1,16 @@
 {% block happy_cms_seo_widget %}
 
-    <h4 class="ui dividing header">Métas</h4>
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Métas</a>
+        </li>
+    </ul>
 
-    <div class="two fields">
-        <div class="field">
+    <div class="row">
+        <div class="col field">
             {{ form_row(form.title) }}
         </div>
-        <div class="field">
+        <div class="col field">
             {{ form_row(form.keywords) }}
         </div>
     </div>
@@ -15,25 +19,31 @@
         {{ form_row(form.description) }}
     </div>
 
-    <div class="twelve wide field">
-        {{ form_row(form.cover) }}
-    </div>
-
-    <div class="fields">
-        <div class="twelve wide field">
+    <div class="row">
+        <div class="col field">
+            {{ form_row(form.cover) }}
+        </div>
+        <div class="col field">
             {{ form_row(form.canonical) }}
         </div>
     </div>
 
-    <h4 class="ui dividing header">Robots & Sitemap</h4>
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Robots & Sitemap</a>
+        </li>
+    </ul>
 
-    <div class="field">
-        {{ form_row(form.sitemap) }}
+    <div class="row">
+        <div class="field">
+            {{ form_row(form.sitemap) }}
+        </div>
+
+        <div class="field">
+            {{ form_row(form.robots) }}
+        </div>
     </div>
 
-    <div class="field">
-        {{ form_row(form.robots) }}
-    </div>
     {{ form_rest(form) }}
 
 {% endblock %}
