@@ -63,12 +63,16 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (PostSubmitEvent $event) {
             /** @var MenuItemInterface $menuItem */
             $menuItem = $event->getData();
-            $menuItemPositions = $menuItem->getParent()->getChildren()
-                ->filter(fn (MenuItemInterface $mi): bool => $mi !== $menuItem)
-                ->map(fn (MenuItemInterface $menuItem): ?int => $menuItem->getPosition())
-                ->toArray();
-            $newPosition = [] !== $menuItemPositions ? max($menuItemPositions) + 1 : 0;
-            $menuItem->setPosition($newPosition);
+            if (null !== $menuItem->getParent()) {
+                $menuItemPositions = $menuItem->getParent()->getChildren()
+                    ->filter(fn (MenuItemInterface $mi): bool => $mi !== $menuItem)
+                    ->map(fn (MenuItemInterface $menuItem): ?int => $menuItem->getPosition())
+                    ->toArray();
+                $newPosition = [] !== $menuItemPositions ? max($menuItemPositions) + 1 : 0;
+                $menuItem->setPosition($newPosition);
+            } else {
+                $menuItem->setPosition(0);
+            }
 
             if (null === $menuItem->getMenu()) {
                 $menuItem->setMenu($menuItem->getParent()?->getMenu());
