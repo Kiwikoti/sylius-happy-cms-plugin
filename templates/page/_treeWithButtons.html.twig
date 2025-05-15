@@ -40,7 +40,7 @@
 
                                             <div class="divider"></div>
 
-                                            {% for action in definition.getEnabledActions('item')|sort_by('position') %}
+                                            {% for action in definition.getEnabledActions('item')|sylius_sort_by('position') %}
                                                 {% if action.name == 'show' %}
                                                     <a class="item" href="{{ path('sylius_happy_cms_admin_page_create', {id: page.id}) }}">
                                                         <i class="search icon grey"></i>{{ 'sylius.ui.show'|trans }}
@@ -62,7 +62,7 @@
                                             {% endfor %}
                                             {% if definition.actionGroups.subitem is defined and definition.getEnabledActions('subitem')|length > 0 %}
                                                 <div class="divider"></div>
-                                                    {% for action in definition.getEnabledActions('subitem')|sort_by('position') %}
+                                                    {% for action in definition.getEnabledActions('subitem')|sylius_sort_by('position') %}
                                                         {% if action.options.links is defined and action.options.links|length %}
                                                             <span class="item">
                                                                 <i class="{{ action.icon }} icon grey"></i>{{ action.label|trans }}
