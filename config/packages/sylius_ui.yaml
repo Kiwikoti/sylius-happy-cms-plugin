@@ -33,3 +33,52 @@ sylius_twig_hooks:
       select_blocks:
         template: '@SyliusHappyCMSPlugin/shared_block/select/blocks.html.twig'
         priority: 0
+
+    'sylius_admin.page.index.content':
+      flashes:
+        template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+        priority: 300
+      header:
+        template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+        priority: 200
+      grid:
+        enabled: false
+      sections:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/sections.html.twig'
+        priority: 100
+      footer:
+        template: '@SyliusAdmin/shared/crud/common/content/footer.html.twig'
+        priority: -100
+    'sylius_admin.page.index.content.sections#left':
+      tree:
+        component: 'happycms:page-tree:tree'
+        props:
+          template: '@SyliusHappyCMSPlugin/page/crud/tree/components/tree.html.twig'
+        priority: 0
+    'sylius_admin.page.index.content.sections.tree':
+      actions:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions.html.twig'
+        priority: 0
+
+    'sylius_admin.page.index.content.sections.tree.actions':
+      edit:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/edit.html.twig'
+        priority: 100
+      dropdown:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown.html.twig'
+        priority: 0
+    'sylius_admin.page.index.content.sections.tree.actions.dropdown':
+      create_child:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/create_child.html.twig'
+        priority: 400
+      delete:
+        component: 'happycms:page-tree:delete'
+        props:
+          template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig'
+        priority: 300
+      move_up:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_up.html.twig'
+        priority: 100
+      move_down:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_down.html.twig'
+        priority: 0

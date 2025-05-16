@@ -1,0 +1,25 @@
+{# Rendered with \App\Twig\Component\Page\PageTreeComponent #}
+
+<div {{ attributes.defaults(stimulus_controller('tree', {treeData: this.tree, autoOpen: true})) }}>
+    <div class="card mb-5">
+        <div data-loading>
+            <div class="sylius-loader">
+                <img src="{{ asset('build/admin/images/loader.svg', 'admin') }}" alt="{{ 'sylius.ui.loading'|trans }}"/>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="d-none" data-page-tree-target="itemPrototyp">
+                <div class="d-flex justify-content-between infinite-tree-item" {{ sylius_test_html_attribute('page-taxon', '__PAGE_NAME__') }}>
+                    <div class="infinite-tree-node">
+                        <span class="infinite-tree-toggler" data-infinite-tree-toggler></span>
+                        <span class="infinite-tree-toggler infinite-tree-title">__PAGE_NAME__</span>
+                    </div>
+
+                    {% hook 'tree' %}
+
+                </div>
+            </div>
+            <div data-page-tree-target="tree" {{ sylius_test_html_attribute('tree-pages') }}></div>
+        </div>
+    </div>
+</div>
