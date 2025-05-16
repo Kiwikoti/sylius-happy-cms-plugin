@@ -195,7 +195,13 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
 
             if ($isCollection) {
                 $innerType = $child->getConfig()->getOption('entry_type');
-                if (!in_array($innerType, array_keys($this->treatedFormTypeThemes)) || isset($this->treatedFormTypeThemes[$innerType]) && $this->treatedFormTypeThemes[$innerType] !== $formTypeClass) {
+                if (
+                    (
+                        !in_array($innerType, array_keys($this->treatedFormTypeThemes)) ||
+                        (isset($this->treatedFormTypeThemes[$innerType]) && $this->treatedFormTypeThemes[$innerType] !==
+                            $formTypeClass)
+                    ) && is_subclass_of($innerType, BlockTypeInterface::class)
+                ) {
                     $this->treatedFormTypeThemes[$innerType] = $formTypeClass;
                     $tempBuilder = $this->tempBuilder($innerType, (string) (time() + usleep(100)));
                     $adminFormThemes = $this->getAdminFormThemesRecursive($tempBuilder, $adminFormThemes);
