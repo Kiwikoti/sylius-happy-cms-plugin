@@ -8,7 +8,7 @@ use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Adeliom\SyliusHappyCMSPlugin\Form\Type\ButtonEmbeddableType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Adeliom\SyliusHappyCMSPlugin\Form\Type\CheckboxJsonType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -21,7 +21,7 @@ class TextImageCtaBlockType extends AbstractBlock
                 'required' => false,
                 'label' => 'sylius_happy_cms.blocks.text_image.fields.image',
             ])
-            ->add('img_right', CheckboxType::class, [
+            ->add('img_right', CheckboxJsonType::class, [
                 'required' => false,
                 'label' => 'sylius_happy_cms.blocks.text_image.fields.img_right',
             ])
