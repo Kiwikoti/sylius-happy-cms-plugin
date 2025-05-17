@@ -31,5 +31,5 @@ sylius_twig_hooks:
         template: '@SyliusAdmin/shared/crud/common/navbar.html.twig'
         priority: 100
       select_blocks:
-        template: '@SyliusHappyCMSPlugin/shared_block/select/blocks.html.twig'
+        template: '@SyliusHappyCMSPlugin/shared_block/crud/select/blocks.html.twig'
         priority: 0
