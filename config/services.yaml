@@ -81,7 +81,7 @@ services:
       - "@sylius_happy_cms.repository.page"
       - "@sylius_happy_cms.manager.page"
     tags:
-      - { name: sylius.live_component.admin, key: happycms:page-tree:tree }
+      - { name: sylius.live_component.admin, key: happycms-page-tree-tree }
 
   # todo interface alias
   sylius.happy_cms.admin.page_tree.delete:
@@ -89,7 +89,7 @@ services:
     arguments:
       - "@security.csrf.token_manager"
     tags:
-      - { name: sylius.live_component.admin, key: happycms:page-tree:delete }
+      - { name: sylius.live_component.admin, key: happycms-page-tree-delete }
 #    <call method="setLiveResponder">
 #    <argument type="service" id="ux.live_component.live_responder"/>
 #    </call>

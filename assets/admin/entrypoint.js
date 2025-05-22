@@ -1,5 +1,6 @@
 import {startStimulusApp} from '@symfony/stimulus-bridge';
 
+import LiveController from '@symfony/ux-live-component';
 import PageTreeController from "./controllers/PageTreeController";
 import DeletePageController from "./controllers/DeletePageController";
 
@@ -10,7 +11,8 @@ export const app = startStimulusApp(require.context(
     /\.[jt]sx?$/
 ));
 
-app.register('page-tree', PageTreeController);
-app.register('delete-page', DeletePageController);
+app.register('live', LiveController);
+app.register('happycms-page-tree-tree', PageTreeController);
+app.register('happycms-page-tree-delete', DeletePageController);
 
 app.debug = process.env.NODE_ENV !== 'production';

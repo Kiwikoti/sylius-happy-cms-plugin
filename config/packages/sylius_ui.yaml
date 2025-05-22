@@ -51,7 +51,7 @@ sylius_twig_hooks:
         priority: -100
     'sylius_admin.page.index.content.sections#left':
       tree:
-        component: 'happycms:page-tree:tree'
+        component: 'happycms-page-tree-tree'
         props:
           template: '@SyliusHappyCMSPlugin/page/crud/tree/components/tree.html.twig'
         priority: 0
@@ -72,7 +72,7 @@ sylius_twig_hooks:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/create_child.html.twig'
         priority: 400
       delete:
-        component: 'happycms:page-tree:delete'
+        component: 'happycms-page-tree-delete'
         props:
           template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig'
         priority: 300
