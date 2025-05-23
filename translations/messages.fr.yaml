@@ -119,7 +119,7 @@ sylius_happy_cms:
     previous: Précédent
     blocks: Blocs
     empty_block_collection: Collection de bloc vide
-    please_saves_changes: Pour accéder à la configuration de ce bloc veuillez cliquer sur le bouton "Enregistrer les modifications" ci-dessous
+    please_saves_changes: Pour accéder à la configuration de ce bloc veuillez cliquer sur le bouton "Mise à jour" en haut de la page
     published: Contenu publié
   shared_block:
     admin:
