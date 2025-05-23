@@ -18,7 +18,12 @@ Encore
         to: 'dist/[path][name].[ext]',
     })
 
-    .addEntry('flexible-content', './assets/js/flexible-content.js')
+    .copyFiles({
+        from: './assets/blocks/dist',
+        to: 'dist/[path][name].[ext]',
+    })
+
+    .addEntry('flexible-content', './assets/flexible-content/flexible-content.js')
     .addEntry('media-form', './assets/media/js/app.js')
     .addEntry('seo-block-type', './assets/blocks/seo-block-type.js')
     .addEntry('accordion-block-type', './assets/blocks/accordion-block-type.js')

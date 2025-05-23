@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adeliom\SyliusHappyCMSPlugin\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
@@ -42,7 +44,7 @@ class BooleanToStringTransformer implements DataTransformerInterface
         // Ex "1", "0" , "true", "false"
         // is_bool() will return false
         if (\is_string($value)) {
-            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            $value = filter_var($value, \FILTER_VALIDATE_BOOLEAN, \FILTER_NULL_ON_FAILURE);
         }
 
         if (!\is_bool($value)) {

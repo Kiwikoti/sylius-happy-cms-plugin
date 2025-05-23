@@ -93,120 +93,124 @@
 
         <div class="container text-center">
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn" data-bs-toggle="modal" data-bs-target="#block-list">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-                </svg>
+            <a type="button" id="open-blocks" class="btn btn-link" data-bs-toggle="offcanvas" href="#block-list">
                 {{ 'sylius_happy_cms.editor.add_new'|trans }}
-            </button>
+            </a>
         </div>
 
         {% if is_empty_collection or form.vars.prototype is defined %}
             {% set attr = attr|merge({'data-empty-collection': block('flexible_content_empty_collection')}) %}
         {% endif %}
 
-        <!-- Modal -->
-        <div class="modal fade" id="block-list" tabindex="-1" aria-labelledby="block list" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <div class="w-flexible-blocks">
-                            {% set tabs = [] %}
-                            {% for type, block in blocks %}
-                                {% set tab = ('sylius_happy_cms.editor.blocks'|trans) %}
-                                {% if block.getTab() is defined %}
-                                    {% set tab = block.getTab() %}
-                                {% endif %}
-                                {% if tab not in tabs %}
-                                    {% set tabs = tabs|merge([tab]) %}
-                                {% endif %}
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="block-list" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel"></h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="w-flexible-blocks">
+                    {% set tabs = [] %}
+                    {% for type, block in blocks %}
+                        {% set tab = ('sylius_happy_cms.editor.blocks'|trans) %}
+                        {% if block.getTab() is defined %}
+                            {% set tab = block.getTab() %}
+                        {% endif %}
+                        {% if tab not in tabs %}
+                            {% set tabs = tabs|merge([tab]) %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="input-group mb-3">
+                        <input id="block-filter" type="text" class="form-control" placeholder="{{ 'sylius_happy_cms.editor.filter'|trans }}">
+                        <select class="form-select block-categories" id="block-categories">
+                            <option value="all_blocks">{{ 'sylius_happy_cms.blocks.tabs.all_blocks'|trans }}</option>
+                            {% for tab in tabs %}
+                                {% set tab_key = tab|replace({' ': '_'})|lower %}
+                                <option value="{{ tab_key }}">{{ tab|trans }}</option>
                             {% endfor %}
-                            <div class="mb-3">
-                                <label for="block-categories" class="form-label">Filter blocks:</label>
-                                <select class="form-select mb-3 block-categories" id="block-categories">
-                                    <div class="item" data-value="all_blocks">
-                                        {{ 'sylius_happy_cms.blocks.tabs.all_blocks'|trans }}
-                                    </div>
-                                    <option value="all_blocks">{{ 'sylius_happy_cms.blocks.tabs.all_blocks'|trans }}</option>
-                                    {% for tab in tabs %}
-                                        {% set tab_key = tab|replace({' ': '_'})|lower %}
-                                        <option value="{{ tab_key }}">{{ tab|trans }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            {% set block_count = 0 %}
-                            <div class="cards row">
-                                {% for type, block in blocks %}
-                                    {% set block_tab = ('sylius_happy_cms.editor.blocks'|trans) %}
-                                    {% if block.getTab is defined %}
-                                        {% set block_tab = block.getTab() %}
+                        </select>
+                    </div>
+
+                    {% set block_count = 0 %}
+                    <div class="cards row">
+                        {% for type, block in blocks %}
+                            {% set block_tab = ('sylius_happy_cms.editor.blocks'|trans) %}
+                            {% if block.getTab is defined %}
+                                {% set block_tab = block.getTab() %}
+                            {% endif %}
+                            {% set tab_key = block_tab|replace({' ': '_'})|lower %}
+                            <div class="col-12" data-block-category="{{ tab_key }}">
+                                <div class="card m-1 mb-3" >
+                                    {% if block.icon is iterable %}
+                                        <div id="carousel-block-{{ loop.index }}" class="carousel slide">
+                                            <div class="carousel-inner">
+                                                {% for icon in block.icon %}
+                                                    <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+                                                        {{ icon|raw }}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-block-{{ loop.index }}" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#carousel-block-{{ loop.index }}" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
+                                    {% elseif block.icon is not iterable and (block.icon starts with '<span' or block.icon starts with '<i ' or block.icon starts with '<svg' or block.icon starts with '<img') %}
+                                        {{ block.icon|raw }}
+                                    {% elseif block.icon is defined and block.icon != '' %}
+                                        {{ block.icon|raw }}
+                                    {% else %}
+                                        <img src="{{ asset('dist/placeholder-image.webp', 'sylius.happy.cms.assets.package') }}" class="card-img-top" alt="block">
                                     {% endif %}
-                                    {% set tab_key = block_tab|replace({' ': '_'})|lower %}
-                                    <div class="col-4" data-block-category="{{ tab_key }}">
-                                        <div class="card m-1 mb-3" >
-                                            {% if block.icon is iterable %}
-                                                <div id="carousel-block-{{ loop.index }}" class="carousel slide">
-                                                    <div class="carousel-inner">
-                                                        {% for icon in block.icon %}
-                                                            <div class="carousel-item {{ loop.first ? 'active' : '' }}">
-                                                                {{ icon|raw }}
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-block-{{ loop.index }}" data-bs-slide="prev">
-                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Previous</span>
-                                                    </button>
-                                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-block-{{ loop.index }}" data-bs-slide="next">
-                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                        <span class="visually-hidden">Next</span>
-                                                    </button>
-                                                </div>
-                                            {% elseif block.icon is not iterable and (block.icon starts with '<span' or block.icon starts with '<i ' or block.icon starts with '<svg' or block.icon starts with '<img') %}
-                                                {{ block.icon|replace({"class='": "class='card-img-top"})|replace({'class="': 'class="card-img-top'})|raw }}
-                                            {% elseif block.icon is defined and block.icon != '' %}
-                                                {{ block.icon|raw }}
-                                            {% endif %}
-                                            <div class="card-body">
-                                                <div class="card-title">
-                                                    {{- block.name|trans -}}
-                                                </div>
-                                                {% set please_save %}
-                                                    <div class="alert alert-secondary" role="alert">
-                                                        <p><span>{{ ux_icon('tabler:device-floppy') }}</span><span>{{ 'sylius_happy_cms.editor.please_saves_changes'|trans }}</span></p>
-                                                    </div>
-                                                {% endset %}
-                                                <button type="button"
-                                                        class="add-flexible-block btn"
-                                                        data-block-type="{{ type }}"
-                                                        data-block-icon="{{ block.icon is not iterable ? block.icon : '' }}"
-                                                        data-block-name="{{ block.name }}"
-                                                        data-prototype='{{ (form_row(prototypes[type]) ~ please_save)|e('html_attr') }}'
-                                                        data-num-items='{{ form.children|length }}'
-                                                        data-form-type-name-placeholder='{{ prototypes[type] is defined ? prototypes[type].vars.name : '' }}'
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/>
-                                                    </svg>
-                                                    {{ 'sylius_happy_cms.editor.add'|trans }}
-                                                </button>
-                                            </div>
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            {{- block.name|trans -}}
                                         </div>
-                                    </div>
-                                {% endfor %}
-                                <div id="confirm_sentence" style="display: none" >{{ 'sylius.ui.are_your_sure_you_want_to_perform_this_action'|trans }}</div>
-                                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                                    <div id="alert_add" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="d-flex">
-                                            <div class="toast-body">
-                                                {{ 'sylius_happy_cms.editor.added'|trans }}
+                                        {% set please_save %}
+                                            <div class="alert alert-secondary" role="alert">
+                                                <p><span>{{ ux_icon('tabler:device-floppy') }}</span><span>{{ 'sylius_happy_cms.editor.please_saves_changes'|trans }}</span></p>
                                             </div>
-                                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                                        </div>
+                                        {% endset %}
+                                        <a
+                                                href="#"
+                                                class="add-flexible-block link-primary"
+                                                data-block-type="{{ type }}"
+                                                data-block-icon="{{ block.icon is not iterable ? block.icon : '' }}"
+                                                data-block-name="{{ block.name }}"
+                                                data-prototype='{{ (form_row(prototypes[type]) ~ please_save)|e('html_attr') }}'
+                                                data-num-items='{{ form.children|length }}'
+                                                data-form-type-name-placeholder='{{ prototypes[type] is defined ? prototypes[type].vars.name : '' }}'
+                                        >
+                                            {{ 'sylius_happy_cms.editor.add'|trans }}
+                                        </a>
+                                        <a
+                                                href="#"
+                                                class="iframe-tooltip link-primary"
+                                                data-url="{{ path('sylius_happy_cms_admin_flexible_content_preview_block') }}"
+                                                title="Preview">
+                                            {{ 'sylius_happy_cms.editor.preview'|trans }}
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endfor %}
+                        <div id="confirm_sentence" style="display: none" >{{ 'sylius.ui.are_your_sure_you_want_to_perform_this_action'|trans }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="block-list" tabindex="-1" aria-labelledby="block list" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <button type="button" class="btn-close text-reset" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-body">
+
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Controller\Page;
 use Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Webmozart\Assert\Assert;
@@ -78,5 +79,23 @@ class PageResourceController extends SyliusCrudResourceController
         Assert::isInstanceOf($page, PageInterface::class);
 
         return $page;
+    }
+
+    public function blockPreviewAction(Request $request): Response
+    {
+        $data = [];
+        $blocks = [
+            'block-demo-1' => array_merge([
+                  'position' => '1',
+                  'block_type' => 'Adeliom\\SyliusHappyCMSPlugin\\Block\\AccordionBlockType',
+                  'block_published' => '1',
+            ], $data),
+        ];
+
+        return $this->render('@SyliusHappyCMSPlugin/front/blocks/preview.html.twig', [
+            'blocks' => $blocks,
+            'preview' => true,
+            'data' => $request->get('data'),
+        ]);
     }
 }

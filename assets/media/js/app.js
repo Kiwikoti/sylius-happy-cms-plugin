@@ -43,7 +43,6 @@ window.loadMediaManager = function(event, widgetId = null) {
         notie.alert({type: type, text: '<small>' + obj.body + '</small>', time: duration})
     })
 
-
     document.querySelectorAll("#media-holder").forEach((elm) => {
         elm.style.display = 'block';
         new Vue({ el: elm });
@@ -65,3 +64,4 @@ if (document.readyState == 'loading') {
   // DOM is ready!
   loadMediaManager();
 }
+

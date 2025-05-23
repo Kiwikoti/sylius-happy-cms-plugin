@@ -114,6 +114,8 @@ sylius_happy_cms:
     add: Add
     add_new: Add new block here
     added: Added successfully in your content
+    preview: Preview
+    filter: Filter
     next: Next
     previous: Previous
     blocks: Blocks

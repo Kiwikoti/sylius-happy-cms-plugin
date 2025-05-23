@@ -1,5 +1,6 @@
 {
-  "flexible-content.js": "/bundles/syliushappycmsplugin/flexible-content.f067481d.js",
+  "flexible-content.css": "/bundles/syliushappycmsplugin/flexible-content.4e7e726a.css",
+  "flexible-content.js": "/bundles/syliushappycmsplugin/flexible-content.b57ebe5a.js",
   "media-form.css": "/bundles/syliushappycmsplugin/media-form.909462c0.css",
   "media-form.js": "/bundles/syliushappycmsplugin/media-form.d321a316.js",
   "seo-block-type.js": "/bundles/syliushappycmsplugin/seo-block-type.33f33775.js",
@@ -14,6 +15,7 @@
   "dist/patterns/still/nyc-candy.png": "/bundles/syliushappycmsplugin/dist/patterns/still/nyc-candy.png",
   "dist/noPreview.jpg": "/bundles/syliushappycmsplugin/dist/noPreview.jpg",
   "dist/lottie/ice_cream.json": "/bundles/syliushappycmsplugin/dist/lottie/ice_cream.json",
+  "dist/placeholder-image.webp": "/bundles/syliushappycmsplugin/dist/placeholder-image.webp",
   "images/baseline-track_changes-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-track_changes-24px.ec843c57.svg",
   "images/baseline-live_help-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-live_help-24px.6027242d.svg",
   "images/baseline-add_alert-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-add_alert-24px.a5cc8f27.svg",

@@ -54,7 +54,7 @@ class AccordionBlockType extends AbstractBlock
 
     public function getIcon(): string
     {
-        return '<img class="card-img-top" src="/static/admin/blocks/AccordionBlockType.jpg" alt="">';
+        return '<img class="card-img-top" src="' . $this->getPackages()->getUrl('dist/placeholder-image.webp', AssetHappyCMSPackage::PACKAGE_NAME) . '" alt="">';
     }
 
     public function getFrontEndTemplatePath(): string

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\ResourceChoiceType;
+use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlock;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
@@ -45,9 +46,9 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
         return '';
     }
 
-    public function getIcon(): string|array
+    public function getIcon(): string
     {
-        return '';
+        return '<img class="card-img-top" src="' . $this->getPackages()->getUrl('dist/placeholder-image.webp', AssetHappyCMSPackage::PACKAGE_NAME) . '" alt="">';
     }
 
     public function configureAdminAssets(): array

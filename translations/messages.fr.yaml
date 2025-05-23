@@ -113,8 +113,10 @@ sylius_happy_cms:
         subheader: Gérer vos configurations
   editor:
     add: Ajouter
+    preview: Apperçu
     add_new: Choisir et ajouter un nouveau bloc
     added: Le bloc a été ajouté
+    filter: Filter
     next: Suivant
     previous: Précédent
     blocks: Blocs

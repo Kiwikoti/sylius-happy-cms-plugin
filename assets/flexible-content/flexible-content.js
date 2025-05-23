@@ -1,7 +1,70 @@
+import './flexible-content.css';
+
 const flexibleContentModule = function () {
   const self = this;
 
   self.blockToMove = null;
+
+  const initIframePreviewModule = function () {
+      document.querySelectorAll('.iframe-tooltip').forEach(link => {
+          let tooltipInstance = null;
+
+          link.addEventListener('mouseenter', async () => {
+              const url = link.dataset.url;
+
+              /*
+                Sur un écran desktop 1920x1080 : 600 x 400
+                Sur un écran tablet 768x1024 : 460 x 400
+                Sur un mobile (360x640) : 216 x 256
+               */
+              const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+              const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+                // Dimensions responsives par défaut
+              const width = link.dataset.width || Math.min(0.6 * vw, 600); // max 600px ou 60% du viewport
+              const height = link.dataset.height || Math.min(0.4 * vh, 400); // max 400px ou 40% du viewport
+
+              const tooltip = new bootstrap.Tooltip(link, {
+                  html: true,
+                  template: `<div class="flexible-tooltip" role="tooltip"><div class="iframe-container" style="width: ${width}px; height: ${height}px;">
+                <div class="spinner-grow text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+              </div></div>`,
+                  placement: 'left',
+                  trigger: 'manual',
+                  container: 'body'
+              });
+
+              tooltip.show();
+
+              // Insertion dynamique de l’iframe après affichage du tooltip
+              setTimeout(() => {
+                  const container = document.querySelector('.flexible-tooltip .iframe-container');
+                  if (container && !container.querySelector('iframe')) {
+                      const iframe = document.createElement('iframe');
+                      iframe.src = url;
+                      iframe.style.width = width+'px';
+                      iframe.style.height = height+'px';
+
+                      iframe.onload = () => {
+                          const loader = container.querySelector('.spinner-grow');
+                          if (loader) loader.remove();
+                          iframe.style.opacity = '1';
+                      };
+
+                      container.appendChild(iframe);
+                  }
+              }, 100);
+          });
+
+          link.addEventListener('mouseleave', () => {
+              const tooltip = bootstrap.Tooltip.getInstance(link);
+              if (tooltip) {
+                  tooltip.hide();
+              }
+          });
+      });
+  };
 
   const initModule = function () {
     // Au chargement on va initialiser le comportement lié au catalogue des blocs :
@@ -16,8 +79,18 @@ const flexibleContentModule = function () {
     const dropDownBlockCategories = self.wFlexibleBlock.querySelector('.block-categories');
     dropDownBlockCategories.addEventListener('change', self.listenBlockCategoriesChanges);
 
+    //    - le dropdown des catégories (au choix) : masquer tous les blocs sauf ceux demandés
+    const filterBlocks = self.wFlexibleBlock.querySelector('#block-filter');
+      filterBlocks.addEventListener('keyup', self.listenBlockFilterChanges);
+
+    document.getElementById('open-blocks').addEventListener('click', () => {
+        setTimeout(() => {
+            self.wFlexibleBlock.querySelector('#block-filter').focus();
+        }, 300)
+    });
+
     //    - le bouton ajouter
-    self.wFlexibleBlock.querySelectorAll('button.add-flexible-block')
+    self.wFlexibleBlock.querySelectorAll('a.add-flexible-block')
         .forEach((addButton) => {
           addButton.addEventListener('click', self.handleAddButton);
         });
@@ -305,10 +378,10 @@ const flexibleContentModule = function () {
     if (document.querySelector('.empty-flexible-content')) {
       document.querySelector('.empty-flexible-content').remove();
     }
-    document.getElementById('alert_add').classList.add('show');
-    setTimeout(() => {
-        document.getElementById('alert_add').classList.remove('show');
-    }, 6000);
+
+    const myModalEl = document.querySelector('#block-list')
+    const modal = bootstrap.Modal.getOrCreateInstance(myModalEl);
+    modal.hide();
     return false;
   };
 
@@ -325,20 +398,31 @@ const flexibleContentModule = function () {
   self.listenBlockCategoriesChanges = function (event) {
     const activeCategory = event.target.value;
     event.target.closest('.w-flexible-blocks')
-        .querySelectorAll('.card')
+        .querySelectorAll('[data-block-category]')
         .forEach((card) => {
           card.style.display = activeCategory === null || activeCategory === 'all_blocks' ? 'block' : 'none';
         });
     if (activeCategory) {
       event.target.closest('.w-flexible-blocks')
-          .querySelectorAll(`.col-4[data-block-category="${activeCategory}"]`)
+          .querySelectorAll(`[data-block-category="${activeCategory}"]`)
           .forEach((card) => {
             card.style.display = 'block';
           });
     }
   };
 
+  self.listenBlockFilterChanges = function (event) {
+    const filter = event.target.value;
+      event.target.closest('.w-flexible-blocks')
+          .querySelectorAll(`[data-block-category] .card-title`)
+          .forEach((title) => {
+              const regex = new RegExp(filter, 'i');
+              title.parentElement.parentElement.style.display = regex.test(title.innerText) || !filter ? 'block' : 'none';
+          });
+  };
+
   initModule();
+  initIframePreviewModule();
 };
 
 window.addEventListener('DOMContentLoaded', flexibleContentModule);

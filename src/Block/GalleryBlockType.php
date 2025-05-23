@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\Form\SortableCollectionType;
 use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
+use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Form\MediaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -46,7 +47,7 @@ class GalleryBlockType extends AbstractBlock
 
     public function getIcon(): string
     {
-        return '<img class="card-img-top" src="/static/admin/blocks/GalleryBlockType.jpg" alt="">';
+        return '<img class="card-img-top" src="' . $this->getPackages()->getUrl('dist/placeholder-image.webp', AssetHappyCMSPackage::PACKAGE_NAME) . '" alt="">';
     }
 
     public function getFrontEndTemplatePath(): string

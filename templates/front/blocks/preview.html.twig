@@ -1,0 +1,19 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block metatags %}{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block javascripts %}{% endblock %}
+
+{% block body %}
+    {% if blocks is defined and blocks is not null %}
+        {% for block in blocks %}
+            {{ happy_cms_block_render(block, preview) }}
+        {% endfor %}
+        {{ happy_cms_block_assets() }}
+        {{ happy_cms_shared_block_assets() }}
+    {% endif %}
+{% endblock %}

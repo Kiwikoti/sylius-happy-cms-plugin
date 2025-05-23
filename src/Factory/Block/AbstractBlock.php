@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -31,6 +32,7 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
         protected EntityManagerInterface $entityManager,
         protected TranslatorInterface $translator,
         protected FormFactoryInterface $formFactory,
+        protected Packages $packages,
     ) {
     }
 
@@ -42,6 +44,11 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
     public function getTranslator(): TranslatorInterface
     {
         return $this->translator;
+    }
+
+    public function getPackages(): Packages
+    {
+        return $this->packages;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void

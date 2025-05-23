@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony package.
  *
@@ -11,8 +13,8 @@
 
 namespace Adeliom\SyliusHappyCMSPlugin\Form\Type;
 
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Adeliom\SyliusHappyCMSPlugin\Form\DataTransformer\BooleanToStringTransformer;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class CheckboxJsonType extends CheckboxType
@@ -22,6 +24,7 @@ class CheckboxJsonType extends CheckboxType
         parent::buildForm($builder, $options);
         $builder->resetViewTransformers();
         $builder->addViewTransformer(
-            new BooleanToStringTransformer($options['value'], $options['false_values']));
-       }
+            new BooleanToStringTransformer($options['value'], $options['false_values']),
+        );
+    }
 }

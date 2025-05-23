@@ -168,6 +168,9 @@ class BlockCollectionType extends CollectionType implements AdminFormTypeInterfa
             'js' => [
                 (Asset::new('flexible-content.js'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
             ],
+            'css' => [
+                (Asset::new('flexible-content.css'))->package(AssetHappyCMSPackage::PACKAGE_NAME),
+            ],
         ];
     }
 

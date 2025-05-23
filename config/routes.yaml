@@ -40,6 +40,16 @@ sylius_happy_cms_admin_menu_item_update_move_down:
     _sylius:
       permission: true
 
+sylius_happy_cms_admin_flexible_content_preview_block:
+  path: /admin/pages/flexible-content/preview-block
+  methods: [ GET ]
+  defaults:
+    _controller: Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageResourceController::blockPreviewAction
+    _sylius:
+      data: $data
+      block: $block
+      permission: true
+
 sylius_happy_cms_admin_page_tree:
   path: /admin/pages/tree
   methods: [ GET ]
