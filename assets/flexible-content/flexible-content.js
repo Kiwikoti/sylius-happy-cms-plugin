@@ -284,6 +284,16 @@ const flexibleContentModule = function () {
         .replace(nameRegexp, index);
 
     const blockElement = blockWrapper.cloneNode(true);
+    const checkboxInNewBlock = blockElement.querySelector('.form-check-input');
+    const labelInNewBlock = blockElement.querySelector('.form-check-label');
+
+    const lastBlockAdded = document.getElementById('w-wrapper-prototype').previousElementSibling.previousElementSibling;
+    const idAttr = lastBlockAdded.querySelector('.form-check-input').getAttribute('id');
+    // get the number part of the for attribute (block-checkbox-3 -> 3)
+    const newId = parseInt(idAttr.split('-')[2], 10) + 1;
+    checkboxInNewBlock.setAttribute('id', `block-checkbox-${newId}`);
+    labelInNewBlock.setAttribute('for', `block-checkbox-${newId}`);
+
     const moveHereWrapper = blockWrapper.nextElementSibling.cloneNode(true);
     blockElement.querySelector('[data-layer="content"]')
         .insertAdjacentHTML('beforeend', newPrototype);

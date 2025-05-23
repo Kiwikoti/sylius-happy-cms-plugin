@@ -67,6 +67,7 @@
 {% endmacro %}
 
 {% block flexible_content_collection_widget %}
+    {% set last_loop_index = 0 %}
     {# the "is iterable" check is needed because if an object implements __toString() and
                returns an empty string, "is empty" returns true even if it's not a collection #}
     {% set is_empty_collection = value is null or (value is iterable and value is empty) %}
@@ -84,11 +85,12 @@
                         {% set block_data = block %}
                     {% endif %}
                 {% endfor %}
-                {{ _self.w_block(block_data.name, form_widget(child), loop.first ? 'none' : 'none') }}
+                {{ _self.w_block(block_data.name, form_widget(child), loop.index) }}
+                {% set last_loop_index = loop.index %}
             {% endfor %}
         {% endif %}
         <div id="w-wrapper-prototype" style="display:none">
-            {{ _self.w_block('Nouveau bloc', '', 'block') }}
+            {{ _self.w_block('Nouveau bloc', '', last_loop_index) }}
         </div>
 
         <div class="container text-center">
