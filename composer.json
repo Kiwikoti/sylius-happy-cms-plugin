@@ -36,7 +36,7 @@
     "nyholm/psr7": "^1.4",
     "presta/sitemap-bundle": "^v4.1.1",
     "james-heinrich/getid3": "^1.9",
-    "eckinox/tinymce-bundle": "^3.0"
+    "emileperron/tinymce-bundle": "^3.0"
   },
   "conflict": {
     "symfony/framework-bundle": "6.2.8",
