@@ -96,8 +96,9 @@ platform:
 		(cd ${APP_DIR} && sed -i'' -e 's|"App\\\\": "src/"|"Adeliom\\\\${PLUGIN_NAMESPACE}\\\\": "${PLUGIN_DIR}/src/",\n            "App\\\\": "src/"|g' composer.json); \
 		(cd ${APP_DIR} && sed -i'' -e 's|type: annotation|type: attribute|g' config/packages/doctrine.yaml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|- { resource: "../parameters.yaml" }|- { resource: "../parameters.yaml" }\n    - { resource: "@${PLUGIN_NAMESPACE}/config/config.yaml" }\n    - { resource: "@${CRUD_PLUGIN_NAMESPACE}/config/config.yaml" }|g' config/packages/_sylius.yaml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|sylius_paypal_webhook:|\nsylius_easy_crud:\n  resource: "@SyliusEasyCrudPlugin/config/routes.yaml"\nsylius_paypal_webhook:|g' config/routes.yaml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|sylius_paypal_webhook:|\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"\nsylius_paypal_webhook:|g' config/routes.yaml); \
+		(cd ${APP_DIR} && echo 'init' > config/routes.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|init|\nsylius_easy_crud:\n  resource: "@SyliusEasyCrudPlugin/config/routes.yaml"\ninit|g' config/routes.yaml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|init|\nsylius_happy_cms:\n  resource: "@SyliusHappyCMSPlugin/config/routes.yaml"\n|g' config/routes.yaml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|plugin-proposal-object-rest-spread|plugin-transform-object-rest-spread|g' .babelrc); \
 		(cd ${APP_DIR} && rm -rf config/packages/doctrine.yaml-e); \
 		(cd ${APP_DIR} && rm -rf config/packages/_sylius.yaml-e); \
