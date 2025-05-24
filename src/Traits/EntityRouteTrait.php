@@ -238,14 +238,14 @@ trait EntityRouteTrait
             'route' => $this->getOnlineRoute(),
         ];
 
-        if (method_exists($this, 'getParent')){
+        if (method_exists($this, 'getParent')) {
             $parent = $this->getParent();
             while ($parent !== null) {
                 $list[] = [
                     'label' => $parent->getName(),
                     'route' => $parent->getOnlineRoute(),
                 ];
-                if (method_exists($parent, 'getParent')){
+                if (method_exists($parent, 'getParent')) {
                     $parent = $parent->getParent();
                 }
             }
