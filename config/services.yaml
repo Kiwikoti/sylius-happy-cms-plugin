@@ -89,10 +89,7 @@ services:
     arguments:
       - "@security.csrf.token_manager"
     tags:
-      - { name: sylius.live_component.admin, key: happycms-page-tree-delete }
-#    <call method="setLiveResponder">
-#    <argument type="service" id="ux.live_component.live_responder"/>
-#    </call>
+      - { name: sylius.live_component.admin, key: happycms-page-tree-delete, template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig' }
 
   # seo
   # ===============================

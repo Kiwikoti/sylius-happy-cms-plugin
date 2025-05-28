@@ -1,6 +1,10 @@
 <div class="btn-group" data-modal-delete-page-target>
     <button class="btn btn-icon btn-sm" type="button" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}' {{ sylius_test_html_attribute('actions') }}>
-        {{ ux_icon('tabler:dots') }}
+        <div>svg</div>
+        {# {{ ux_icon('tabler:dots') }} #}
+        {# there is actually an issue with infinite-tree when using an svg to be the dropdown button,
+            because the el.className doesn't exists on an svg element.
+        #}
     </button>
     <ul class="dropdown-menu">
         {% hook 'dropdown' %}

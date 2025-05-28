@@ -6,7 +6,6 @@ namespace Adeliom\SyliusHappyCMSPlugin\Twig\Components\PageTree;
 
 use Sylius\TwigHooks\LiveComponent\HookableLiveComponentTrait;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
-use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
@@ -17,7 +16,7 @@ final class DeleteComponent
 {
     use DefaultActionTrait;
     use HookableLiveComponentTrait;
-//    use ComponentToolsTrait;
+    use ComponentToolsTrait;
 
     public const OPEN_DELETE_MODAL_EVENT = 'happycms:page:open_delete_modal';
 
@@ -29,13 +28,13 @@ final class DeleteComponent
     ) {
     }
 
-//    #[LiveAction]
-//    public function delete(#[LiveArg] string $pageId): void
-//    {
-//        $this->pageId = $pageId;
-//        $this->dispatchBrowserEvent(
-//            self::OPEN_DELETE_MODAL_EVENT,
-//            ['csrfToken' => $this->csrfTokenManager->getToken($pageId)->getValue()],
-//        );
-//    }
+    #[LiveAction]
+    public function delete(#[LiveArg] string $pageId): void
+    {
+        $this->pageId = $pageId;
+        $this->dispatchBrowserEvent(
+            self::OPEN_DELETE_MODAL_EVENT,
+            ['csrfToken' => $this->csrfTokenManager->getToken($pageId)->getValue()],
+        );
+    }
 }

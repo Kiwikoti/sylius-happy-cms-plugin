@@ -1,5 +1,4 @@
 import { Controller } from '@hotwired/stimulus';
-import { Modal } from 'bootstrap';
 
 /**
  * @property {HTMLDivElement} element
@@ -17,7 +16,7 @@ export default class extends Controller {
       this.modalElement = this.modalTarget;
 
       this.modalElement.closest('[data-modal-delete-page-target]').appendChild(this.modalElement);
-      this.modal = new Modal(this.modalElement);
+      this.modal = new window.bootstrap.Modal(this.modalElement);
       this.modal.show();
 
       this.modalElement.addEventListener('hidden.bs.modal', () => {
