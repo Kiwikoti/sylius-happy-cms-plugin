@@ -14,5 +14,5 @@
 {% block javascripts %}
     {{ parent() }}
 
-    {% include '@SyliusHappyCMSPlugin/page/moveTree.html.twig' %}
+    <script src="{{ asset('stimulus-happycsms.js', 'sylius.happy.cms.assets.package') }}"></script>
 {% endblock %}

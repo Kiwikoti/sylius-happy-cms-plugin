@@ -1,0 +1,38 @@
+{# Rendered with \App\Twig\Component\Page\DeletePageComponent #}
+
+{% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
+{% set id = page_id|default('__PAGE_ID__') %}
+
+<div {{ attributes.defaults(stimulus_controller('happycms-page-tree-delete')) }}>
+    <button
+        class="dropdown-item"
+        data-action="live#action:prevent"
+        data-live-action-param="delete"
+        data-live-page-id-param="{{ id }}"
+        {{ sylius_test_html_attribute('delete') }}
+    >
+        {{ ux_icon('tabler:trash', { class: 'icon dropdown-item-icon icon-tabler icon-tabler-settings' }) }}
+        {{ 'sylius.ui.delete'|trans }}
+    </button>
+
+    <div data-happycms-page-tree-delete-target="parent">
+        <div class="modal fade" id="delete-modal-{{ id }}" tabindex="-1" aria-hidden="true" data-happycms-page-tree-delete-target="modal" {{ sylius_test_html_attribute('delete-modal') }}>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title py-5">{{ 'sylius.ui.are_your_sure_you_want_to_perform_this_action'|trans }}</h1>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{{ path('sylius_happy_cms_admin_page_delete', {id: id}) }}" method="post">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_csrf_token" data-happycms-page-tree-delete-target="csrfToken"/>
+
+                            {{ button.default({ text: 'sylius.ui.cancel'|trans, attr: 'data-bs-dismiss=modal' }) }}
+                            {{ button.default({ text: 'sylius.ui.delete'|trans, type: 'submit', class: 'btn-danger', attr: sylius_test_html_attribute('confirm-button') }) }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

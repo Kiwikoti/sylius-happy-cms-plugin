@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+const path = require("path");
 
 Encore
     .setOutputPath('./public/')
