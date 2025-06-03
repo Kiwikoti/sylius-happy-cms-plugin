@@ -20,7 +20,7 @@
         }
       }
     },
-    "@SyliusHappyCMSPlugin": {
+    "@agence-adeliom/sylius-happy-cms-plugin": {
       "delete-page": {
         "main": "controller/DeletePageController.js",
         "webpackMode": "eager",

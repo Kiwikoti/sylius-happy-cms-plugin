@@ -6,9 +6,6 @@
   "keywords": [],
   "repository": "https://github.com/agence-adeliom/sylius-happy-cms-plugin",
   "type": "module",
-  "files": [
-    "dist"
-  ],
   "symfony": {
     "@symfony/ux-autocomplete": {
       "autocomplete": {
@@ -96,5 +93,8 @@
     "stylelint-config-standard": "^36.0.0",
     "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.14"
-  }
+  },
+  "files": [
+    "./controllers.json"
+  ]
 }
