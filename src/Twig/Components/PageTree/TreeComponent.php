@@ -7,6 +7,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Twig\Components\PageTree;
 use Adeliom\SyliusHappyCMSPlugin\Doctrine\Query\Page\AllPagesInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepositoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Bundle\UiBundle\Twig\Component\TemplatePropTrait;
 use Sylius\TwigHooks\LiveComponent\HookableLiveComponentTrait;
@@ -21,11 +22,9 @@ class TreeComponent
     use HookableLiveComponentTrait;
     use TemplatePropTrait;
 
-    /** @param PageRepositoryInterface<PageInterface> $pageRepository */
     public function __construct(
         protected readonly AllPagesInterface $allPages,
-        protected readonly PageRepositoryInterface $pageRepository,
-        protected readonly ObjectManager $pageManager,
+        protected readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -38,21 +37,23 @@ class TreeComponent
     #[LiveAction]
     public function moveUp(#[LiveArg] int $pageId): void
     {
-        $pageToBeMoved = $this->pageRepository->find($pageId);
+        $pageRepository = $this->entityManager->getRepository(PageInterface::class);
+        $pageToBeMoved = $pageRepository->find($pageId);
 
         if ($pageToBeMoved->getPosition() > 0) {
             $pageToBeMoved->setPosition($pageToBeMoved->getPosition() - 1);
-            $this->pageManager->flush();
+            $this->entityManager->flush();
         }
     }
 
     #[LiveAction]
     public function moveDown(#[LiveArg] int $pageId): void
     {
-        $pageToBeMoved = $this->pageRepository->find($pageId);
+        $pageRepository = $this->entityManager->getRepository(PageInterface::class);
+        $pageToBeMoved = $pageRepository->find($pageId);
 
         $pageToBeMoved->setPosition($pageToBeMoved->getPosition() + 1);
-        $this->pageManager->flush();
+        $this->entityManager->flush();
     }
 
     /**

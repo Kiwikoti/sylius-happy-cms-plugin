@@ -78,8 +78,6 @@ services:
     class: Adeliom\SyliusHappyCMSPlugin\Twig\Components\PageTree\TreeComponent
     arguments:
       - "@sylius.happy_cms.page.all_pages"
-      - "@sylius_happy_cms.repository.page"
-      - "@sylius_happy_cms.manager.page"
     tags:
       - { name: sylius.live_component.admin, key: happycms-page-tree-tree }
 
