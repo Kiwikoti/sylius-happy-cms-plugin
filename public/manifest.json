@@ -1,23 +1,13 @@
 {
-  "flexible-content.js": "/bundles/syliushappycmsplugin/flexible-content.f067481d.js",
-  "media-form.css": "/bundles/syliushappycmsplugin/media-form.909462c0.css",
-  "media-form.js": "/bundles/syliushappycmsplugin/media-form.d321a316.js",
-  "seo-block-type.js": "/bundles/syliushappycmsplugin/seo-block-type.33f33775.js",
-  "accordion-block-type.js": "/bundles/syliushappycmsplugin/accordion-block-type.63a6620c.js",
-  "db.js": "/bundles/syliushappycmsplugin/workers/db.js",
-  "audio.js": "/bundles/syliushappycmsplugin/workers/audio.js",
-  "15.9bfa1ff2.js": "/bundles/syliushappycmsplugin/15.9bfa1ff2.js",
+  "flexible-content.js": "/bundles/syliushappycmsplugin/flexible-content.c56265d9.js",
+  "media-form.js": "/bundles/syliushappycmsplugin/media-form.79a339ac.js",
+  "seo-block-type.js": "/bundles/syliushappycmsplugin/seo-block-type.70c8ae20.js",
+  "accordion-block-type.js": "/bundles/syliushappycmsplugin/accordion-block-type.4c9e82b7.js",
   "dist/lottie/world.json": "/bundles/syliushappycmsplugin/dist/lottie/world.json",
   "dist/patterns/gif/5b98026bab87a.gif": "/bundles/syliushappycmsplugin/dist/patterns/gif/5b98026bab87a.gif",
   "dist/lottie/avalanche.json": "/bundles/syliushappycmsplugin/dist/lottie/avalanche.json",
   "dist/lottie/zero.json": "/bundles/syliushappycmsplugin/dist/lottie/zero.json",
   "dist/patterns/still/nyc-candy.png": "/bundles/syliushappycmsplugin/dist/patterns/still/nyc-candy.png",
   "dist/noPreview.jpg": "/bundles/syliushappycmsplugin/dist/noPreview.jpg",
-  "dist/lottie/ice_cream.json": "/bundles/syliushappycmsplugin/dist/lottie/ice_cream.json",
-  "images/baseline-track_changes-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-track_changes-24px.ec843c57.svg",
-  "images/baseline-live_help-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-live_help-24px.6027242d.svg",
-  "images/baseline-add_alert-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-add_alert-24px.a5cc8f27.svg",
-  "images/baseline-power_settings_new-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-power_settings_new-24px.9d34b10d.svg",
-  "images/baseline-check_circle-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-check_circle-24px.08fbaa47.svg",
-  "images/baseline-error-24px.svg": "/bundles/syliushappycmsplugin/images/baseline-error-24px.b7e19771.svg"
+  "dist/lottie/ice_cream.json": "/bundles/syliushappycmsplugin/dist/lottie/ice_cream.json"
 }

@@ -1,7 +1,6 @@
 {
-  "name": "SyliusHappyCMSPlugin",
+  "name": "@agence-adeliom/sylius-happy-cms-plugin",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "encore dev",
@@ -27,6 +26,8 @@
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^2.0",
+    "@symfony/stimulus-bridge": "^4.0.0",
+    "@hotwired/stimulus": "^3.0.0",
     "annyang": "^2.6.1",
     "axios": "^0.21.2",
     "cropperjs": "^1.5.12",
@@ -53,5 +54,44 @@
     "vue-tippy": "v2",
     "vue-touch": "^2.0.0-beta.4",
     "vue2-filters": "^0.13.0"
+  },
+  "symfony": {
+    "@symfony/ux-autocomplete": {
+      "autocomplete": {
+        "enabled": true,
+        "fetch": "eager",
+        "autoimport": {
+          "tom-select/dist/css/tom-select.default.css": true,
+          "tom-select/dist/css/tom-select.bootstrap4.css": false,
+          "tom-select/dist/css/tom-select.bootstrap5.css": false
+        }
+      }
+    },
+    "@symfony/ux-live-component": {
+      "live": {
+        "enabled": true,
+        "fetch": "eager",
+        "autoimport": {
+          "@symfony/ux-live-component/dist/live.min.css": true
+        }
+      }
+    },
+    "@agence-adeliom/sylius-happy-cms-plugin": {
+      "delete-page": {
+        "main": "controller/DeletePageController.js",
+        "webpackMode": "eager",
+        "fetch": "eager",
+        "enabled": true
+      },
+      "page-tree": {
+        "main": "controller/PageTreeController.js",
+        "webpackMode": "eager",
+        "fetch": "eager",
+        "enabled": true
+      }
+    },
+    "importmap": {
+      "@hotwired/stimulus": "^3.0.0"
+    }
   }
 }

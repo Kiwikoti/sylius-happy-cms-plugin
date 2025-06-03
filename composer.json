@@ -6,7 +6,8 @@
     "symfony",
     "sylius",
     "cms",
-    "editorial content"
+    "editorial content",
+    "symfony-ux"
   ],
   "homepage": "https://github.com/agence-adeliom/sylius-happy-cms-plugin",
   "license": "MIT",

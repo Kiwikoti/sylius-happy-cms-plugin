@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+const path = require("path");
 
 Encore
     .setOutputPath('./public/')
@@ -12,7 +13,6 @@ Encore
     .enableSassLoader()
     .enableVueLoader()
     .enablePostCssLoader()
-    .enableStimulusBridge('./assets/admin/controllers.json')
 
     .copyFiles({
         from: './assets/media/dist',
@@ -23,7 +23,6 @@ Encore
     .addEntry('media-form', './assets/media/js/app.js')
     .addEntry('seo-block-type', './assets/blocks/seo-block-type.js')
     .addEntry('accordion-block-type', './assets/blocks/accordion-block-type.js')
-    .addEntry('stimulus-happycsms', './assets/admin/entrypoint.js')
 ;
 
 module.exports = Encore.getWebpackConfig();
