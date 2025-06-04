@@ -22,11 +22,13 @@
     "stylelint": "^16.3.0",
     "stylelint-config-standard": "^36.0.0",
     "vue-loader": "^15.9.7",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "@agence-adeliom/sylius-happy-cms-assets": "file:assets/"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^2.0",
     "@symfony/stimulus-bridge": "^4.0.0",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
     "@hotwired/stimulus": "^3.0.0",
     "annyang": "^2.6.1",
     "axios": "^0.21.2",
@@ -76,17 +78,17 @@
         }
       }
     },
-    "@agence-adeliom/sylius-happy-cms-plugin": {
-      "delete-page": {
+    "@agence-adeliom/sylius-happy-cms-assets": {
+      "happycms-page-tree-delete": {
         "main": "controller/DeletePageController.js",
-        "webpackMode": "eager",
-        "fetch": "eager",
+        "webpackMode": "lazy",
+        "fetch": "lazy",
         "enabled": true
       },
-      "page-tree": {
+      "happycms-page-tree-tree": {
         "main": "controller/PageTreeController.js",
-        "webpackMode": "eager",
-        "fetch": "eager",
+        "webpackMode": "lazy",
+        "fetch": "lazy",
         "enabled": true
       }
     },

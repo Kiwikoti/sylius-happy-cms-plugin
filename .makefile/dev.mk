@@ -139,7 +139,7 @@ platform_debug:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose -f compose.yml -f compose.override.yml -f compose.debug.yml up -d)
 
 platform_up:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose up -d --force-recreate)
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose up -d --force-recreate --remove-orphans)
 
 platform_down:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose down)
@@ -157,7 +157,12 @@ node-shell:
 
 HELP += $(call help,node-watch,			Run assets build as watch)
 node-watch:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run watch")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run build")
+
+HELP += $(call help,node-watch,			Run assets build as dev)
+node-build:
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run build")
+	${MAKE} symfony_assets_install
 
 HELP += $(call help,bundle_dependencies_install,			Install bundles assets npm dependencies)
 bundle_dependencies_install:
@@ -186,6 +191,3 @@ bundle_install_test_files:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:mig -n)
-
-tssds:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="*@dev")

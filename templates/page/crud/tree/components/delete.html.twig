@@ -3,7 +3,7 @@
 {% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
 {% set id = page_id|default('__PAGE_ID__') %}
 
-<div {{ attributes.defaults(stimulus_controller('happycms-page-tree-delete')) }}>
+<div {{ attributes.defaults(stimulus_controller('@agence-adeliom/sylius-happy-cms-plugin/happycms-page-tree-delete')) }}>
     <button
         class="dropdown-item"
         data-action="live#action:prevent"

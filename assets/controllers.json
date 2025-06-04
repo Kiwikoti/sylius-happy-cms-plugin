@@ -2,11 +2,12 @@
   "controllers": {
     "@symfony/ux-autocomplete": {
       "autocomplete": {
-        "enabled": true,
+        "main": "dist/controller.js",
+        "webpackMode": "eager",
         "fetch": "eager",
+        "enabled": true,
         "autoimport": {
-          "tom-select/dist/css/tom-select.default.css": true,
-          "tom-select/dist/css/tom-select.bootstrap4.css": false,
+          "tom-select/dist/css/tom-select.default.css": false,
           "tom-select/dist/css/tom-select.bootstrap5.css": false
         }
       }
@@ -20,17 +21,17 @@
         }
       }
     },
-    "@agence-adeliom/sylius-happy-cms-plugin": {
-      "delete-page": {
+    "@agence-adeliom/sylius-happy-cms-assets": {
+      "happycms-page-tree-delete": {
         "main": "controller/DeletePageController.js",
-        "webpackMode": "eager",
-        "fetch": "eager",
+        "webpackMode": "lazy",
+        "fetch": "lazy",
         "enabled": true
       },
-      "page-tree": {
+      "happycms-page-tree-tree": {
         "main": "controller/PageTreeController.js",
-        "webpackMode": "eager",
-        "fetch": "eager",
+        "webpackMode": "lazy",
+        "fetch": "lazy",
         "enabled": true
       }
     }
