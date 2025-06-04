@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
-use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
 use Adeliom\SyliusHappyCMSPlugin\Form\TinymceBridgeType;

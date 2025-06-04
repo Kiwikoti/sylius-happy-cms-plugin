@@ -17,6 +17,7 @@ tinymce:
   icons: ""
   icons_url: ""
   setup: ""
+  height: "18em"
   images_upload_url: "https://yoursite.com/upload"
   images_upload_route: ""
   images_upload_route_params: []

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
-use Adeliom\SyliusEasyCrudPlugin\Form\TextEditorType;
 use Adeliom\SyliusHappyCMSPlugin\Asset\AssetHappyCMSPackage;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\AbstractBlock;
+use Adeliom\SyliusHappyCMSPlugin\Form\TinymceBridgeType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class SeoBlockType extends AbstractBlock
@@ -15,7 +15,7 @@ class SeoBlockType extends AbstractBlock
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('wysiwyg', TextEditorType::class, [
+            ->add('wysiwyg', TinymceBridgeType::class, [
                 'required' => true,
                 'label' => 'sylius_happy_cms.blocks.seo.fields.wysiwyg',
             ]);
