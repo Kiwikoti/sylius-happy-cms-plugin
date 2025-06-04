@@ -6,10 +6,10 @@
             {% with { attr: tinymce_attributes(attr) } %}
                 {{ block('attributes') }}
             {% endwith %}
-            src="{{ asset('bundles/tinymce/ext/tinymce/tinymce.min.js') }}"
+            src="/bundles/tinymce/ext/tinymce/tinymce.min.js"
     >{{ value }}</tinymce-editor>
     {% include '@Tinymce/partial/default_tinymce_config.html.twig' %}
-    <script src="{{ asset('bundles/tinymce/ext/tinymce-webcomponent.js') }}" type="module"></script>
+    <script src="/bundles/tinymce/ext/tinymce-webcomponent.js" type="module"></script>
     <noscript>
 		<textarea id="{{ id }}-noscript"
                   name="{{ full_name }}"
