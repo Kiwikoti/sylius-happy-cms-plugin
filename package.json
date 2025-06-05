@@ -9,9 +9,6 @@
     "lint": "eslint -c .eslintrc.cjs ./assets/js",
     "lint-style": "stylelint --fix --no-cache \"./assets/**/*.css\""
   },
-  "dependencies": {
-    "@agence-adeliom/sylius-happy-cms-assets": "file:assets/"
-  },
   "devDependencies": {
     "@symfony/webpack-encore": "^2.0",
     "buffer": "^6.0.3",
@@ -57,42 +54,19 @@
     "vue2-filters": "^0.13.0"
   },
   "symfony": {
-    "@symfony/ux-autocomplete": {
-      "autocomplete": {
-        "enabled": true,
-        "fetch": "eager",
-        "autoimport": {
-          "tom-select/dist/css/tom-select.default.css": true,
-          "tom-select/dist/css/tom-select.bootstrap4.css": false,
-          "tom-select/dist/css/tom-select.bootstrap5.css": false
-        }
-      }
-    },
-    "@symfony/ux-live-component": {
-      "live": {
-        "enabled": true,
-        "fetch": "eager",
-        "autoimport": {
-          "@symfony/ux-live-component/dist/live.min.css": true
-        }
-      }
-    },
-    "@agence-adeliom/sylius-happy-cms-assets": {
-      "happycms-page-tree-delete": {
-        "main": "controller/DeletePageController.js",
+    "controllers": {
+      "page-tree-tree": {
+        "main": "controllers/PageTreeController.js",
         "webpackMode": "lazy",
         "fetch": "lazy",
         "enabled": true
       },
-      "happycms-page-tree-tree": {
-        "main": "controller/PageTreeController.js",
+      "page-tree-delete": {
+        "main": "controllers/DeletePageController.js",
         "webpackMode": "lazy",
         "fetch": "lazy",
         "enabled": true
       }
-    },
-    "importmap": {
-      "@hotwired/stimulus": "^3.0.0"
     }
   },
   "files": [
