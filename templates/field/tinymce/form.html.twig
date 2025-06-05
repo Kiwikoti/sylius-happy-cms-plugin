@@ -21,7 +21,8 @@
 {% endblock %}
 
 {% block happy_cms_tinymce_row %}
-    <div class="field">
+    <div class="field mb-3">
+        {{- form_label(form) -}}
         {{- form_widget(form) -}}
     </div>
 {% endblock %}
