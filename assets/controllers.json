@@ -15,24 +15,24 @@
     "@symfony/ux-live-component": {
       "live": {
         "enabled": true,
-        "fetch": "eager",
+        "fetch": "lazy",
         "autoimport": {
           "@symfony/ux-live-component/dist/live.min.css": true
         }
       }
     },
     "@agence-adeliom/sylius-happy-cms-assets": {
-      "happycms-page-tree-delete": {
-        "main": "controller/DeletePageController.js",
-        "webpackMode": "lazy",
-        "fetch": "lazy",
-        "enabled": true
+      "page-tree-tree" : {
+        "main" : "controllers/PageTreeController.js",
+        "webpackMode" : "lazy",
+        "fetch" : "lazy",
+        "enabled" : true
       },
-      "happycms-page-tree-tree": {
-        "main": "controller/PageTreeController.js",
-        "webpackMode": "lazy",
-        "fetch": "lazy",
-        "enabled": true
+      "page-tree-delete" : {
+        "main" : "controllers/DeletePageController.js",
+        "webpackMode" : "lazy",
+        "fetch" : "lazy",
+        "enabled" : true
       }
     }
   },

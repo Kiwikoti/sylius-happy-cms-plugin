@@ -10,3 +10,9 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script src="{{ asset('stimulus-controllers.js', 'sylius.happy.cms.assets.package') }}"></script>
+{% endblock %}

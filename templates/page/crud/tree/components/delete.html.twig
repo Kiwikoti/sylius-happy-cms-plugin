@@ -3,7 +3,7 @@
 {% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
 {% set id = page_id|default('__PAGE_ID__') %}
 
-<div {{ attributes.defaults(stimulus_controller('@agence-adeliom/sylius-happy-cms-plugin/happycms-page-tree-delete')) }}>
+<div {{ attributes.defaults(stimulus_controller('@agence-adeliom/sylius-happy-cms-assets/page-tree-delete')) }}>
     <button
         class="dropdown-item"
         data-action="live#action:prevent"
@@ -15,8 +15,8 @@
         {{ 'sylius.ui.delete'|trans }}
     </button>
 
-    <div data-happycms-page-tree-delete-target="parent">
-        <div class="modal fade" id="delete-modal-{{ id }}" tabindex="-1" aria-hidden="true" data-happycms-page-tree-delete-target="modal" {{ sylius_test_html_attribute('delete-modal') }}>
+    <div data-agence-adeliom--sylius-happy-cms-assets--page-tree-delete-target="parent">
+        <div class="modal fade" id="delete-modal-{{ id }}" tabindex="-1" aria-hidden="true" data-agence-adeliom--sylius-happy-cms-assets--page-tree-delete-target="modal" {{ sylius_test_html_attribute('delete-modal') }}>
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -25,7 +25,7 @@
                     <div class="modal-footer">
                         <form action="{{ path('sylius_happy_cms_admin_page_delete', {id: id}) }}" method="post">
                             <input type="hidden" name="_method" value="DELETE">
-                            <input type="hidden" name="_csrf_token" data-happycms-page-tree-delete-target="csrfToken"/>
+                            <input type="hidden" name="_csrf_token" data-agence-adeliom--sylius-happy-cms-assets--page-tree-delete-target="csrfToken"/>
 
                             {{ button.default({ text: 'sylius.ui.cancel'|trans, attr: 'data-bs-dismiss=modal' }) }}
                             {{ button.default({ text: 'sylius.ui.delete'|trans, type: 'submit', class: 'btn-danger', attr: sylius_test_html_attribute('confirm-button') }) }}
