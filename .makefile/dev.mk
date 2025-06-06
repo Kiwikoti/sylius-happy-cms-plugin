@@ -124,7 +124,7 @@ platform:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer global config allow-plugins.${PLUGIN_NAME} true)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer dump-autoload)
 	rm -rf ${APP_DIR}/composer.lock
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="*@dev")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="${PLUGIN_VERSION}")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --dev symfony/maker-bundle --no-scripts)
 	${MAKE} platform_up
 	${MAKE} platform_assets
@@ -157,7 +157,7 @@ node-shell:
 
 HELP += $(call help,node-watch,			Run assets build as watch)
 node-watch:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run build")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run watch")
 
 HELP += $(call help,node-watch,			Run assets build as dev)
 node-build:
@@ -191,3 +191,6 @@ bundle_install_test_files:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:mig -n)
+
+test_install:
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="${PLUGIN_VERSION}")
