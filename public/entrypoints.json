@@ -2,36 +2,28 @@
   "entrypoints": {
     "flexible-content": {
       "css": [
-        "/bundles/syliushappycmsplugin/flexible-content.css"
+        "/bundles/syliushappycmsplugin/flexible-content.4e7e726a.css"
       ],
       "js": [
-        "/bundles/syliushappycmsplugin/flexible-content.js"
+        "/bundles/syliushappycmsplugin/flexible-content.6dcf741e.js"
       ]
     },
     "media-form": {
       "css": [
-        "/bundles/syliushappycmsplugin/media-form.css"
+        "/bundles/syliushappycmsplugin/media-form.909462c0.css"
       ],
       "js": [
-        "/bundles/syliushappycmsplugin/media-form.js"
+        "/bundles/syliushappycmsplugin/media-form.d321a316.js"
       ]
     },
     "seo-block-type": {
       "js": [
-        "/bundles/syliushappycmsplugin/seo-block-type.js"
+        "/bundles/syliushappycmsplugin/seo-block-type.33f33775.js"
       ]
     },
     "accordion-block-type": {
       "js": [
-        "/bundles/syliushappycmsplugin/accordion-block-type.js"
-      ]
-    },
-    "stimulus-controllers": {
-      "css": [
-        "/bundles/syliushappycmsplugin/stimulus-controllers.css"
-      ],
-      "js": [
-        "/bundles/syliushappycmsplugin/stimulus-controllers.js"
+        "/bundles/syliushappycmsplugin/accordion-block-type.63a6620c.js"
       ]
     }
   }
