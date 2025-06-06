@@ -9,6 +9,9 @@
     "lint": "eslint -c .eslintrc.cjs ./assets/js",
     "lint-style": "stylelint --fix --no-cache \"./assets/**/*.css\""
   },
+  "dependencies": {
+    "@agence-adeliom/sylius-happy-cms-plugin" : "file:./assets/"
+  },
   "devDependencies": {
     "@symfony/webpack-encore": "^2.0",
     "buffer": "^6.0.3",
