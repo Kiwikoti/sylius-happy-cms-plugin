@@ -41,7 +41,8 @@
   },
   "conflict": {
     "symfony/framework-bundle": "6.2.8",
-    "agence-adeliom/sylius-easy-crud-plugin": "< v1.13.18"
+    "agence-adeliom/sylius-easy-crud-plugin": "< v1.13.18",
+    "sylius/sylius": "< v2.1.0"
   },
   "require-dev": {
     "friendsoftwig/twigcs": "^6.4 || ^v7.0",

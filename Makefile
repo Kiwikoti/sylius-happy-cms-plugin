@@ -19,7 +19,7 @@ PLUGIN_DIR=lib/sylius-happy-cms-plugin
 PLUGIN_NAMESPACE=SyliusHappyCMSPlugin
 PLUGIN_URL=git@github.com:agence-adeliom/sylius-happy-cms-plugin.git
 PLUGIN_ALIAS=sylius_happy_cms
-PLUGIN_VERSION="2.1.x-dev"
+PLUGIN_VERSION="2.x-dev"
 
 CRUD_PLUGIN_NAMESPACE=SyliusEasyCrudPlugin
 CRUD_PLUGIN_URL=git@github.com:agence-adeliom/sylius-easy-crud-plugin.git
