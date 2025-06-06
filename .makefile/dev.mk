@@ -191,6 +191,3 @@ bundle_install_test_files:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:mig -n)
-
-test_install:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="${PLUGIN_VERSION}")

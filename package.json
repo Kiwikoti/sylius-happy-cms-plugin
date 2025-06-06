@@ -10,7 +10,7 @@
     "lint-style": "stylelint --fix --no-cache \"./assets/**/*.css\""
   },
   "dependencies": {
-    "@agence-adeliom/sylius-happy-cms-plugin" : "file:./assets/"
+    "@agence-adeliom/sylius-happy-cms-plugin" : "file:./"
   },
   "devDependencies": {
     "@symfony/webpack-encore": "^2.0",
@@ -59,13 +59,13 @@
   "symfony": {
     "controllers": {
       "page-tree-tree": {
-        "main": "controllers/PageTreeController.js",
+        "main": "assets/controllers/PageTreeController.js",
         "webpackMode": "lazy",
         "fetch": "lazy",
         "enabled": true
       },
       "page-tree-delete": {
-        "main": "controllers/DeletePageController.js",
+        "main": "assets/controllers/DeletePageController.js",
         "webpackMode": "lazy",
         "fetch": "lazy",
         "enabled": true
