@@ -13,7 +13,6 @@ Encore
     .enableSassLoader()
     .enableVueLoader()
     .enablePostCssLoader()
-    .enableStimulusBridge(path.resolve(__dirname, './assets/controllers.json'))
 
     .copyFiles({
         from: './assets/media/dist',
@@ -29,7 +28,6 @@ Encore
     .addEntry('media-form', './assets/media/js/app.js')
     .addEntry('seo-block-type', './assets/blocks/seo-block-type.js')
     .addEntry('accordion-block-type', './assets/blocks/accordion-block-type.js')
-    .addEntry('stimulus-controllers', './assets/entrypoint.js')
 ;
 
 module.exports = Encore.getWebpackConfig();
