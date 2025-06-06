@@ -198,7 +198,12 @@ services:
 
 ```
 
-4. Update database :
+```bash
+npm run build
+yarn run build
+```
+
+5. Update database :
 
 ```bash
 php bin/console doc:mig:diff

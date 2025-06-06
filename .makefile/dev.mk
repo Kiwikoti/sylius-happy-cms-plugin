@@ -46,7 +46,7 @@ ${APP_DIR}:
 	cd ${APP_DIR} && chmod -R 777 public
 	echo "COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME}" >> ${APP_DIR}/.env
 	echo "NODE_VERSION=${NODE_VERSION}" >> ${APP_DIR}/.env
-	${MAKE} apply_dist
+	#${MAKE} apply_dist
 
 apply_dist:
 	ROOT_DIR=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST)))); \
@@ -88,7 +88,7 @@ platform:
 		(cd ${APP_DIR} && sed -i'' -e 's|          - public-media:/srv/sylius/public/media:rw|          - public-media:/srv/sylius/public/media:rw\n          - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|            - ./public:/srv/sylius/public:rw,delegated|            - ./public:/srv/sylius/public:rw,delegated\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|APP_DEBUG: 0|APP_DEBUG: 1|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|- "80:80"|- "$(DOCKER_PHP_PORT):80"\n        depends_on:\n            - php|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|- "80:80"|- "$(DOCKER_PHP_PORT):80"|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|            - public-media:/srv/sylius/public/media:ro,nocopy|            - public-media:/srv/sylius/public/media:ro,nocopy\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n];|g" config/bundles.php); \
 		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\${PLUGIN_NAMESPACE}\\\${PLUGIN_NAMESPACE}::class => ['all' => true],\n    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n];|g" config/bundles.php); \
@@ -124,7 +124,7 @@ platform:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer global config allow-plugins.${PLUGIN_NAME} true)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer dump-autoload)
 	rm -rf ${APP_DIR}/composer.lock
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="*@dev")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --no-interaction --with-all-dependencies --no-scripts ${PLUGIN_NAME}="${PLUGIN_VERSION}")
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer require --dev symfony/maker-bundle --no-scripts)
 	${MAKE} platform_up
 	${MAKE} platform_assets
@@ -157,7 +157,7 @@ node-shell:
 
 HELP += $(call help,node-watch,			Run assets build as watch)
 node-watch:
-	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run build")
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm -i nodejs "npm run watch")
 
 HELP += $(call help,node-watch,			Run assets build as dev)
 node-build:
@@ -191,3 +191,6 @@ bundle_install_test_files:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console cache:clear)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:diff --allow-empty-diff -n)
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php bin/console doc:mig:mig -n)
+
+update_plugin:
+	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer update ${PLUGIN_NAME}="${PLUGIN_VERSION}")

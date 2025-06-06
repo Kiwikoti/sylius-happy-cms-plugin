@@ -9,28 +9,14 @@
     "lint": "eslint -c .eslintrc.cjs ./assets/js",
     "lint-style": "stylelint --fix --no-cache \"./assets/**/*.css\""
   },
+  "dependencies": {
+    "@agence-adeliom/sylius-happy-cms-assets" : "file:./assets"
+  },
   "devDependencies": {
-    "@agence-adeliom/sylius-happy-cms-assets": "file:Resources/assets/",
-    "@hotwired/stimulus": "^3.0.0",
-    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
-    "@symfony/stimulus-bridge": "^4.0.0",
-    "@symfony/webpack-encore": "^5.0",
-    "annyang": "^2.6.1",
-    "axios": "^0.21.2",
+    "@symfony/webpack-encore": "^2.0",
     "buffer": "^6.0.3",
-    "cropperjs": "^1.5.12",
-    "dropzone": "^5.9.2",
     "eslint": "^8.56.0",
-    "file-loader": "^6.2.0",
-    "fuse.js": "^6.4.6",
-    "idb-keyval": "^5.0.6",
     "infinite-tree": "^1.18.0",
-    "keycode": "^2.2.0",
-    "lottie-web": "^5.7.11",
-    "music-metadata-browser": "^2.2.6",
-    "notie": "^4.3.1",
-    "plyr": "^3.6.8",
-    "postcss-loader": "^6.2.1",
     "process": "^0.11.10",
     "resolve-url-loader": "^4.0.0",
     "sass": "^1.35.1",
@@ -38,6 +24,24 @@
     "sortablejs": "^1.15.2",
     "stylelint": "^16.3.0",
     "stylelint-config-standard": "^36.0.0",
+    "vue-loader": "^15.9.7",
+    "vue-template-compiler": "^2.6.14",
+    "@symfony/stimulus-bridge": "^4.0.0",
+    "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "@hotwired/stimulus": "^3.0.0",
+    "annyang": "^2.6.1",
+    "axios": "^0.21.2",
+    "cropperjs": "^1.5.12",
+    "dropzone": "^5.9.2",
+    "file-loader": "^6.2.0",
+    "fuse.js": "^6.4.6",
+    "idb-keyval": "^5.0.6",
+    "keycode": "^2.2.0",
+    "lottie-web": "^5.7.11",
+    "music-metadata-browser": "^2.2.6",
+    "notie": "^4.3.1",
+    "plyr": "^3.6.8",
+    "postcss-loader": "^6.2.1",
     "tailwindcss": "^2.2.4",
     "vue": "^2.6.14",
     "vue-awesome": "^4.3.1",
@@ -46,51 +50,26 @@
     "vue-image-compare2": "^1.0.0",
     "vue-infinite-loading": "^2.4.5",
     "vue-input-autowidth": "^1.0.11",
-    "vue-loader": "^15.9.7",
     "vue-ls": "^3.2.2",
     "vue-notif": "^2.0.0",
-    "vue-template-compiler": "^2.6.14",
     "vue-tippy": "v2",
     "vue-touch": "^2.0.0-beta.4",
     "vue2-filters": "^0.13.0"
   },
   "symfony": {
-    "@symfony/ux-autocomplete": {
-      "autocomplete": {
-        "enabled": true,
-        "fetch": "eager",
-        "autoimport": {
-          "tom-select/dist/css/tom-select.default.css": true,
-          "tom-select/dist/css/tom-select.bootstrap4.css": false,
-          "tom-select/dist/css/tom-select.bootstrap5.css": false
-        }
-      }
-    },
-    "@symfony/ux-live-component": {
-      "live": {
-        "enabled": true,
-        "fetch": "eager",
-        "autoimport": {
-          "@symfony/ux-live-component/dist/live.min.css": true
-        }
-      }
-    },
-    "@agence-adeliom/sylius-happy-cms-assets": {
-      "happycms-page-tree-delete": {
-        "main": "controller/DeletePageController.js",
+    "controllers": {
+      "page-tree-tree": {
+        "main": "controllers/PageTreeController.js",
         "webpackMode": "lazy",
         "fetch": "lazy",
         "enabled": true
       },
-      "happycms-page-tree-tree": {
-        "main": "controller/PageTreeController.js",
+      "page-tree-delete": {
+        "main": "controllers/DeletePageController.js",
         "webpackMode": "lazy",
         "fetch": "lazy",
         "enabled": true
       }
-    },
-    "importmap": {
-      "@hotwired/stimulus": "^3.0.0"
     }
   },
   "files": [

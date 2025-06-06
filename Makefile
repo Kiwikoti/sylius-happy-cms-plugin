@@ -8,7 +8,7 @@ SHELL=/bin/bash
 ### VERSIONS
 ### ¯¯¯
 
-SYLIUS_STANDARD_VERSION="~2.0.0"
+SYLIUS_STANDARD_VERSION="~2.1.0"
 SYLIUS_VERSION="~2.1.0"
 SYMFONY_VERSION="~7.3.0"
 NODE_VERSION=20
@@ -19,6 +19,7 @@ PLUGIN_DIR=lib/sylius-happy-cms-plugin
 PLUGIN_NAMESPACE=SyliusHappyCMSPlugin
 PLUGIN_URL=git@github.com:agence-adeliom/sylius-happy-cms-plugin.git
 PLUGIN_ALIAS=sylius_happy_cms
+PLUGIN_VERSION="2.1.x-dev"
 
 CRUD_PLUGIN_NAMESPACE=SyliusEasyCrudPlugin
 CRUD_PLUGIN_URL=git@github.com:agence-adeliom/sylius-easy-crud-plugin.git
