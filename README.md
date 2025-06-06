@@ -198,34 +198,6 @@ services:
 
 ```
 
-
-4. Reference the symfony ux controllers
-
-into `assets/admin/controllers.json` add :
-
-```json
-{
-  "controllers": {
-    "@agence-adeliom/sylius-happy-cms-plugin": {
-      "page-tree-tree": {
-        "main": "assets/controllers/PageTreeController.js",
-        "webpackMode": "lazy",
-        "fetch": "lazy",
-        "enabled": true
-      },
-      "page-tree-delete": {
-        "main": "assets/controllers/DeletePageController.js",
-        "webpackMode": "lazy",
-        "fetch": "lazy",
-        "enabled": true
-      }
-    }
-  }
-}
-```
-
-Then recompile your assets :
-
 ```bash
 npm run build
 yarn run build
