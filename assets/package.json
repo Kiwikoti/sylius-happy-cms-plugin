@@ -1,0 +1,32 @@
+{
+  "name": "@agence-adeliom/sylius-happy-cms-assets",
+  "version": "1.0.0",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "requires": true,
+  "engineStrict": true,
+  "symfony": {
+    "controllers": {
+      "page-tree-tree": {
+        "main": "controllers/PageTreeController.js",
+        "webpackMode": "lazy",
+        "fetch": "lazy",
+        "enabled": true
+      },
+      "page-tree-delete": {
+        "main": "controllers/DeletePageController.js",
+        "webpackMode": "lazy",
+        "fetch": "lazy",
+        "enabled": true
+      }
+    }
+  },
+  "peerDependencies": {
+    "@hotwired/stimulus": "^3.0.0"
+  },
+  "devDependencies": {
+    "@hotwired/stimulus": "^3.0.0"
+  }
+}
