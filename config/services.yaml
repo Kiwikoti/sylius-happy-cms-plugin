@@ -89,5 +89,30 @@ services:
     tags:
       - { name: sylius.live_component.admin, key: happycms-page-tree-delete, template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig' }
 
-  # seo
+  # menu
   # ===============================
+
+
+  # todo interface alias
+  sylius.happy_cms.menu_item.all_menu_items:
+    class: Adeliom\SyliusHappyCMSPlugin\Doctrine\Query\Menu\AllMenuItems
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@sylius_admin.context.locale.admin_based"
+      - "@sylius.translation_locale_provider"
+
+  # todo interface alias
+  sylius.happy_cms.admin.menu_item_tree.tree:
+    class: Adeliom\SyliusHappyCMSPlugin\Twig\Components\MenuItemTree\TreeComponent
+    arguments:
+      - "@sylius.happy_cms.menu_item.all_menu_items"
+    tags:
+      - { name: sylius.live_component.admin, key: happycms-menu-item-tree-tree }
+
+  # todo interface alias
+  sylius.happy_cms.admin.menu_item_tree.delete:
+    class: Adeliom\SyliusHappyCMSPlugin\Twig\Components\MenuItemTree\DeleteComponent
+    arguments:
+      - "@security.csrf.token_manager"
+    tags:
+      - { name: sylius.live_component.admin, key: happycms-menu-item-tree-delete, template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/components/delete.html.twig' }

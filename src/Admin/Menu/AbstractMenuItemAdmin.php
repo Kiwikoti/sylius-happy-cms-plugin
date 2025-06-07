@@ -93,7 +93,7 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
         if ($menuId) {
             $actions->remove(Crud::PAGE_INDEX, Action::NEW);
             $newMenuItem = Action::new('menu_items.new', 'sylius_happy_cms.menu_item.admin.action.create', 'plus')
-                ->linkToRoute('sylius_happy_cms_admin_menu_item_create', ['id' => $menuId])
+                ->linkToRoute('sylius_happy_cms_admin_menu_item_create', ['menu_id' => $menuId])
                 ->addCssClass('primary');
             $actions->addGlobalAction(Crud::PAGE_INDEX, $newMenuItem);
         }
@@ -105,7 +105,8 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
     {
         $menuId = $this->getMenuId();
 
-        yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item');
+        yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item')
+            ->renderHorizontal();
 
         $syliusResources = $this->crudAdminFactory->parameterBag->get('sylius.resources');
         if ($menuId && is_array($syliusResources['sylius_happy_cms.menu']) && is_array($syliusResources['sylius_happy_cms.menu']['classes']) && isset($syliusResources['sylius_happy_cms.menu']['classes']['model'])) {
@@ -163,7 +164,8 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
             ->setFormTypeOption('placeholder', false)
             ->renderExpanded();
 
-        yield TabField::new('link', 'sylius_happy_cms.menu_item.admin.tab.link');
+        yield TabField::new('link', 'sylius_happy_cms.menu_item.admin.tab.link')
+            ->renderHorizontal();
 
         yield TranslationField::new('translations', 'sylius_happy_cms.menu_item.admin.field.translations')
             ->addField(Field::new('name', 'sylius_happy_cms.menu_item.admin.field.name'))
@@ -176,10 +178,13 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
         $resource = $this->getResource();
 
         if ($resource instanceof MenuItemInterface && null !== $resource->getMenu()) {
+            $this->crudAdminFactory->requestStack->getCurrentRequest()->attributes->set('menu_id', $resource->getMenu()->getId());
+
             return $resource->getMenu()->getId();
         }
 
         $menuId = (int) $this->getResourceFieldValueInRequest(formName: 'menu_item_admin', fieldName: 'menu');
+        $this->crudAdminFactory->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuId ?: null);
 
         return $menuId ?: null;
     }

@@ -82,3 +82,111 @@ sylius_twig_hooks:
       move_down:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_down.html.twig'
         priority: 0
+
+    'easy_crud.menu_item.create.content':
+      flashes:
+        template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+        priority: 300
+      header:
+        template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+        priority: 200
+      sections:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/sections.html.twig'
+        priority: 100
+      footer:
+        template: '@SyliusAdmin/shared/crud/common/content/footer.html.twig'
+        priority: -100
+      form:
+        enabled: false
+    'easy_crud.menu_item.create.content.sections#right':
+      form:
+        template: '@SyliusEasyCrudPlugin/shared/crud/common/content/form.html.twig'
+        priority: 0
+    'easy_crud.menu_item.create.content.sections#left':
+      tree:
+        component: 'happycms-menu-item-tree-tree'
+        props:
+          template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/components/tree.html.twig'
+        priority: 0
+    'easy_crud.menu_item.create.content.sections.tree':
+      actions:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions.html.twig'
+        priority: 0
+
+    'easy_crud.menu_item.create.content.sections.tree.actions':
+      edit:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/edit.html.twig'
+        priority: 100
+      dropdown:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown.html.twig'
+        priority: 0
+    'easy_crud.menu_item.create.content.sections.tree.actions.dropdown':
+      create_child:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/create_child.html.twig'
+        priority: 400
+      delete:
+        component: 'happycms-menu-item-tree-delete'
+        props:
+          template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/components/delete.html.twig'
+        priority: 300
+      move_up:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_up.html.twig'
+        priority: 100
+      move_down:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_down.html.twig'
+        priority: 0
+
+
+
+    'easy_crud.menu_item.update.content':
+      flashes:
+        template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
+        priority: 300
+      header:
+        template: '@SyliusAdmin/shared/crud/common/content/header.html.twig'
+        priority: 200
+      sections:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/sections.html.twig'
+        priority: 100
+      footer:
+        template: '@SyliusAdmin/shared/crud/common/content/footer.html.twig'
+        priority: -100
+      form:
+        enabled: false
+    'easy_crud.menu_item.update.content.sections#right':
+      form:
+        template: '@SyliusEasyCrudPlugin/shared/crud/common/content/form.html.twig'
+        priority: 0
+    'easy_crud.menu_item.update.content.sections#left':
+      tree:
+        component: 'happycms-menu-item-tree-tree'
+        props:
+          template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/components/tree.html.twig'
+        priority: 0
+    'easy_crud.menu_item.update.content.sections.tree':
+      actions:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions.html.twig'
+        priority: 0
+
+    'easy_crud.menu_item.update.content.sections.tree.actions':
+      edit:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/edit.html.twig'
+        priority: 100
+      dropdown:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown.html.twig'
+        priority: 0
+    'easy_crud.menu_item.update.content.sections.tree.actions.dropdown':
+      create_child:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/create_child.html.twig'
+        priority: 400
+      delete:
+        component: 'happycms-menu-item-tree-delete'
+        props:
+          template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/components/delete.html.twig'
+        priority: 300
+      move_up:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_up.html.twig'
+        priority: 100
+      move_down:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_down.html.twig'
+        priority: 0
