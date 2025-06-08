@@ -7,6 +7,7 @@ sylius_happy_cms:
     menus: "Menus"
     menu_item: "Elément de menu"
     menu_items: "Eléments de menu"
+    shared_blocks: "Shared blocks"
   page:
     admin:
       action:

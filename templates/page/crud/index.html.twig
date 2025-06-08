@@ -1,12 +1,1 @@
 {% extends '@SyliusEasyCrudPlugin/crud/index.html.twig' %}
-
-{% block content %}
-    <div class="ui grid sticky-container">
-        <div class="sixteen wide mobile sixteen wide tablet four wide computer column sticky-column">
-            {% include '@SyliusHappyCMSPlugin/page/_treeWithButtons.html.twig' with {pages: happy_cms_tree_pages()} %}
-        </div>
-        <div class="sixteen wide mobile sixteen wide tablet twelve wide computer column">
-            {{ parent() }}
-        </div>
-    </div>
-{% endblock %}

@@ -8,7 +8,7 @@ sylius_twig_hooks:
       content:
         template: "@SyliusHappyCMSPlugin/shared_block/select.html.twig"
 
-    'sylius.cms.shared_block.create':
+    'sylius.cms.shared_block.create.content':
       content:
         template: "@SyliusAdmin/Crud/Create/_content.html.twig"
 
@@ -71,16 +71,19 @@ sylius_twig_hooks:
       create_child:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/create_child.html.twig'
         priority: 400
-      delete:
-        component: 'happycms-page-tree-delete'
-        props:
-          template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig'
-        priority: 300
       move_up:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_up.html.twig'
         priority: 100
       move_down:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_down.html.twig'
+        priority: 0
+      manage_content:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/manage_content.html.twig'
+        priority: 0
+      delete:
+        component: 'happycms-page-tree-delete'
+        props:
+          template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig'
         priority: 0
 
     'easy_crud.menu_item.create.content':

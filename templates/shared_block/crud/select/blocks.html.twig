@@ -1,40 +1,47 @@
 {% import '@SyliusAdmin/shared/helper/header.html.twig' as header %}
 {% set blocks = hookable_metadata.context.blocks %}
 
-<div class="page-body">
-    <div class="container-xl">
-
-        <div class="row m-3 row-gap-2">
-            <div class="col-12 col-md">
-                <div class="d-md-flex gap-2 align-items-center">
-                    {{ header.h1('sylius_happy_cms.shared_block.admin.ui.choose'|trans, null, null) }}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            {% if (blocks|default([]))|length %}
-                {% for type, block in blocks %}
-
-                    <div class="card m-3" style="width: 18rem;">
-                        {% if block.icon is iterable and block.icon|length %}
-                            <img class="card-img-top" src="{{ block.icon|first }}">
-                        {% elseif block.icon is not iterable and block.icon is not empty %}
-                            <img class="card-img-top" src="{{ block.icon }}">
-                        {% else %}
-                            <div class="card-img-top">
-                                <svg fill="#b5b5b5" viewBox="-3.2 -3.2 38.40 38.40" id="icon" xmlns="http://www.w3.org/2000/svg" stroke="#b5b5b5" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)"><rect x="-3.2" y="-3.2" width="38.40" height="38.40" rx="0" fill="#f7f7f7" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.128"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;}</style></defs><title>no-image</title><path d="M30,3.4141,28.5859,2,2,28.5859,3.4141,30l2-2H26a2.0027,2.0027,0,0,0,2-2V5.4141ZM26,26H7.4141l7.7929-7.793,2.3788,2.3787a2,2,0,0,0,2.8284,0L22,19l4,3.9973Zm0-5.8318-2.5858-2.5859a2,2,0,0,0-2.8284,0L19,19.1682l-2.377-2.3771L26,7.4141Z"></path><path d="M6,22V19l5-4.9966,1.3733,1.3733,1.4159-1.416-1.375-1.375a2,2,0,0,0-2.8284,0L6,16.1716V6H22V4H6A2.002,2.002,0,0,0,4,6V22Z"></path><rect id="_Transparent_Rectangle_" data-name="<Transparent Rectangle>" class="cls-1" width="32" height="32"></rect></g></svg>
+<div class="page-wrapper">
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row m-3 row-gap-2">
+                        <div class="col-12 col-md">
+                            <div class="d-md-flex gap-2 align-items-center">
+                                {{ header.h1('sylius_happy_cms.shared_block.admin.ui.choose'|trans, null, null) }}
                             </div>
-                        {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ block.name }}</h5>
-                            <p class="card-text">{{ block.description }}</p>
-                            <a class="btn btn-primary" href="{{ path('sylius_happy_cms_admin_shared_block_create', {block_type: type}) }}">{{ 'sylius_happy_cms.shared_block.admin.action.choose'|trans }}</a>
                         </div>
                     </div>
 
-                {% endfor %}
-            {% endif %}
+                    <div class="row">
+                        {% if (blocks|default([]))|length %}
+                            {% for type, block in blocks %}
+
+                                <div class="card m-3" style="width: 18rem;">
+                                    {% if block.icon is iterable and block.icon|length %}
+                                        <img class="card-img-top" src="{{ block.icon|first }}">
+                                    {% elseif block.icon is not iterable and block.icon is not empty %}
+                                        <img class="card-img-top" src="{{ block.icon }}">
+                                    {% else %}
+                                        <div class="card-img-top">
+                                            <svg fill="#b5b5b5" viewBox="-3.2 -3.2 38.40 38.40" id="icon" xmlns="http://www.w3.org/2000/svg" stroke="#b5b5b5" transform="rotate(0)"><g id="SVGRepo_bgCarrier" stroke-width="0" transform="translate(0,0), scale(1)"><rect x="-3.2" y="-3.2" width="38.40" height="38.40" rx="0" fill="#f7f7f7" strokewidth="0"></rect></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.128"></g><g id="SVGRepo_iconCarrier"><defs><style>.cls-1{fill:none;}</style></defs><title>no-image</title><path d="M30,3.4141,28.5859,2,2,28.5859,3.4141,30l2-2H26a2.0027,2.0027,0,0,0,2-2V5.4141ZM26,26H7.4141l7.7929-7.793,2.3788,2.3787a2,2,0,0,0,2.8284,0L22,19l4,3.9973Zm0-5.8318-2.5858-2.5859a2,2,0,0,0-2.8284,0L19,19.1682l-2.377-2.3771L26,7.4141Z"></path><path d="M6,22V19l5-4.9966,1.3733,1.3733,1.4159-1.416-1.375-1.375a2,2,0,0,0-2.8284,0L6,16.1716V6H22V4H6A2.002,2.002,0,0,0,4,6V22Z"></path><rect id="_Transparent_Rectangle_" data-name="<Transparent Rectangle>" class="cls-1" width="32" height="32"></rect></g></svg>
+                                        </div>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ block.name }}</h5>
+                                        <p class="card-text">{{ block.description }}</p>
+                                        <a class="btn btn-primary" href="{{ path('sylius_happy_cms_admin_shared_block_create', {block_type: type}) }}">{{ 'sylius_happy_cms.shared_block.admin.action.choose'|trans }}</a>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
+
