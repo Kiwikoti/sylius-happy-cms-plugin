@@ -15,7 +15,7 @@ export default class extends Controller {
       this.csrfTokenTarget.value = event.detail.csrfToken;
       this.modalElement = this.modalTarget;
 
-      this.modalElement.closest('[data-modal-delete-page-target]').appendChild(this.modalElement);
+      this.modalElement.closest('[data-modal-delete-menu-item-target]').appendChild(this.modalElement);
       this.modal = new window.bootstrap.Modal(this.modalElement);
       this.modal.show();
 

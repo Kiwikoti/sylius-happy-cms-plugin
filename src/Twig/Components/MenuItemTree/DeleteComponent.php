@@ -18,7 +18,7 @@ final class DeleteComponent
     use HookableLiveComponentTrait;
     use ComponentToolsTrait;
 
-    public const OPEN_DELETE_MODAL_EVENT = 'happycms:menuitem:open_delete_modal';
+    public const OPEN_DELETE_MODAL_EVENT = 'happycms:menu_item:open_delete_modal';
 
     #[ExposeInTemplate(name: 'menu_item_id')]
     public string $menuItemId = '';
