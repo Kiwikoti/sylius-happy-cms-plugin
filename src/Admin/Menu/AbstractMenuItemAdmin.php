@@ -135,18 +135,19 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
             $parentField
                 ->setFormTypeOption(
                     'query_builder',
-                    function(EntityRepository $er) use ($resource, $menuId) :QueryBuilder {
+                    function (EntityRepository $er) use ($resource, $menuId): QueryBuilder {
                         $builder = $er->createQueryBuilder('mi');
                         $builder
                             ->andWhere('mi.menu = :menuId')
                             ->setParameter('menuId', $menuId);
-                        if (!is_null($resource->getId())) {
+                        if (null !== $resource->getId()) {
                             $builder
                                 ->andWhere('mi.id != :id')
                                 ->setParameter('id', $resource->getId());
                         }
+
                         return $builder;
-                    }
+                    },
                 );
         }
 
