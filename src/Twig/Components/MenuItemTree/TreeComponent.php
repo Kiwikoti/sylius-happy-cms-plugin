@@ -6,7 +6,9 @@ namespace Adeliom\SyliusHappyCMSPlugin\Twig\Components\MenuItemTree;
 
 use Adeliom\SyliusHappyCMSPlugin\Doctrine\Query\Menu\AllMenuItemsInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
+use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Tool\ActorProviderInterface;
 use Sylius\Bundle\UiBundle\Twig\Component\TemplatePropTrait;
 use Sylius\TwigHooks\LiveComponent\HookableLiveComponentTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,22 +40,26 @@ class TreeComponent
     #[LiveAction]
     public function moveUp(#[LiveArg] int $menuItemId): void
     {
+        /** @var MenuItemRepositoryInterface $menuItemRepository */
         $menuItemRepository = $this->entityManager->getRepository(MenuItemInterface::class);
         $menuItemToBeMoved = $menuItemRepository->find($menuItemId);
 
-        if ($menuItemToBeMoved->getPosition() > 0 && null !== $menuItemRepository) {
-            $otherMenuItemToBeMoved = $menuItemRepository->findPreviousMenuItem($menuItemToBeMoved);
-            if ($otherMenuItemToBeMoved) {
-                $oldPosition = $menuItemToBeMoved->getPosition();
+        if ($menuItemToBeMoved->getPosition() > 0) {
+            $targetItem = $menuItemRepository->findPreviousMenuItem($menuItemToBeMoved);
 
-                $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() - 1);
-                $otherMenuItemToBeMoved->setPosition($oldPosition);
+            $oldPosition = $menuItemToBeMoved->getPosition();
+            $oldLft = $menuItemToBeMoved->getLft();
+            $oldRgt= $menuItemToBeMoved->getRgt();
 
-                $this->entityManager->persist($menuItemToBeMoved);
-                $this->entityManager->persist($otherMenuItemToBeMoved);
-                $this->entityManager->flush();
-            } else {
-                $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() - 1);
+            if ($targetItem instanceof MenuItemInterface) {
+                $targetItem->setPosition($oldPosition);
+                $targetItem->setLft($oldLft);
+                $targetItem->setRgt($oldRgt);
+                $this->entityManager->persist($targetItem);
+
+                $menuItemToBeMoved->setPosition($oldPosition - 1);
+                $menuItemToBeMoved->setLft($oldLft - 2);
+                $menuItemToBeMoved->setRgt($oldRgt - 2);
                 $this->entityManager->persist($menuItemToBeMoved);
                 $this->entityManager->flush();
             }
@@ -65,22 +71,25 @@ class TreeComponent
     #[LiveAction]
     public function moveDown(#[LiveArg] int $menuItemId): void
     {
+        /** @var MenuItemRepositoryInterface $menuItemRepository */
         $menuItemRepository = $this->entityManager->getRepository(MenuItemInterface::class);
         $menuItemToBeMoved = $menuItemRepository->find($menuItemId);
 
-        $otherMenuItemToBeMoved = $menuItemRepository->findNextMenuItem($menuItemToBeMoved);
-        if ($otherMenuItemToBeMoved instanceof MenuItemInterface) {
-            $oldPosition = $menuItemToBeMoved->getPosition();
+        $targetItem = $menuItemRepository->findNextMenuItem($menuItemToBeMoved);
 
-            $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() + 1);
-            $this->entityManager->persist($menuItemToBeMoved);
-            $otherMenuItemToBeMoved->setPosition($oldPosition);
-            $this->entityManager->persist($otherMenuItemToBeMoved);
+        $oldPosition = $menuItemToBeMoved->getPosition();
+        $oldLft = $menuItemToBeMoved->getLft();
+        $oldRgt= $menuItemToBeMoved->getRgt();
 
-            $this->entityManager->flush();
-        } else {
-            // If there is no next item, we can set the position to null
-            $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() + 1);
+        if ($targetItem instanceof MenuItemInterface) {
+            $targetItem->setPosition($oldPosition);
+            $targetItem->setLft($oldLft);
+            $targetItem->setRgt($oldRgt);
+
+            $menuItemToBeMoved->setPosition($oldPosition + 1);
+            $menuItemToBeMoved->setLft($oldLft + 2);
+            $menuItemToBeMoved->setRgt($oldRgt + 2);
+
             $this->entityManager->persist($menuItemToBeMoved);
             $this->entityManager->flush();
         }
