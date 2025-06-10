@@ -76,7 +76,7 @@
     .__box-img {
       @apply rounded-none h-full w-full overflow-hidden relative border-0;
       @screen md{
-        @apply rounded h-12 w-12 border border-dashed border-theme-25;
+        @apply rounded h-12 w-12 border border-dashed border-primary;
       }
 
       img {
