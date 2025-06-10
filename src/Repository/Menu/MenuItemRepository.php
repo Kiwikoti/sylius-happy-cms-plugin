@@ -119,7 +119,7 @@ class MenuItemRepository extends NestedTreeRepository implements MenuItemReposit
             ->orderBy('mi.id', 'DESC')
             ->getQuery()
             ->setMaxResults(1)
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 
     public function findNextMenuItem(MenuItemInterface $menuItem): ?MenuItemInterface
@@ -135,6 +135,6 @@ class MenuItemRepository extends NestedTreeRepository implements MenuItemReposit
             ->orderBy('mi.id', 'ASC')
             ->getQuery()
             ->setMaxResults(1)
-            ->getSingleResult();
+            ->getOneOrNullResult();
     }
 }

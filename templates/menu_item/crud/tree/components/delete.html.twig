@@ -1,7 +1,7 @@
 {# Rendered with \App\Twig\Component\Page\DeletePageComponent #}
 
 {% import '@SyliusAdmin/shared/helper/button.html.twig' as button %}
-{% set id = page_id|default('__PAGE_ID__') %}
+{% set id = menu_item_id|default('__PAGE_ID__') %}
 
 <div {{ attributes.defaults(stimulus_controller('@agence-adeliom/sylius-happy-cms-plugin/menu-item-tree-delete')) }}>
     <button

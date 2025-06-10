@@ -41,10 +41,25 @@ class TreeComponent
         $menuItemRepository = $this->entityManager->getRepository(MenuItemInterface::class);
         $menuItemToBeMoved = $menuItemRepository->find($menuItemId);
 
-        if ($menuItemToBeMoved->getPosition() > 0) {
-            $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() - 1);
-            $this->entityManager->flush();
+        if ($menuItemToBeMoved->getPosition() > 0 && null !== $menuItemRepository) {
+            $otherMenuItemToBeMoved = $menuItemRepository->findPreviousMenuItem($menuItemToBeMoved);
+            if ($otherMenuItemToBeMoved) {
+                $oldPosition = $menuItemToBeMoved->getPosition();
+
+                $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() - 1);
+                $otherMenuItemToBeMoved->setPosition($oldPosition);
+
+                $this->entityManager->persist($menuItemToBeMoved);
+                $this->entityManager->persist($otherMenuItemToBeMoved);
+                $this->entityManager->flush();
+            } else {
+                $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() - 1);
+                $this->entityManager->persist($menuItemToBeMoved);
+                $this->entityManager->flush();
+            }
         }
+
+        $this->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuItemToBeMoved->getMenu()->getId());
     }
 
     #[LiveAction]
@@ -53,8 +68,24 @@ class TreeComponent
         $menuItemRepository = $this->entityManager->getRepository(MenuItemInterface::class);
         $menuItemToBeMoved = $menuItemRepository->find($menuItemId);
 
-        $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() + 1);
-        $this->entityManager->flush();
+        $otherMenuItemToBeMoved = $menuItemRepository->findNextMenuItem($menuItemToBeMoved);
+        if ($otherMenuItemToBeMoved instanceof MenuItemInterface) {
+            $oldPosition = $menuItemToBeMoved->getPosition();
+
+            $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() + 1);
+            $this->entityManager->persist($menuItemToBeMoved);
+            $otherMenuItemToBeMoved->setPosition($oldPosition);
+            $this->entityManager->persist($otherMenuItemToBeMoved);
+
+            $this->entityManager->flush();
+        } else {
+            // If there is no next item, we can set the position to null
+            $menuItemToBeMoved->setPosition($menuItemToBeMoved->getPosition() + 1);
+            $this->entityManager->persist($menuItemToBeMoved);
+            $this->entityManager->flush();
+        }
+
+        $this->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuItemToBeMoved->getMenu()->getId());
     }
 
     /**

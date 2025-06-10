@@ -194,3 +194,4 @@ bundle_install_test_files:
 
 update_plugin:
 	cd ${APP_DIR} && (ENV=$(ENV) docker compose run --rm php composer update ${PLUGIN_NAME}="${PLUGIN_VERSION}")
+	${MAKE} node-build

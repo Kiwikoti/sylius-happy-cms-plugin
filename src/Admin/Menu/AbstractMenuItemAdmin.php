@@ -115,6 +115,7 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
                 ->setFormType(EntityType::class)
                 ->setFormTypeOption('class', $syliusResources['sylius_happy_cms.menu']['classes']['model'])
                 ->setFormTypeOption('placeholder', false)
+                ->setFormTypeOption('attr', ['disabled' => 'disabled'])
                 ->setFormTypeOption(
                     'query_builder',
                     fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('m')
@@ -130,15 +131,22 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
 
         $resource = $this->getResource();
 
-        if ($menuId && ($resource instanceof MenuItemInterface && null !== $resource->getId())) {
+        if ($menuId && ($resource instanceof MenuItemInterface)) {
             $parentField
                 ->setFormTypeOption(
                     'query_builder',
-                    fn (EntityRepository $er): QueryBuilder => $er->createQueryBuilder('mi')
-                    ->andWhere('mi.id != :id')
-                    ->andWhere('mi.menu = :menuId')
-                    ->setParameter('id', $resource->getId())
-                    ->setParameter('menuId', $menuId),
+                    function(EntityRepository $er) use ($resource, $menuId) :QueryBuilder {
+                        $builder = $er->createQueryBuilder('mi');
+                        $builder
+                            ->andWhere('mi.menu = :menuId')
+                            ->setParameter('menuId', $menuId);
+                        if (!is_null($resource->getId())) {
+                            $builder
+                                ->andWhere('mi.id != :id')
+                                ->setParameter('id', $resource->getId());
+                        }
+                        return $builder;
+                    }
                 );
         }
 
@@ -155,7 +163,7 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
 
         yield Field::new('target', 'sylius_happy_cms.menu_item.admin.field.target');
 
-        yield Field::new('position', 'sylius_happy_cms.menu_item.admin.field.position');
+        //yield Field::new('position', 'sylius_happy_cms.menu_item.admin.field.position');
 
         yield EnumField::new('publishState', 'sylius_happy_cms.menu_item.admin.field.state')
             ->setEnum(ThreeStateStatusEnum::class)
