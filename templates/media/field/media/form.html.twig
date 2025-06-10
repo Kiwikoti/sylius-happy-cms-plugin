@@ -27,18 +27,24 @@
                 <!--media-modal item="links" :name="inputName" :multi="true"></media-modal-->
 
                 <section>
-                    <button type="button"  class="icon-link" @click="toggleModalFor('media')">
-                        {{ 'sylius_happy_cms.media.select.file'|trans({}, 'SyliusHappyCMSPlugin') }}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="bi" viewBox="0 0 16 16" aria-hidden="true">
-                            <path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
-                        </svg>
-                    </button>
+                    <div class="selection-preview mb-3"  v-if="!selectedFile">
+                        <div class="__box-data">
+                            <div class="__box-preview">
+                                <div class="__box-img"></div>
+                            </div>
 
-                    <div class="ui placeholder"  v-if="!selectedFile">
-                        <div class="image"></div>
+                            <div class="__box-info">
+                                {{ 'sylius_happy_cms.media.no_val'|trans({}, 'SyliusHappyCMSPlugin') }}
+                            </div>
+
+                            <div class="__box-select">
+                                <span class="ui button" @click.stop="toggleModalFor('media')" title="{{ 'sylius_happy_cms.media.select.file'|trans({}, 'SyliusHappyCMSPlugin') }}">{{ 'sylius_happy_cms.media.select.file'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="selection-preview" v-if="selectedFile">
+                    <div class="selection-preview mb-3" v-if="selectedFile">
                         <div class="__box-data" @click.stop="toggleModal('preview_modal')">
                             <div class="__box-preview">
                                 <template v-if="fileTypeIs(selectedFile, 'image')">
@@ -78,6 +84,10 @@
                                 </template>
                             </div>
 
+                            <div class="__box-update">
+                                <span class="ui red button" @click.stop="toggleModalFor('media')" title="{{ 'sylius_happy_cms.media.select.file'|trans({}, 'SyliusHappyCMSPlugin') }}">{{ 'sylius_happy_cms.media.select.file'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
+                            </div>
+
                             <div class="__box-delete">
                                 <span class="ui red button" @click.stop="clearFile()" v-tippy="{arrow: true, placement: 'top'}" title="{{ 'sylius_happy_cms.media.remove'|trans({}, 'SyliusHappyCMSPlugin') }}">{{ 'sylius_happy_cms.media.remove'|trans({}, 'SyliusHappyCMSPlugin') }}</span>
                             </div>
@@ -113,7 +123,6 @@
     <script type="text/javascript">
         Array.from(document.querySelectorAll(".happy-cms-media-widget[data-widget]")).forEach(w => {
             if(w && !w.__vue__ && window.Vue){
-                console.log(w);
                 new window.Vue({ el: w });
             }
         });
