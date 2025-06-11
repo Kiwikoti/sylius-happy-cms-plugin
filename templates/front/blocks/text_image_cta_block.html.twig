@@ -15,10 +15,6 @@
                     'class': 'object-cover w-full h-full',
                     'alt': 'sylius.homepage.banner_content'|trans
                 }) }}
-            {% else %}
-                <img class="object-cover w-full h-full"
-                     src="{{ asset('themes/tailwind-theme/images/background-login_1024.webp', 'tailwindTheme') }}"
-                     alt="{{ 'sylius.homepage.banner_content'|trans }}">
             {% endif %}
         </div>
         <div class="col-span-full md:col-span-6 {{ img_right ? 'order-first' : 'md:col-start-7' }}">
