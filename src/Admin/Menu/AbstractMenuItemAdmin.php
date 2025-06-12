@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Admin\Menu;
 
 use Adeliom\SyliusEasyCrudPlugin\Admin\AbstractAdmin;
+use Adeliom\SyliusEasyCrudPlugin\Admin\Field\ColumnField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\EnumField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TabField;
 use Adeliom\SyliusEasyCrudPlugin\Admin\Field\TranslationField;
@@ -12,6 +13,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Action\Action;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Actions;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Crud;
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\Field;
+use Adeliom\SyliusEasyCrudPlugin\Enum\ColumnSizeEnum;
 use Adeliom\SyliusEasyCrudPlugin\Enum\ThreeStateStatusEnum;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItem;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
@@ -105,8 +107,28 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
     {
         $menuId = $this->getMenuId();
 
-        yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item')
-            ->renderHorizontal();
+        yield ColumnField::new('col1', '')
+            ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
+
+        yield EnumField::new('publishState', 'sylius_happy_cms.menu_item.admin.field.state')
+            ->setEnum(ThreeStateStatusEnum::class)
+            ->hideOnIndex()
+            ->setRequired(false)
+            ->setFormTypeOption('placeholder', false)
+            ->renderExpanded();
+
+        yield TranslationField::new('translations', 'sylius_happy_cms.menu_item.admin.field.translations')
+            ->addField(Field::new('name', 'sylius_happy_cms.menu_item.admin.field.name'))
+            ->addField(Field::new('url', 'sylius_happy_cms.menu_item.admin.field.url'))
+            ->hideOnIndex();
+
+        yield Field::new('target', 'sylius_happy_cms.menu_item.admin.field.target');
+        //yield Field::new('position', 'sylius_happy_cms.menu_item.admin.field.position');
+
+        yield ColumnField::new('col2', '')
+            ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
+        //yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item')
+        //    ->renderHorizontal();
 
         $syliusResources = $this->crudAdminFactory->parameterBag->get('sylius.resources');
         if ($menuId && is_array($syliusResources['sylius_happy_cms.menu']) && is_array($syliusResources['sylius_happy_cms.menu']['classes']) && isset($syliusResources['sylius_happy_cms.menu']['classes']['model'])) {
@@ -161,25 +183,6 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
         //        yield Field::new('url', 'sylius_happy_cms.menu_item.admin.field.url')
         //            ->setSortablePath('translations.url')
         //            ->onlyOnIndex();
-
-        yield Field::new('target', 'sylius_happy_cms.menu_item.admin.field.target');
-
-        //yield Field::new('position', 'sylius_happy_cms.menu_item.admin.field.position');
-
-        yield EnumField::new('publishState', 'sylius_happy_cms.menu_item.admin.field.state')
-            ->setEnum(ThreeStateStatusEnum::class)
-            ->hideOnIndex()
-            ->setRequired(false)
-            ->setFormTypeOption('placeholder', false)
-            ->renderExpanded();
-
-        yield TabField::new('link', 'sylius_happy_cms.menu_item.admin.tab.link')
-            ->renderHorizontal();
-
-        yield TranslationField::new('translations', 'sylius_happy_cms.menu_item.admin.field.translations')
-            ->addField(Field::new('name', 'sylius_happy_cms.menu_item.admin.field.name'))
-            ->addField(Field::new('url', 'sylius_happy_cms.menu_item.admin.field.url'))
-            ->hideOnIndex();
     }
 
     private function getMenuId(): ?int

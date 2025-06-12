@@ -208,10 +208,14 @@ sylius_happy_cms:
   blocks:
     tabs:
       all_blocks: All blocks
-      flex_blocks: Flex blocks
-      shared_blocks: Blocs partagés
+      shared_blocks: Shared blocks
       media_blocks: Media blocks
       text_blocks: Text blocks
+      flex_blocks: Flexible blocks
+      content_blocks: Content blocks
+      listing_blocks: Listing blocks
+      product_blocks: Product blocks
+      blog_faq_blocks: Articles & FAQ
     accordion:
       name: Accordion
       fields:
@@ -223,11 +227,11 @@ sylius_happy_cms:
           title: Title
           content: Content
     cta:
-      name: Call to Action
+      name: Call-to-Action
       fields:
         title: Title
-        wysiwyg: Rich text
-        cta_one: Main button
+        wysiwyg: Text
+        cta_one: Primary button
         cta_two: Secondary button
     gallery:
       name: Image gallery
@@ -236,35 +240,39 @@ sylius_happy_cms:
         wysiwyg: Rich text
         images: Images
     key_features:
-      name: Key points
+      name: Key features
       fields:
-        headline: Headline
+        headline: Subtitle
         title: Title
         wysiwyg: Rich text
-        features: Key points
+        features: Key features
         feature:
           icon: Icon
           key: Key value
           text: Associated text
-    wysiwyg:
-      name: Rich text
+    seo:
+      name: SEO expandable text
       fields:
         wysiwyg: Rich text
     text_cta:
       name: Rich text + CTA
       fields:
-        headline: Headline
+        headline: Subtitle
         title: Title
         wysiwyg: Rich text
-        cta_one: Main button
+        cta_one: Primary button
         cta_two: Secondary button
     text_image:
       name: Rich text + Image + CTA
       fields:
         image: Image
         img_right: Image on the right?
-        headline: Headline
+        headline: Subtitle
         title: Title
         wysiwyg: Rich text
-        cta_one: Main button
+        cta_one: Primary button
         cta_two: Secondary button
+    wysiwyg:
+      name: Rich text
+      fields:
+        wysiwyg: Rich text

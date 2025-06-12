@@ -8,7 +8,6 @@ use Adeliom\SyliusHappyCMSPlugin\Doctrine\Query\Menu\AllMenuItemsInterface;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Menu\MenuItemInterface;
 use Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Gedmo\Tool\ActorProviderInterface;
 use Sylius\Bundle\UiBundle\Twig\Component\TemplatePropTrait;
 use Sylius\TwigHooks\LiveComponent\HookableLiveComponentTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -49,7 +48,7 @@ class TreeComponent
 
             $oldPosition = $menuItemToBeMoved->getPosition();
             $oldLft = $menuItemToBeMoved->getLft();
-            $oldRgt= $menuItemToBeMoved->getRgt();
+            $oldRgt = $menuItemToBeMoved->getRgt();
 
             if ($targetItem instanceof MenuItemInterface) {
                 $targetItem->setPosition($oldPosition);
@@ -79,7 +78,7 @@ class TreeComponent
 
         $oldPosition = $menuItemToBeMoved->getPosition();
         $oldLft = $menuItemToBeMoved->getLft();
-        $oldRgt= $menuItemToBeMoved->getRgt();
+        $oldRgt = $menuItemToBeMoved->getRgt();
 
         if ($targetItem instanceof MenuItemInterface) {
             $targetItem->setPosition($oldPosition);

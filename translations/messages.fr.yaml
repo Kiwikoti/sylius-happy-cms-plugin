@@ -208,10 +208,14 @@ sylius_happy_cms:
   blocks:
     tabs:
       all_blocks: Tous les blocs
-      flex_blocks: Blocks
       shared_blocks: Blocs partagés
       media_blocks: Blocs médias
       text_blocks: Blocs de texte
+      flex_blocks: Blocs flexibles
+      content_blocks: Blocs de contenu
+      listing_blocks: Blocs de listes
+      product_blocks: Blocs produits
+      blog_faq_blocks: Articles & FAQ
     accordion:
       name: Accordéon
       fields:
@@ -223,10 +227,10 @@ sylius_happy_cms:
           title: Titre
           content: Contenu
     cta:
-      name: Call to Action
+      name: Call-to-Action
       fields:
         title: Titre
-        wysiwyg: Texte enrichi
+        wysiwyg: Texte
         cta_one: Bouton principal
         cta_two: Bouton secondaire
     gallery:
@@ -246,10 +250,6 @@ sylius_happy_cms:
           icon: Pictogramme
           key: Valeur clé
           text: Texte associé
-    wysiwyg:
-      name: Texte enrichi
-      fields:
-        wysiwyg: Texte enrichi
     seo:
       name: Texte dépliant SEO
       fields:
@@ -272,3 +272,8 @@ sylius_happy_cms:
         wysiwyg: Texte enrichi
         cta_one: Bouton principal
         cta_two: Bouton secondaire
+    wysiwyg:
+      name: Texte enrichi
+      fields:
+        wysiwyg: Texte enrichi
+
