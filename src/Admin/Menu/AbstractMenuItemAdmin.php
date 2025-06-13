@@ -107,8 +107,8 @@ abstract class AbstractMenuItemAdmin extends AbstractAdmin implements MenuItemAd
     {
         $menuId = $this->getMenuId();
 
-        yield ColumnField::new('col1', '')
-            ->setSize(ColumnSizeEnum::WIDE_8_OF_16);
+        yield TabField::new('menu', 'sylius_happy_cms.menu_item.admin.tab.menu_item')
+            ->renderHorizontal();
 
         yield EnumField::new('publishState', 'sylius_happy_cms.menu_item.admin.field.state')
             ->setEnum(ThreeStateStatusEnum::class)
