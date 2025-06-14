@@ -86,6 +86,10 @@ sylius_twig_hooks:
           template: '@SyliusHappyCMSPlugin/page/crud/tree/components/delete.html.twig'
         priority: 0
 
+    'sylius_admin.page.update.content.header.title_block.actions':
+      show:
+        enabled: false
+
     'easy_crud.menu_item.create.content':
       flashes:
         template: '@SyliusAdmin/shared/crud/common/content/flashes.html.twig'
