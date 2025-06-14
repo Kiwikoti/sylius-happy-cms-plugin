@@ -12,6 +12,9 @@
                 <span itemprop="name">{{ breadcrumb.linkName|trans }}</span>
             </a>
             {% endif %}
+            {% if not loop.last %}
+                <i class="fa-solid text-sm fa-sharp fa-chevron-right"></i>
+            {% endif %}
         </li>
     {% endfor %}
     </ol>
