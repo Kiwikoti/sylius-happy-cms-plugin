@@ -182,7 +182,7 @@
                                                 class="add-flexible-block link-primary"
                                                 data-block-type="{{ type }}"
                                                 data-block-icon="{{ block.icon is not iterable ? block.icon : '' }}"
-                                                data-block-name="{{ block.name }}"
+                                                data-block-name="{{ block.name|trans }}"
                                                 data-prototype='{{ (form_row(prototypes[type]) ~ please_save)|e('html_attr') }}'
                                                 data-num-items='{{ form.children|length }}'
                                                 data-form-type-name-placeholder='{{ prototypes[type] is defined ? prototypes[type].vars.name : '' }}'
