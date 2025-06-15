@@ -12,6 +12,8 @@ use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 trait EntityRouteTrait
@@ -148,6 +150,14 @@ trait EntityRouteTrait
             str_replace('\\', '_', self::class),
             $this->getId(),
         );
+    }
+
+    public function renderResponse(Request $request, Response $response): Response
+    {
+        $response->setEtag(md5((string) $this->getUpdatedAt()->getTimestamp()));
+        $response->setPublic(); // make sure the response is public/cacheable
+        $response->isNotModified($request);
+        return $response;
     }
 
     public function getRouteStaticPrefix(TranslationInterface $translation, bool $isPreview): string

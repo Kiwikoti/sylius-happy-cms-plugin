@@ -98,7 +98,11 @@ class RouteRenderService extends AbstractController
             'preview' => $route->getOption(EntityRouteIndexer::OPTION_PREVIEW),
         ]));
 
-        return $this->render($template, $event->getParameters());
+        $response = $this->render($template, $event->getParameters());
+
+        $response = $contentDocument->renderResponse($request, $response);
+
+        return $response;
     }
 
     /**

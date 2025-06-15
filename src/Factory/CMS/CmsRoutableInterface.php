@@ -9,6 +9,8 @@ use Sylius\Component\Channel\Model\ChannelAwareInterface;
 use Sylius\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 interface CmsRoutableInterface extends ChannelAwareInterface
 {
@@ -39,6 +41,7 @@ interface CmsRoutableInterface extends ChannelAwareInterface
     public function isDatePublished(): bool;
 
     public function getRouteUnikName(): string;
+    public function renderResponse(Request $request, Response $response): Response;
 
     /**
      * @return string[]
