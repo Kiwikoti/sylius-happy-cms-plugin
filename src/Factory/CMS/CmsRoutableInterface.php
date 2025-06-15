@@ -41,7 +41,7 @@ interface CmsRoutableInterface extends ChannelAwareInterface
     public function isDatePublished(): bool;
 
     public function getRouteUnikName(): string;
-    public function renderResponse(Request $request, Response $response): Response;
+    public function renderResponse(Request $request, Response $response, OrmRoute $route): Response;
 
     /**
      * @return string[]
