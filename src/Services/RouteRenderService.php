@@ -50,6 +50,13 @@ class RouteRenderService extends AbstractController
             throw new \Exception('missing route with entity');
         }
 
+        $response = $contentDocument->renderResponse($request, new Response(null), $route);
+
+        if ($response->isNotModified($request)) {
+            // return the 304 Response
+            return $response;
+        }
+
         [$metadata, $configuration] = $this->contentDocumentAsResource(
             get_class($contentDocument),
             $request,
@@ -91,18 +98,14 @@ class RouteRenderService extends AbstractController
         $this->twig->addGlobal('resource', $contentDocument);
 
         $event = $this->eventDispatcher->dispatch(new RouteRenderServiceEvent([
-            'metadata' => $metadata,
-            'configuration' => $configuration,
-            'resource' => $contentDocument,
-            'route' => $route,
-            'preview' => $route->getOption(EntityRouteIndexer::OPTION_PREVIEW),
+          'metadata' => $metadata,
+          'configuration' => $configuration,
+          'resource' => $contentDocument,
+          'route' => $route,
+          'preview' => $route->getOption(EntityRouteIndexer::OPTION_PREVIEW),
         ]));
 
-        $response = $this->render($template, $event->getParameters());
-
-        $response = $contentDocument->renderResponse($request, $response);
-
-        return $response;
+        return $this->render($template, $event->getParameters(), $response);
     }
 
     /**

@@ -23,6 +23,8 @@ class EntityRouteIndexer
 
     public const OPTION_PREVIEW = 'preview_behavior';
 
+    public const OPTION_LAST_MODIFICATION_TIMESTAMP = 'last_modification_timestamp';
+
     public function __construct(
         protected ContentRepository $contentRepository,
     ) {
@@ -106,6 +108,9 @@ class EntityRouteIndexer
                 $entity->getVariablePattern($translation, $routeNamePrefix === self::ROUTE_PREVIEW),
             );
             $route->setOption(self::OPTION_PREVIEW, $routeNamePrefix === self::ROUTE_PREVIEW);
+            $route->setOption(self::OPTION_LAST_MODIFICATION_TIMESTAMP,
+                              (new \DateTimeImmutable('now'))->getTimestamp()
+            );
             $route->setDefault(RouteObjectInterface::CONTENT_ID, $this->contentRepository->getContentId($entity));
             $entity->addRoute($route);
         }

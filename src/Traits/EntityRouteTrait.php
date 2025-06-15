@@ -14,6 +14,7 @@ use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 trait EntityRouteTrait
@@ -152,11 +153,18 @@ trait EntityRouteTrait
         );
     }
 
-    public function renderResponse(Request $request, Response $response): Response
+    public function renderResponse(Request $request, Response $response, OrmRoute $route): Response
     {
-        $response->setEtag(md5((string) $this->getUpdatedAt()->getTimestamp()));
-        $response->setPublic(); // make sure the response is public/cacheable
-        $response->isNotModified($request);
+        if ($route->getOption('last_modification_timestamp') && is_int($route->getOption('last_modification_timestamp'))) {
+            $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+            $response->setLastModified((new \DateTime())->setTimestamp($route->getOption('last_modification_timestamp')));
+            // date of the entity
+            $response->setCache([
+                'must_revalidate' => true
+            ]);
+            $response->setPublic(); // make sure the response is public/cacheable
+        }
+
         return $response;
     }
 
