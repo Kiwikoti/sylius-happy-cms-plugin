@@ -67,18 +67,33 @@ class EntityRouteIndexer
         }
 
         if ($entity->isOnline()) {
-            $this->manageRoutes($entity, self::ROUTE_ONLINE);
+            $this->computeRoutes($entity, self::ROUTE_ONLINE);
         }
+        // TODO : check si ça marche et si nécessaire
+        //else {
+        //    $this->removeRoutes($entity, self::ROUTE_ONLINE);
+        //}
 
         if ($entity->previewIsAvailable()) {
-            $this->manageRoutes($entity, self::ROUTE_PREVIEW);
+            $this->computeRoutes($entity, self::ROUTE_PREVIEW);
         }
 
         $event->getObjectManager()->persist($entity);
         $event->getObjectManager()->flush();
     }
 
-    private function manageRoutes(CmsRoutableInterface &$entity, string $routeNamePrefix = ''): void
+    private function removeRoutes(CmsRoutableInterface &$entity, string $routeNamePrefix = ''): void
+    {
+        $routesToRemove = $entity->getRoutes()->filter(
+            static fn (Route $route) => str_starts_with($route->getName(), $routeNamePrefix),
+        );
+
+        foreach ($routesToRemove as $route) {
+            $entity->removeRoute($route);
+        }
+    }
+
+    private function computeRoutes(CmsRoutableInterface &$entity, string $routeNamePrefix = ''): void
     {
         foreach ($entity->getTranslations() as $translation) {
             $routeName = $routeNamePrefix .
