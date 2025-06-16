@@ -153,16 +153,36 @@ trait EntityRouteTrait
         );
     }
 
+    // Override response header when a document controller is rendered
+    // If this behavior is not wanted, you can override this method in your routable entity
+    // To make this configuration working, use this framework configuration
+    //     framework:
+    //        http_cache:
+    //            enabled: true
+    //            default_ttl: 0
+    // To unvalide all route cache, you can use the command : happycms:cache:invalidate
     public function renderResponse(Request $request, Response $response, OrmRoute $route): Response
     {
+        // This timestamp is update on every persist of the entity
+        // It's store into the route option 'last_modification_timestamp'
+        // This allow to simply check the last modification date of the entity and before rendering all page
+        // This code is executed on the controller top actions
         if ($route->getOption('last_modification_timestamp') && is_int($route->getOption('last_modification_timestamp'))) {
+            // Force public cache even if a session is started
+            // Carreful to not have client component in you cache
+            // Or wrap those component into a sub request (esi render, or live component)
             $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
+            // Set the last modification date of the entity
             $response->setLastModified((new \DateTime())->setTimestamp($route->getOption('last_modification_timestamp')));
-            // date of the entity
+            // No ttl to avoid cache expire mode
+            // And force validation cache mode
+            $response->setTtl(0);
+            // Tell the client to revalidate the cache
             $response->setCache([
-                'must_revalidate' => true
-            ]);
-            $response->setPublic(); // make sure the response is public/cacheable
+                                    'must_revalidate' => true
+                                ]);
+            // Put cache public
+            $response->setPublic();
         }
 
         return $response;
