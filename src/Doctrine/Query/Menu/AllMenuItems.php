@@ -65,6 +65,7 @@ final class AllMenuItems implements AllMenuItemsInterface
             ->andWhere('menu_item.menu_id = :menuId')
             ->orderBy('menu_item.lvl', Criteria::DESC)
             ->addOrderBy('menu_item.position', Criteria::ASC)
+            ->addOrderBy('menu_item.id', Criteria::ASC)
             ->setParameter('currentLocale', $currentLocale, Types::STRING)
             ->setParameter('fallbackLocale', $fallbackLocale, Types::STRING)
             ->setParameter('menuId', $menuId, Types::INTEGER)
