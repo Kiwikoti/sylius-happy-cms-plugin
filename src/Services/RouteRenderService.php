@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
@@ -31,6 +33,7 @@ class RouteRenderService extends AbstractController
         protected Environment $twig,
         protected EventDispatcherInterface $eventDispatcher,
         protected BreadcrumbCollection $breadcrumb,
+        protected KernelInterface $kernel,
     ) {
     }
 
@@ -50,7 +53,9 @@ class RouteRenderService extends AbstractController
             throw new \Exception('missing route with entity');
         }
 
-        $response = $contentDocument->renderResponse($request, new Response(null), $route);
+        $cacheEnabled = $contentDocument->isHttpCacheEnabled($this->kernel->getEnvironment(), $route);
+
+        $response = $contentDocument->renderResponse($request, new Response(null), $route, $cacheEnabled);
 
         if ($response->isNotModified($request)) {
             // return the 304 Response
@@ -98,12 +103,12 @@ class RouteRenderService extends AbstractController
         $this->twig->addGlobal('resource', $contentDocument);
 
         $event = $this->eventDispatcher->dispatch(new RouteRenderServiceEvent([
-          'metadata' => $metadata,
-          'configuration' => $configuration,
-          'resource' => $contentDocument,
-          'route' => $route,
-          'preview' => $route->getOption(EntityRouteIndexer::OPTION_PREVIEW),
-        ]));
+                                                                                  'metadata' => $metadata,
+                                                                                  'configuration' => $configuration,
+                                                                                  'resource' => $contentDocument,
+                                                                                  'route' => $route,
+                                                                                  'preview' => $route->getOption(EntityRouteIndexer::OPTION_PREVIEW),
+                                                                              ]));
 
         return $this->render($template, $event->getParameters(), $response);
     }

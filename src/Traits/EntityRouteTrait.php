@@ -153,6 +153,13 @@ trait EntityRouteTrait
         );
     }
 
+    public function isHttpCacheEnabled(string $env, OrmRoute $route): bool
+    {
+        // Default behavior is to enable http cache
+        //return $env === 'prod' ? true : false;
+        return false;
+    }
+
     // Override response header when a document controller is rendered
     // If this behavior is not wanted, you can override this method in your routable entity
     // To make this configuration working, use this framework configuration
@@ -161,12 +168,19 @@ trait EntityRouteTrait
     //            enabled: true
     //            default_ttl: 0
     // To unvalide all route cache, you can use the command : happycms:cache:invalidate
-    public function renderResponse(Request $request, Response $response, OrmRoute $route): Response
+    public function renderResponse(Request $request, Response $response, OrmRoute $route, bool $cacheEnabled):
+    Response
     {
+        // If cache is disabled, we return the response as is
+        if (!$cacheEnabled) {
+            return $response;
+        }
+
         // No cache in preview mode
         if ($route->getOption('preview_behavior') === true) {
             return $response;
         }
+
         // This timestamp is update on every persist of the entity
         // It's store into the route option 'last_modification_timestamp'
         // This allow to simply check the last modification date of the entity and before rendering all page

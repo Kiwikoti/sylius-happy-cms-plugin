@@ -41,6 +41,7 @@ services:
       - "@twig"
       - "@event_dispatcher"
       - "@happy_cms_seo.breadcrumb"
+      - "@kernel"
     public: true
 
   sylius.happy_cms.plugin.controller.render:
