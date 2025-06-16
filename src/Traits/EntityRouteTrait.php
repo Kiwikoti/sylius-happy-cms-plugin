@@ -163,6 +163,10 @@ trait EntityRouteTrait
     // To unvalide all route cache, you can use the command : happycms:cache:invalidate
     public function renderResponse(Request $request, Response $response, OrmRoute $route): Response
     {
+        // No cache in preview mode
+        if ($route->getOption('preview_behavior') === true) {
+            return $response;
+        }
         // This timestamp is update on every persist of the entity
         // It's store into the route option 'last_modification_timestamp'
         // This allow to simply check the last modification date of the entity and before rendering all page
