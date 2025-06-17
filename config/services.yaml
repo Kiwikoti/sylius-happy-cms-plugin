@@ -42,6 +42,8 @@ services:
       - "@event_dispatcher"
       - "@happy_cms_seo.breadcrumb"
       - "@kernel"
+      - "@doctrine.orm.entity_manager"
+      - "@parameter_bag"
     public: true
 
   sylius.happy_cms.plugin.controller.render:
