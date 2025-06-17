@@ -287,9 +287,9 @@ const flexibleContentModule = function () {
 
     const checkboxInNewBlock = blockElement.querySelector('.form-check-input');
     const labelInNewBlock = blockElement.querySelector('.form-check-label');
-    const lastBlockAdded = document.getElementById('w-wrapper-prototype').previousElementSibling.previousElementSibling;
-    if (lastBlockAdded && checkboxInNewBlock && labelInNewBlock) {
-        const idAttr = lastBlockAdded.querySelector('.form-check-input').getAttribute('id');
+    const lastBlockInContent = document.getElementById('w-wrapper-prototype').parentElement.parentElement.querySelector('.w-flexible-content > .card');
+    if (lastBlockInContent && checkboxInNewBlock && labelInNewBlock) {
+        const idAttr = lastBlockInContent.querySelector('.form-check-input').getAttribute('id');
         // get the number part of the for attribute (block-checkbox-3 -> 3)
         const newId = parseInt(idAttr.split('-')[2], 10) + 1;
         checkboxInNewBlock.setAttribute('id', `block-checkbox-${newId}`);
