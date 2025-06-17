@@ -43,11 +43,11 @@ class EntityRouteIndexer
         }
 
         if ($entity->isOnline()) {
-            $this->manageRoutes($entity, self::ROUTE_ONLINE);
+            $this->computeRoutes($entity, self::ROUTE_ONLINE);
         }
 
         if ($entity->previewIsAvailable()) {
-            $this->manageRoutes($entity, self::ROUTE_PREVIEW);
+            $this->computeRoutes($entity, self::ROUTE_PREVIEW);
         }
 
         $event->getObjectManager()->persist($entity);
