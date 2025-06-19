@@ -28,6 +28,7 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
             ->add('block', ResourceChoiceType::class, [
                 'class' => SharedBlock::class,
                 'resource' => 'sylius_happy_cms.shared_block',
+                'persist_into_an_array' => true,
             ]);
     }
 
