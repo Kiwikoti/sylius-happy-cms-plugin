@@ -1,7 +1,7 @@
 sylius_twig_hooks:
   hooks:
-    'sylius.shop.layout.head':
-      seo_metas:
+    'sylius_shop.base#metatags':
+      happy_seo_metas:
         template: "@SyliusHappyCMSPlugin/front/template_block/seo_metas.html.twig"
 
     'sylius.cms.shared_block.choose':
