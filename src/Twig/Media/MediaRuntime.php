@@ -351,11 +351,15 @@ class MediaRuntime implements RuntimeExtensionInterface
             $pictureParams['img'] = $params + $options;
             $params = ['picture' => $pictureParams];
         } elseif (isset($formats[$format])) {
-            [$width, $height] = $formats[$format]['filters']['thumbnail']['size'];
+            if (isset($formats[$format]['filters']['thumbnail'])) {
+                [$width, $height] = $formats[$format]['filters']['thumbnail']['size'];
+                $params += [
+                    'width' => $width ?: null,
+                    'height' => $height ?: null,
+                ];
+            }
             $params += [
                 'src' => $this->path($media, $format),
-                'width' => $width ?? $box['width'] ?: null,
-                'height' => $height ?? $box['height'] ?: null,
             ];
         }
 
