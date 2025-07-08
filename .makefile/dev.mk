@@ -85,11 +85,11 @@ platform:
 	@if [ ! -e ${APP_DIR}/compose.override.yml ]; then \
 		(cd ${APP_DIR} && cp compose.override.dist.yml compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|3306:3306|${DOCKER_MYSQL_PORT}:3306|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|          - public-media:/srv/sylius/public/media:rw|          - public-media:/srv/sylius/public/media:rw\n          - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|            - ./public:/srv/sylius/public:rw,delegated|            - ./public:/srv/sylius/public:rw,delegated\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|          - public-media:/srv/sylius/public/media:rw|          - public-media:/srv/sylius/public/media:rw\n          - ../../:/srv/sylius/${PLUGIN_DIR}:rw,cached|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|            - ./public:/srv/sylius/public:rw,delegated|            - ./public:/srv/sylius/public:rw,delegated\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw,cached|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|APP_DEBUG: 0|APP_DEBUG: 1|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|- "80:80"|- "$(DOCKER_PHP_PORT):80"|g' compose.override.yml); \
-		(cd ${APP_DIR} && sed -i'' -e 's|            - public-media:/srv/sylius/public/media:ro,nocopy|            - public-media:/srv/sylius/public/media:ro,nocopy\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw|g' compose.override.yml); \
+		(cd ${APP_DIR} && sed -i'' -e 's|            - public-media:/srv/sylius/public/media:ro,nocopy|            - public-media:/srv/sylius/public/media:ro,nocopy\n            - ../../:/srv/sylius/${PLUGIN_DIR}:rw,cached|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e 's|XDEBUG_MODE: debug|XDEBUG_MODE: coverage|g' compose.override.yml); \
 		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n];|g" config/bundles.php); \
 		(cd ${APP_DIR} && sed -i'' -e "s|];|    Adeliom\\\${PLUGIN_NAMESPACE}\\\${PLUGIN_NAMESPACE}::class => ['all' => true],\n    Adeliom\\\${CRUD_PLUGIN_NAMESPACE}\\\${CRUD_PLUGIN_NAMESPACE}::class => ['all' => true],\n];|g" config/bundles.php); \

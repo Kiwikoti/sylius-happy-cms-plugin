@@ -33,6 +33,7 @@ services:
 
   Adeliom\SyliusHappyCMSPlugin\Services\Cmf\RouteRenderService:
     alias: sylius.happy_cms.plugin.services.render
+    public: true
 
   Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepositoryInterface:
     alias: happy_cms_menu.menu_item.repository

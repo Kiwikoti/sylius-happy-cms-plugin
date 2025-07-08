@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
+use Sylius\Resource\Model\ResourceInterface;
 
 interface BlockTypeInterface
 {
@@ -45,5 +46,5 @@ interface BlockTypeInterface
      */
     public static function researchableProperties(): array;
 
-    public function supports(string $objectClass, ?object $instance = null): bool;
+    public function supports(?ResourceInterface $resource = null): bool;
 }

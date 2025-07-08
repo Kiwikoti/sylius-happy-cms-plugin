@@ -6,79 +6,60 @@ namespace Adeliom\SyliusHappyCMSPlugin\Controller\Page;
 
 use Adeliom\SyliusEasyCrudPlugin\Controller\SyliusCrudResourceController;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
+use Adeliom\SyliusHappyCMSPlugin\Services\Cmf\RouteRenderService;
+use Doctrine\Persistence\ObjectManager;
+use Sylius\Bundle\ResourceBundle\Controller\AuthorizationCheckerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\EventDispatcherInterface;
+use Sylius\Bundle\ResourceBundle\Controller\FlashHelperInterface;
+use Sylius\Bundle\ResourceBundle\Controller\NewResourceFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RedirectHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceDeleteHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceFormFactoryInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourcesCollectionProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ResourceUpdateHandlerInterface;
+use Sylius\Bundle\ResourceBundle\Controller\SingleResourceProviderInterface;
+use Sylius\Bundle\ResourceBundle\Controller\StateMachineInterface;
+use Sylius\Bundle\ResourceBundle\Controller\ViewHandlerInterface;
+use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
+use Sylius\Resource\Factory\FactoryInterface;
+use Sylius\Resource\Metadata\MetadataInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Webmozart\Assert\Assert;
 
 class PageResourceController extends SyliusCrudResourceController
 {
-    public function moveUpAction(int $id): Response
+    public static function getSubscribedServices(): array
     {
-        $pageToBeMoved = $this->findPageOr404($id);
-        $repository = $this->getDoctrine()->getRepository(PageInterface::class);
-
-        if (null === $pageToBeMoved->getPosition()) {
-            $parent = $pageToBeMoved->getParent();
-            foreach ($parent->getChildren() as $key => $child) {
-                $child->setPosition($key);
-                $this->getDoctrine()->getManager()->persist($child);
-            }
-            $this->getDoctrine()->getManager()->flush();
-        }
-
-        if ($pageToBeMoved->getPosition() > 0 && null !== $repository) {
-            $otherPageToBeMoved = $repository->findPreviousPage($pageToBeMoved);
-            if ($otherPageToBeMoved) {
-                $oldPosition = $pageToBeMoved->getPosition();
-
-                $pageToBeMoved->setPosition($pageToBeMoved->getPosition() - 1);
-                $otherPageToBeMoved->setPosition($oldPosition);
-
-                $this->getDoctrine()->getManager()->flush();
-            }
-        }
-
-        return new JsonResponse('', Response::HTTP_NO_CONTENT);
+        return [
+            RouteRenderService::class => RouteRenderService::class,
+            FlashBagInterface::class => "session.flash_bag",
+        ];
     }
 
-    public function moveDownAction(int $id): Response
+    public function clearCacheAction(Request $request): Response
     {
-        $pageToBeMoved = $this->findPageOr404($id);
-        $repository = $this->getDoctrine()->getRepository(PageInterface::class);
+        $flashBag = $request->getSession()->getBag('flashes');
+        try {
+            /** @var RouteRenderService $service */
+            $service = $this->container->get(RouteRenderService::class);
+            $service->invalidCache();
 
-        if (null !== $repository) {
-            $otherPageToBeMoved = $repository->findNextPage($pageToBeMoved);
-            if ($otherPageToBeMoved) {
-                $oldPosition = $pageToBeMoved->getPosition();
-
-                $pageToBeMoved->setPosition($pageToBeMoved->getPosition() + 1);
-                $otherPageToBeMoved->setPosition($oldPosition);
-
-                $this->getDoctrine()->getManager()->flush();
+            $flashBag->add('success', 'sylius_happy_cms.cache.successfully_cleared');
+        } catch (\RuntimeException $exception) {
+            try {
+                $flashBag->add('error', 'sylius_happy_cms.cache.something_went_wrong');
+            }
+            catch (\RuntimeException $exception) {
+                // DO nothing, flash service not available
             }
         }
-
-        return new JsonResponse('', Response::HTTP_NO_CONTENT);
-    }
-
-    private function findPageOr404(int $id): PageInterface
-    {
-        $repository = $this->getDoctrine()->getRepository(PageInterface::class);
-
-        $page = null;
-        if (null !== $repository) {
-            /** @var PageInterface|null $page */
-            $page = $repository->find($id);
-
-            if (null === $page) {
-                throw new NotFoundHttpException(sprintf('Page with id %d does not exist.', $id));
-            }
-        }
-        Assert::isInstanceOf($page, PageInterface::class);
-
-        return $page;
+        return $this->redirectToRoute('sylius_happy_cms_admin_page_index');
     }
 
     public function blockPreviewAction(Request $request): Response

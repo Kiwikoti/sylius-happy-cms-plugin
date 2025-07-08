@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
+use Sylius\Resource\Model\ResourceInterface;
+
 class BlockCollection
 {
     /** @var array<string, BlockTypeInterface> */
@@ -47,7 +49,7 @@ class BlockCollection
      *
      * @return BlockTypeInterface[]
      */
-    public function getAllowedBlocks(?array $blockTypes): array
+    public function getAllowedBlocks(?array $blockTypes, ?ResourceInterface $resource): array
     {
         $blocks = $this->getBlocks();
 
@@ -57,7 +59,7 @@ class BlockCollection
 
         return array_filter(
             $blocks,
-            static fn (BlockTypeInterface $block, string $type) => in_array($type, $blockTypes),
+            static fn (BlockTypeInterface $block, string $type) => in_array($type, $blockTypes) && $block->supports($resource),
             \ARRAY_FILTER_USE_BOTH,
         );
     }

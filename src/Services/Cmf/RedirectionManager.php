@@ -35,11 +35,11 @@ class RedirectionManager implements RedirectionManagerInterface
             throw new \InvalidArgumentException(sprintf(
                 'The model class "%s" must implement "%s".',
                 $modelClass,
-                RedirectRouteInterface::class
+                RedirectRouteInterface::class,
             ));
         }
 
-        /** @var RedirectRouteRepositoryInterface $redirectRouteRepository **/
+        /** @var RedirectRouteRepositoryInterface $redirectRouteRepository * */
         $redirectRouteRepository = $this->manager->getRepository($modelClass);
 
         // A redirect route is already persisted?

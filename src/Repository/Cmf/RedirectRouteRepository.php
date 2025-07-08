@@ -50,8 +50,8 @@ class RedirectRouteRepository extends EntityRepository implements RepositoryInte
         $qb->where(
             $qb->expr()->orX(
                 $qb->expr()->eq('redirect_route.host', ':host'),
-                $qb->expr()->isNull('redirect_route.host')
-            )
+                $qb->expr()->isNull('redirect_route.host'),
+            ),
         )
         ->andWhere('redirect_route.staticPrefix', ':staticPrefix')
         ->setParameter('host', $host)

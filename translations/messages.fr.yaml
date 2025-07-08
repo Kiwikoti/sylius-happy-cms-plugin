@@ -7,14 +7,19 @@ sylius_happy_cms:
     menu_item: "Elément de menu"
     menu_items: "Eléments de menu"
     shared_blocks: "Blocs partagés"
+    route: "Route"
     routes: "Routes"
+    redirect_route: "Redirection"
     redirect_routes: "Redirections"
+    configs: "Configurations"
+    config: "Configuration"
   home: Page d'accueil
   page:
     admin:
       action:
         manage_content: Gérer le contenu
         index: Retour à la liste
+        clear_cache: Vider le cache HTTP
       crud:
         title:
           page:
@@ -308,3 +313,6 @@ sylius_happy_cms:
         host: "Ex: www.website.com (not required)"
         uri:  "Si renseigner permet d'activer une redirection, ex : /fr_FR/nouvelle-page"
         permanent: "A cocher pour une redirection permanente (301), sinon une temporaire (302) est appliquée"
+  cache:
+    successfully_cleared: Le cache a été vidé avec succès
+    something_went_wrong: Une erreur est survenue lors du vidage du cache

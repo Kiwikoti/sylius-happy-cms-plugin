@@ -39,8 +39,7 @@ abstract class AbstractSharedBlockAdmin extends AbstractAdmin implements Service
     {
         /** @var SharedBlockInterface|null $block */
         $block = $this->getResource();
-        yield TabField::new('configuration', 'sylius_happy_cms.shared_block.admin.tab.configuration')
-            ->renderHorizontal();
+        yield TabField::new('configuration', 'sylius_happy_cms.shared_block.admin.tab.configuration');
 
         yield Field::new('name', 'sylius_happy_cms.shared_block.admin.field.name')
             ->setRequired(true);

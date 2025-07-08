@@ -51,6 +51,9 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
 
         $locales = $this->getSyliusLocales();
 
+        $clearCacheAction = Action::new('cache', 'sylius_happy_cms.page.admin.action.clear_cache', 'tabler:world-check')
+            ->linkToRoute('sylius_happy_cms_admin_page_clear_cache');
+
         $contentAction = Action::new('content', 'sylius_happy_cms.page.admin.action.manage_content', 'bxs:book-content');
         foreach ($locales as $locale) {
             $contentAction->addSubAction(
@@ -65,14 +68,15 @@ abstract class AbstractPageAdmin extends AbstractAdmin implements PageAdminInter
         $actions->addItemAction(Crud::PAGE_DETAIL, $contentAction);
         $actions->addItemAction(Crud::PAGE_EDIT, $contentAction);
 
+        $actions->addGlobalAction(Crud::PAGE_INDEX, $clearCacheAction);
+
         return $actions;
     }
 
     public function configureFields(string $pageName, ?string $context = null): iterable
     {
         if (null === $context) {
-            yield TabField::new('Page', 'sylius_happy_cms.page.admin.tab.page')
-                ->renderHorizontal();
+            yield TabField::new('Page', 'sylius_happy_cms.page.admin.tab.page');
 
             yield ResourceChoiceField::new('parent', 'sylius_happy_cms.page.admin.field.parent')
                 ->setMultiple(false)

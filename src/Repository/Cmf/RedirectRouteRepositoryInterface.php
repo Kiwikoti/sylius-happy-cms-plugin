@@ -9,5 +9,6 @@ use Adeliom\SyliusHappyCMSPlugin\Entity\Cmf\RedirectRouteInterface;
 interface RedirectRouteRepositoryInterface
 {
     public function createNew(): RedirectRouteInterface;
+
     public function findByHostAndPath(string $host, string $path): ?RedirectRouteInterface;
 }

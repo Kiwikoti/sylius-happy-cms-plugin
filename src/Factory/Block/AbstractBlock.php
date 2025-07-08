@@ -6,6 +6,7 @@ namespace Adeliom\SyliusHappyCMSPlugin\Factory\Block;
 
 use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Config\Asset;
 use Doctrine\ORM\EntityManagerInterface;
+use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -176,7 +177,7 @@ abstract class AbstractBlock extends AbstractType implements BlockTypeInterface
         return 100;
     }
 
-    public function supports(string $objectClass, ?object $instance = null): bool
+    public function supports(?ResourceInterface $resource = null): bool
     {
         return true;
     }

@@ -10,11 +10,14 @@ sylius_happy_cms:
     shared_blocks: "Shared block"
     routes: "Routing"
     redirect_routes: "Redirection"
+    configs: "Configurations"
+    config: "Configuration"
   page:
     admin:
       action:
         manage_content: Manage content
         index: Back to list
+        clear_cache: Clear http cache
       crud:
         title:
           page:
@@ -305,3 +308,6 @@ sylius_happy_cms:
         host: "Ex: www.website.com (not required)"
         uri:  "When fullfilled, activate the redirection to an uri, ex: /en_US/redirected-page"
         permanent: "Check for a permanent redirection (301), otherwise a temporary one (302) is applied"
+  cache:
+    successfully_cleared: Cache successfully cleared
+    something_went_wrong: Something went wrong while clearing the cache

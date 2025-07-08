@@ -67,6 +67,7 @@ final class FlexibleContentConfigurator implements FieldConfiguratorInterface
         $blocksCollection = $this->collection->enabledSupportFilter();
         $blocks = $blocksCollection->getAllowedBlocks(
             $field->getCustomOptions()->get(FlexibleContentField::OPTION_BLOCKS),
+            $resource,
         );
 
         foreach ($blocks as $blockType => $block) {
