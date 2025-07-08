@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Services;
+namespace Adeliom\SyliusHappyCMSPlugin\Services\Cmf;
 
+use Adeliom\SyliusHappyCMSPlugin\Entity\Cmf\Route as OrmRoute;
+use Adeliom\SyliusHappyCMSPlugin\Entity\Cmf\RouteInterface;
 use Adeliom\SyliusHappyCMSPlugin\Event\Route\RouteRenderServiceEvent;
 use Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer;
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
@@ -16,7 +18,6 @@ use Sylius\Bundle\ResourceBundle\Controller\RequestConfiguration;
 use Sylius\Bundle\ResourceBundle\Controller\RequestConfigurationFactory;
 use Sylius\Resource\Metadata\Metadata;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route as OrmRoute;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -40,25 +41,27 @@ class RouteRenderService extends AbstractController
     ) {
     }
 
-    public function invalidAllCache(): bool {
-
+    public function invalidCache(): bool
+    {
         $routeClass = $this->parameterBag->get('cmf_routing.dynamic.persistence.orm.route_class');
-        $qb = $this->manager->getRepository($routeClass)->createQueryBuilder('r');
-        $routes = $qb
-            ->select()
-            ->where($qb->expr()->like('r.options', ':option'))
-            ->setParameter('option', '%'.EntityRouteIndexer::OPTION_LAST_MODIFICATION_TIMESTAMP.'%')
-            ->getQuery()
-            ->getResult();
+        if (is_string($routeClass)) {
+            $qb = $this->manager->getRepository($routeClass)->createQueryBuilder('r');
+            $routes = $qb
+                ->select()
+                ->where($qb->expr()->like('r.options', ':option'))
+                ->setParameter('option', '%' . EntityRouteIndexer::OPTION_LAST_MODIFICATION_TIMESTAMP . '%')
+                ->getQuery()
+                ->getResult();
 
-        foreach ($routes as $route) {
-            /**
-             * @var OrmRoute $route
-             */
-            $route->setOption(EntityRouteIndexer::OPTION_LAST_MODIFICATION_TIMESTAMP, time());
-            $this->manager->persist($route);
+            foreach ($routes as $route) {
+                /**
+                 * @var RouteInterface $route
+                 */
+                $route->setOption(EntityRouteIndexer::OPTION_LAST_MODIFICATION_TIMESTAMP, time());
+                $this->manager->persist($route);
+            }
+            $this->manager->flush();
         }
-        $this->manager->flush();
 
         return true;
     }

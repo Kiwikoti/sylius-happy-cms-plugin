@@ -20,6 +20,7 @@ services:
     class: Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer
     arguments:
       - '@cmf_routing.orm_content_repository'
+      - "@parameter_bag"
     tags:
       -   name: 'doctrine.event_listener'
           event: 'postPersist'
@@ -30,11 +31,23 @@ services:
           priority: 500
           connection: 'default'
 
-  Adeliom\SyliusHappyCMSPlugin\Services\RouteRenderService:
+  Adeliom\SyliusHappyCMSPlugin\Services\Cmf\RouteRenderService:
     alias: sylius.happy_cms.plugin.services.render
 
+  Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuRepositoryInterface:
+    alias: happy_cms_menu.menu_item.repository
+
+  Adeliom\SyliusHappyCMSPlugin\Repository\Menu\MenuItemRepositoryInterface:
+    alias: happy_cms_menu.menu.repository
+
+  Adeliom\SyliusHappyCMSPlugin\Repository\Page\PageRepositoryInterface:
+    alias: happy_cms_page.page.repository
+
+  Adeliom\SyliusHappyCMSPlugin\Repository\Cmf\RouteRepositoryInterface:
+    alias: happy_cms_page.route.repository
+
   sylius.happy_cms.plugin.services.render:
-    class: Adeliom\SyliusHappyCMSPlugin\Services\RouteRenderService
+    class: Adeliom\SyliusHappyCMSPlugin\Services\Cmf\RouteRenderService
     arguments:
       - "@router"
       - "@sylius.resource_controller.request_configuration_factory"
@@ -119,3 +132,19 @@ services:
       - "@security.csrf.token_manager"
     tags:
       - { name: sylius.live_component.admin, key: happycms-menu-item-tree-delete, template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/components/delete.html.twig' }
+
+  sylius.happy_cms.plugin.listener.redirection_manager:
+    class: Adeliom\SyliusHappyCMSPlugin\Services\Cmf\RedirectionManager
+    arguments:
+      - '@doctrine.orm.entity_manager'
+      - '@parameter_bag'
+
+  Adeliom\SyliusHappyCMSPlugin\Services\Cmf\RedirectionManagerInterface:
+    alias: sylius.happy_cms.plugin.listener.redirection_manager
+
+  sylius.happy_cms.exception_listener:
+    class: Adeliom\SyliusHappyCMSPlugin\EventListener\ExceptionListener
+    arguments:
+        - '@sylius.happy_cms.plugin.listener.redirection_manager'
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }
