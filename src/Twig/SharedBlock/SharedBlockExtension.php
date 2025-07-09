@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Twig\SharedBlock;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\SharedBlock\SharedBlockInterface;
-use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\Helper;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -16,7 +15,7 @@ class SharedBlockExtension extends AbstractExtension
 {
     public function __construct(
         private readonly EntityManagerInterface $manager,
-        private readonly ParameterBag $parameterBag,
+        private readonly ParameterBagInterface $parameterBag,
     ) {
     }
 
