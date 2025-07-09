@@ -128,15 +128,26 @@ class PageRepository extends EntityRepository implements PageRepositoryInterface
     }
 
     /**
-     * @return PageInterface[]
+     * @return ?PageInterface
      */
-    public function getByTemplate(string $template): array
+    public function getByTemplate(string $template, string $locale, ChannelInterface $channel): ?PageInterface
     {
         $qb = $this->getPublishedQuery();
-        $qb->andWhere('page.template = :template')
-            ->setParameter('template', $template);
+        /** @var PageInterface|null $page */
+        $page = $qb
+            ->innerJoin('page.translations', 't', 'WITH', 't.locale = :locale')
+            ->andWhere('page.template = :template')
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->eq('page.channel', ':channel'),
+                $qb->expr()->isNull('page.channel'),
+            ))
+            ->setParameter('template', $template)
+            ->setParameter('locale', $locale)
+            ->setParameter('channel', $channel)
+            ->getQuery()
+            ->getSingleResult();
 
-        return $this->getResult($qb->getQuery());
+        return $page;
     }
 
     public function getBySeoKey(string $seoKey, string $locale): PageInterface

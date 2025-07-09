@@ -8,6 +8,8 @@ use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Sylius\Component\Channel\Context\ChannelContextInterface;
+use Sylius\Component\Channel\Model\ChannelInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,6 +25,7 @@ RouteExtension extends AbstractExtension
         private readonly RouterInterface $router,
         private readonly ParameterBag $parameterBag,
         private readonly RequestStack $requestStack,
+        private readonly ChannelContextInterface $channelContext,
     ) {
     }
 
@@ -31,6 +34,7 @@ RouteExtension extends AbstractExtension
         return [
             new TwigFunction('happy_cms_path', $this->getPath(...)),
             new TwigFunction('happy_cms_path_by_seo_key', $this->getPathBySeoKey(...)),
+            new TwigFunction('happy_cms_path_by_template', $this->getPathByTemplate(...)),
             new TwigFunction('happy_cms_path_by_key', $this->getPathByKey(...)),
             new TwigFunction('happy_cms_path_by_id', $this->getPathById(...)),
         ];
@@ -98,6 +102,48 @@ RouteExtension extends AbstractExtension
 
             /** @var CmsRoutableInterface|null $object */
             $object = $repository->getByKey($key);
+            if (!is_null($object)) {
+                return $this->router->generate(RouteObjectInterface::OBJECT_BASED_ROUTE_NAME, [
+                    RouteObjectInterface::ROUTE_OBJECT => $object->getOnlineRoute(),
+                ]);
+            }
+            return '';
+        } catch (NoResultException | NonUniqueResultException $e) {
+            return '';
+        }
+    }
+
+    public function getPathByTemplate(
+        string $key,
+        string $resourceName = 'sylius_happy_cms.page',
+        ?string $locale = null,
+        ?ChannelInterface $channel = null,
+    ) : ?string
+    {
+        try {
+            $resources = $this->parameterBag->get('sylius.resources');
+            $modelClass = $resources[$resourceName]['classes']['model'] ?? null;
+
+            if (is_null($modelClass) || !is_a($modelClass, CmsRoutableInterface::class, true)) {
+                throw new \InvalidArgumentException(sprintf('The resource "%s" must implement "%s".', $resourceName, CmsRoutableInterface::class));
+            }
+
+            $repository = $this->manager->getRepository($modelClass);
+
+            if (is_null($repository) || !method_exists($repository, 'getByTemplate')) {
+                throw new \InvalidArgumentException(sprintf('The resource "%s" repository must have a method "%s".', $resourceName, 'getByTemplate'));
+            }
+
+            if (is_null($locale)) {
+                $locale = $this->requestStack->getCurrentRequest()?->getLocale() ?? 'en_US';
+            }
+
+            if (is_null($channel)) {
+                $channel = $this->channelContext->getChannel();
+            }
+
+            /** @var CmsRoutableInterface|null $object */
+            $object = $repository->getByTemplate($key, $locale, $channel);
             if (!is_null($object)) {
                 return $this->router->generate(RouteObjectInterface::OBJECT_BASED_ROUTE_NAME, [
                     RouteObjectInterface::ROUTE_OBJECT => $object->getOnlineRoute(),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\Repository\Page;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
+use Sylius\Component\Channel\Model\ChannelInterface;
 
 interface PageRepositoryInterface
 {
@@ -16,4 +17,6 @@ interface PageRepositoryInterface
      * @return PageInterface[]
      */
     public function getBySlug(string $slug, string $locale): array;
+
+    public function getByTemplate(string $template, string $locale, ChannelInterface $channel): ?PageInterface;
 }
