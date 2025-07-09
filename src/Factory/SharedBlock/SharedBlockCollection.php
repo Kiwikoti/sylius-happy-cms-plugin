@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock;
 
+use Sylius\Resource\Model\ResourceInterface;
+
 class SharedBlockCollection
 {
     /** @var array<string, SharedBlockTypeInterface> */
@@ -23,9 +25,9 @@ class SharedBlockCollection
         $this->blocks = $blocks;
     }
 
-    public function enabledSupportFilter(): self
+    public function enabledSupportFilter(?ResourceInterface $resource = null): self
     {
-        $this->filterSupportedBlocks();
+        $this->filterSupportedBlocks($resource);
 
         return $this;
     }
@@ -39,29 +41,21 @@ class SharedBlockCollection
     }
 
     /**
-     * @param array<SharedBlockTypeInterface> $blockTypes
-     *
      * @return array<SharedBlockTypeInterface>
      */
-    public function getAllowedBlocks(?array $blockTypes): array
+    public function getAllowedBlocks(?ResourceInterface $resource = null): array
     {
         $blocks = $this->getBlocks();
 
-        if (empty($blockTypes)) {
-            return $blocks;
-        }
-
         return array_filter(
             $blocks,
-            static fn (SharedBlockTypeInterface $block, string $type) => in_array($type, $blockTypes),
+            static fn (SharedBlockTypeInterface $block, string $type) => $block->supports($resource),
             \ARRAY_FILTER_USE_BOTH,
         );
     }
 
-    private function filterSupportedBlocks(): void
+    private function filterSupportedBlocks(?ResourceInterface $resource = null): void
     {
-        /*if (null !== $this->entityDto) {
-            $this->blocks = $this->blocks->filter(fn (BlockInterface $block, $type) => $block->supports($this->entityDto->getFqcn(), $this->entityDto->getInstance()));
-        }*/
+        $this->blocks = $this->getAllowedBlocks($resource);
     }
 }

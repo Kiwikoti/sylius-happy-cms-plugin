@@ -27,7 +27,7 @@ final class SharedBlockConfigurator implements FieldConfiguratorInterface
 
     public function configure(FieldDto $field, ?ResourceInterface $resource = null): void
     {
-        $blocksCollection = $this->collection->enabledSupportFilter();
+        $blocksCollection = $this->collection->enabledSupportFilter($resource);
         $blocks = $blocksCollection->getBlocks();
 
         foreach ($blocks as $blockType => $block) {
