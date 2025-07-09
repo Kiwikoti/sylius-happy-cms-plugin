@@ -139,6 +139,20 @@ class PageRepository extends EntityRepository implements PageRepositoryInterface
         return $this->getResult($qb->getQuery());
     }
 
+    public function getBySeoKey(string $seoKey, string $locale): PageInterface
+    {
+        /** @var PageInterface|null $page */
+        $page = $this->getPublishedQuery()
+            ->innerJoin('page.translations', 't', 'WITH', 't.locale = :locale')
+            ->andWhere('t.seo.key = :seo_key')
+            ->setParameter('seo_key', $seoKey)
+            ->setParameter('locale', $locale)
+            ->getQuery()
+            ->getSingleResult();
+
+        return $page;
+    }
+
     /**
      * @return PageInterface[]
      */
