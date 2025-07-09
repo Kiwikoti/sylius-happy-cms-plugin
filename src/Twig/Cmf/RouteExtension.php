@@ -12,6 +12,7 @@ use Sylius\Component\Channel\Context\ChannelContextInterface;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
@@ -23,7 +24,7 @@ RouteExtension extends AbstractExtension
     public function __construct(
         private readonly EntityManagerInterface $manager,
         private readonly RouterInterface $router,
-        private readonly ParameterBag $parameterBag,
+        private readonly ParameterBagInterface $parameterBag,
         private readonly RequestStack $requestStack,
         private readonly ChannelContextInterface $channelContext,
     ) {
