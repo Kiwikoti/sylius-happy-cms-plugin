@@ -48,19 +48,16 @@ class RouteRenderService extends AbstractController
             $qb = $this->manager->getRepository($routeClass)->createQueryBuilder('r');
             $routes = $qb
                 ->select()
-                ->where($qb->expr()->like('r.options', ':option'))
-                ->setParameter('option', '%' . EntityRouteIndexer::OPTION_LAST_MODIFICATION_TIMESTAMP . '%')
+                ->where($qb->expr()->isNotNull('r.lastModification'))
                 ->getQuery()
                 ->getResult();
-
+            $this->manager->beginTransaction();
             foreach ($routes as $route) {
-                /**
-                 * @var RouteInterface $route
-                 */
-                $route->setOption(EntityRouteIndexer::OPTION_LAST_MODIFICATION_TIMESTAMP, time());
+                /** @var RouteInterface $route */
+                $route->setLastModification(new \DateTime());
                 $this->manager->persist($route);
             }
-            $this->manager->flush();
+            $this->manager->commit();
         }
 
         return true;
