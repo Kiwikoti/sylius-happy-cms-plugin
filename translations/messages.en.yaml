@@ -295,6 +295,14 @@ sylius_happy_cms:
       host: Host
       preview: Preview
       lastModification: Last modification
+  redirect_route:
+    admin:
+      ui:
+        index: Redirections
+        create: New redirection
+        update: Redirect edition
+        show: Redirection detail
+        subheader: Manage your redirections
   redirection:
     admin:
       tab:

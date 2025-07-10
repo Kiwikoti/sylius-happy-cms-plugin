@@ -300,6 +300,14 @@ sylius_happy_cms:
       menu:
         route: Route
         redirections: Redirection
+  redirect_route:
+    admin:
+      ui:
+        index: Redirections
+        create: Créer une redirection
+        update: Modifier la redirection
+        show: Détail de la redirection
+        subheader: Gérer vos redirections
   redirection:
     admin:
       tab:
