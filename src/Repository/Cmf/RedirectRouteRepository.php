@@ -53,7 +53,7 @@ class RedirectRouteRepository extends EntityRepository implements RepositoryInte
                 $qb->expr()->isNull('redirect_route.host'),
             ),
         )
-        ->andWhere('redirect_route.staticPrefix', ':staticPrefix')
+        ->andWhere('redirect_route.staticPrefix = :staticPrefix')
         ->setParameter('host', $host)
         ->setParameter('staticPrefix', $path);
 
