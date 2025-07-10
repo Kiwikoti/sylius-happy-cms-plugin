@@ -1,5 +1,5 @@
-{% set definition = hookable_metadata.context.pages.definition %}
-{% if definition.actionGroups.subitem is defined and definition.getEnabledActions('subitem')|length > 0 %}
+{% set definition = hookable_metadata.context.pages is defined ? hookable_metadata.context.pages.definition : null %}
+{% if definition and definition.actionGroups.subitem is defined and definition.getEnabledActions('subitem')|length > 0 %}
     {% for action in definition.getEnabledActions('item')|sylius_sort_by('position') %}
         {% if action.name != 'show' and action.name != 'update' and action.name != 'delete' %}
             {% set action_path = action.link.url|default(path(action.link.route|default(grid.requestConfiguration.getRouteName(action.name)), action.link.parameters|default({'id': '__PAGE_ID__'}))) %}
@@ -33,7 +33,7 @@
             {% set action_path = action.link.url|default(path(action.link.route|default(grid.requestConfiguration.getRouteName(action.name)), action.link.parameters|default({'id': '__PAGE_ID__'}))) %}
             <li>
                 <a class="dropdown-item" href="{{ action_path }}">
-                <i class="{{ action.icon }} icon grey"></i>{{ action.label|trans }}
+                    <i class="{{ action.icon }} icon grey"></i>{{ action.label|trans }}
                 </a>
             </li>
         {% endif %}
