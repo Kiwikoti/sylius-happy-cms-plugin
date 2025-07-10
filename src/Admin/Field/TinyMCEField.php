@@ -18,8 +18,8 @@ class TinyMCEField implements FieldInterface
         $field
             ->setProperty($propertyName)
             ->setLabel($label)
-            ->setGridTemplatePath('@SyliusHappyCMSPlugin/media/field/tinymce/grid.html.twig')
-            ->setShowTemplatePath('@SyliusHappyCMSPlugin/media/field/tinymce/show.html.twig')
+            ->setGridTemplatePath('@SyliusHappyCMSPlugin/field/tinymce/grid.html.twig')
+            ->setShowTemplatePath('@SyliusHappyCMSPlugin/field/tinymce/show.html.twig')
             ->addFormThemes(TinymceBridgeType::configureAdminFormThemes())
             ->addJsFiles(TinymceBridgeType::configureAdminAssets()['js'])
             ->addCssFiles(TinymceBridgeType::configureAdminAssets()['css'])
