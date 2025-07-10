@@ -180,13 +180,13 @@ trait EntityRouteTrait
         // It's store into the route option 'last_modification_timestamp'
         // This allow to simply check the last modification date of the entity and before rendering all page
         // This code is executed on the controller top actions
-        if ($route->getOption('last_modification_timestamp') && is_int($route->getOption('last_modification_timestamp'))) {
+        if (!is_null($route->getLastModification())) {
             // Force public cache even if a session is started
             // Carreful to not have client component in you cache
             // Or wrap those component into a sub request (esi render, or live component)
             $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
             // Set the last modification date of the entity
-            $response->setLastModified((new \DateTime())->setTimestamp($route->getOption('last_modification_timestamp')));
+            $response->setLastModified($route->getLastModification());
             // No ttl to avoid cache expire mode
             // And force validation cache mode
             $response->setTtl(0);
