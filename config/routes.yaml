@@ -15,7 +15,7 @@ sylius_happy_cms_admin_page_clear_cache:
   path: /admin/pages/clear-cache
   methods: [ GET ]
   defaults:
-    _controller: Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageResourceController::clearCacheAction
+    _controller: Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageController::clearCacheAction
     _sylius:
       template: $template
       menu: $menu
@@ -26,7 +26,7 @@ sylius_happy_cms_admin_flexible_content_preview_block:
   path: /admin/pages/flexible-content/preview-block
   methods: [ GET ]
   defaults:
-    _controller: Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageResourceController::blockPreviewAction
+    _controller: Adeliom\SyliusHappyCMSPlugin\Controller\Page\PageController::blockPreviewAction
     _sylius:
       data: $data
       block: $block
