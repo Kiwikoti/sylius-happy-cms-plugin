@@ -57,6 +57,7 @@ class RouteRenderService extends AbstractController
                 $route->setLastModification(new \DateTime());
                 $this->manager->persist($route);
             }
+            $this->manager->flush();
             $this->manager->commit();
         }
 
