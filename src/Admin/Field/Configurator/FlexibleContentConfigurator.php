@@ -9,6 +9,7 @@ use Adeliom\SyliusEasyCrudPlugin\CrudFactory\Field\FieldConfiguratorInterface;
 use Adeliom\SyliusHappyCMSPlugin\Admin\Field\FlexibleContentField;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockCollection;
 use Adeliom\SyliusHappyCMSPlugin\Factory\Block\BlockTypeInterface;
+use Adeliom\SyliusHappyCMSPlugin\Factory\SharedBlock\SharedBlockCollection;
 use Doctrine\ORM\PersistentCollection;
 use Sylius\Resource\Model\ResourceInterface;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -23,9 +24,11 @@ use function Symfony\Component\String\u;
  */
 final class FlexibleContentConfigurator implements FieldConfiguratorInterface
 {
-    public function __construct(protected BlockCollection $collection)
-    {
-    }
+    public function __construct(
+        protected BlockCollection $collection,
+        protected SharedBlockCollection $sharedBlockCollection,
+    )
+    {}
 
     public function supports(FieldDto $field, ?ResourceInterface $resource = null): bool
     {
@@ -34,6 +37,15 @@ final class FlexibleContentConfigurator implements FieldConfiguratorInterface
 
     public function configure(FieldDto $field, ?ResourceInterface $resource = null): void
     {
+        // Get all shared allowed blocks type for current resource
+        // Then put as global variable to be used in sub files (shared block type)
+        $sharedBlocksCollection = $this->sharedBlockCollection->enabledSupportFilter();
+        $sharedBlocks = $sharedBlocksCollection->getAllowedBlocks(
+            $resource,
+        );
+        global $allowedSharedBlockTypesForResource;
+        $allowedSharedBlockTypesForResource = array_keys($sharedBlocks);
+
         if (null !== $entryTypeFunction = $field->getCustomOptions()->get(FlexibleContentField::OPTION_ENTRY_TYPE)) {
             $field->setFormTypeOption('entry_type', $entryTypeFunction);
         }

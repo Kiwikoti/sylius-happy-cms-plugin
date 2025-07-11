@@ -24,11 +24,14 @@ class SharedBlockType extends AbstractBlock implements ServiceSubscriberInterfac
 
     public function buildBlock(FormBuilderInterface $builder, array $options): void
     {
+        global $allowedSharedBlockTypesForResource;
         $builder
             ->add('block', ResourceChoiceType::class, [
                 'class' => SharedBlock::class,
                 'resource' => 'sylius_happy_cms.shared_block',
                 'persist_into_an_array' => true,
+                'repositoryMethod' => 'findByTypes',
+                'repositoryArguments' => ['types' => $allowedSharedBlockTypesForResource],
             ]);
     }
 

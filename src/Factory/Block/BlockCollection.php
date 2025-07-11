@@ -54,7 +54,7 @@ class BlockCollection
         $blocks = $this->getBlocks();
 
         if (empty($blockTypes)) {
-            return $blocks;
+            $blockTypes = $blocks ? array_keys($blocks) : [];
         }
 
         return array_filter(
