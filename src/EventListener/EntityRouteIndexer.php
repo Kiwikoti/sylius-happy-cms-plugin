@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Adeliom\SyliusHappyCMSPlugin\EventListener;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Cmf\RouteInterface;
+use Adeliom\SyliusHappyCMSPlugin\Event\Route\CalculateRouteStaticPrefixEvent;
 use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Sylius\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\ContentRepository;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 #[AsDoctrineListener('postPersist')]
 #[AsDoctrineListener('postUpdate')]
@@ -27,6 +31,8 @@ class EntityRouteIndexer
     public function __construct(
         protected ContentRepository $contentRepository,
         protected ParameterBag $parameterBag,
+        protected EventDispatcherInterface $dispatcher,
+        protected EntityManagerInterface $manager,
     ) {
     }
 
@@ -120,17 +126,92 @@ class EntityRouteIndexer
             $route->setDefaults($entity->getRouteDefaults($translation));
             $route->setSchemes($entity->getRouteSchemes($translation));
             $route->setHost($entity->getRouteHost($translation));
-            $route->setStaticPrefix(
-                $entity->getRouteStaticPrefix($translation, $routeNamePrefix === self::ROUTE_PREVIEW),
+
+            // Get previus static prefix
+            $previousStaticPrefix = $route->getStaticPrefix() ?? '';
+
+            // Does the current entity is a child route of an other entity?
+            // We dispath an event to give the possibility to add a static prefix before this one
+            // Example: the current entity is linked to PostInterface (for a blog) and his static route is
+            // "article-123"
+            // and you want to prefix it with "blog" to have "slug-page/blog-slug/article-123"
+            // slug "blog-slug" is a PageInterface entity slug
+            // slug "slug-page is the PageInterface parent entity slug of "blog-slug"
+
+            $urlPattern = '/{{locale}}{{other_entity_path}}{{current_entity_path}}';
+
+            // Get locale
+            $locale = $translation->getLocale();
+
+            // Get specific parent slug (for other entities)
+            $event = $this->dispatcher->dispatch(
+                new CalculateRouteStaticPrefixEvent($entity, $translation)
             );
+            $otherEntityPath = $event->getRouteStaticPrefix() ?? '';
+
+            // Get current entity path
+            $currentEntityPath = $entity->getRouteStaticPrefix($translation, $routeNamePrefix === self::ROUTE_PREVIEW);
+
+            // Set all complete path for the current entity route
+            $route->setStaticPrefix(
+                str_replace([
+                                '{{locale}}',
+                                '{{other_entity_path}}',
+                                '{{current_entity_path}}',
+                            ], [
+                                $locale,
+                                $otherEntityPath,
+                                $currentEntityPath,
+                            ],
+                    $urlPattern
+                )
+            );
+
             $route->setVariablePattern(
                 $entity->getVariablePattern($translation, $routeNamePrefix === self::ROUTE_PREVIEW),
             );
+
             $route->setLastModification(new \DateTime());
             $route->setPreview($routeNamePrefix === self::ROUTE_PREVIEW);
             $route->setOption(self::OPTION_PREVIEW, $routeNamePrefix === self::ROUTE_PREVIEW);
             $route->setDefault(RouteObjectInterface::CONTENT_ID, $this->contentRepository->getContentId($entity));
             $entity->addRoute($route);
+
+            // TODO : modifier les autres qui commencent par le même préfixe
+            // Ex : je viens de modifier /mapage-1 en /mapage-yo, il faudrait modifier toutes les lignes de la table
+            // des routes qui commencent par mapage-1% en mapage-yo%
+            $this->rewriteOtherStaticPrefix($route, $previousStaticPrefix, $routeNamePrefix);
+        }
+    }
+
+    /**
+     * If an uri is modified, ex: /mapage-1 => /ma-page-1, we need to update all other routes starting with the
+     * same prefix.
+     * This method will find all routes that start with the previous static prefix and update them to use the new
+     * TODO: replace findAll() with an optimized query to avoid loading all routes
+     */
+    private function rewriteOtherStaticPrefix(RouteInterface $route, string $previousStaticPrefix, string $routeNamePrefix): void
+    {
+        if ($previousStaticPrefix && $previousStaticPrefix !== $route->getStaticPrefix()) {
+            $allRoutes = $this->manager->getRepository(RouteInterface::class)->findAll();
+
+            if (is_array($allRoutes) && count($allRoutes) > 0) {
+                $routesToUpdate = array_filter($allRoutes, function (RouteInterface $route) use
+                ($previousStaticPrefix, $routeNamePrefix) {
+                    return str_starts_with($route->getStaticPrefix(), $previousStaticPrefix);
+                });
+
+                $this->manager->getConnection()->beginTransaction();
+                foreach ($routesToUpdate as $routeToUpdate) {
+                    // Update the static prefix of the route
+                    $routeToUpdate->setStaticPrefix(
+                        str_replace($previousStaticPrefix, $route->getStaticPrefix(), $routeToUpdate->getStaticPrefix())
+                    );
+                    $this->manager->persist($routeToUpdate);
+                }
+                $this->manager->flush();
+                $this->manager->getConnection()->commit();
+            }
         }
     }
 }

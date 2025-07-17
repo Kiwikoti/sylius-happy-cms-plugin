@@ -21,6 +21,8 @@ services:
     arguments:
       - '@cmf_routing.orm_content_repository'
       - "@parameter_bag"
+      - "@event_dispatcher"
+      - "@doctrine.orm.entity_manager"
     tags:
       -   name: 'doctrine.event_listener'
           event: 'postPersist'
@@ -146,6 +148,6 @@ services:
   sylius.happy_cms.exception_listener:
     class: Adeliom\SyliusHappyCMSPlugin\EventListener\ExceptionListener
     arguments:
-        - '@sylius.happy_cms.plugin.listener.redirection_manager'
+      - '@sylius.happy_cms.plugin.listener.redirection_manager'
     tags:
       - { name: kernel.event_listener, event: kernel.exception }

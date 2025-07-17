@@ -203,49 +203,74 @@ trait EntityRouteTrait
 
     public function getRouteStaticPrefix(TranslationInterface $translation, bool $isPreview): string
     {
-        $entity = $translation->getTranslatable();
-        $parentSlug = '';
+        /** @var PageInterface $translatable */
+        $translatable = $translation->getTranslatable();
         $accessor = new PropertyAccessor();
-        // TODO: rename isHomepage by isRootNode
-        // Nous n'avons pas besoin de slug pour le root node
-        // TODO: while loop until parent is null
+
+        // Est-ce que la page en cours est la home ?
         $isHomepage = false;
-        if ($accessor->isReadable($entity, 'isHomePage')) {
-            $isHomepage = $accessor->getValue($entity, 'isHomePage');
+        if ($accessor->isReadable($translatable, 'isHomePage')) {
+            $isHomepage = $accessor->getValue($translatable, 'isHomePage');
         }
-        if (!$isHomepage) {
-            if ($accessor->isReadable($entity, 'parent')) {
-                if ($parent = $accessor->getValue($entity, 'parent')) {
-                    $isParentHomepage = false;
+
+        // Calcul de l'url de l'entité en cours
+        $urlPattern = '{{parents}}{{current}}{{preview}}';
+
+        // 1. Le slug de la page en cours
+        $current = '';
+        if (!$isHomepage && method_exists($translation, 'getSlug')) {
+            $current = '/' . $translation->getSlug();
+        }
+
+        // 2. Si c'est une preview, on ajoute -preview à la fin de l'url
+        $preview = '';
+        if ($isPreview) {
+            $preview .= '-preview';
+        }
+
+        // 3. Le slug des parents
+        $parents = '';
+        while (!is_null($translatable)) {
+            if ($accessor->isReadable($translatable, 'parent')) {
+                $parent = $accessor->getValue($translatable, 'parent');
+                if (is_null($parent)) {
+                    $translatable = null;
+                    break;
+                } else {
+                    $parentSlug = '';
+                    if ($accessor->isReadable($parent, 'translation')) {
+                        $parentTranslation = $parent->getTranslation($translation->getLocale());
+                        $parentSlug = $accessor->getValue($parentTranslation, 'slug');
+                    } else if ($accessor->isReadable($parent, 'slug')) {
+                        $parentSlug = $accessor->getValue($parent, 'slug');
+                    }
+                    $isHomepage = false;
                     if ($accessor->isReadable($parent, 'isHomePage')) {
-                        $isParentHomepage = $accessor->getValue($parent, 'isHomePage');
+                        $isHomepage = $accessor->getValue($parent, 'isHomePage');
                     }
-                    if (!$isParentHomepage) {
-                        if ($accessor->isReadable($parent, 'translation')) {
-                            // access parent->translation->slug if parent is Translatable
-                            $parentTranslation = $parent->getTranslation($translation->getLocale());
-                            $parentSlug = $accessor->getValue($parentTranslation, 'slug');
-                        } elseif ($accessor->isReadable($parent, 'slug')) {
-                            // access parent->slug if parent is not Translatable
-                            $parentSlug = $accessor->getValue($parent, 'slug');
-                        }
+                    if ($isHomepage) {
+                        $parents .= '/';
+                    } else if ($parentSlug) {
+                        $parents .= '/' . $parentSlug;
                     }
+                    // Prochaine boucle la parent devient le translatable
+                    $translatable = $parent;
                 }
             }
         }
 
-        $url = '/' . $translation->getLocale();
-        if ($parentSlug ?? false) {
-            $url .= '/' . $parentSlug;
-        }
-        if (!$isHomepage && method_exists($translation, 'getSlug')) {
-            $url .= '/' . $translation->getSlug();
-        }
-        if ($isPreview) {
-            $url .= '-preview';
-        }
+        return str_replace([
+                               '{{parents}}',
+                               '{{current}}',
+                               '{{preview}}',
+                           ], [
+                               $parents,
+                               $current,
+                               $preview,
+                           ],
+            $urlPattern
+        );
 
-        return $url;
     }
 
     public function getVariablePattern(TranslationInterface $translation, bool $isPreview): string
