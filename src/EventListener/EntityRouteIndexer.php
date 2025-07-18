@@ -2,342 +2,224 @@
 
 declare(strict_types=1);
 
-namespace Adeliom\SyliusHappyCMSPlugin\Traits;
+namespace Adeliom\SyliusHappyCMSPlugin\EventListener;
 
 use Adeliom\SyliusHappyCMSPlugin\Entity\Cmf\RouteInterface;
-use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
-use Adeliom\SyliusHappyCMSPlugin\EventListener\EntityRouteIndexer;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Channel\Model\ChannelInterface;
+use Adeliom\SyliusHappyCMSPlugin\Event\Route\CalculateRouteStaticPrefixEvent;
+use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\Persistence\ObjectManager;
 use Sylius\Resource\Model\TranslationInterface;
+use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\ContentRepository;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-trait EntityRouteTrait
+class EntityRouteIndexer
 {
-    #[ORM\ManyToMany(targetEntity: RouteInterface::class, cascade: ['persist', 'remove'])]
-    protected Collection $routes;
+    public const ROUTE_PREVIEW = 'route_preview_';
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(name: 'channel_id', nullable: true, onDelete: 'SET NULL')]
-    protected ?ChannelInterface $channel = null;
+    public const ROUTE_ONLINE = 'route_online_';
 
-    public function __construct()
-    {
-        $this->routes = new ArrayCollection();
+    public const OPTION_PREVIEW = 'preview_behavior';
+
+    public array $entitiesToManage = [];
+
+    public function __construct(
+        protected ContentRepository $contentRepository,
+        protected ParameterBag $parameterBag,
+        protected EventDispatcherInterface $dispatcher,
+        protected EntityManagerInterface $manager,
+    ) {
     }
 
-    /**
-     * @return Collection<int, RouteInterface>
-     */
-    public function getRoutes(): Collection
+    public function postPersist(PostPersistEventArgs $event): void
     {
-        return $this->routes;
-    }
+        $entity = $event->getObject();
 
-    public function getOnlineRoute(): ?RouteObjectInterface
-    {
-        return $this->getRoute(false);
-    }
-
-    public function getPreviewRoute(): ?RouteObjectInterface
-    {
-        return $this->getRoute(true);
-    }
-
-    private function getRoute(bool $preview = false): ?RouteObjectInterface
-    {
-        foreach ($this->routes as $route) {
-            if ($preview === $route->getOption(EntityRouteIndexer::OPTION_PREVIEW)) {
-                $route->setContent($this);
-
-                return $route;
-            }
+        if ($entity instanceof TranslationInterface) {
+            $entity = $entity->getTranslatable();
         }
 
-        return null;
-    }
+        if (!$entity instanceof CmsRoutableInterface) {
+            return;
+        }
 
-    /**
-     * @param Collection<int, RouteInterface> $routes
-     */
-    public function setRoutes(Collection $routes): void
-    {
-        $this->routes = $routes;
-    }
-
-    public function addRoute(RouteInterface $route): void
-    {
-        if (!$this->routes->contains($route)) {
-            $this->routes->add($route);
+        if (!in_array($entity, $this->entitiesToManage)) {
+            $this->entitiesToManage[] = $entity;
+            $this->manageRoutes($entity, $event->getObjectManager());
         }
     }
 
-    public function removeRoute(RouteInterface $route): void
+    public function postUpdate(PostUpdateEventArgs $event): void
     {
-        if ($this->routes->contains($route)) {
-            $this->routes->removeElement($route);
+        $entity = $event->getObject();
+
+        if ($entity instanceof TranslationInterface) {
+            $entity = $entity->getTranslatable();
+        }
+
+        if (!$entity instanceof CmsRoutableInterface) {
+            return;
+        }
+
+        if (!in_array($entity, $this->entitiesToManage)) {
+            $this->entitiesToManage[] = $entity;
+            $this->manageRoutes($entity, $event->getObjectManager());
         }
     }
 
-    /**
-     * @return string[]
-     */
-    public function getRouteMethods(): array
+    private function manageRoutes(CmsRoutableInterface $entity, ObjectManager $objectManager)
     {
-        return ['GET', 'POST'];
-    }
+        $routesChanges = [];
 
-    /**
-     * @return array<string, mixed>
-     */
-    public function getRouteOptions(TranslationInterface $translation): array
-    {
-        return [
-            'add_locale_pattern' => false,
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getRouteRequirements(TranslationInterface $translation): array
-    {
-        return [
-            '_locale' => $translation->getLocale(),
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getRouteDefaults(TranslationInterface $translation): array
-    {
-        return [
-            '_locale' => $translation->getLocale(),
-        ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getRouteSchemes(TranslationInterface $translation): array
-    {
-        return ['https', 'http'];
-    }
-
-    public function getRouteHost(TranslationInterface $translation): ?string
-    {
-        if (null !== $this->getChannel()) {
-            return $this->getChannel()->getHostname();
+        if ($entity->isOnline()) {
+            $this->computeRoutes($routesChanges, $entity, self::ROUTE_ONLINE, $objectManager);
         }
 
-        return null;
+        if ($entity->previewIsAvailable()) {
+            $this->computeRoutes($routesChanges, $entity, self::ROUTE_PREVIEW, $objectManager);
+        }
+
+        foreach ($entity->getRoutes() as $route) {
+            $this->manager->persist($route);
+        }
+        $this->manager->flush();
+
+        foreach ($routesChanges as $previousStaticPrefix => $staticPrefix) {
+            $this->rewriteOtherStaticPrefix($staticPrefix, $previousStaticPrefix);
+        }
+
     }
 
-    public function getRouteUnikName(): string
+    private function removeRoutes(CmsRoutableInterface &$entity, string $routeNamePrefix = ''): void
     {
-        return \sprintf(
-            '%s_%s',
-            str_replace('\\', '_', self::class),
-            $this->getId(),
+        $routesToRemove = $entity->getRoutes()->filter(
+            static fn (RouteInterface $route) => str_starts_with($route->getName(), $routeNamePrefix),
         );
+
+        foreach ($routesToRemove as $route) {
+            $entity->removeRoute($route);
+        }
     }
 
-    public function isHttpCacheEnabled(string $env, RouteInterface $route): bool
+    private function computeRoutes(array &$routesChanges, CmsRoutableInterface &$entity, string $routeNamePrefix = '',
+                                   ObjectManager $objectManager): void
     {
-        // Default behavior is to enable http cache
-        //return $env === 'prod' ? true : false;
-        return false;
+        foreach ($entity->getTranslations() as $translation) {
+            $routeName = $routeNamePrefix .
+                $translation->getLocale() . '_' .
+                $entity->getRouteUnikName()
+            ;
+
+            // Route exists ?
+            $route = $entity->getRoutes()->filter(
+                static fn (RouteInterface $route) => $route->getName() === $routeName,
+            )->first();
+
+            if (!($route instanceof RouteInterface)) {
+                $routeClass = $this->parameterBag->get('cmf_routing.dynamic.persistence.orm.route_class');
+                /**
+                 * @var RouteInterface $route
+                 */
+                $route = new $routeClass();
+                $route->setName($routeName);
+            }
+
+            $route->setMethods($entity->getRouteMethods());
+            $route->setRequirements($entity->getRouteRequirements($translation));
+            $route->setDefaults($entity->getRouteDefaults($translation));
+            $route->setSchemes($entity->getRouteSchemes($translation));
+            $route->setHost($entity->getRouteHost($translation));
+
+            // Get previus static prefix
+            $previousStaticPrefix = $route->getStaticPrefix() ?? '';
+
+            // Does the current entity is a child route of an other entity?
+            // We dispath an event to give the possibility to add a static prefix before this one
+            // Example: the current entity is linked to PostInterface (for a blog) and his static route is
+            // "article-123"
+            // and you want to prefix it with "blog" to have "slug-page/blog-slug/article-123"
+            // slug "blog-slug" is a PageInterface entity slug
+            // slug "slug-page is the PageInterface parent entity slug of "blog-slug"
+
+            $urlPattern = '/{{locale}}{{other_entity_path}}{{current_entity_path}}';
+
+            // Get locale
+            $locale = $translation->getLocale();
+
+            // Get specific parent slug (for other entities)
+            $event = $this->dispatcher->dispatch(
+                new CalculateRouteStaticPrefixEvent($entity, $translation)
+            );
+            $otherEntityPath = $event->getRouteStaticPrefix() ?? '';
+
+            // Get current entity path
+            $currentEntityPath = $entity->getRouteStaticPrefix($translation, $routeNamePrefix === self::ROUTE_PREVIEW);
+
+            // Set all complete path for the current entity route
+            $route->setStaticPrefix(
+                str_replace([
+                                '{{locale}}',
+                                '{{other_entity_path}}',
+                                '{{current_entity_path}}',
+                            ], [
+                                $locale,
+                                $otherEntityPath,
+                                $currentEntityPath,
+                            ],
+                    $urlPattern
+                )
+            );
+
+            $route->setVariablePattern(
+                $entity->getVariablePattern($translation, $routeNamePrefix === self::ROUTE_PREVIEW),
+            );
+
+            $route->setLastModification(new \DateTime());
+            $route->setPreview($routeNamePrefix === self::ROUTE_PREVIEW);
+            $route->setOption(self::OPTION_PREVIEW, $routeNamePrefix === self::ROUTE_PREVIEW);
+            $route->setDefault(RouteObjectInterface::CONTENT_ID, $this->contentRepository->getContentId($entity));
+
+            $entity->addRoute($route);
+
+            $this->manager->persist($route);
+            $this->manager->persist($entity);
+
+            $routesChanges[$previousStaticPrefix] = $route->getStaticPrefix();
+        }
     }
 
-    // Override response header when a document controller is rendered
-    // If this behavior is not wanted, you can override this method in your routable entity
-    // To make this configuration working, use this framework configuration
-    //     framework:
-    //        http_cache:
-    //            enabled: true
-    //            default_ttl: 0
-    // To unvalide all route cache, you can use the command : happycms:cache:invalidate
-    public function renderResponse(Request $request, Response $response, RouteInterface $route, bool $cacheEnabled): Response
+    /**
+     * If an uri is modified, ex: /mapage-1 => /ma-page-1, we need to update all other routes starting with the
+     * same prefix.
+     * This method will find all routes that start with the previous static prefix and update them to use the new
+     * TODO: replace findAll() with an optimized query to avoid loading all routes
+     */
+    private function rewriteOtherStaticPrefix(string $staticPrefix, string $previousStaticPrefix): void
     {
-        // If cache is disabled, we return the response as is
-        if (!$cacheEnabled) {
-            return $response;
-        }
+        if ($previousStaticPrefix && $previousStaticPrefix !== $staticPrefix) {
+            $allRoutes = $this->manager->getRepository(RouteInterface::class)->findAll();
 
-        // No cache in preview mode
-        if ($route->getOption('preview_behavior') === true) {
-            return $response;
-        }
+            if (is_array($allRoutes) && count($allRoutes) > 0) {
+                $routesToUpdate = array_filter($allRoutes, function (RouteInterface $route) use
+                ($staticPrefix, $previousStaticPrefix) {
+                    return str_starts_with($route->getStaticPrefix(), $previousStaticPrefix);
+                });
 
-        // This timestamp is update on every persist of the entity
-        // It's store into the route option 'last_modification_timestamp'
-        // This allow to simply check the last modification date of the entity and before rendering all page
-        // This code is executed on the controller top actions
-        if (!is_null($route->getLastModification())) {
-            // Force public cache even if a session is started
-            // Carreful to not have client component in you cache
-            // Or wrap those component into a sub request (esi render, or live component)
-            $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
-            // Set the last modification date of the entity
-            $response->setLastModified($route->getLastModification());
-            // No ttl to avoid cache expire mode
-            // And force validation cache mode
-            $response->setTtl(0);
-            // Tell the client to revalidate the cache
-            $response->setCache([
-                                    'must_revalidate' => true,
-                                ]);
-            // Put cache public
-            $response->setPublic();
-        }
-
-        return $response;
-    }
-
-    public function getRouteStaticPrefix(TranslationInterface $translation, bool $isPreview): string
-    {
-        /** @var PageInterface $translatable */
-        $translatable = $translation->getTranslatable();
-        $accessor = new PropertyAccessor();
-
-        // Est-ce que la page en cours est la home ?
-        $isHomepage = false;
-        if ($accessor->isReadable($translatable, 'isHomePage')) {
-            $isHomepage = $accessor->getValue($translatable, 'isHomePage');
-        }
-
-        // Calcul de l'url de l'entité en cours
-        $urlPattern = '{{parents}}{{current}}{{preview}}';
-
-        // 1. Le slug de la page en cours
-        $current = '';
-        if (!$isHomepage && method_exists($translation, 'getSlug')) {
-            $current = '/' . $translation->getSlug();
-        }
-
-        // 2. Si c'est une preview, on ajoute -preview à la fin de l'url
-        $preview = '';
-        if ($isPreview) {
-            $preview .= '-preview';
-        }
-
-        // 3. Le slug des parents
-        $parents = [];
-        while (!is_null($translatable)) {
-            if ($accessor->isReadable($translatable, 'parent')) {
-                $parent = $accessor->getValue($translatable, 'parent');
-                if (is_null($parent)) {
-                    $translatable = null;
-                    break;
-                } else {
-                    $parentSlug = '';
-                    if ($accessor->isReadable($parent, 'translation')) {
-                        $parentTranslation = $parent->getTranslation($translation->getLocale());
-                        $parentSlug = $accessor->getValue($parentTranslation, 'slug');
-                    } else if ($accessor->isReadable($parent, 'slug')) {
-                        $parentSlug = $accessor->getValue($parent, 'slug');
-                    }
-                    $isHomepage = false;
-                    if ($accessor->isReadable($parent, 'isHomePage')) {
-                        $isHomepage = $accessor->getValue($parent, 'isHomePage');
-                    }
-                    if ($parentSlug && !$isHomepage) {
-                        $parents[] = $parentSlug;
-                    }
-                    // Prochaine boucle la parent devient le translatable
-                    $translatable = $parent;
+                $this->manager->getConnection()->beginTransaction();
+                foreach ($routesToUpdate as $routeToUpdate) {
+                    // Update the static prefix of the route
+                    $routeToUpdate->setStaticPrefix(
+                        str_replace($previousStaticPrefix, $staticPrefix, $routeToUpdate->getStaticPrefix())
+                    );
+                    $this->manager->persist($routeToUpdate);
                 }
+                $this->manager->flush();
+                $this->manager->getConnection()->commit();
             }
         }
-
-        return str_replace([
-                               '{{parents}}',
-                               '{{current}}',
-                               '{{preview}}',
-                           ], [
-                               (count($parents) > 0) ? '/' . implode('/', array_reverse($parents)) : '',
-                               $current,
-                               $preview,
-                           ],
-            $urlPattern
-        );
-
-    }
-
-    public function getVariablePattern(TranslationInterface $translation, bool $isPreview): string
-    {
-        return '';
-    }
-
-    public function getRouteController(): ?string
-    {
-        // To forward route response to a custom controller
-        // return 'App\Controller\MyController::fancy';
-        return null;
-    }
-
-    public function getRouteTemplate(): ?string
-    {
-        // render '@SyliusHappyCMSPlugin/front/document/default.html.twig' as default template
-        // Feel free to change template path
-        // return 'App/front/document/fancy.html.twig'
-        return null;
-    }
-
-    public function getChannel(): ?ChannelInterface
-    {
-        return $this->channel;
-    }
-
-    public function setChannel(?ChannelInterface $channel): void
-    {
-        $this->channel = $channel;
-    }
-
-    /**
-     * @return array{label: string, route: ?RouteObjectInterface}
-     */
-    public function getBreadcrumbItems(): array
-    {
-        $list = [];
-        $list[] = [
-            'label' => $this->getName(),
-            'route' => $this->getOnlineRoute(),
-        ];
-
-        try {
-            $parent = $this->getParent();
-            while ($parent !== null) {
-                $list[] = [
-                    'label' => $parent->getName(),
-                    'route' => $parent->getOnlineRoute(),
-                ];
-                $parent = $parent->getParent();
-            }
-        } catch (\Exception $e) {
-            // If getParent no exists or throws an exception, we just ignore it
-        }
-
-        /** @var array{label: string, route: ?RouteObjectInterface} $reservedList */
-        $reservedList = array_reverse($list, true);
-
-        return $reservedList;
-    }
-
-    public function getParent(): ?PageInterface
-    {
-        return null;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->getTranslation()->getName();
     }
 }
