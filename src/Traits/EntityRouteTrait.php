@@ -229,7 +229,7 @@ trait EntityRouteTrait
         }
 
         // 3. Le slug des parents
-        $parents = '';
+        $parents = [];
         while (!is_null($translatable)) {
             if ($accessor->isReadable($translatable, 'parent')) {
                 $parent = $accessor->getValue($translatable, 'parent');
@@ -248,10 +248,8 @@ trait EntityRouteTrait
                     if ($accessor->isReadable($parent, 'isHomePage')) {
                         $isHomepage = $accessor->getValue($parent, 'isHomePage');
                     }
-                    if ($isHomepage) {
-                        $parents .= '';
-                    } else if ($parentSlug) {
-                        $parents .= '/' . $parentSlug;
+                    if ($parentSlug && !$isHomepage) {
+                        $parents[] = $parentSlug;
                     }
                     // Prochaine boucle la parent devient le translatable
                     $translatable = $parent;
@@ -264,7 +262,7 @@ trait EntityRouteTrait
                                '{{current}}',
                                '{{preview}}',
                            ], [
-                               $parents,
+                               (count($parents) > 0) ? '/' . implode('/', array_reverse($parents)) : '',
                                $current,
                                $preview,
                            ],
