@@ -249,7 +249,7 @@ trait EntityRouteTrait
                         $isHomepage = $accessor->getValue($parent, 'isHomePage');
                     }
                     if ($isHomepage) {
-                        $parents .= '/';
+                        $parents .= '';
                     } else if ($parentSlug) {
                         $parents .= '/' . $parentSlug;
                     }
