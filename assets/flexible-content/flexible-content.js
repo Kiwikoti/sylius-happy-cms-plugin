@@ -184,28 +184,44 @@ const flexibleContentModule = function () {
 
   // action move
   self.handleMoveContent = function (block) {
-    block.querySelector('[data-action="move"]')
-        .addEventListener('click', function (event) {
-          self.wFlexibleContent.querySelectorAll('[data-action="move"].border-teal').forEach(el => {
-            if (el != event.target)
-              el.classList.remove('border-teal');
-          });
-          block.querySelector('[data-action="move"]')
-              .classList.toggle('border-teal');
-          setTimeout(() => {
-            self.wFlexibleContent.querySelectorAll('.move-here').forEach(el => {
-              const moveEnabled = block.querySelector('[data-action="move"]')
-                  .classList.contains('border-teal');
+      function hideMoveHere(moveButton) {
+          self.wFlexibleContent.querySelectorAll('.move-here').forEach(el => {
+              const moveEnabled = moveButton.getAttribute('clicked') === "true";
               self.blockToMove = moveEnabled ? block : null;
               el.style.display = moveEnabled ? 'block' : 'none';
               if (moveEnabled) {
-                self.blockToMove.previousElementSibling.style.display = 'none';
-                if (self.blockToMove.nextElementSibling) {
-                  self.blockToMove.nextElementSibling.style.display = 'none';
-                }
+                  self.blockToMove.previousElementSibling.style.display = 'none';
+                  if (self.blockToMove.nextElementSibling) {
+                      self.blockToMove.nextElementSibling.style.display = 'none';
+                  }
               }
-            });
-          }, 150);
+          });
+      }
+
+      function handleEscapeKeyPress(e) {
+          if (e.key === "Escape") {
+              const moveButton = block.querySelector('[data-action="move"]');
+              moveButton.removeAttribute('clicked');
+              moveButton.classList.remove('border-teal');
+              document.removeEventListener("keydown", handleEscapeKeyPress);
+              hideMoveHere(moveButton);
+          }
+    }
+
+    block.querySelector('[data-action="move"]')
+        .addEventListener('click', function (event) {
+          self.wFlexibleContent.querySelectorAll('[data-action="move"].border-teal').forEach(el => { if (el !== event.target) { el.classList.remove('border-teal'); } });
+          const moveButton = block.querySelector('[data-action="move"]');
+          if (moveButton.getAttribute('clicked') === "true") {
+              document.removeEventListener("keydown", handleEscapeKeyPress);
+              moveButton.removeAttribute('clicked');
+              moveButton.classList.remove('border-teal');
+          } else {
+              document.addEventListener("keydown", handleEscapeKeyPress);
+              moveButton.setAttribute('clicked', "true");
+              moveButton.classList.add('border-teal');
+          }
+          hideMoveHere(moveButton);
         });
   };
 
