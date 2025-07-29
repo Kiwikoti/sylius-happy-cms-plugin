@@ -344,8 +344,8 @@ export default {
 
                 this.showNotif(`${this.trans('rename_success')} "${filename}" -> "${savedName}"`)
                 selected.name = savedName
-                selected.path = selected.path.replace(filename, savedName)
-                selected.storage_path = selected.storage_path.replace(filename, savedName)
+                // selected.path = selected.path.replace(filename, savedName)
+                // selected.storage_path = selected.storage_path.replace(filename, savedName)
 
             }).catch((err) => {
                 console.error(err)
