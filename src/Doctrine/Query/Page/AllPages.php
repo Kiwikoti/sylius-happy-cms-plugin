@@ -64,8 +64,8 @@ final class AllPages implements AllPagesInterface
                 ),
             )
             ->orderBy('page.lvl', Criteria::DESC)
-            ->addOrderBy('page.position', Criteria::ASC)
-            ->addOrderBy('page.id', Criteria::ASC)
+            ->addOrderBy('page.root', Criteria::ASC)
+            ->addOrderBy('page.lft', Criteria::ASC)
             ->setParameter('currentLocale', $currentLocale, Types::STRING)
             ->setParameter('fallbackLocale', $fallbackLocale, Types::STRING)
         ;

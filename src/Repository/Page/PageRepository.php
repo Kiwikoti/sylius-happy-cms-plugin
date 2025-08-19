@@ -10,15 +10,17 @@ use Adeliom\SyliusEasyCrudPlugin\Traits\TranslationRepositoryTrait;
 use Adeliom\SyliusHappyCMSPlugin\Entity\Page\PageInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\ResourceRepositoryTrait;
 use Sylius\Component\Channel\Model\ChannelInterface;
 use Sylius\Resource\Doctrine\Persistence\RepositoryInterface;
 
 /**
- * @implements RepositoryInterface<PageInterface>
+ * @implements NestedTreeRepository<PageInterface>
  */
-class PageRepository extends EntityRepository implements PageRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
+class PageRepository extends NestedTreeRepository implements PageRepositoryInterface, RepositoryInterface, TranslationRepositoryInterface
 {
+    use ResourceRepositoryTrait;
     use TranslationRepositoryTrait;
 
     protected bool $cacheEnabled = false;

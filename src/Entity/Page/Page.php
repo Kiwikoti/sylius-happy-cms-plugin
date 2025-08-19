@@ -74,7 +74,7 @@ class Page implements PageInterface
 
     /** @var Collection<int, PageInterface> */
     #[ORM\OneToMany(targetEntity: PageInterface::class, mappedBy: 'parent')]
-    #[ORM\OrderBy(['position' => 'ASC'])]
+    #[ORM\OrderBy(['root' => 'ASC', 'lft' => 'ASC'])]
     protected Collection $children;
 
     #[ORM\Column(name: 'action', type: Types::STRING, nullable: true)]

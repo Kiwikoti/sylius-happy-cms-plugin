@@ -37,10 +37,55 @@ class TreeComponent
         $pageRepository = $this->entityManager->getRepository(PageInterface::class);
         $pageToBeMoved = $pageRepository->find($pageId);
 
-        if ($pageToBeMoved->getPosition() > 0) {
-            $pageToBeMoved->setPosition($pageToBeMoved->getPosition() - 1);
+        if (true !== $pageRepository->verify()) {
+            $pageRepository->recoverFast([
+                                             'sortByField'   => 'lft', // Reorder sibling nodes by this field
+                                             // during recovery
+                                             'sortDirection' => 'ASC',
+                                         ]);
             $this->entityManager->flush();
         }
+
+        $pageRepository->moveUp($pageToBeMoved, 1);
+        $this->entityManager->flush();
+    }
+
+    #[LiveAction]
+    public function moveTop(#[LiveArg] int $pageId): void
+    {
+        $pageRepository = $this->entityManager->getRepository(PageInterface::class);
+        $pageToBeMoved = $pageRepository->find($pageId);
+
+        if (true !== $pageRepository->verify()) {
+            $pageRepository->recoverFast([
+                                             'sortByField'   => 'lft', // Reorder sibling nodes by this field
+                                             // during recovery
+                                             'sortDirection' => 'ASC',
+                                         ]);
+            $this->entityManager->flush();
+        }
+
+        $pageRepository->moveUp($pageToBeMoved, true);
+        $this->entityManager->flush();
+    }
+
+    #[LiveAction]
+    public function moveBottom(#[LiveArg] int $pageId): void
+    {
+        $pageRepository = $this->entityManager->getRepository(PageInterface::class);
+        $pageToBeMoved = $pageRepository->find($pageId);
+
+        if (true !== $pageRepository->verify()) {
+            $pageRepository->recoverFast([
+                                             'sortByField'   => 'lft',
+                                             'sortDirection' => 'ASC',
+                                         ]);
+            $this->entityManager->flush();
+        }
+
+        $pageRepository->moveDown($pageToBeMoved, true);
+        $this->entityManager->flush();
+
     }
 
     #[LiveAction]
@@ -49,7 +94,16 @@ class TreeComponent
         $pageRepository = $this->entityManager->getRepository(PageInterface::class);
         $pageToBeMoved = $pageRepository->find($pageId);
 
-        $pageToBeMoved->setPosition($pageToBeMoved->getPosition() + 1);
+        if (true !== $pageRepository->verify()) {
+            $pageRepository->recoverFast([
+                                             'sortByField'   => 'lft', // Reorder sibling nodes by this field
+                                             // during recovery
+                                             'sortDirection' => 'ASC',
+                                         ]);
+            $this->entityManager->flush();
+        }
+
+        $pageRepository->moveDown($pageToBeMoved, 1);
         $this->entityManager->flush();
     }
 

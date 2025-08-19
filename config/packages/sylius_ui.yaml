@@ -71,12 +71,18 @@ sylius_twig_hooks:
       create_child:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/create_child.html.twig'
         priority: 400
+      move_top:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_top.html.twig'
+        priority: 4
       move_up:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_up.html.twig'
-        priority: 100
+        priority: 3
       move_down:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_down.html.twig'
-        priority: 0
+        priority: 2
+      move_bottom:
+        template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/move_bottom.html.twig'
+        priority: 1
       manage_content:
         template: '@SyliusHappyCMSPlugin/page/crud/tree/actions/dropdown/manage_content.html.twig'
         priority: 0
