@@ -42,26 +42,56 @@ class TreeComponent
     {
         $menuItemToBeMoved = $this->menuItemRepository->find($menuItemId);
 
-        if ($menuItemToBeMoved->getPosition() > 0) {
-            $targetItem = $this->menuItemRepository->findPreviousMenuItem($menuItemToBeMoved);
-
-            $oldPosition = $menuItemToBeMoved->getPosition();
-            $oldLft = $menuItemToBeMoved->getLft();
-            $oldRgt = $menuItemToBeMoved->getRgt();
-
-            if ($targetItem instanceof MenuItemInterface) {
-                $targetItem->setPosition($oldPosition);
-                $targetItem->setLft($oldLft);
-                $targetItem->setRgt($oldRgt);
-                $this->entityManager->persist($targetItem);
-
-                $menuItemToBeMoved->setPosition($oldPosition - 1);
-                $menuItemToBeMoved->setLft($oldLft - 2);
-                $menuItemToBeMoved->setRgt($oldRgt - 2);
-                $this->entityManager->persist($menuItemToBeMoved);
-                $this->entityManager->flush();
-            }
+        if (true !== $this->menuItemRepository->verify()) {
+            $this->menuItemRepository->recoverFast([
+                                                       'sortByField'   => 'lft', // Reorder sibling nodes by this field
+                                                       // during recovery
+                                                       'sortDirection' => 'ASC',
+                                                   ]);
+            $this->entityManager->flush();
         }
+
+        $this->menuItemRepository->moveUp($menuItemToBeMoved, 1);
+        $this->entityManager->flush();
+
+        $this->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuItemToBeMoved->getMenu()->getId());
+    }
+
+    #[LiveAction]
+    public function moveTop(#[LiveArg] int $menuItemId): void
+    {
+        $menuItemToBeMoved = $this->menuItemRepository->find($menuItemId);
+
+        if (true !== $this->menuItemRepository->verify()) {
+            $this->menuItemRepository->recoverFast([
+                                                       'sortByField'   => 'lft', // Reorder sibling nodes by this field
+                                                       // during recovery
+                                                       'sortDirection' => 'ASC',
+                                                   ]);
+            $this->entityManager->flush();
+        }
+
+        $this->menuItemRepository->moveUp($menuItemToBeMoved, true);
+        $this->entityManager->flush();
+
+        $this->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuItemToBeMoved->getMenu()->getId());
+    }
+
+    #[LiveAction]
+    public function moveBottom(#[LiveArg] int $menuItemId): void
+    {
+        $menuItemToBeMoved = $this->menuItemRepository->find($menuItemId);
+
+        if (true !== $this->menuItemRepository->verify()) {
+            $this->menuItemRepository->recoverFast([
+                                                       'sortByField'   => 'lft',
+                                                       'sortDirection' => 'ASC',
+                                                   ]);
+            $this->entityManager->flush();
+        }
+
+        $this->menuItemRepository->moveDown($menuItemToBeMoved, true);
+        $this->entityManager->flush();
 
         $this->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuItemToBeMoved->getMenu()->getId());
     }
@@ -71,24 +101,17 @@ class TreeComponent
     {
         $menuItemToBeMoved = $this->menuItemRepository->find($menuItemId);
 
-        $targetItem = $this->menuItemRepository->findNextMenuItem($menuItemToBeMoved);
-
-        $oldPosition = $menuItemToBeMoved->getPosition();
-        $oldLft = $menuItemToBeMoved->getLft();
-        $oldRgt = $menuItemToBeMoved->getRgt();
-
-        if ($targetItem instanceof MenuItemInterface) {
-            $targetItem->setPosition($oldPosition);
-            $targetItem->setLft($oldLft);
-            $targetItem->setRgt($oldRgt);
-
-            $menuItemToBeMoved->setPosition($oldPosition + 1);
-            $menuItemToBeMoved->setLft($oldLft + 2);
-            $menuItemToBeMoved->setRgt($oldRgt + 2);
-
-            $this->entityManager->persist($menuItemToBeMoved);
+        if (true !== $this->menuItemRepository->verify()) {
+            $this->menuItemRepository->recoverFast([
+                                                       'sortByField'   => 'lft', // Reorder sibling nodes by this field
+                                                       // during recovery
+                                                       'sortDirection' => 'ASC',
+                                                   ]);
             $this->entityManager->flush();
         }
+
+        $this->menuItemRepository->moveDown($menuItemToBeMoved, 1);
+        $this->entityManager->flush();
 
         $this->requestStack->getCurrentRequest()->attributes->set('menu_id', $menuItemToBeMoved->getMenu()->getId());
     }

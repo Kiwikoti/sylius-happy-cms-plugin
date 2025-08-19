@@ -13,6 +13,8 @@ sylius_happy_cms:
     redirect_routes: "Redirections"
     configs: "Configurations"
     config: "Configuration"
+    move_bottom: "Déplacement tout en bas"
+    move_top: "Déplacement tout en haut"
   home: Page d'accueil
   page:
     admin:

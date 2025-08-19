@@ -139,9 +139,16 @@ sylius_twig_hooks:
       move_up:
         template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_up.html.twig'
         priority: 100
+      move_top:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_top.html.twig'
+        priority: 101
       move_down:
         template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_down.html.twig'
+        priority: 1
+      move_bottom:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_bottom.html.twig'
         priority: 0
+
 
 
 
@@ -194,6 +201,13 @@ sylius_twig_hooks:
       move_up:
         template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_up.html.twig'
         priority: 100
+      move_top:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_top.html.twig'
+        priority: 101
       move_down:
         template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_down.html.twig'
+        priority: 1
+      move_bottom:
+        template: '@SyliusHappyCMSPlugin/menu_item/crud/tree/actions/dropdown/move_bottom.html.twig'
         priority: 0
+

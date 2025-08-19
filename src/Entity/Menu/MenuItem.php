@@ -69,7 +69,7 @@ class MenuItem implements MenuItemInterface
 
     /** @var Collection<int, MenuItemInterface> */
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: MenuItemInterface::class, cascade: ['all'])]
-    #[ORM\OrderBy(['lft' => 'ASC'])]
+    #[ORM\OrderBy(['root' => 'ASC', 'lft' => 'ASC'])]
     protected Collection $children;
 
     public function __construct()

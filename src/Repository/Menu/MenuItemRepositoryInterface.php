@@ -27,10 +27,6 @@ interface MenuItemRepositoryInterface extends
 
     public function filterByMenu(int $menuId, string $locale): QueryBuilder;
 
-    public function findPreviousMenuItem(MenuItemInterface $menuItem): ?MenuItemInterface;
-
-    public function findNextMenuItem(MenuItemInterface $menuItem): ?MenuItemInterface;
-
     /**
      * @param array<string, mixed> $cacheConfig
      */

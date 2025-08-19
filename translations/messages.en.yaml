@@ -12,6 +12,8 @@ sylius_happy_cms:
     redirect_routes: "Redirection"
     configs: "Configurations"
     config: "Configuration"
+    move_bottom: "Move to top"
+    move_top: "Move to bottom"
   page:
     admin:
       action:
