@@ -55,9 +55,9 @@ class Helper
     ) {
     }
 
-    public function includeAssets(): string
+    public function includeAssets(?string $nonce = null): string
     {
-        return $this->assetRenderer->renderAssets($this->assets);
+        return $this->assetRenderer->renderAssets($this->assets, $nonce);
     }
 
     /**

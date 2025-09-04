@@ -13,7 +13,7 @@
         {% for block in blocks %}
             {{ happy_cms_block_render(block, preview) }}
         {% endfor %}
-        {{ happy_cms_block_assets() }}
-        {{ happy_cms_shared_block_assets() }}
+        {{ happy_cms_block_assets(csp_nonce('script')) }}
+        {{ happy_cms_shared_block_assets(csp_nonce('script')) }}
     {% endif %}
 {% endblock %}
