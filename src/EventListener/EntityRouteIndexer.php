@@ -10,6 +10,7 @@ use Adeliom\SyliusHappyCMSPlugin\Factory\CMS\CmsRoutableInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\Persistence\ObjectManager;
 use Sylius\Resource\Model\TranslationInterface;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\ContentRepository;
@@ -89,7 +90,7 @@ class EntityRouteIndexer
         $this->manager->flush();
 
         foreach ($routesChanges as $previousStaticPrefix => $staticPrefix) {
-            $this->rewriteOtherStaticPrefix($staticPrefix, $previousStaticPrefix);
+            $this->rewriteOtherStaticPrefix($staticPrefix, $previousStaticPrefix, $entity->getRoutes());
         }
 
     }
@@ -198,7 +199,8 @@ class EntityRouteIndexer
      * This method will find all routes that start with the previous static prefix and update them to use the new
      * TODO: replace findAll() with an optimized query to avoid loading all routes
      */
-    private function rewriteOtherStaticPrefix(string $staticPrefix, string $previousStaticPrefix): void
+    private function rewriteOtherStaticPrefix(string $staticPrefix, string $previousStaticPrefix, 
+                                              PersistentCollection $excludedRoutes): void
     {
         if ($previousStaticPrefix && $previousStaticPrefix !== $staticPrefix) {
             $allRoutes = $this->manager->getRepository(RouteInterface::class)->findAll();
@@ -211,6 +213,9 @@ class EntityRouteIndexer
 
                 $this->manager->getConnection()->beginTransaction();
                 foreach ($routesToUpdate as $routeToUpdate) {
+                    if ($excludedRoutes->contains($routeToUpdate)) {
+                        continue;
+                    }
                     // Update the static prefix of the route
                     $routeToUpdate->setStaticPrefix(
                         str_replace($previousStaticPrefix, $staticPrefix, $routeToUpdate->getStaticPrefix())
