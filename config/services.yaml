@@ -151,3 +151,10 @@ services:
       - '@sylius.happy_cms.plugin.listener.redirection_manager'
     tags:
       - { name: kernel.event_listener, event: kernel.exception }
+
+  sylius.happy_cms.command.invalid_cache:
+    class: Adeliom\SyliusHappyCMSPlugin\Command\InvalidCacheCommand
+    arguments:
+      - '@sylius.happy_cms.plugin.services.render'
+    tags:
+      - { name: 'console.command' }
